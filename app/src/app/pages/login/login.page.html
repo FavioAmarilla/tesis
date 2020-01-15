@@ -1,0 +1,35 @@
+
+
+
+<ion-content>
+
+  <app-header></app-header>
+
+  <div class="wrapper fadeInDown">
+      <div id="formContent">
+        <!-- Tabs Titles -->
+    
+        <!-- Icon -->
+        <div class="fadeIn first">
+          <br>
+        </div>
+    
+        <!-- Login Form -->
+        <form (ngSubmit)="login()" [formGroup]="angForm">
+          <input type="text" class="fadeIn second" name="emaill" placeholder="Email" formControlName="email">
+          <input type="password" class="fadeIn third" name="password" placeholder="Password" formControlName="clave_acceso">
+          <input type="submit" class="fadeIn fourth" value="Log In">
+        </form>
+    
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+          <a class="underlineHover" href="#">Forgot Password?</a>
+        </div>
+    
+      </div>
+    </div>
+  ​
+
+  <app-footer [loading]="loading"></app-footer>
+</ion-content>
+

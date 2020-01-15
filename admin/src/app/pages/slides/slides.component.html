@@ -1,0 +1,83 @@
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card" *ngIf="!form">
+            <div class="card-header">
+                <button class="btn btn-primary" (click)="viewForm(true, 'INS')">Agregar</button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="text-primary">
+                            <th>
+                                Titulo
+                            </th>
+                            <th>
+                                Descripción
+                            </th>
+                            <th>
+                                Imagen
+                            </th>
+                            <th class="text-right">
+                                Opciones
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let slide of slides">
+                                <td>
+                                    {{ slide.titulo }}
+                                </td>
+                                <td>
+                                    {{ slide.descripcion }}
+                                </td>
+                                <td>
+                                    {{ slide.imagen }}
+                                </td>
+                                <td class="text-right">
+                                    <button class="btn btn-sm btn-warning" (click)="getSlide(slide.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
+                                    <button class="btn btn-sm btn-danger" (click)="delete(slide.identificador)"><i class="fas fa-times"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="form">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <form>
+                        <div class="form-group">
+                            <label for="archivo_img">Imagen</label>
+                
+                            <div *ngIf="slide && slide.archivo_img">
+                                <img src="{{url + '/slide/getImage/' + slide.archivo_img}}" width="100" height="100">
+                            </div>
+                
+                            <angular-file-uploader
+                                [config]="fileUploaderConfig"
+                                [resetUpload]=resetVar
+                                (ApiResponse)="uploadImage($event)">
+                            </angular-file-uploader>
+                        </div>
+                        <div class="form-group">
+                            <label for="titulo">Titulo</label>
+                            <input type="text" class="form-control" placeholder="Titulo" name="titulo" [(ngModel)]="slide.titulo">
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion">Descripción</label>
+                            <input type="text" class="form-control" placeholder="Descripción" name="descripcion" [(ngModel)]="slide.descripcion">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">Actualizar</button>
+                            <button class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">Guardar</button>
+                            <button class="btn btn-danger" (click)="viewForm(false, '')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

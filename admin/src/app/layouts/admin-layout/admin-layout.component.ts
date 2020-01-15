@@ -1,0 +1,22 @@
+import { Component, OnInit } from '@angular/core';
+
+
+@Component({
+  selector: 'app-admin-layout',
+  templateUrl: './admin-layout.component.html',
+  styleUrls: ['./admin-layout.component.scss']
+})
+export class AdminLayoutComponent implements OnInit {
+
+  ngOnInit() {
+    this.changeSidebarColor();
+  }
+
+  changeSidebarColor(){
+    var sidebar = <HTMLElement>document.querySelector('.sidebar');
+
+    if(sidebar != undefined){
+        sidebar.setAttribute('data-color', 'black');
+    }
+  }
+}

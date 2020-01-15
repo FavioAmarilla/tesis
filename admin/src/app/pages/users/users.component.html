@@ -1,0 +1,80 @@
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card" *ngIf="!form">
+            <div class="card-header">
+                <button class="btn btn-primary" (click)="viewForm(true, 'INS')">Agregar</button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="text-primary">
+                            <th>
+                                Nombre
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th class="text-right">
+                                Opciones
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of users">
+                                <td>
+                                    {{ user.nombre_completo }}
+                                </td>
+                                <td>
+                                    {{ user.email }}
+                                </td>
+                                <td class="text-right">
+                                    <button class="btn btn-sm btn-warning" (click)="getUser(user.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="form">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <form>
+                        <div class="form-group">
+                            <label for="image">Imagen</label>
+                
+                            <div *ngIf="user && user.imagen">
+                                <img src="{{url + '/user/getImage/' + user.imagen}}" width="100" height="100">
+                            </div>
+                
+                            <angular-file-uploader
+                                [config]="fileUploaderConfig"
+                                [resetUpload]=resetVar
+                                (ApiResponse)="uploadImage($event)">
+                            </angular-file-uploader>
+                        </div>
+                        <div class="form-group">
+                            <label for="nombre_completo">Nombre</label>
+                            <input type="text" class="form-control" placeholder="Nombre" name="nombre_completo" [(ngModel)]="user.nombre_completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control" placeholder="Email" name="email" [(ngModel)]="user.email">
+                        </div>
+                        <div class="form-group">
+                            <label for="clave_acceso">Clave de Acceso</label>
+                            <input type="password" class="form-control" placeholder="Clave de Acceso" name="clave_acceso" [(ngModel)]="user.clave_acceso">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">Actualizar</button>
+                            <button class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">Guardar</button>
+                            <button class="btn btn-danger" (click)="viewForm(false, '')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

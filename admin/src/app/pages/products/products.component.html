@@ -1,0 +1,129 @@
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card" *ngIf="!form">
+            <div class="card-header">
+                <button class="btn btn-primary" (click)="viewForm(true, 'INS')">Agregar</button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="text-primary">
+                            <th>
+                                Descripción
+                            </th>
+                            <th>
+                                Cod. Barras
+                            </th>
+                            <th>
+                                Precio Unitario
+                            </th>
+                            <th>
+                                Precio Venta
+                            </th>
+                            <th class="text-right">
+                                Opciones
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let product of products">
+                                <td>
+                                    {{ product.descripcion }}
+                                </td>
+                                <td>
+                                    {{ product.codigo_barras }}
+                                </td>
+                                <td>
+                                    {{ product.costo_unitario }}
+                                </td>
+                                <td>
+                                    {{ product.precio_venta }}
+                                </td>
+                                <td class="text-right">
+                                    <button class="btn btn-sm btn-warning" (click)="getProduct(product.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
+                                    <button class="btn btn-sm btn-danger"><i class="fas fa-times"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="form">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <form>
+                        <div class="form-group">
+                            <label for="image">Imagen</label>
+
+                            <div *ngIf="user && product.imagen">
+                                <img src="{{url + '/product/getImage/' + product.imagen}}" width="100" height="100">
+                            </div>
+
+                            <angular-file-uploader [config]="fileUploaderConfig" [resetUpload]=resetVar
+                                (ApiResponse)="uploadImage($event)">
+                            </angular-file-uploader>
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion">Descripción</label>
+                            <input type="text" class="form-control" placeholder="Descripción" name="descripcion" [(ngModel)]="product.descripcion">
+                        </div>
+                        <div class="form-group">
+                            <label for="vr_unidad_medida">Unidad de medida</label>
+                            <select name="vr_unidad_medida" id="vr_unidad_medida" class="form-control" [(ngModel)]="product.vr_unidad_medida">
+                                <option value="" disabled selected>Seleccione una unidad de medida</option>
+                                <option value="UN">Unidad</option>
+                                <option value="KG">Kilogramo</option>
+                                <option value="ME">Metro</option>
+                                <option value="LI">Litros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="costo_unitario">Costo unitario</label>
+                            <input type="text" class="form-control" placeholder="Costo unitario" name="costo_unitario" [(ngModel)]="product.costo_unitario">
+                        </div>
+                        <div class="form-group">
+                            <label for="precio_venta">Precio Venta</label>
+                            <input type="text" class="form-control" placeholder="Precio venta" name="precio_venta" [(ngModel)]="product.precio_venta">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_tipo_impuesto">Tipo de impuesto</label>
+                            <select name="id_tipo_impuesto" id="id_tipo_impuesto" class="form-control" [(ngModel)]="product.id_tipo_impuesto">
+                                <option value="" disabled selected>Seleccione el tipo de impuesto</option>
+                                <option *ngFor="let tax of taxes" value="{{tax.identificador}}">{{tax.descripcion}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_linea">Linea del producto</label>
+                            <select name="id_linea" id="id_linea" class="form-control" [(ngModel)]="product.id_linea">
+                                <option value="" disabled selected>Seleccione la linea del producto</option>
+                                <option *ngFor="let linea of lineasProducto" value="{{linea.identificador}}">{{linea.descripcion}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" id="generateBarcode" class="btn btn-primary" (click)="generateBarcode()">Generar código de barras</button>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name="codigo_barras" [(ngModel)]="product.codigo_barras">
+                            <svg id="barcode"></svg>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">Actualizar</button>
+                            <button class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">Guardar</button>
+                            <button class="btn btn-danger" (click)="viewForm(false, '')">Cancelar</button>
+                        </div>
+                        <div class="card-footer">
+                            <div class="alert alert-danger alert-dismissible col-md-6 mt-4" *ngIf="errors.length > 0">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (click)="errors = []">×</button>
+                                <h4 class="mt-0 mb-0"><i class="icon fa fa-ban"></i> Error de validación</h4>
+                                <p *ngFor="let error of errors" class="mt-2 mb-0"> {{ error }} </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

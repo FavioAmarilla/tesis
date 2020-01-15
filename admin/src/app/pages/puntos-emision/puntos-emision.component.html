@@ -1,0 +1,80 @@
+<div class="row">
+    <div class="col-md-12">
+      
+      <div class="card" *ngIf="!form">
+        <div class="card-header">
+          <button class="btn btn-primary" (click)="viewForm(true, 'INS')">Agregar</button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  Nombre
+                </th>
+                <th class="text-right">
+                  Codigo
+                </th>
+                <th class="text-right">
+                  Tipo
+                </th>
+                <th class="text-right">
+                  Opciones
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let puntoEmision of puntosEmision">
+                  <td>
+                    {{ puntoEmision.nombre }}
+                  </td>
+                  <td>
+                    {{ puntoEmision.codigo }}
+                  </td>
+                  <td class="text-right">
+                      <p *ngIf="puntoEmision.vr_tipo == 'ON'">ONLINE</p>
+                      <p *ngIf="puntoEmision.vr_tipo == 'PI'">Pre impreso</p>
+                      <p *ngIf="puntoEmision.vr_tipo == 'AI'">Auto impreso</p>
+                  </td>
+                  <td class="text-right">
+                    <button class="btn btn-sm btn-warning" (click)="getTipoImpuesto(puntoEmision.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="form">
+        <div class="card-body">
+          <div class="table-responsive">
+            <form>
+                <div class="form-group">
+                  <label for="Nombre">Nombre</label>
+                  <input type="text" class="form-control" placeholder="Nombre" name="nombre" [(ngModel)]="puntoEmision.nombre">
+                </div>
+                <div class="form-group">
+                  <label for="Codigo">Codigo</label>
+                  <input type="text" class="form-control" placeholder="Codigo" name="codigo" [(ngModel)]="puntoEmision.codigo">
+                </div>
+                <div class="form-group">
+                  <label for="Tipo">Tipo</label>
+                  <select class="form-control" name="vr_tipo" [(ngModel)]="puntoEmision.vr_tipo">
+                    <option selected value="ON">Online</option>
+                    <option value="PI">Pre impreso</option>
+                    <option value="AI">Auto impreso</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">Actualizar</button>
+                  <button class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">Guardar</button>
+                  <button class="btn btn-danger" (click)="viewForm(false, '')">Cancelar</button>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</div>
+  
