@@ -179,7 +179,7 @@ class UserController extends BaseController
         }else{
             if ($image) {
                 $image_name = time().$image->getClientOriginalName();
-                \Storage::disk('users')->put($image_name, \File::get($image));
+                \Storage::disk('usuarios')->put($image_name, \File::get($image));
     
                 return $this->sendResponse($image_name, 'Imagen subida');
             }else{
@@ -190,9 +190,9 @@ class UserController extends BaseController
     }
 
     public function getImage($filename){
-        $isset = \Storage::disk('users')->exists($filename);
+        $isset = \Storage::disk('usuarios')->exists($filename);
         if ($isset) {
-            $file = \Storage::disk('users')->get($filename);
+            $file = \Storage::disk('usuarios')->get($filename);
             return new Response($file);
         }else{
             return $this->sendError('La imagen no existe', null);
