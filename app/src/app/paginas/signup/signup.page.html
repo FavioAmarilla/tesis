@@ -1,0 +1,29 @@
+
+
+
+<ion-content>
+
+    <app-header></app-header>
+  
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+      
+          <div class="fadeIn first">
+            <br>
+          </div>
+      
+          <form>
+            <input type="text" class="fadeIn third" name="nombre_completo" placeholder="Nombre completo" [(ngModel)]="usuario.nombre_completo">
+            <input type="text" class="fadeIn second" name="email" placeholder="E-mail" [(ngModel)]="usuario.email">
+            <input type="text" class="fadeIn third" name="clave_acceso" placeholder="Password" [(ngModel)]="usuario.clave_acceso">
+            <input type="button" class="fadeIn fourth" value="Aceptar" (click)="registro()">
+          </form>
+      
+        </div>
+      </div>
+    ​
+  
+    <app-footer [cargando]="cargando"></app-footer>
+  </ion-content>
+  
+  

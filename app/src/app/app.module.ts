@@ -12,7 +12,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { UsuarioService } from './services/usuario.service';
+import { ServicioUsuario } from './servicios/usuario.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,7 +33,7 @@ import { UsuarioService } from './services/usuario.service';
     SplashScreen,
     InAppBrowser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    UsuarioService,
+    ServicioUsuario,
   ],
   bootstrap: [AppComponent]
 })

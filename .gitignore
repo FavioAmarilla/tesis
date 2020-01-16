@@ -1,0 +1,4 @@
+.history
+app/node_modules/
+admin/node_modules/
+api/vendor/
