@@ -1,4 +1,4 @@
-export class Product {
+export class Producto {
     constructor(
         public identificador: number,
         public id_linea: number,

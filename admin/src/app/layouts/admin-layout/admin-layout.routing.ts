@@ -8,10 +8,10 @@ import { MapsComponent } from '../../pages/maps/maps.component';
 import { NotificationsComponent } from '../../pages/notifications/notifications.component';
 import { LoginComponent } from '../../pages/login/login.component';
 import { TiposImpuestoComponent } from '../../pages/tipos-impuesto/tipos-impuesto.component';
-import { BusinessComponent } from '../../pages/business/business.component'
+import { EmpresaComponent } from '../../pages/empresa/empresa.component'
 import { UsersComponent } from '../../pages/users/users.component'
 import { SlidesComponent } from '../../pages/slides/slides.component';
-import { ProductsComponent } from '../../pages/products/products.component';
+import { ProductoComponent } from '../../pages/producto/producto.component';
 import { LineaProductoComponent } from '../../pages/linea-producto/linea-producto.component';
 import { PuntosEmisionComponent } from '../../pages/puntos-emision/puntos-emision.component';
 import { ProfileComponent } from '../../pages/profile/profile.component';
@@ -20,8 +20,8 @@ export const AdminLayoutRoutes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
     { path: 'login',            component: LoginComponent },
     { path: 'dashboard',        component: DashboardComponent, canActivate: [UserGuard] },
-    { path: 'empresas',         component: BusinessComponent, canActivate: [UserGuard] },
-    { path: 'productos',        component: ProductsComponent, canActivate: [UserGuard] },
+    { path: 'empresas',         component: EmpresaComponent, canActivate: [UserGuard] },
+    { path: 'productos',        component: ProductoComponent, canActivate: [UserGuard] },
     { path: 'usuarios',         component: UsersComponent, canActivate: [UserGuard] },
     { path: 'profile',          component: ProfileComponent, canActivate: [UserGuard] },
     { path: 'tipos-impuesto',   component: TiposImpuestoComponent, canActivate: [UserGuard] },

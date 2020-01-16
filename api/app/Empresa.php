@@ -11,12 +11,9 @@ class Empresa extends Model
 
     protected $fillable =[
         'identificador',
+        'codigo',
         'nombre',
         'numero_documento',
-        'telefono',
-        'pais',
-        'ciudad',
-        'direccion',
         'imagen'
     ];
 }

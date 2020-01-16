@@ -1,0 +1,86 @@
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card" *ngIf="!form">
+            <div class="card-header">
+                <button class="btn btn-primary" (click)="mostrarFormulario(true, 'INS')">Agregar</button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="text-primary">
+                            <th>
+                                Codigo
+                            </th>
+                            <th>
+                                Nombre
+                            </th>
+                            <th>
+                                Nro. Documento
+                            </th>
+                            <th class="text-right">
+                                Opciones
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of listaEmpresas">
+                                <td>
+                                    {{ row.codigo }}
+                                </td>
+                                <td>
+                                    {{ row.nombre }}
+                                </td>
+                                <td>
+                                    {{ row.numero_documento }}
+                                </td>
+                                <td class="text-right">
+                                    <button class="btn btn-sm btn-warning" (click)="getEmpresa(row.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="form">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <form>
+                        <div class="form-group">
+                            <label for="image">Imagen</label>
+                
+                            <div *ngIf="empresa && empresa.imagen">
+                                <img src="{{url + '/empresa/getImage/' + empresa.imagen}}" width="100" height="100">
+                            </div>
+                
+                            <angular-file-uploader
+                                [config]="fileUploaderConfig"
+                                [resetUpload]=resetVar
+                                (ApiResponse)="uploadImage($event)">
+                            </angular-file-uploader>
+                        </div>
+                        <div class="form-group">
+                            <label for="codigo">Codigo</label>
+                            <input type="text" class="form-control" placeholder="Codigo" name="codigo" [(ngModel)]="empresa.codigo">
+                        </div>
+                        <div class="form-group">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" class="form-control" placeholder="Nombre" name="nombre" [(ngModel)]="empresa.nombre">
+                        </div>
+                        <div class="form-group">
+                            <label for="numero_documento">Número Documento</label>
+                            <input type="text" class="form-control" placeholder="Número Documento" name="numero_documento" [(ngModel)]="empresa.numero_documento">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">Actualizar</button>
+                            <button class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">Guardar</button>
+                            <button class="btn btn-danger" (click)="mostrarFormulario(false, '')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

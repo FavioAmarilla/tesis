@@ -7,31 +7,31 @@ const API = environment.api;
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService {
+export class EmpresaService {
 
   constructor(
     private http: HttpClient
-  ) { }
+  ) {}
 
-  getProducts(id?) {
-    const url = (id) ? `${API}/producto/getProducto/${id}` : `${API}/producto`;
+  getEmpresa(id?) {
+    const url = (id) ? `${API}/empresa/show/${id}` : `${API}/empresa`;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.get(url, { headers });
   }
 
-  register(producto) {
-    const json = JSON.stringify(producto);
+  register(empresa) {
+    const json = JSON.stringify(empresa);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(`${API}/producto`, params, { headers: headers });
+    return this.http.post(`${API}/empresa`, params, { headers: headers });
   }
 
-  update(producto, id) {
-    const json = JSON.stringify(producto);
+  update(empresa, id) {
+    const json = JSON.stringify(empresa);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.put(`${API}/producto/update/${id}`, params, { headers: headers });
+    return this.http.put(`${API}/empresa/update/${id}`, params, { headers: headers });
   }
 }

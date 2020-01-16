@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { BusinessService } from '../../services/business.service';
-import { Business } from 'app/models/business';
+import { EmpresaService } from '../../services/empresa.service';
+import { Empresa } from 'app/models/empresa';
 import { environment } from 'environments/environment';
-import { FormBuilder, FormGroup } from '@angular/forms';
 
 const API = environment.api;
 
 @Component({
-  selector: 'app-business',
-  templateUrl: './business.component.html',
-  styleUrls: ['./business.component.scss']
+  selector: 'app-empresa',
+  templateUrl: './empresa.component.html',
+  styleUrls: ['./empresa.component.scss']
 })
-export class BusinessComponent implements OnInit {
+export class EmpresaComponent implements OnInit {
 
   public url: string;
   public form = false;
   public action: string = '';
-  public business: Business;
-  public businesses: Business;
+  public empresa: Empresa;
+  public listaEmpresas: Empresa;
 
   public fileUploaderConfig = {
     multiple: false,
@@ -34,30 +33,29 @@ export class BusinessComponent implements OnInit {
   };
 
   constructor(
-    private businessService: BusinessService,
-    private formBuilder: FormBuilder
+    private empresaService: EmpresaService
   ) { 
     this.url = environment.api; 
   }
 
   ngOnInit() {
-    this.getBusinesses();
+    this.getEmpresas();
   }
 
-  viewForm(flag, action) {
+  mostrarFormulario(flag, action) {
     this.form = flag
     this.action = action;
 
     if (flag && action == 'INS') {
-      this.business = new Business(null, null, null, null, null);
+      this.empresa = new Empresa(null, null, null, null, null);
     }
   }
 
-  getBusinesses() {
-    this.businessService.getBusiness().subscribe(
+  getEmpresas() {
+    this.empresaService.getEmpresa().subscribe(
       (response: any) => {
         if (response.status) {
-          this.businesses = response.data;
+          this.listaEmpresas = response.data;
         }
       },
       error => {
@@ -66,12 +64,12 @@ export class BusinessComponent implements OnInit {
     );
   }
 
-  getBusiness(id) {
-    this.businessService.getBusiness(id).subscribe(
+  getEmpresa(id) {
+    this.empresaService.getEmpresa(id).subscribe(
       (response: any) => {
         if (response.status) {
-          this.business = response.data;
-          this.viewForm(true, 'UPD');
+          this.empresa = response.data;
+          this.mostrarFormulario(true, 'UPD');
         }
       },
       error => {
@@ -81,11 +79,10 @@ export class BusinessComponent implements OnInit {
   }
 
   register() {
-    this.businessService.register(this.business).subscribe(
+    this.empresaService.register(this.empresa).subscribe(
       (response: any) => {
-        console.log('register: ', response);
         if (response.status) {
-          this.getBusinesses();
+          this.getEmpresas();
         } else {
 
         }
@@ -97,13 +94,10 @@ export class BusinessComponent implements OnInit {
   }
 
   update() {
-    console.log(this.business);
-
-    this.businessService.update(this.business, this.business.identificador).subscribe(
+    this.empresaService.update(this.empresa, this.empresa.identificador).subscribe(
       (response: any) => {
-        console.log('update: ', response);
         if (response.status) {
-          this.getBusinesses();
+          this.getEmpresas();
         } else {
 
         }
@@ -115,9 +109,8 @@ export class BusinessComponent implements OnInit {
   }
 
   uploadImage(event){
-    console.log(event.response);
     let data = JSON.parse(event.response);
-    this.business.imagen = data.data;
+    this.empresa.imagen = data.data;
   }
 
 }

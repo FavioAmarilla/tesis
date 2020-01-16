@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from 'environments/environment';
 import { LineaProductoService } from '../../services/linea-producto.service';
 import { TipoImpuestoService } from '../../services/tipo-impuesto.service';
-import { ProductService } from '../../services/product.service';
+import { ProductoService } from '../../services/producto.service';
 import { LineaProducto } from '../../models/linea-producto';
-import { Product } from '../../models/product';
+import { Producto } from '../../models/producto';
 import { TipoImpuesto } from '../../models/tipo-impuesto';
 import * as JsBarcode from 'jsbarcode';
 import { v4 as uuid } from 'uuid';
@@ -12,18 +12,18 @@ import { v4 as uuid } from 'uuid';
 const API = environment.api;
 
 @Component({
-  selector: 'app-products',
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss']
+  selector: 'app-producto',
+  templateUrl: './producto.component.html',
+  styleUrls: ['./producto.component.scss']
 })
-export class ProductsComponent implements OnInit {
+export class ProductoComponent implements OnInit {
 
   public url: string;
   public form = false;
   public action: string = '';
-  public product: Product;
-  public products: Product;
-  public taxes: TipoImpuesto;
+  public producto: Producto;
+  public listaProductos: Producto;
+  public impuestos: TipoImpuesto;
   public lineasProducto: LineaProducto;
   public errors = [];
 
@@ -42,14 +42,16 @@ export class ProductsComponent implements OnInit {
   };
 
   constructor(
-    private productService: ProductService,
+    private productoService: ProductoService,
     private impuestoService: TipoImpuestoService,
     private lineaProductoService: LineaProductoService
-  ) { }
+  ) { 
+    this.url = environment.api;
+  }
 
   ngOnInit() {
-    this.getProducts();
-    this.getTaxes();
+    this.getProductos();
+    this.getImpuestos();
     this.getLineasProducto();
   }
 
@@ -58,15 +60,15 @@ export class ProductsComponent implements OnInit {
     this.action = action;
 
     if (flag && action == 'INS') {
-      this.product = new Product(0, 0, 0, '', '', '', 0, 0, '');
+      this.producto = new Producto(0, 0, 0, '', '', '', 0, 0, '');
     }
   }
 
-  getTaxes() {
+  getImpuestos() {
     this.impuestoService.getTipoImpuesto()
     .subscribe((response: any) => {
       if (response && response.status) {
-        this.taxes = response.data;
+        this.impuestos = response.data;
       }
     });
   }
@@ -80,11 +82,11 @@ export class ProductsComponent implements OnInit {
     })
   }
 
-  getProducts() {
-    this.productService.getProducts().subscribe(
+  getProductos() {
+    this.productoService.getProducto().subscribe(
       (response: any) => {
         if (response && response.status) {
-          this.products = response.data;
+          this.listaProductos = response.data;
         }
       },
       error => {
@@ -93,12 +95,11 @@ export class ProductsComponent implements OnInit {
     );
   }
 
-  getProduct(id) {
-    this.productService.getProducts(id).subscribe(
+  getProducto(id) {
+    this.productoService.getProducto(id).subscribe(
       (response: any) => {
         if (response && response.status) {
-          this.product = response.data;
-
+          this.producto = response.data;
           this.viewForm(true, 'UPD');
         }
       },
@@ -110,11 +111,10 @@ export class ProductsComponent implements OnInit {
 
   register() {
     this.errors = [];
-    this.productService.register(this.product).subscribe(
+    this.productoService.register(this.producto).subscribe(
       (response: any) => {
-        console.log('register: ', response, response.data.length);
         if (response && response.status) {
-          this.getProducts();
+          this.getProductos();
           this.viewForm(true, 'INS');
         } else {
           for (const i in response.data) {
@@ -129,12 +129,13 @@ export class ProductsComponent implements OnInit {
   }
 
   update() {
+    console.log(this.producto);
     this.errors = [];
-    this.productService.update(this.product, this.product.identificador).subscribe(
+    this.productoService.update(this.producto, this.producto.identificador).subscribe(
       (response: any) => {
-        console.log('update: ', response);
+        console.log(response);
         if (response && response.status) {
-          this.getProducts();
+          this.getProductos();
         } else {
           for (let i = 0; i < response.data.length; i++) {
             this.errors.push(response.data[i]);
@@ -148,15 +149,14 @@ export class ProductsComponent implements OnInit {
   }
 
   uploadImage(event) {
-    console.log(event.response);
     let data = JSON.parse(event.response);
-    this.product.archivo_img = data.data;
+    this.producto.archivo_img = data.data;
   }
 
   generateBarcode() {
     const buffer = new Array();
     const random = uuid(null, buffer, 0).join('').slice(0, 13);
-    this.product.codigo_barras = random;
+    this.producto.codigo_barras = random;
     JsBarcode('#barcode', random);
   }
 

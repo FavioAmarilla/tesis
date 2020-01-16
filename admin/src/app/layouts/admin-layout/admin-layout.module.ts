@@ -14,10 +14,10 @@ import { NotificationsComponent } from '../../pages/notifications/notifications.
 
 import { LoginComponent } from '../../pages/login/login.component';
 import { TiposImpuestoComponent } from '../../pages/tipos-impuesto/tipos-impuesto.component';
-import { BusinessComponent } from '../../pages/business/business.component';
+import { EmpresaComponent } from '../../pages/empresa/empresa.component';
 import { UsersComponent } from '../../pages/users/users.component';
 import { SlidesComponent } from '../../pages/slides/slides.component';
-import { ProductsComponent } from '../../pages/products/products.component';
+import { ProductoComponent } from '../../pages/producto/producto.component';
 import { LineaProductoComponent } from '../../pages/linea-producto/linea-producto.component';
 import { PuntosEmisionComponent } from '../../pages/puntos-emision/puntos-emision.component';
 import { ProfileComponent } from '../../pages/profile/profile.component';
@@ -38,11 +38,11 @@ import { ProfileComponent } from '../../pages/profile/profile.component';
     NotificationsComponent,
     LoginComponent,
     TiposImpuestoComponent,
-    BusinessComponent,
+    EmpresaComponent,
     UsersComponent,
     SlidesComponent,
     LineaProductoComponent,
-    ProductsComponent,
+    ProductoComponent,
     PuntosEmisionComponent,
     ProfileComponent
   ]
