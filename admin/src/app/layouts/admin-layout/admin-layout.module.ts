@@ -17,7 +17,7 @@ import { TiposImpuestoComponent } from '../../pages/tipos-impuesto/tipos-impuest
 import { EmpresaComponent } from '../../pages/empresa/empresa.component';
 import { UsersComponent } from '../../pages/users/users.component';
 import { SlidesComponent } from '../../pages/slides/slides.component';
-import { ProductsComponent } from '../../pages/products/products.component';
+import { ProductoComponent } from '../../pages/producto/producto.component';
 import { LineaProductoComponent } from '../../pages/linea-producto/linea-producto.component';
 import { PuntosEmisionComponent } from '../../pages/puntos-emision/puntos-emision.component';
 import { ProfileComponent } from '../../pages/profile/profile.component';
@@ -42,7 +42,7 @@ import { ProfileComponent } from '../../pages/profile/profile.component';
     UsersComponent,
     SlidesComponent,
     LineaProductoComponent,
-    ProductsComponent,
+    ProductoComponent,
     PuntosEmisionComponent,
     ProfileComponent
   ]
