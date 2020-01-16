@@ -128,6 +128,9 @@ class ProductoController extends BaseController
             return $this->sendError('Error de validacion', $validator->errors());
         }
 
+        unset($input['linea_producto']);
+        unset($input['tipo_impuesto']);
+
         $producto = Producto::where('identificador', $id)->update($input);
         return $this->sendResponse($input, 'Producto actualizado');
     }
