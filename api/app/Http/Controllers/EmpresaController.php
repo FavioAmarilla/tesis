@@ -47,10 +47,7 @@ class EmpresaController extends BaseController
         $validator = Validator::make($input, [
             'nombre'            => 'required|unique:fnd_parm_empresas', 
             'numero_documento'  => 'required', 
-            'telefono'          => 'required', 
-            'pais'              => 'required',  
-            'ciudad'            => 'required',
-            'direccion'         => 'required',
+            'codigo'            => 'required', 
             'imagen'            => 'required'
         ]);
 
@@ -61,9 +58,7 @@ class EmpresaController extends BaseController
         $empresa = new Empresa();
         $empresa->nombre = $input['nombre'];
         $empresa->numero_documento = $input['numero_documento'];
-        $empresa->pais = $input['pais'];
-        $empresa->ciudad = $input['ciudad'];
-        $empresa->direccion = $input['direccion'];
+        $empresa->codigo = $input['codigo'];
         $empresa->imagen = $input['imagen'];
         $empresa->save();
 
@@ -113,10 +108,7 @@ class EmpresaController extends BaseController
         $validator = Validator::make($input, [
             'nombre'            => 'required', 
             'numero_documento'  => 'required', 
-            'telefono'          => 'required', 
-            'pais'              => 'required',  
-            'ciudad'            => 'required',
-            'direccion'         => 'required',
+            'codigo'            => 'required', 
             'imagen'            => 'required'
         ]);
 

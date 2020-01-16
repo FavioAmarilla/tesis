@@ -7,13 +7,13 @@ const API = environment.api;
 @Injectable({
   providedIn: 'root'
 })
-export class BusinessService {
+export class EmpresaService {
 
   constructor(
     private http: HttpClient
   ) {}
 
-  getBusiness(id?) {
+  getEmpresa(id?) {
     const url = (id) ? `${API}/empresa/show/${id}` : `${API}/empresa`;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.get(url, { headers });
