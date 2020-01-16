@@ -21,6 +21,8 @@ import { ProductoComponent } from '../../pages/producto/producto.component';
 import { LineaProductoComponent } from '../../pages/linea-producto/linea-producto.component';
 import { PuntosEmisionComponent } from '../../pages/puntos-emision/puntos-emision.component';
 import { ProfileComponent } from '../../pages/profile/profile.component';
+import { PaisComponent } from '../../pages/pais/pais.component';
+import { CiudadComponent } from '../../pages/ciudad/ciudad.component';
 
 @NgModule({
   imports: [
@@ -44,7 +46,9 @@ import { ProfileComponent } from '../../pages/profile/profile.component';
     LineaProductoComponent,
     ProductoComponent,
     PuntosEmisionComponent,
-    ProfileComponent
+    ProfileComponent,
+    PaisComponent,
+    CiudadComponent
   ]
 })
 

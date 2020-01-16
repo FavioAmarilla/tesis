@@ -17,6 +17,8 @@ export const ROUTES: RouteInfo[] = [
     { path: '/slides', title: 'Banners', icon: 'nc-image', class: '' },
     { path: '/linea-producto', title: 'Lineas de productos', icon: 'nc-list', class: '' },
     { path: '/punto-emision', title: 'Puntos de emision', icon: 'nc-list', class: '' },
+    { path: '/pais', title: 'Paises', icon: 'nc-list', class: '' },
+    { path: '/ciudad', title: 'Ciudades', icon: 'nc-list', class: '' },
 ];
 
 @Component({

@@ -1,0 +1,68 @@
+<div class="row">
+    <div class="col-md-12">
+      
+      <div class="card" *ngIf="!form">
+        <div class="card-header">
+          <button class="btn btn-primary" (click)="viewForm(true, 'INS')">Agregar</button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  Nombre
+                </th>
+                <th class="text-right">
+                  Opciones
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of listaPaises">
+                  <td>
+                    {{ row.nombre }}
+                  </td>
+                  <td class="text-right">
+                    <button class="btn btn-sm btn-warning" (click)="getPais(row.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="form">
+        <div class="card-body">
+          <div class="table-responsive">
+            <form>
+                <div class="form-group">
+                  <label for="Nombre">Nombre</label>
+                  <input type="text" class="form-control" placeholder="Nombre" name="nombre" [(ngModel)]="pais.nombre">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">
+                        <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Guardar
+                    </button>
+                    <button class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">
+                        <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Actualizar
+                    </button>
+                    <button class="btn btn-danger" (click)="viewForm(false, '')">Cancelar</button>
+                </div>
+
+                
+                <div class="card-footer">
+                    <div class="alert alert-danger alert-dismissible col-md-6 mt-4" *ngIf="errors.length > 0">
+                        <p *ngFor="let error of errors" class="mt-2 mb-0"> {{ error }} </p>
+                    </div>
+                </div>
+
+              </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</div>
+  

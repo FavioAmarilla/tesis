@@ -15,6 +15,8 @@ import { ProductoComponent } from '../../pages/producto/producto.component';
 import { LineaProductoComponent } from '../../pages/linea-producto/linea-producto.component';
 import { PuntosEmisionComponent } from '../../pages/puntos-emision/puntos-emision.component';
 import { ProfileComponent } from '../../pages/profile/profile.component';
+import { PaisComponent } from '../../pages/pais/pais.component';
+import { CiudadComponent } from '../../pages/ciudad/ciudad.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -30,5 +32,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'maps',             component: MapsComponent, canActivate: [UserGuard] },
     { path: 'notifications',    component: NotificationsComponent, canActivate: [UserGuard] },
     { path: 'linea-producto',   component: LineaProductoComponent, canActivate: [UserGuard] },
-    { path: 'punto-emision',    component: PuntosEmisionComponent, canActivate: [UserGuard] }
+    { path: 'punto-emision',    component: PuntosEmisionComponent, canActivate: [UserGuard] },
+    { path: 'pais',             component: PaisComponent, canActivate: [UserGuard] },
+    { path: 'ciudad',           component: CiudadComponent, canActivate: [UserGuard] }
 ];

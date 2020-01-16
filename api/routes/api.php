@@ -70,3 +70,15 @@ Route::group(['prefix' => 'puntoEmision'], function () {
     Route::put('update/{id}', 'PuntoEmisionController@update');
     Route::get('show/{id}', 'PuntoEmisionController@show');
 });
+
+Route::group(['prefix' => 'pais'], function () {
+    Route::resource('/', 'PaisController');
+    Route::put('update/{id}', 'PaisController@update');
+    Route::get('show/{id}', 'PaisController@show');
+});
+
+Route::group(['prefix' => 'ciudad'], function () {
+    Route::resource('/', 'CiudadController');
+    Route::put('update/{id}', 'CiudadController@update');
+    Route::get('show/{id}', 'CiudadController@show');
+});
