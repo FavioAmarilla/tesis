@@ -13,25 +13,54 @@ export class PaisService {
     private http: HttpClient
   ) { }
 
-  getPais(id?) {
+  async getPais(id?) {
     const url = (id) ? `${API}/pais/show/${id}` : `${API}/pais`;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.get(url, { headers });
+
+    return new Promise(resolve => {
+      this.http.get(url, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
+    
   }
 
-  register(pais) {
+  async register(pais) {
     const json = JSON.stringify(pais);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(`${API}/pais`, params, { headers: headers });
+    return new Promise(resolve => {
+      this.http.post(`${API}/pais`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  update(pais, id) {
+  async update(pais, id) {
     const json = JSON.stringify(pais);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.put(`${API}/pais/update/${id}`, params, { headers: headers });
+    return new Promise(resolve => {
+      this.http.put(`${API}/pais/update/${id}`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 }

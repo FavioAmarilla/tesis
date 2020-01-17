@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Pais } from '../../models/pais';
 import { PaisService } from '../../services/pais.service';
+import swal from'sweetalert2';
 
 @Component({
   selector: 'app-pais',
@@ -11,99 +12,120 @@ export class PaisComponent implements OnInit {
 
   public cargando: boolean = false;
   public form = false;
-  public action: string = '';
+  public action: string = 'LST';
   public pais: Pais;
   public listaPaises: Pais;
   public errors = [];
 
   constructor(
     private paisService: PaisService
-  ) {
-    this.cargando = false;
-   }
+  ) { }
 
   ngOnInit() {
     this.getPaises();
   }
 
-  viewForm(flag, action) {
+  viewForm(flag, action, limpiarError?) {
     this.form = flag
     this.action = action;
 
     if (flag && action == 'INS') {
       this.pais = new Pais(null, null);
     }
+    if (limpiarError) {
+      this.errors = [];
+    }
   }
 
-  getPaises() {
-    this.paisService.getPais().subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.listaPaises = response.data;
-        }
-      },
-      error => {
-        console.log('error: ', error);
-      }
-    );
-  }
-
-  getPais(id) {
-    this.paisService.getPais(id).subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.pais = response.data;
-          this.viewForm(true, 'UPD');
-        }
-      },
-      error => {
-        console.log('error: ', error);
-      }
-    );
-  }
-
-  register() {
+  async getPaises() {
+    this.listaPaises = null;
+    this.action = "LST";
     this.cargando = true;
-
     this.errors = [];
-    this.paisService.register(this.pais).subscribe(
-      (response: any) => {
-        if (response && response.status) {
-          this.getPaises();
-        } else {
-          for (const i in response.data) {
-            this.errors.push(response.data[i]);
-          }
-        }
-      },
-      error => {
-        console.log('Error: ', error);
+
+    var response = <any>await this.paisService.getPais();
+
+    if (response.status) {
+      this.listaPaises = response.data;
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
 
     this.cargando = false;
   }
 
-  update() {
+  async getPais(id) {
+    this.action = "LST";
     this.cargando = true;
 
     this.errors = [];
-    this.paisService.update(this.pais, this.pais.identificador).subscribe(
-      (response: any) => {
-        if (response && response.status) {
-          this.getPaises();
-        } else {
-          for (const i in response.data) {
-            this.errors.push(response.data[i]);
-          }
-        }
-      },
-      error => {
-        console.log('Error: ', error);
+    var response = <any>await this.paisService.getPais(id);
+
+    if (response.status) {
+      this.pais = response.data;
+      this.viewForm(true, 'UPD');
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
+    this.cargando = false;
+  }
+
+  async register() {
+    this.cargando = true;
+
+    this.errors = [];
+    var response = <any>await this.paisService.register(this.pais);
 
     this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
+          this.getPaises();
+          this.viewForm(false, 'LST');
+        }
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
+      }
+      this.viewForm(true, 'INS');
+    }
+  }
+
+  async update() {
+    this.cargando = true;
+
+    this.errors = [];
+    var response = <any>await this.paisService.update(this.pais, this.pais.identificador);
+
+    this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
+          this.getPaises();
+          this.viewForm(false, 'LST');
+        }
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
+      }
+      this.viewForm(true, 'UPD');
+    }
   }
 
 

@@ -24,9 +24,11 @@
               "node_modules/bootstrap/scss/bootstrap.scss",
               "src/assets/scss/paper-dashboard.scss",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/sweetalert2/dist/sweetalert2.css"
             ],
             "scripts": [
+              "node_modules/sweetalert2/dist/sweetalert2.js"
             ]
           },
           "configurations": {

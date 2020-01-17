@@ -46,17 +46,17 @@ export class CiudadComponent implements OnInit {
     }
   }
 
-  getPaises() {
-    this.paisService.getPais().subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.listaPaises = response.data;
-        }
-      },
-      error => {
-        console.log('error: ', error);
+  async getPaises() {
+    this.errors = [];
+    var response = <any>await this.paisService.getPais();
+
+    if (response.status) {
+      this.listaPaises = response.data;
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
   }
 
   getCiudades() {

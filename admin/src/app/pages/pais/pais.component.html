@@ -3,7 +3,7 @@
       
       <div class="card" *ngIf="!form">
         <div class="card-header">
-          <button class="btn btn-primary" (click)="viewForm(true, 'INS')">Agregar</button>
+          <button class="btn btn-primary" (click)="viewForm(true, 'INS', true)">Agregar</button>
         </div>
         <div class="card-body">
           <div class="table-responsive">
@@ -22,15 +22,21 @@
                     {{ row.nombre }}
                   </td>
                   <td class="text-right">
-                    <button class="btn btn-sm btn-warning" (click)="getPais(row.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
+                    <button class="btn btn-sm btn-warning" (click)="getPais(row.identificador)"> <i class="fas fa-edit"></i> </button>
                   </td>
                 </tr>
               </tbody>
             </table>
+            <div class="row justify-content-center align-items-center col-md-12">
+              <span *ngIf="cargando && !form && action == 'LST'" class="spinner-border spinner-border-lg spinner-table" role="status" aria-hidden="true"></span>
+            </div>
           </div>
+
+          
         </div>
       </div>
 
+      <!-- SECCION FORMULARIO -->
       <div class="card" *ngIf="form">
         <div class="card-body">
           <div class="table-responsive">
@@ -40,15 +46,17 @@
                   <input type="text" class="form-control" placeholder="Nombre" name="nombre" [(ngModel)]="pais.nombre">
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">
-                        <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        Guardar
-                    </button>
-                    <button class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">
-                        <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        Actualizar
-                    </button>
-                    <button class="btn btn-danger" (click)="viewForm(false, '')">Cancelar</button>
+                  <button type="button" class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">
+                      <span *ngIf="cargando && action == 'INS'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Guardar
+                  </button>
+                  <button type="button" class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">
+                      <span *ngIf="cargando && action == 'UPD'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Actualizar
+                  </button>
+                  <button type="button" class="btn btn-danger" (click)="viewForm(false, 'LST')">
+                    Cancelar
+                  </button>
                 </div>
 
                 

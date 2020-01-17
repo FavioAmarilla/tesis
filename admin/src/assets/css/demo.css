@@ -204,3 +204,32 @@
   outline: none;
   display: none;
 }
+
+/* ESTILOS PARA EL EFECTO DE LOADING */
+.loading {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  img {
+      width: 120px;
+  }
+}
+
+.loading-div{
+  position: fixed;
+  z-index: 999;
+  overflow: visible;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+}
+
+.loading-div img{
+  display:block;
+  position: fixed; /* or absolute */
+  top: 33%;
+  left: 43%;
+}
