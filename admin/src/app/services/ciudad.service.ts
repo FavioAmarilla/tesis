@@ -13,25 +13,53 @@ export class CiudadService {
     private http: HttpClient
   ) { }
 
-  getCiudad(id?) {
+  async getCiudad(id?) {
     const url = (id) ? `${API}/ciudad/show/${id}` : `${API}/ciudad`;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.get(url, { headers });
+
+    return new Promise(resolve => {
+      this.http.get(url, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  register(ciudad) {
+  async register(ciudad) {
     const json = JSON.stringify(ciudad);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(`${API}/ciudad`, params, { headers: headers });
+    return new Promise(resolve => {
+      this.http.post(`${API}/ciudad`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  update(ciudad, id) {
+  async update(ciudad, id) {
     const json = JSON.stringify(ciudad);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.put(`${API}/ciudad/update/${id}`, params, { headers: headers });
+    return new Promise(resolve => {
+      this.http.put(`${API}/ciudad/update/${id}`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 }
