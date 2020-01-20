@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
 import { environment } from 'environments/environment';
+import swal from'sweetalert2';
 
 const API = environment.api;
 
@@ -15,8 +16,10 @@ export class UsersComponent implements OnInit {
   public url: string;
   public form = false;
   public action: string = '';
-  public user: User;
-  public users: User;
+  public usuario: User;
+  public listaUsuario: User;
+  public cargando: boolean = false;
+  public errors = [];
 
   public fileUploaderConfig = {
     multiple: false,
@@ -33,89 +36,122 @@ export class UsersComponent implements OnInit {
   };
 
   constructor(
-    private userService: UserService
+    private usuarioService: UserService
   ) {
     this.url = environment.api; 
   }
 
   ngOnInit() {
-    this.getUsers();
+    this.getUsuarios();
   }
 
-  viewForm(flag, action) {
+  viewForm(flag, action, limpiarError?) {
     this.form = flag
     this.action = action;
 
     if (flag && action == 'INS') {
-      this.user = new User(0, '', '', '', '');
+      this.usuario = new User(null, null, null, null, null);
+    }
+    if (limpiarError) {
+      this.errors = [];
     }
   }
 
-  getUsers() {
-    this.userService.getUsers().subscribe(
-      (response: any) => {
-        if (response && response.status) {
-          this.users = response.data;
-        }
-      },
-      error => {
-        console.log('error: ', error);
+  async getUsuarios() {
+    this.listaUsuario = null;
+    this.action = "LST";
+    this.cargando = true;
+    this.errors = [];
+
+    var response = <any>await this.usuarioService.getUsuario();
+    
+    if (response.status) {
+      this.listaUsuario = response.data;
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
+
+    this.cargando = false;
   }
 
-  getUser(id) {
-    this.userService.getUsers(id).subscribe(
-      (response: any) => {
-        if (response && response.status) {
-          this.user = response.data;
-          this.user.clave_acceso = "";
+  async getUsuario(id) {
+    this.action = "LST";
+    this.cargando = true;
 
-          this.viewForm(true, 'UPD');
-        }
-      },
-      error => {
-        console.log('error: ', error);
+    this.errors = [];
+    var response = <any>await this.usuarioService.getUsuario(id);
+    
+    if (response.status) {
+      this.usuario = response.data;
+      this.viewForm(true, 'UPD');
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
+    this.cargando = false;
   }
 
-  register() {
-    this.userService.register(this.user).subscribe(
-      (response: any) => {
-        console.log('register: ', response);
-        if (response && response.status) {
-          this.getUsers();
-        } else {
+  async register() {
+    this.cargando = true;
 
+    this.errors = [];
+    var response = <any>await this.usuarioService.register(this.usuario);
+    
+    this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
+          this.getUsuarios();
+          this.viewForm(false, 'LST');
         }
-      },
-      error => {
-        console.log('Error: ', error);
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+      this.viewForm(true, 'INS');
+    }
   }
 
-  update() {
-    this.userService.update(this.user, this.user.identificador).subscribe(
-      (response: any) => {
-        console.log('update: ', response);
-        if (response && response.status) {
-          this.getUsers();
-        } else {
+  async update() {
+    this.cargando = true;
 
+    this.errors = [];
+    var response = <any>await this.usuarioService.update(this.usuario, this.usuario.identificador);
+
+    this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
+          this.getUsuarios();
+          this.viewForm(false, 'LST');
         }
-      },
-      error => {
-        console.log('Error: ', error);
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+      this.viewForm(true, 'UPD');
+    }
   }
 
   uploadImage(event){
     console.log(event.response);
     let data = JSON.parse(event.response);
-    this.user.imagen = data.data;
+    this.usuario.imagen = data.data;
   }
 
 }

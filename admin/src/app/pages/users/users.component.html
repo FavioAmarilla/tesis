@@ -3,12 +3,15 @@
 
         <div class="card" *ngIf="!form">
             <div class="card-header">
-                <button class="btn btn-primary" (click)="viewForm(true, 'INS')">Agregar</button>
+                <button class="btn btn-primary" (click)="viewForm(true, 'INS', true)">Agregar</button>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table">
                         <thead class="text-primary">
+                            <th>
+                                Imagen
+                            </th>
                             <th>
                                 Nombre
                             </th>
@@ -20,19 +23,25 @@
                             </th>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let user of users">
+                            <tr *ngFor="let row of listaUsuario">
                                 <td>
-                                    {{ user.nombre_completo }}
+                                    <img *ngIf="row.imagen" src="{{url + '/user/getImage/' + row.imagen}}" width="50" height="50">
                                 </td>
                                 <td>
-                                    {{ user.email }}
+                                    {{ row.nombre_completo }}
+                                </td>
+                                <td>
+                                    {{ row.email }}
                                 </td>
                                 <td class="text-right">
-                                    <button class="btn btn-sm btn-warning" (click)="getUser(user.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
+                                    <button class="btn btn-sm btn-warning" (click)="getUsuario(row.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="row justify-content-center align-items-center col-md-12">
+                      <span *ngIf="cargando && !form && action == 'LST'" class="spinner-border spinner-border-lg spinner-table" role="status" aria-hidden="true"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,8 +53,8 @@
                         <div class="form-group">
                             <label for="image">Imagen</label>
                 
-                            <div *ngIf="user && user.imagen">
-                                <img src="{{url + '/user/getImage/' + user.imagen}}" width="100" height="100">
+                            <div *ngIf="usuario && usuario.imagen">
+                                <img src="{{url + '/user/getImage/' + usuario.imagen}}" width="100" height="100">
                             </div>
                 
                             <angular-file-uploader
@@ -56,20 +65,28 @@
                         </div>
                         <div class="form-group">
                             <label for="nombre_completo">Nombre</label>
-                            <input type="text" class="form-control" placeholder="Nombre" name="nombre_completo" [(ngModel)]="user.nombre_completo">
+                            <input type="text" class="form-control" placeholder="Nombre" name="nombre_completo" [(ngModel)]="usuario.nombre_completo">
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="text" class="form-control" placeholder="Email" name="email" [(ngModel)]="user.email">
+                            <input type="text" class="form-control" placeholder="Email" name="email" [(ngModel)]="usuario.email">
                         </div>
                         <div class="form-group">
                             <label for="clave_acceso">Clave de Acceso</label>
-                            <input type="password" class="form-control" placeholder="Clave de Acceso" name="clave_acceso" [(ngModel)]="user.clave_acceso">
+                            <input type="password" class="form-control" placeholder="Clave de Acceso" name="clave_acceso" [(ngModel)]="usuario.clave_acceso">
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">Actualizar</button>
-                            <button class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">Guardar</button>
-                            <button class="btn btn-danger" (click)="viewForm(false, '')">Cancelar</button>
+                            <button type="button" class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">
+                                <span *ngIf="cargando && action == 'INS'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Guardar
+                            </button>
+                            <button type="button" class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">
+                                <span *ngIf="cargando && action == 'UPD'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Actualizar
+                            </button>
+                            <button type="button" class="btn btn-danger" (click)="viewForm(false, 'LST')">
+                              Cancelar
+                            </button>
                         </div>
                     </form>
                 </div>

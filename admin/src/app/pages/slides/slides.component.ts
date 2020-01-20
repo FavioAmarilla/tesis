@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SlidesService } from '../../services/slides.service';
 import { Slides } from '../../models/slides';
 import { environment } from 'environments/environment';
+import swal from'sweetalert2';
 
 const API = environment.api;
 
@@ -16,6 +17,9 @@ export class SlidesComponent implements OnInit {
   public form = false;
   public action: string = '';
   public slide: Slides;
+  public listaSlide: Slides;
+  public cargando: boolean = false;
+  public errors = [];
 
   public fileUploaderConfig = {
     multiple: false,
@@ -42,86 +46,150 @@ export class SlidesComponent implements OnInit {
     this.getSlides();
   }
 
-  viewForm(flag, action) {
+  viewForm(flag, action, limpiarError?) {
     this.form = flag
     this.action = action;
 
     if (flag && action == 'INS') {
       this.slide = new Slides(null, null, null, null);
     }
+    if (limpiarError) {
+      this.errors = [];
+    }
   }
 
-  getSlides() {
-    this.slidesService.getSlides().subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.slides = response.data;
-        }
-      },
-      error => {
-        console.log('error: ', error);
+  async getSlides() {
+    this.listaSlide = null;
+    this.action = "LST";
+    this.cargando = true;
+    this.errors = [];
+
+    var response = <any>await this.slidesService.getSlide();
+    
+    if (response.status) {
+      this.listaSlide = response.data;
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
+
+    this.cargando = false;
   }
 
-  getSlide(id) {
-    this.slidesService.getSlides(id).subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.slide = response.data;
-          this.viewForm(true, 'UPD');
-        }
-      },
-      error => {
-        console.log('error: ', error);
+  async getSlide(id) {
+    this.action = "LST";
+    this.cargando = true;
+
+    this.errors = [];
+    var response = <any>await this.slidesService.getSlide(id);
+    
+    if (response.status) {
+      this.slide = response.data;
+      this.viewForm(true, 'UPD');
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
+    this.cargando = false;
   }
 
-  register() {
-    this.slidesService.register(this.slide).subscribe(
-      (response: any) => {
-        if (response.status) {
+  async register() {
+    this.cargando = true;
+
+    this.errors = [];
+    var response = <any>await this.slidesService.register(this.slide);
+    
+    this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
           this.getSlides();
-        } else {
-
+          this.viewForm(false, 'LST');
         }
-      },
-      error => {
-        console.log('Error: ', error);
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+      this.viewForm(true, 'INS');
+    }
   }
 
-  update() {
-    this.slidesService.update(this.slide, this.slide.identificador).subscribe(
-      (response: any) => {
-        if (response.status) {
+  async update() {
+    this.cargando = true;
+
+    this.errors = [];
+    var response = <any>await this.slidesService.update(this.slide, this.slide.identificador);
+
+    this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
           this.getSlides();
-        } else {
-
+          this.viewForm(false, 'LST');
         }
-      },
-      error => {
-        console.log('Error: ', error);
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+      this.viewForm(true, 'UPD');
+    }
   }
 
-  delete(id) {
-    this.slidesService.delete(id).subscribe(
-      (response: any) => {
-        if (response.status) {
+  async delete(id) {
+    this.action = "LST";
+    this.cargando = true;
+
+    this.errors = [];
+    var response = <any>await this.slidesService.delete(id);
+
+    this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
           this.getSlides();
-        } else {
-
+          this.viewForm(false, 'LST');
         }
-      },
-      error => {
-        console.log('Error: ', error);
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
   }
+
+  // delete(id) {
+  //   this.slidesService.delete(id).subscribe(
+  //     (response: any) => {
+  //       if (response.status) {
+  //         this.getSlides();
+  //       } else {
+
+  //       }
+  //     },
+  //     error => {
+  //       console.log('Error: ', error);
+  //     }
+  //   );
+  // }
 
   uploadImage(event){
     let data = JSON.parse(event.response);

@@ -54,31 +54,59 @@ export class UserService {
     return this.http.post(`${API}/user`, {headers});
   }
 
-  register(user: any) {
-    const json = JSON.stringify(user);
-    const params = 'json=' + json;
+  async getUsuario(id?) {
+    const url = (id) ? `${API}/user/show/${id}` : `${API}/user`;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(`${API}/user`, params, { headers });
+    return new Promise(resolve => {
+      this.http.get(url, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  update(user: any, id) {
+  async register(user) {
     const json = JSON.stringify(user);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.put(`${API}/user/update/${id}`, params, { headers });
+    return new Promise(resolve => {
+      this.http.post(`${API}/user`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
+  }
+
+  async update(user, id) {
+    const json = JSON.stringify(user);
+    const params = 'json=' + json;
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return new Promise(resolve => {
+      this.http.put(`${API}/user/update/${id}`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
   getUser() {
     if (!this.user) { this.validateToken(); }
     return (this.user) ? { ...this.user } : null;
-  }
-
-  getUsers(id?) {
-    const url = (id) ? `${API}/user/show/${id}` : `${API}/user`;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.get(url, { headers });
   }
 
   async loadToken() {

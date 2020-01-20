@@ -13,31 +13,69 @@ export class SlidesService {
     private http: HttpClient
   ) {}
 
-  getSlides(id?) {
+  async getSlide(id?) {
     const url = (id) ? `${API}/slide/show/${id}` : `${API}/slide`;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.get(url, { headers });
+
+    return new Promise(resolve => {
+      this.http.get(url, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  register(impuesto) {
-    const json = JSON.stringify(impuesto);
+  async register(slide) {
+    const json = JSON.stringify(slide);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(`${API}/slide`, params, { headers: headers });
+    return new Promise(resolve => {
+      this.http.post(`${API}/slide`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  update(impuesto, id) {
-    const json = JSON.stringify(impuesto);
+  async update(slide, id) {
+    const json = JSON.stringify(slide);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.put(`${API}/slide/update/${id}`, params, { headers: headers });
+    return new Promise(resolve => {
+      this.http.put(`${API}/slide/update/${id}`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  delete(id) {
+  async delete(id) {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.delete(`${API}/slide/delete/${id}`, {headers: headers});
+    return new Promise(resolve => {
+      this.http.delete(`${API}/slide/delete/${id}`, {headers: headers}).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
+
 }

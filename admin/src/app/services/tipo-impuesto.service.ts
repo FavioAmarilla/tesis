@@ -13,26 +13,54 @@ export class TipoImpuestoService {
     private http: HttpClient
   ) { }
 
-  getTipoImpuesto(id?) {
+  async getImpuesto(id?) {
     const url = (id) ? `${API}/tipoImpuesto/show/${id}` : `${API}/tipoImpuesto`;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.get(url, {headers});
+
+    return new Promise(resolve => {
+      this.http.get(url, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  register(impuesto) {
-    const json = JSON.stringify(impuesto);
+  async register(tipoImpuesto) {
+    const json = JSON.stringify(tipoImpuesto);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(`${API}/tipoImpuesto`, params, {headers: headers});
+    return new Promise(resolve => {
+      this.http.post(`${API}/tipoImpuesto`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  update(impuesto, id) {
-    const json = JSON.stringify(impuesto);
+  async update(tipoImpuesto, id) {
+    const json = JSON.stringify(tipoImpuesto);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.put(`${API}/tipoImpuesto/update/${id}`, params, {headers: headers});
+    return new Promise(resolve => {
+      this.http.put(`${API}/tipoImpuesto/update/${id}`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
 }

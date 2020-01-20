@@ -8,9 +8,6 @@ import { AngularFileUploaderModule } from 'angular-file-uploader';
 import { AdminLayoutRoutes } from './admin-layout.routing';
 
 import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
-import { TableComponent } from '../../pages/table/table.component';
-import { MapsComponent } from '../../pages/maps/maps.component';
-import { NotificationsComponent } from '../../pages/notifications/notifications.component';
 
 import { LoginComponent } from '../../pages/login/login.component';
 import { TiposImpuestoComponent } from '../../pages/tipos-impuesto/tipos-impuesto.component';
@@ -35,9 +32,6 @@ import { CiudadComponent } from '../../pages/ciudad/ciudad.component';
   ],
   declarations: [
     DashboardComponent,
-    TableComponent,
-    MapsComponent,
-    NotificationsComponent,
     LoginComponent,
     TiposImpuestoComponent,
     EmpresaComponent,

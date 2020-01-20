@@ -69,13 +69,16 @@ export class ProductoComponent implements OnInit {
     }
   }
 
-  getImpuestos() {
-    this.impuestoService.getTipoImpuesto()
-    .subscribe((response: any) => {
-      if (response && response.status) {
-        this.listaImpuestos = response.data;
+  async getImpuestos() {
+    var response = <any>await this.impuestoService.getImpuesto();
+
+    if (response.status) {
+      this.listaImpuestos = response.data;
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    });
+    }
   }
 
   async getLineasProducto() {
