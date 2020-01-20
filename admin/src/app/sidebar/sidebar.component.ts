@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from 'app/services/user.service';
 
 export interface RouteInfo {
@@ -19,6 +19,7 @@ export const ROUTES: RouteInfo[] = [
     { path: '/punto-emision', title: 'Puntos de emision', icon: 'nc-list', class: '' },
     { path: '/pais', title: 'Paises', icon: 'nc-list', class: '' },
     { path: '/ciudad', title: 'Ciudades', icon: 'nc-list', class: '' },
+    { path: '/barrio', title: 'Barrio', icon: 'nc-list', class: '' },
 ];
 
 @Component({
