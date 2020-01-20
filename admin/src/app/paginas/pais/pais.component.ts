@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Pais } from '../../modelos/pais';
 import { ServicioPais } from '../../servicios/pais.service';
-import swal from'sweetalert2';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-pais',
@@ -16,6 +16,9 @@ export class PaisComponent implements OnInit {
   public pais: Pais;
   public listaPaises: Pais;
   public errors = [];
+  public paginaActual = 1;
+  public porPagina;
+  public total;
 
   constructor(
     private servicioPais: ServicioPais
@@ -37,16 +40,19 @@ export class PaisComponent implements OnInit {
     }
   }
 
-  async obtenerPaises() {
+  async obtenerPaises(pagina?) {
+    this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaPaises = null;
     this.accion = 'LST';
     this.cargando = true;
     this.errors = [];
 
-    const response = <any> await this.servicioPais.obtenerPais();
+    const response = <any> await this.servicioPais.obtenerPais('', pagina);
 
     if (response.status) {
-      this.listaPaises = response.data;
+      this.listaPaises = response.data.data;
+      this.porPagina = response.data.per_page;
+      this.total = response.data.total;
     } else {
       for (const i in response.data) {
         this.errors.push(response.data[i]);

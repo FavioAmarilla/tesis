@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFileUploaderModule } from 'angular-file-uploader';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { AdminLayoutRoutes } from './admin-layout.routing';
 
@@ -22,6 +23,8 @@ import { PaisComponent } from '../../paginas/pais/pais.component';
 import { CiudadComponent } from '../../paginas/ciudad/ciudad.component';
 import { BarrioComponent } from '../../paginas/barrio/barrio.component';
 
+import { PaginacionComponent } from '../../shared/paginacion/paginacion.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -29,7 +32,8 @@ import { BarrioComponent } from '../../paginas/barrio/barrio.component';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    AngularFileUploaderModule
+    AngularFileUploaderModule,
+    NgxPaginationModule
   ],
   declarations: [
     DashboardComponent,
@@ -44,7 +48,8 @@ import { BarrioComponent } from '../../paginas/barrio/barrio.component';
     PerfilComponent,
     PaisComponent,
     CiudadComponent,
-    BarrioComponent
+    BarrioComponent,
+    PaginacionComponent
   ]
 })
 

@@ -13,8 +13,10 @@ export class ServicioPais {
     private http: HttpClient
   ) { }
 
-  async obtenerPais(id?) {
-    const url = (id) ? `${API}/pais/show/${id}` : `${API}/pais`;
+  async obtenerPais(id?, pagina = '') {
+    let url = (id && id !== '') ? `${API}/pais/show/${id}` : `${API}/pais`;
+    url = (pagina) ? `${url}?page=${pagina}` : url;
+
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {

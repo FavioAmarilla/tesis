@@ -17,7 +17,8 @@
                 </th>
               </thead>
               <tbody>
-                <tr *ngFor="let row of listaPaises">
+                
+                <tr *ngFor="let row of listaPaises | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
                   <td>
                     {{ row.nombre }}
                   </td>
@@ -27,6 +28,7 @@
                 </tr>
               </tbody>
             </table>
+            <app-paginacion (actualizarPagina)="obtenerPaises($event)" [datos]="pais" [porPagina]="porPagina" [total]="total"></app-paginacion>
             <div class="row justify-content-center align-items-center col-md-12">
               <span *ngIf="cargando && !form && accion == 'LST'" class="spinner-border spinner-border-lg spinner-table" role="status" aria-hidden="true"></span>
             </div>
