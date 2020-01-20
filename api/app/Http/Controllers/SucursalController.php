@@ -8,7 +8,7 @@ use Validator;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Sucursal;
 
-class SucursalController extends Controller
+class SucursalController extends BaseController
 {
      /**
      * Display a listing of the resource.

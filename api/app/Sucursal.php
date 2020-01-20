@@ -20,16 +20,16 @@ class Sucursal extends Model
 
     //obtener empresa de la sucursal
     public function empresa(){
-        return $this->hasMany('App\Empresa');
+        return $this->belongsTo('App\LineaProducto', 'id_empresa');
     }
 
     //obtener pais de la sucursal
     public function pais(){
-        return $this->hasMany('App\Pais');
+        return $this->belongsTo('App\LineaProducto', 'id_pais');
     }
 
     //obtener ciudad de la sucursal
     public function ciudad(){
-        return $this->hasMany('App\Ciudad');
+        return $this->belongsTo('App\LineaProducto', 'id_ciudad');
     }
 }

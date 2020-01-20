@@ -19,6 +19,6 @@ class Empresa extends Model
 
     //obtener todas las sucursales de una empresa
     public function sucursales(){
-        return $this->belongsTo('App\Sucursal', 'id_sucursal');
+        return $this->hasMany('App\Sucursal');
     }
 }

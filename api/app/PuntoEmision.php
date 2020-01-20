@@ -15,6 +15,6 @@ class PuntoEmision extends Model
     
     //obtener sucursal del punto de emision
     public function sucursal(){
-        return $this->belognsTo('App\Sucursal', 'id_sucursal');
+        return $this->belongsTo('App\Sucursal', 'id_sucursal');
     }
 }

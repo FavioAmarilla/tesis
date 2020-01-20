@@ -23,8 +23,8 @@ class Ciudad extends Model
         return $this->belongsTo('App\Pais', 'id_pais');
     }
 
-    //obtener todos las sucursales de una ciudad
+    //obtener todas las sucursales de una ciudad
     public function sucursales(){
-        return $this->belongsTo('App\Sucursal', 'id_ciudad');
+        return $this->hasMany('App\Sucursal');
     }
 }
