@@ -30,7 +30,7 @@ Route::group(['prefix' => 'user'], function () {
 Route::group(['prefix' => 'producto'], function () {
     Route::resource('/', 'ProductoController');
     Route::put('update/{id}', 'ProductoController@update');
-    Route::get('getProducto/{id}', 'ProductoController@show');
+    Route::get('show/{id}', 'ProductoController@show');
     Route::get('search/{search}', 'ProductoController@search');
     Route::post('upload', 'ProductoController@upload');
     Route::get('getImage/{filename}', 'ProductoController@getImage');
