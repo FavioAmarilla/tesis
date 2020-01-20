@@ -12,11 +12,11 @@ export class AdminLayoutComponent implements OnInit {
     this.changeSidebarColor();
   }
 
-  changeSidebarColor(){
-    var sidebar = <HTMLElement>document.querySelector('.sidebar');
+  changeSidebarColor() {
+    const sidebar = <HTMLElement>document.querySelector('.sidebar');
 
-    if(sidebar != undefined){
-        sidebar.setAttribute('data-color', 'black');
+    if (sidebar != undefined) {
+      sidebar.setAttribute('data-color', 'black');
     }
   }
 }

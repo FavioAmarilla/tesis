@@ -1,0 +1,97 @@
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card" *ngIf="!form">
+            <div class="card-header">
+                <button class="btn btn-primary" (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="text-primary">
+                            <th>
+                                Imagen
+                            </th>
+                            <th>
+                                Nombre
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th class="text-right">
+                                Opciones
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of listaUsuario">
+                                <td>
+                                    <img *ngIf="row.imagen" src="{{url + '/user/getImage/' + row.imagen}}" width="50" height="50">
+                                </td>
+                                <td>
+                                    {{ row.nombre_completo }}
+                                </td>
+                                <td>
+                                    {{ row.email }}
+                                </td>
+                                <td class="text-right">
+                                    <button class="btn btn-sm btn-warning" (click)="obtenerUsuario(row.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row justify-content-center align-items-center col-md-12">
+                      <span *ngIf="cargando && !form && accion == 'LST'" class="spinner-border spinner-border-lg spinner-table" role="status" aria-hidden="true"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="form">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <form>
+                        <div class="form-group">
+                            <label for="image">Imagen</label>
+                
+                            <div *ngIf="usuario && usuario.imagen">
+                                <img src="{{url + '/user/getImage/' + usuario.imagen}}" width="100" height="100">
+                            </div>
+                
+                            <angular-file-uploader
+                                [config]="fileUploaderConfig"
+                                [resetUpload]=resetVar
+                                (ApiResponse)="subirImagen($event)">
+                            </angular-file-uploader>
+                        </div>
+                        <div class="form-group">
+                            <label for="nombre_completo">Nombre</label>
+                            <input type="text" class="form-control" placeholder="Nombre" name="nombre_completo" [(ngModel)]="usuario.nombre_completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control" placeholder="Email" name="email" [(ngModel)]="usuario.email">
+                        </div>
+                        <div class="form-group">
+                            <label for="clave_acceso">Clave de Acceso</label>
+                            <input type="password" class="form-control" placeholder="Clave de Acceso" name="clave_acceso" [(ngModel)]="usuario.clave_acceso">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success" (click)="registrar()" *ngIf="accion == 'INS'">
+                                <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Guardar
+                            </button>
+                            <button type="button" class="btn btn-warning" (click)="actualizar()" *ngIf="accion == 'UPD'">
+                                <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Actualizar
+                            </button>
+                            <button type="button" class="btn btn-danger" (click)="mostrarFormulario(false, 'LST')">
+                              Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -6,7 +6,7 @@
     </a>
   </div>
   
-    <ul class="nav" *ngIf="user">
+    <ul class="nav" *ngIf="usuario">
         <li *ngFor="let menuItem of menuItems" routerLinkActive="active" class="{{menuItem.class}}">
             <a [routerLink]="[menuItem.path]">
                 <i class="nc-icon {{menuItem.icon}}"></i>
@@ -15,7 +15,7 @@
         </li>
     </ul>
 
-    <ul class="nav" *ngIf="!user">
+    <ul class="nav" *ngIf="!usuario">
         <li routerLinkActive="active">
             <a [routerLink]="['/login']">
                 <i class="nc-icon nc-single-02"></i>

@@ -7,19 +7,19 @@ import { AngularFileUploaderModule } from 'angular-file-uploader';
 
 import { AdminLayoutRoutes } from './admin-layout.routing';
 
-import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
+import { DashboardComponent } from '../../paginas/dashboard/dashboard.component';
 
-import { LoginComponent } from '../../pages/login/login.component';
-import { TiposImpuestoComponent } from '../../pages/tipos-impuesto/tipos-impuesto.component';
-import { EmpresaComponent } from '../../pages/empresa/empresa.component';
-import { UsersComponent } from '../../pages/users/users.component';
-import { SlidesComponent } from '../../pages/slides/slides.component';
-import { ProductoComponent } from '../../pages/producto/producto.component';
-import { LineaProductoComponent } from '../../pages/linea-producto/linea-producto.component';
-import { PuntosEmisionComponent } from '../../pages/puntos-emision/puntos-emision.component';
-import { ProfileComponent } from '../../pages/profile/profile.component';
-import { PaisComponent } from '../../pages/pais/pais.component';
-import { CiudadComponent } from '../../pages/ciudad/ciudad.component';
+import { LoginComponent } from '../../paginas/login/login.component';
+import { TiposImpuestoComponent } from '../../paginas/tipos-impuesto/tipos-impuesto.component';
+import { EmpresaComponent } from '../../paginas/empresa/empresa.component';
+import { UsuariosComponent } from '../../paginas/usuarios/usuarios.component';
+import { CarruselComponent } from '../../paginas/carrusel/carrusel.component';
+import { ProductoComponent } from '../../paginas/producto/producto.component';
+import { LineaProductoComponent } from '../../paginas/linea-producto/linea-producto.component';
+import { PuntosEmisionComponent } from '../../paginas/puntos-emision/puntos-emision.component';
+import { PerfilComponent } from '../../paginas/perfil/perfil.component';
+import { PaisComponent } from '../../paginas/pais/pais.component';
+import { CiudadComponent } from '../../paginas/ciudad/ciudad.component';
 
 @NgModule({
   imports: [
@@ -35,12 +35,12 @@ import { CiudadComponent } from '../../pages/ciudad/ciudad.component';
     LoginComponent,
     TiposImpuestoComponent,
     EmpresaComponent,
-    UsersComponent,
-    SlidesComponent,
+    UsuariosComponent,
+    CarruselComponent,
     LineaProductoComponent,
     ProductoComponent,
     PuntosEmisionComponent,
-    ProfileComponent,
+    PerfilComponent,
     PaisComponent,
     CiudadComponent
   ]

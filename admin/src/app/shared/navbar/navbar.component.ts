@@ -2,8 +2,8 @@ import { Component, OnInit, Renderer, ViewChild, ElementRef, OnChanges } from '@
 import { ROUTES } from '../../sidebar/sidebar.component';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { UserService } from '../../services/user.service';
-import { User } from '../../models/user';
+import { ServicioUsuario } from '../../servicios/usuario.service';
+import { Usuario } from '../../modelos/usuario';
 import { environment } from 'environments/environment';
 
 const API = environment.api;
@@ -22,17 +22,17 @@ export class NavbarComponent implements OnInit {
   private sidebarVisible: boolean;
 
   public isCollapsed = true;
-  @ViewChild("navbar-cmp", { static: false }) button;
+  @ViewChild('navbar-cmp', { static: false }) button;
 
   public url: string;
-  public user: User;
+  public user: Usuario;
 
   constructor(
     location: Location,
     private renderer: Renderer,
     private element: ElementRef,
     private router: Router,
-    private userService: UserService
+    private servicioUsuario: ServicioUsuario
   ) {
     this.location = location;
     this.nativeElement = element.nativeElement;
@@ -47,21 +47,21 @@ export class NavbarComponent implements OnInit {
     this.router.events.subscribe((event) => {
       this.sidebarClose();
     });
-    this.getUser();
+    this.obtenerUsuario();
 
-    this.userService.loginEmitter
+    this.servicioUsuario.loginEmitter
     .subscribe(response => {
       this.user = response;
       console.log(this.user);
     });
 
-    this.userService.logoutEmitter
+    this.servicioUsuario.logoutEmitter
     .subscribe(event => {
-        this.getUser();
+      this.obtenerUsuario();
     });
   }
 
-  getTitle() {
+  obtenerTitulo() {
     let titlee = this.location.prepareExternalUrl(this.location.path());
     if (titlee.charAt(0) === '#') {
       titlee = titlee.slice(1);
@@ -124,13 +124,13 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  logout() {
-    this.userService.logout();
+  cerrarSession() {
+    this.servicioUsuario.cerrarSession();
     this.user = null;
   }
 
-  async getUser() {
-    this.user = await this.userService.getUser();
+  async obtenerUsuario() {
+    this.user = await this.servicioUsuario.obtenerUsuario();
   }
 
 }

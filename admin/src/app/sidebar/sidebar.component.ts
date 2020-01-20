@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
-import { UserService } from 'app/services/user.service';
+import { ServicioUsuario } from '../servicios/usuario.service';
 
 export interface RouteInfo {
     path: string;
@@ -31,34 +31,34 @@ export class SidebarComponent implements OnInit {
 
 
     public menuItems: any[];
-    public user: any = null;
+    public usuario: any = null;
 
     constructor(
-        private userService: UserService
+        private servicioUsuario: ServicioUsuario
     ) { }
 
     ngOnInit() {
         this.menuItems = ROUTES.filter(menuItem => menuItem);
-        this.getUser();
+        this.obtenerUsuario();
 
-        this.userService.loginEmitter
+        this.servicioUsuario.loginEmitter
         .subscribe(response => {
-            this.user = response;
-            console.log(this.user);
+            this.usuario = response;
+            console.log(this.usuario);
         });
 
-        this.userService.logoutEmitter
+        this.servicioUsuario.logoutEmitter
         .subscribe(event => {
-            this.getUser();
+            this.obtenerUsuario();
         });
     }
 
-    async getUser() {
-        this.user = await this.userService.getUser();
+    async obtenerUsuario() {
+        this.usuario = await this.servicioUsuario.obtenerUsuario();
     }
 
-    logout() {
-        this.userService.logout();
-        this.user = null;
+    cerrarSession() {
+        this.servicioUsuario.cerrarSession();
+        this.usuario = null;
     }
 }

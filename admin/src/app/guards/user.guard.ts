@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { UserService } from '../services/user.service';
+import { ServicioUsuario } from '../servicios/usuario.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserGuard implements CanActivate {
 
-  constructor(private userService: UserService) {}
+  constructor(private servicioUsuario: ServicioUsuario) {}
 
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
-    return this.userService.validateToken();
+    return this.servicioUsuario.validarToken();
   }
 }
