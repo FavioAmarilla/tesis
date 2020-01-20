@@ -4,5 +4,6 @@ export class PuntoEmision {
         public nombre: string,
         public codigo: string,
         public vr_tipo: string,
+        public id_sucursal: number,
     ) {}
 }

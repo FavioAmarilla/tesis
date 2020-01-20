@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PuntoEmision } from '../../models/punto-emision';
+import { Sucursal } from '../../models/sucursal';
 import { PuntoEmisionService } from '../../services/punto-emision.service';
+import { SucursalService } from '../../services/sucursal.service';
+import swal from'sweetalert2';
 
 @Component({
   selector: 'app-puntos-emision',
@@ -11,83 +14,136 @@ export class PuntosEmisionComponent implements OnInit {
 
   public form = false;
   public action: string = '';
-  public puntosEmision: PuntoEmision;
+  public listaPuntosEmision: PuntoEmision;
+  public listaSucursal: Sucursal;
   public puntoEmision: PuntoEmision;
+  public cargando: boolean = false;
+  public errors = [];
 
   constructor(
-    private puntoEmisionService: PuntoEmisionService
+    private puntoEmisionService: PuntoEmisionService,
+    private sucursalService: SucursalService
   ) { }
 
   ngOnInit() {
-    this.getPuntoEmision();
+    this.getPuntosEmision();
+    this.getSucursales();
   }
 
-  viewForm(flag, action) {
+  viewForm(flag, action, limpiarError?) {
     this.form = flag
     this.action = action;
 
     if (flag && action == 'INS') {
-      this.puntoEmision = new PuntoEmision(null, null, null, null);
+      this.puntoEmision = new PuntoEmision(null, null, null, null, null);
+    }
+    if (limpiarError) {
+      this.errors = [];
     }
   }
 
-  getPuntoEmision() {
-    this.puntoEmisionService.getPuntoEmision().subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.puntosEmision = response.data;
-        }
-      },
-      error => {
-        console.log('error: ', error);
+  async getSucursales() {
+    var response = <any>await this.sucursalService.getSucursal();
+
+    if (response.status) {
+      this.listaSucursal = response.data;
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
+    console.log(this.listaSucursal);
   }
 
-  getTipoImpuesto(id) {
-    this.puntoEmisionService.getPuntoEmision(id).subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.puntoEmision = response.data;
-          this.viewForm(true, 'UPD');
-        }
-      },
-      error => {
-        console.log('error: ', error);
+  async getPuntosEmision() {
+    this.listaPuntosEmision = null;
+    this.action = "LST";
+    this.cargando = true;
+    this.errors = [];
+
+    var response = <any>await this.puntoEmisionService.getPuntoEmision();
+    
+    if (response.status) {
+      this.listaPuntosEmision = response.data;
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
+
+    this.cargando = false;
   }
 
-  register() {
-    this.puntoEmisionService.register(this.puntoEmision).subscribe(
-      (response: any) => {
-        console.log('register: ', response);
-        if (response.status) {
-          this.getPuntoEmision();
-        } else {
+  async getPuntoEmision(id) {
+    this.action = "LST";
+    this.cargando = true;
 
-        }
-      },
-      error => {
-        console.log('Error: ', error);
+    this.errors = [];
+    var response = <any>await this.puntoEmisionService.getPuntoEmision(id);
+    
+    if (response.status) {
+      this.puntoEmision = response.data;
+      this.viewForm(true, 'UPD');
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
+    this.cargando = false;
   }
 
-  update() {
-    this.puntoEmisionService.update(this.puntoEmision, this.puntoEmision.identificador).subscribe(
-      (response: any) => {
-        console.log('update: ', response);
-        if (response.status) {
-          this.getPuntoEmision();
-        } else {
+  async register() {
+    this.cargando = true;
 
+    this.errors = [];
+    var response = <any>await this.puntoEmisionService.register(this.puntoEmision);
+    console.log(response);
+    this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
+          this.getPuntosEmision();
+          this.viewForm(false, 'LST');
         }
-      },
-      error => {
-        console.log('Error: ', error);
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+      this.viewForm(true, 'INS');
+    }
+  }
+
+  async update() {
+    this.cargando = true;
+
+    this.errors = [];
+    var response = <any>await this.puntoEmisionService.update(this.puntoEmision, this.puntoEmision.identificador);
+
+    this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
+          this.getPuntosEmision();
+          this.viewForm(false, 'LST');
+        }
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
+      }
+      this.viewForm(true, 'UPD');
+    }
   }
 
 }

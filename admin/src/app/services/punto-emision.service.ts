@@ -13,25 +13,55 @@ export class PuntoEmisionService {
     private http: HttpClient
   ) { }
 
-  getPuntoEmision(id?) {
+  async getPuntoEmision(id?) {
     const url = (id) ? `${API}/puntoEmision/show/${id}` : `${API}/puntoEmision`;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.get(url, {headers});
+
+    return new Promise(resolve => {
+      this.http.get(url, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  register(impuesto) {
-    const json = JSON.stringify(impuesto);
+  async register(puntoEmision) {
+    const json = JSON.stringify(puntoEmision);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(`${API}/puntoEmision`, params, {headers: headers});
+    return new Promise(resolve => {
+      this.http.post(`${API}/puntoEmision`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  update(impuesto, id) {
-    const json = JSON.stringify(impuesto);
+  async update(puntoEmision, id) {
+    const json = JSON.stringify(puntoEmision);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.put(`${API}/puntoEmision/update/${id}`, params, {headers: headers});
+    return new Promise(resolve => {
+      this.http.put(`${API}/puntoEmision/update/${id}`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
+
+  
 }

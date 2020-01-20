@@ -3,12 +3,15 @@
       
       <div class="card" *ngIf="!form">
         <div class="card-header">
-          <button class="btn btn-primary" (click)="viewForm(true, 'INS')">Agregar</button>
+          <button class="btn btn-primary" (click)="viewForm(true, 'INS', true)">Agregar</button>
         </div>
         <div class="card-body">
           <div class="table-responsive">
             <table class="table">
               <thead class=" text-primary">
+                <th>
+                  Sucursal
+                </th>
                 <th>
                   Nombre
                 </th>
@@ -23,7 +26,10 @@
                 </th>
               </thead>
               <tbody>
-                <tr *ngFor="let puntoEmision of puntosEmision">
+                <tr *ngFor="let puntoEmision of listaPuntosEmision">
+                  <td>
+                    {{ puntoEmision.sucursal.nombre }}
+                  </td>
                   <td>
                     {{ puntoEmision.nombre }}
                   </td>
@@ -32,15 +38,18 @@
                   </td>
                   <td class="text-right">
                       <p *ngIf="puntoEmision.vr_tipo == 'ON'">ONLINE</p>
-                      <p *ngIf="puntoEmision.vr_tipo == 'PI'">Pre impreso</p>
-                      <p *ngIf="puntoEmision.vr_tipo == 'AI'">Auto impreso</p>
+                      <p *ngIf="puntoEmision.vr_tipo == 'PI'">PRE IMPRESO</p>
+                      <p *ngIf="puntoEmision.vr_tipo == 'AI'">AUTO   IMPRESO</p>
                   </td>
                   <td class="text-right">
-                    <button class="btn btn-sm btn-warning" (click)="getTipoImpuesto(puntoEmision.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
+                    <button class="btn btn-sm btn-warning" (click)="getPuntoEmision(puntoEmision.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
                   </td>
                 </tr>
               </tbody>
             </table>
+            <div class="row justify-content-center align-items-center col-md-12">
+              <span *ngIf="cargando && !form && action == 'LST'" class="spinner-border spinner-border-lg spinner-table" role="status" aria-hidden="true"></span>
+            </div>
           </div>
         </div>
       </div>
@@ -49,28 +58,43 @@
         <div class="card-body">
           <div class="table-responsive">
             <form>
-                <div class="form-group">
-                  <label for="Nombre">Nombre</label>
-                  <input type="text" class="form-control" placeholder="Nombre" name="nombre" [(ngModel)]="puntoEmision.nombre">
-                </div>
-                <div class="form-group">
-                  <label for="Codigo">Codigo</label>
-                  <input type="text" class="form-control" placeholder="Codigo" name="codigo" [(ngModel)]="puntoEmision.codigo">
-                </div>
-                <div class="form-group">
-                  <label for="Tipo">Tipo</label>
-                  <select class="form-control" name="vr_tipo" [(ngModel)]="puntoEmision.vr_tipo">
-                    <option selected value="ON">Online</option>
-                    <option value="PI">Pre impreso</option>
-                    <option value="AI">Auto impreso</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <button class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">Actualizar</button>
-                  <button class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">Guardar</button>
-                  <button class="btn btn-danger" (click)="viewForm(false, '')">Cancelar</button>
-                </div>
-              </form>
+              <div class="form-group">
+                <label for="id_sucursal">Sucursal</label>
+                <select name="id_sucursal" class="form-control" [(ngModel)]="puntoEmision.id_sucursal">
+                    <option value="" disabled selected>--Seleccionar--</option>
+                    <option *ngFor="let sucursal of listaSucursal" value="{{sucursal.identificador}}">{{sucursal.nombre}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="Nombre">Nombre</label>
+                <input type="text" class="form-control" placeholder="Nombre" name="nombre" [(ngModel)]="puntoEmision.nombre">
+              </div>
+              <div class="form-group">
+                <label for="Codigo">Codigo</label>
+                <input type="text" class="form-control" placeholder="Codigo" name="codigo" [(ngModel)]="puntoEmision.codigo">
+              </div>
+              <div class="form-group">
+                <label for="Tipo">Tipo</label>
+                <select class="form-control" name="vr_tipo" [(ngModel)]="puntoEmision.vr_tipo">
+                  <option selected value="ON">ONLINE</option>
+                  <option value="PI">PRE IMPRESO</option>
+                  <option value="AI">AUTO IMPRESO</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <button type="button" class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">
+                    <span *ngIf="cargando && action == 'INS'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Guardar
+                </button>
+                <button type="button" class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">
+                    <span *ngIf="cargando && action == 'UPD'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Actualizar
+                </button>
+                <button type="button" class="btn btn-danger" (click)="viewForm(false, 'LST')">
+                  Cancelar
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

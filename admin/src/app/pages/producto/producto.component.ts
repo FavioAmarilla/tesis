@@ -115,7 +115,7 @@ export class ProductoComponent implements OnInit {
 
     this.errors = [];
     var response = <any>await this.productoService.getProducto(id);
-    console.log(response);
+    
     if (response.status) {
       this.producto = response.data;
       this.viewForm(true, 'UPD');
