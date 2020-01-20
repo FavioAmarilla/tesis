@@ -13,25 +13,53 @@ export class EmpresaService {
     private http: HttpClient
   ) {}
 
-  getEmpresa(id?) {
+  async getEmpresa(id?) {
     const url = (id) ? `${API}/empresa/show/${id}` : `${API}/empresa`;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.get(url, { headers });
+
+    return new Promise(resolve => {
+      this.http.get(url, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  register(empresa) {
+  async register(empresa) {
     const json = JSON.stringify(empresa);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(`${API}/empresa`, params, { headers: headers });
+    return new Promise(resolve => {
+      this.http.post(`${API}/empresa`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  update(empresa, id) {
+  async update(empresa, id) {
     const json = JSON.stringify(empresa);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.put(`${API}/empresa/update/${id}`, params, { headers: headers });
+    return new Promise(resolve => {
+      this.http.put(`${API}/empresa/update/${id}`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 }

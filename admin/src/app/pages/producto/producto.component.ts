@@ -8,6 +8,7 @@ import { Producto } from '../../models/producto';
 import { TipoImpuesto } from '../../models/tipo-impuesto';
 import * as JsBarcode from 'jsbarcode';
 import { v4 as uuid } from 'uuid';
+import swal from'sweetalert2';
 
 const API = environment.api;
 
@@ -23,9 +24,10 @@ export class ProductoComponent implements OnInit {
   public action: string = '';
   public producto: Producto;
   public listaProductos: Producto;
-  public impuestos: TipoImpuesto;
-  public lineasProducto: LineaProducto;
+  public listaImpuestos: TipoImpuesto;
+  public listaLineas: LineaProducto;
   public errors = [];
+  public cargando: boolean = false;
 
   public fileUploaderConfig = {
     multiple: false,
@@ -55,12 +57,15 @@ export class ProductoComponent implements OnInit {
     this.getLineasProducto();
   }
 
-  viewForm(flag, action) {
+  viewForm(flag, action, limpiarError?) {
     this.form = flag
     this.action = action;
 
     if (flag && action == 'INS') {
-      this.producto = new Producto(0, 0, 0, '', '', '', 0, 0, '');
+      this.producto = new Producto(null, null, null, null, null, null, null, null, null);
+    }
+    if (limpiarError) {
+      this.errors = [];
     }
   }
 
@@ -68,84 +73,112 @@ export class ProductoComponent implements OnInit {
     this.impuestoService.getTipoImpuesto()
     .subscribe((response: any) => {
       if (response && response.status) {
-        this.impuestos = response.data;
+        this.listaImpuestos = response.data;
       }
     });
   }
 
-  getLineasProducto() {
-    this.lineaProductoService.getLineas()
-    .subscribe((response: any) => {
-      if (response && response.status) {
-        this.lineasProducto = response.data;
+  async getLineasProducto() {
+    var response = <any>await this.lineaProductoService.getLinea();
+
+    if (response.status) {
+      this.listaLineas = response.data;
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    })
+    }
   }
 
-  getProductos() {
-    this.productoService.getProducto().subscribe(
-      (response: any) => {
-        if (response && response.status) {
-          this.listaProductos = response.data;
-        }
-      },
-      error => {
-        console.log('error: ', error);
-      }
-    );
-  }
-
-  getProducto(id) {
-    this.productoService.getProducto(id).subscribe(
-      (response: any) => {
-        if (response && response.status) {
-          this.producto = response.data;
-          this.viewForm(true, 'UPD');
-        }
-      },
-      error => {
-        console.log('error: ', error);
-      }
-    );
-  }
-
-  register() {
+  async getProductos() {
+    this.listaProductos = null;
+    this.action = "LST";
+    this.cargando = true;
     this.errors = [];
-    this.productoService.register(this.producto).subscribe(
-      (response: any) => {
-        if (response && response.status) {
-          this.getProductos();
-          this.viewForm(true, 'INS');
-        } else {
-          for (const i in response.data) {
-            this.errors.push(response.data[i]);
-          }
-        }
-      },
-      error => {
-        console.log('Error: ', error);
+
+    var response = <any>await this.productoService.getProducto();
+
+    if (response.status) {
+      this.listaProductos = response.data;
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
+
+    this.cargando = false;
   }
 
-  update() {
-    console.log(this.producto);
+  async getProducto(id) {
+    this.action = "LST";
+    this.cargando = true;
+
     this.errors = [];
-    this.productoService.update(this.producto, this.producto.identificador).subscribe(
-      (response: any) => {
-        console.log(response);
-        if (response && response.status) {
-          this.getProductos();
-        } else {
-          for (let i = 0; i < response.data.length; i++) {
-            this.errors.push(response.data[i]);
-          }
-        }
-      },
-      error => {
-        console.log('Error: ', error);
+    var response = <any>await this.productoService.getProducto(id);
+    console.log(response);
+    if (response.status) {
+      this.producto = response.data;
+      this.viewForm(true, 'UPD');
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
+    this.cargando = false;
+  }
+
+  async register() {
+    this.cargando = true;
+
+    this.errors = [];
+    var response = <any>await this.productoService.register(this.producto);
+
+    this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
+          this.getProductos();
+          this.viewForm(false, 'LST');
+        }
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
+      }
+      this.viewForm(true, 'INS');
+    }
+  }
+
+  async update() {
+    this.cargando = true;
+
+    this.errors = [];
+    var response = <any>await this.productoService.update(this.producto, this.producto.identificador);
+
+    this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
+          this.getProductos();
+          this.viewForm(false, 'LST');
+        }
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
+      }
+      this.viewForm(true, 'UPD');
+    }
   }
 
   uploadImage(event) {

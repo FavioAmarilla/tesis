@@ -13,25 +13,54 @@ export class ProductoService {
     private http: HttpClient
   ) { }
 
-  getProducto(id?) {
-    const url = (id) ? `${API}/producto/getProducto/${id}` : `${API}/producto`;
+  async getProducto(id?) {
+    const url = (id) ? `${API}/producto/show/${id}` : `${API}/producto`;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.get(url, { headers });
+
+    return new Promise(resolve => {
+      this.http.get(url, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  register(producto) {
+  async register(producto) {
     const json = JSON.stringify(producto);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(`${API}/producto`, params, { headers: headers });
+    return new Promise(resolve => {
+      this.http.post(`${API}/producto`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
 
-  update(producto, id) {
+  async update(producto, id) {
     const json = JSON.stringify(producto);
     const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.put(`${API}/producto/update/${id}`, params, { headers: headers });
+    return new Promise(resolve => {
+      this.http.put(`${API}/producto/update/${id}`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
   }
+  
 }

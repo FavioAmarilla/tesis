@@ -3,7 +3,7 @@
 
         <div class="card" *ngIf="!form">
             <div class="card-header">
-                <button class="btn btn-primary" (click)="mostrarFormulario(true, 'INS')">Agregar</button>
+                <button class="btn btn-primary" (click)="viewForm(true, 'INS', true)">Agregar</button>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -39,6 +39,9 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div class="row justify-content-center align-items-center col-md-12">
+                      <span *ngIf="cargando && !form && action == 'LST'" class="spinner-border spinner-border-lg spinner-table" role="status" aria-hidden="true"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -73,9 +76,17 @@
                             <input type="text" class="form-control" placeholder="Número Documento" name="numero_documento" [(ngModel)]="empresa.numero_documento">
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">Actualizar</button>
-                            <button class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">Guardar</button>
-                            <button class="btn btn-danger" (click)="mostrarFormulario(false, '')">Cancelar</button>
+                            <button type="button" class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">
+                                <span *ngIf="cargando && action == 'INS'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Guardar
+                            </button>
+                            <button type="button" class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">
+                                <span *ngIf="cargando && action == 'UPD'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Actualizar
+                            </button>
+                            <button type="button" class="btn btn-danger" (click)="viewForm(false, 'LST')">
+                              Cancelar
+                            </button>
                         </div>
                     </form>
                 </div>

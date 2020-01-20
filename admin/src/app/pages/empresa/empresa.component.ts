@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { EmpresaService } from '../../services/empresa.service';
 import { Empresa } from 'app/models/empresa';
 import { environment } from 'environments/environment';
+import swal from'sweetalert2';
 
-const API = environment.api;
+const API = environment.api; 
 
 @Component({
   selector: 'app-empresa',
@@ -12,11 +13,13 @@ const API = environment.api;
 })
 export class EmpresaComponent implements OnInit {
 
+  public cargando: boolean = false;
   public url: string;
   public form = false;
   public action: string = '';
   public empresa: Empresa;
   public listaEmpresas: Empresa;
+  public errors = [];
 
   public fileUploaderConfig = {
     multiple: false,
@@ -29,7 +32,7 @@ export class EmpresaComponent implements OnInit {
     hideProgressBar: false,
     hideResetBtn: true,
     hideSelectBtn: false,
-    attachPinText: "Seleccionar imagen"
+    attachPinText: "Seleccionar"
   };
 
   constructor(
@@ -42,70 +45,107 @@ export class EmpresaComponent implements OnInit {
     this.getEmpresas();
   }
 
-  mostrarFormulario(flag, action) {
+  viewForm(flag, action, limpiarError?) {
     this.form = flag
     this.action = action;
 
     if (flag && action == 'INS') {
       this.empresa = new Empresa(null, null, null, null, null);
     }
+    if (limpiarError) {
+      this.errors = [];
+    }
   }
 
-  getEmpresas() {
-    this.empresaService.getEmpresa().subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.listaEmpresas = response.data;
-        }
-      },
-      error => {
-        console.log('error: ', error);
+  async getEmpresas() {
+    this.listaEmpresas = null;
+    this.action = "LST";
+    this.cargando = true;
+    this.errors = [];
+
+    var response = <any>await this.empresaService.getEmpresa();
+
+    if (response.status) {
+      this.listaEmpresas = response.data;
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
+
+    this.cargando = false;
   }
 
-  getEmpresa(id) {
-    this.empresaService.getEmpresa(id).subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.empresa = response.data;
-          this.mostrarFormulario(true, 'UPD');
-        }
-      },
-      error => {
-        console.log('error: ', error);
+  async getEmpresa(id) {
+    this.action = "LST";
+    this.cargando = true;
+
+    this.errors = [];
+    var response = <any>await this.empresaService.getEmpresa(id);
+    
+    if (response.status) {
+      this.empresa = response.data;
+      this.viewForm(true, 'UPD');
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+    }
+    this.cargando = false;
   }
 
-  register() {
-    this.empresaService.register(this.empresa).subscribe(
-      (response: any) => {
-        if (response.status) {
+  async register() {
+    this.cargando = true;
+
+    this.errors = [];
+    var response = <any>await this.empresaService.register(this.empresa);
+
+    this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
           this.getEmpresas();
-        } else {
-
+          this.viewForm(false, 'LST');
         }
-      },
-      error => {
-        console.log('Error: ', error);
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+      this.viewForm(true, 'INS');
+    }
   }
 
-  update() {
-    this.empresaService.update(this.empresa, this.empresa.identificador).subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.getEmpresas();
-        } else {
+  async update() {
+    this.cargando = true;
 
+    this.errors = [];
+    var response = <any>await this.empresaService.update(this.empresa, this.empresa.identificador);
+
+    this.cargando = false;
+    if (response.status) {
+      swal.fire({
+        text: response.message,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
+          this.getEmpresas();
+          this.viewForm(false, 'LST');
         }
-      },
-      error => {
-        console.log('Error: ', error);
+      });
+    } else {
+      for (const i in response.data) {
+        this.errors.push(response.data[i]);
       }
-    );
+      this.viewForm(true, 'UPD');
+    }
   }
 
   uploadImage(event){

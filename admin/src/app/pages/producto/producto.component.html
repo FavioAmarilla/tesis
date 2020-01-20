@@ -3,7 +3,7 @@
 
         <div class="card" *ngIf="!form">
             <div class="card-header">
-                <button class="btn btn-primary" (click)="viewForm(true, 'INS')">Agregar</button>
+                <button class="btn btn-primary" (click)="viewForm(true, 'INS', true)">Agregar</button>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -46,6 +46,9 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div class="row justify-content-center align-items-center col-md-12">
+                      <span *ngIf="cargando && !form && action == 'LST'" class="spinner-border spinner-border-lg spinner-table" role="status" aria-hidden="true"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,14 +94,14 @@
                             <label for="id_tipo_impuesto">Tipo de impuesto</label>
                             <select name="id_tipo_impuesto" id="id_tipo_impuesto" class="form-control" [(ngModel)]="producto.id_tipo_impuesto">
                                 <option value="" disabled selected>Seleccione el tipo de impuesto</option>
-                                <option *ngFor="let impuesto of impuestos" value="{{impuesto.identificador}}">{{impuesto.descripcion}}</option>
+                                <option *ngFor="let impuesto of listaImpuestos" value="{{impuesto.identificador}}">{{impuesto.descripcion}}</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="id_linea">Linea del producto</label>
                             <select name="id_linea" id="id_linea" class="form-control" [(ngModel)]="producto.id_linea">
                                 <option value="" disabled selected>Seleccione la linea del producto</option>
-                                <option *ngFor="let linea of lineasProducto" value="{{linea.identificador}}">{{linea.descripcion}}</option>
+                                <option *ngFor="let linea of listaLineas" value="{{linea.identificador}}">{{linea.descripcion}}</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -109,16 +112,17 @@
                             <svg id="barcode"></svg>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">Actualizar</button>
-                            <button class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">Guardar</button>
-                            <button class="btn btn-danger" (click)="viewForm(false, '')">Cancelar</button>
-                        </div>
-                        <div class="card-footer">
-                            <div class="alert alert-danger alert-dismissible col-md-6 mt-4" *ngIf="errors.length > 0">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (click)="errors = []">×</button>
-                                <h4 class="mt-0 mb-0"><i class="icon fa fa-ban"></i> Error de validación</h4>
-                                <p *ngFor="let error of errors" class="mt-2 mb-0"> {{ error }} </p>
-                            </div>
+                            <button type="button" class="btn btn-success" (click)="register()" *ngIf="action == 'INS'">
+                                <span *ngIf="cargando && action == 'INS'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Guardar
+                            </button>
+                            <button type="button" class="btn btn-warning" (click)="update()" *ngIf="action == 'UPD'">
+                                <span *ngIf="cargando && action == 'UPD'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Actualizar
+                            </button>
+                            <button type="button" class="btn btn-danger" (click)="viewForm(false, 'LST')">
+                              Cancelar
+                            </button>
                         </div>
                     </form>
                 </div>
