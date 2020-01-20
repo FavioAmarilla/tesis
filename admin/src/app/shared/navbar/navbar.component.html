@@ -29,8 +29,14 @@
             </p>
           </a>
           <div ngbDropdownMenu aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu dropdown-menu-right">
-            <a ngbDropdownItem [routerLink]="['/profile']" >Mi Perfil</a>
-            <a ngbDropdownItem  (click) ="logout()">Cerrar sesion</a>
+            <a ngbDropdownItem [routerLink]="['/profile']">
+              <i class="fas fa-id-card"></i>
+              Mi Perfil
+            </a>
+            <a ngbDropdownItem  (click) ="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              Cerrar sesion
+            </a>
           </div>
         </li>
       </ul>

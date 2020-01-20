@@ -5,21 +5,20 @@ export interface RouteInfo {
     path: string;
     title: string;
     icon: string;
-    class: string;
 }
 
 export const ROUTES: RouteInfo[] = [
-    { path: '/dashboard', title: 'Dashboard', icon: 'nc-bank', class: '' },
-    { path: '/empresas', title: 'Empresa', icon: 'nc-shop', class: '' },
-    { path: '/productos', title: 'Productos', icon: 'nc-basket', class: '' },
-    { path: '/usuarios', title: 'Usuarios', icon: 'nc-single-02', class: '' },
-    { path: '/tipos-impuesto', title: 'Tipos de impuesto', icon: 'nc-tile-56', class: '' },
-    { path: '/slides', title: 'Banners', icon: 'nc-image', class: '' },
-    { path: '/linea-producto', title: 'Lineas de productos', icon: 'nc-list', class: '' },
-    { path: '/punto-emision', title: 'Puntos de emision', icon: 'nc-list', class: '' },
-    { path: '/pais', title: 'Paises', icon: 'nc-list', class: '' },
-    { path: '/ciudad', title: 'Ciudades', icon: 'nc-list', class: '' },
-    { path: '/barrio', title: 'Barrio', icon: 'nc-list', class: '' },
+    { path: '/dashboard',       title: 'Dashboard',             icon: 'fas fa-tachometer-alt'},
+    { path: '/empresas',        title: 'Empresa',               icon: 'fas fa-building'},
+    { path: '/productos',       title: 'Productos',             icon: 'fas fa-barcode'},
+    { path: '/usuarios',        title: 'Usuarios',              icon: 'fas fa-user-friends'},
+    { path: '/tipos-impuesto',  title: 'Tipos de impuesto',     icon: 'fas fa-percent'},
+    { path: '/slides',          title: 'Banners',               icon: 'far fa-window-restore'},
+    { path: '/linea-producto',  title: 'Lineas de productos',   icon: 'fas fa-th-list'},
+    { path: '/punto-emision',   title: 'Puntos de emision',     icon: 'fas fa-list-ol'},
+    { path: '/pais',            title: 'Paises',                icon: 'fas fa-globe'},
+    { path: '/ciudad',          title: 'Ciudades',              icon: 'fas fa-city'},
+    { path: '/barrio',          title: 'Barrio',                icon: 'fas fa-map-marker-alt'},
 ];
 
 @Component({
