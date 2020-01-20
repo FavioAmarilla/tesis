@@ -16,4 +16,9 @@ class Empresa extends Model
         'numero_documento',
         'imagen'
     ];
+
+    //obtener todas las sucursales de una empresa
+    public function sucursales(){
+        return $this->belongsTo('App\Sucursal', 'id_sucursal');
+    }
 }

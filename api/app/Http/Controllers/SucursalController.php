@@ -5,21 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
-use App\PuntoEmision;
+use App\Sucursal;
 
-class PuntoEmisionController extends BaseController
+class SucursalController extends Controller
 {
-    /**
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $puntosEmision = PuntoEmision::orderBy('created_at','desc')->get()->load('sucursal');
-        return $this->sendResponse($puntosEmision, '');
+        $sucursales = Sucursal::orderBy('created_at','desc')->get()->load('empresa');
+        return $this->sendResponse($sucursales, '');
     }
 
     /**
@@ -44,24 +43,32 @@ class PuntoEmisionController extends BaseController
         $input = json_decode($json, true);
 
         $validator = Validator::make($input, [
-            'nombre'        => 'required', 
-            'codigo'        => 'required',
-            'vr_tipo'       => 'required',
-            'id_sucursal'   => 'required',
+            'id_empresa'  => 'required',
+            'codigo'      => 'required', 
+            'nombre'      => 'required', 
+            'telefono'    => 'required',
+            'id_pais'     => 'required',
+            'id_ciudad'   => 'required',
+            'direccion'   => 'required',
+            'ecommerce'   => 'required',
         ]);
 
         if ($validator->fails()) {
             return $this->sendError('Error de validacion', $validator->errors());
         }
 
-        $puntoEmision = new PuntoEmision();
-        $puntoEmision->nombre = $input['nombre'];
-        $puntoEmision->codigo = $input['codigo'];
-        $puntoEmision->vr_tipo = $input['vr_tipo'];
-        $puntoEmision->id_sucursal = $input['id_sucursal'];
-        $puntoEmision->save();
+        $sucursal = new Sucursal();
+        $sucursal->id_empresa = $input['id_empresa'];
+        $sucursal->codigo = $input['codigo'];
+        $sucursal->nombre = $input['nombre'];
+        $sucursal->telefono = $input['telefono'];
+        $sucursal->id_pais = $input['id_pais'];
+        $sucursal->id_ciudad = $input['id_ciudad'];
+        $sucursal->direccion = $input['direccion'];
+        $sucursal->ecommerce = $input['ecommerce'];
+        $sucursal->save();
 
-        return $this->sendResponse($puntoEmision, 'Punto de emision registrado');
+        return $this->sendResponse($sucursal, 'Sucursal registrada');
     }
 
     /**
@@ -77,7 +84,7 @@ class PuntoEmisionController extends BaseController
         if (is_object($puntoEmision)) {
             return $this->sendResponse($puntoEmision, '');
         }else{
-            return $this->sendError('Punto de emision no definido', null);
+            return $this->sendError('Sucursal no definida', null);
         }
     }
 
@@ -105,10 +112,14 @@ class PuntoEmisionController extends BaseController
         $input = json_decode($json, true);
 
         $validator = Validator::make($input, [
-            'nombre'        => 'required', 
-            'codigo'        => 'required',
-            'vr_tipo'       => 'required',
-            'id_sucursal'   => 'required',
+            'id_empresa'  => 'required',
+            'codigo'      => 'required', 
+            'nombre'      => 'required', 
+            'telefono'    => 'required',
+            'id_pais'     => 'required',
+            'id_ciudad'   => 'required',
+            'direccion'   => 'required',
+            'ecommerce'   => 'required',
         ]);
             
         if ($validator->fails()) {
@@ -116,7 +127,7 @@ class PuntoEmisionController extends BaseController
         }
 
         $puntoEmision = PuntoEmision::where('identificador', $id)->update($input);
-        return $this->sendResponse($input, 'Punto de emision actualizado');
+        return $this->sendResponse($input, 'Sucursal actualizada');
     }
 
     /**

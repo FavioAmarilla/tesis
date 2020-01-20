@@ -82,3 +82,9 @@ Route::group(['prefix' => 'ciudad'], function () {
     Route::put('update/{id}', 'CiudadController@update');
     Route::get('show/{id}', 'CiudadController@show');
 });
+
+Route::group(['prefix' => 'sucursal'], function () {
+    Route::resource('/', 'SucursalController');
+    Route::put('update/{id}', 'SucursalController@update');
+    Route::get('show/{id}', 'SucursalController@show');
+});

@@ -10,6 +10,11 @@ class PuntoEmision extends Model
     protected $table = 'vta_puntos_emision';
     
     protected $fillable = [
-        'identificador', 'nombre', 'codigo', 'vr_tipo',
+        'identificador', 'nombre', 'codigo', 'vr_tipo', 'id_sucursal'
     ];
+    
+    //obtener sucursal del punto de emision
+    public function sucursal(){
+        return $this->belognsTo('App\Sucursal', 'id_sucursal');
+    }
 }

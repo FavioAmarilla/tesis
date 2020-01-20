@@ -17,4 +17,9 @@ class Pais extends Model
     public function ciudad(){
         return $this->hasMany('App\Ciudad');
     }
+
+    //obtener todas las sucursales de un pais
+    public function sucursales(){
+        return $this->belongsTo('App\Sucursal', 'id_pais');
+    }
 }
