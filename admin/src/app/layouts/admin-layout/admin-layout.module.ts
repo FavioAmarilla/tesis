@@ -20,6 +20,7 @@ import { PuntosEmisionComponent } from '../../paginas/puntos-emision/puntos-emis
 import { PerfilComponent } from '../../paginas/perfil/perfil.component';
 import { PaisComponent } from '../../paginas/pais/pais.component';
 import { CiudadComponent } from '../../paginas/ciudad/ciudad.component';
+import { BarrioComponent } from '../../paginas/barrio/barrio.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { CiudadComponent } from '../../paginas/ciudad/ciudad.component';
     PuntosEmisionComponent,
     PerfilComponent,
     PaisComponent,
-    CiudadComponent
+    CiudadComponent,
+    BarrioComponent
   ]
 })
 

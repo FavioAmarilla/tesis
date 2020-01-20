@@ -14,6 +14,7 @@ import { PuntosEmisionComponent } from '../../paginas/puntos-emision/puntos-emis
 import { PerfilComponent } from '../../paginas/perfil/perfil.component';
 import { PaisComponent } from '../../paginas/pais/pais.component';
 import { CiudadComponent } from '../../paginas/ciudad/ciudad.component';
+import { BarrioComponent } from '../../paginas/barrio/barrio.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -28,5 +29,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'linea-producto',   component: LineaProductoComponent, canActivate: [UserGuard] },
     { path: 'punto-emision',    component: PuntosEmisionComponent, canActivate: [UserGuard] },
     { path: 'pais',             component: PaisComponent, canActivate: [UserGuard] },
-    { path: 'ciudad',           component: CiudadComponent, canActivate: [UserGuard] }
+    { path: 'ciudad',           component: CiudadComponent, canActivate: [UserGuard] },
+    { path: 'barrio',           component: BarrioComponent, canActivate: [UserGuard] }
 ];
