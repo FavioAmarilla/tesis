@@ -17,8 +17,16 @@ class SucursalController extends BaseController
      */
     public function index()
     {
-        $sucursales = Sucursal::orderBy('created_at','desc')->get()->load('empresa');
+        $sucursales = Sucursal::orderBy('id_empresa','desc')->get()->load('empresa');
         return $this->sendResponse($sucursales, '');
+    }
+
+    public function paginate()
+    {
+        $paginate = Sucursal::orderBy('id_empresa', 'desc')->paginate(5);
+        $paginate->load('empresa');
+
+        return $this->sendResponse($paginate, '');
     }
 
     /**

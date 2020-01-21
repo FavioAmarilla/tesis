@@ -22,6 +22,13 @@ class SlideController extends BaseController
         return $this->sendResponse($slides, '');
     }
 
+    public function paginate()
+    {
+        $paginate = Slide::orderBy('created_at', 'desc')->paginate(5);
+
+        return $this->sendResponse($paginate, '');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

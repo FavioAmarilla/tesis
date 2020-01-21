@@ -18,9 +18,17 @@ class ProductoController extends BaseController
      */
     public function index()
     {
-        $productos = Producto::orderBy('created_at', 'desc')->get()->load('lineaProducto')->load('tipoImpuesto');
+        $productos = Producto::orderBy('descripcion', 'desc')->get()->load('lineaProducto')->load('tipoImpuesto');
 
         return $this->sendResponse($productos, '');
+    }
+
+    public function paginate()
+    {
+        $paginate = Producto::orderBy('descripcion', 'desc')->paginate(5);
+        $paginate->load('lineaProducto')->load('tipoImpuesto');
+
+        return $this->sendResponse($paginate, '');
     }
 
     /**

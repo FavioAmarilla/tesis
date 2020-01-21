@@ -17,9 +17,16 @@ class UserController extends BaseController
      */
     public function index()
     {
-        $users = User::orderBy('created_at', 'desc')->get();
+        $users = User::orderBy('nombre_completo', 'desc')->get();
 
         return $this->sendResponse($users, '');
+    }
+
+    public function paginate()
+    {
+        $paginate = User::orderBy('nombre_completo', 'desc')->paginate(5);
+
+        return $this->sendResponse($paginate, '');
     }
 
     /**

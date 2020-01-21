@@ -18,8 +18,15 @@ class TipoImpuestoController extends BaseController
      */
     public function index()
     {
-        $impuestos = TipoImpuesto::orderBy('created_at','desc')->get();
+        $impuestos = TipoImpuesto::orderBy('valor','desc')->get();
         return $this->sendResponse($impuestos, '');
+    }
+
+    public function paginate()
+    {
+        $paginate = TipoImpuesto::orderBy('valor', 'desc')->paginate(5);
+
+        return $this->sendResponse($paginate, '');
     }
 
     /**

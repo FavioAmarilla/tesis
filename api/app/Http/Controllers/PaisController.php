@@ -18,9 +18,16 @@ class PaisController extends BaseController
      */
     public function index()
     {
-        $paises = Pais::orderBy('nombre', 'asc')->paginate(5);
+        $paises = Pais::orderBy('nombre', 'asc')->get();
 
         return $this->sendResponse($paises, '');
+    }
+
+    public function paginate()
+    {
+        $paginate = Pais::orderBy('nombre', 'asc')->paginate(5);
+
+        return $this->sendResponse($paginate, '');
     }
 
     /**

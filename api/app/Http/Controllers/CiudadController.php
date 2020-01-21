@@ -18,9 +18,17 @@ class CiudadController extends BaseController
      */
     public function index()
     {
-        $ciudades = Ciudad::orderBy('created_at', 'desc')->get()->load('pais');
+        $ciudades = Ciudad::orderBy('id_pais', 'asc')->get()->load('pais');
 
         return $this->sendResponse($ciudades, '');
+    }
+
+    public function paginate()
+    {
+        $paginate = Ciudad::orderBy('id_pais', 'asc')->paginate(5);
+        $paginate->load('pais');
+
+        return $this->sendResponse($paginate, '');
     }
 
     /**
