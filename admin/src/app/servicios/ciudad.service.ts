@@ -29,6 +29,24 @@ export class ServicioCiudad {
     });
   }
 
+  async paginacion(pagina = '') {
+    let url = `${API}/ciudad/paginate`;
+    url = (pagina) ? `${url}?page=${pagina}` : url;
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return new Promise(resolve => {
+      this.http.get(url, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
+  }
+
   async registrar(ciudad) {
     const json = JSON.stringify(ciudad);
     const params = 'json=' + json;

@@ -29,6 +29,24 @@ export class ServicioSucursal {
     });
   }
 
+  async paginacion(pagina = '') {
+    let url = `${API}/sucursal/paginate`;
+    url = (pagina) ? `${url}?page=${pagina}` : url;
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return new Promise(resolve => {
+      this.http.get(url, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
+  }
+
   async registrar(sucursal) {
     const json = JSON.stringify(sucursal);
     const params = 'json=' + json;

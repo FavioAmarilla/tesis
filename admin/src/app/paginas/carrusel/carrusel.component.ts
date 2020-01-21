@@ -20,6 +20,9 @@ export class CarruselComponent implements OnInit {
   public listaSlide: Carrusel;
   public cargando: boolean = false;
   public errores = [];
+  public paginaActual = 1;
+  public porPagina;
+  public total;
 
   public fileUploaderConfig = {
     multiple: false,
@@ -43,7 +46,7 @@ export class CarruselComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.obtenerCarruseles();
+    this.paginacion();
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -58,16 +61,19 @@ export class CarruselComponent implements OnInit {
     }
   }
 
-  async obtenerCarruseles() {
+  async paginacion(pagina?) {
+    this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaSlide = null;
     this.accion = 'LST';
     this.cargando = true;
     this.errores = [];
 
-    const response = <any> await this.servicioCarrusel.obtenerCarrusel();
+    const response = <any> await this.servicioCarrusel.paginacion(pagina);
 
     if (response.status) {
-      this.listaSlide = response.data;
+      this.listaSlide = response.data.data;
+      this.porPagina = response.data.per_page;
+      this.total = response.data.total;
     } else {
       for (const i in response.data) {
         this.errores.push(response.data[i]);
@@ -86,7 +92,6 @@ export class CarruselComponent implements OnInit {
 
     if (response.status) {
       this.slide = response.data;
-      this.mostrarFormulario(true, 'UPD');
     } else {
       for (const i in response.data) {
         this.errores.push(response.data[i]);
@@ -110,7 +115,7 @@ export class CarruselComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerCarruseles();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });
@@ -137,7 +142,7 @@ export class CarruselComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerCarruseles();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });
@@ -165,7 +170,7 @@ export class CarruselComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerCarruseles();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });
@@ -175,21 +180,6 @@ export class CarruselComponent implements OnInit {
       }
     }
   }
-
-  // delete(id) {
-  //   this.servicioCarrusel.delete(id).subscribe(
-  //     (response: any) => {
-  //       if (response.status) {
-  //         this.obtenerCarruseles();
-  //       } else {
-
-  //       }
-  //     },
-  //     error => {
-  //       console.log('Error: ', error);
-  //     }
-  //   );
-  // }
 
   subirImagen(event) {
     const data = JSON.parse(event.response);

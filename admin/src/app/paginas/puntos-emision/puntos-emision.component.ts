@@ -19,6 +19,9 @@ export class PuntosEmisionComponent implements OnInit {
   public puntoEmision: PuntoEmision;
   public cargando: boolean = false;
   public errors = [];
+  public paginaActual = 1;
+  public porPagina;
+  public total;
 
   constructor(
     private servicioPuntoEmision: ServicioPuntoEmision,
@@ -26,7 +29,7 @@ export class PuntosEmisionComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getPuntosEmision();
+    this.paginacion();
     this.obtenerSucursales();
   }
 
@@ -52,19 +55,21 @@ export class PuntosEmisionComponent implements OnInit {
         this.errors.push(response.data[i]);
       }
     }
-    console.log(this.listaSucursal);
   }
 
-  async getPuntosEmision() {
+  async paginacion(pagina?) {
+    this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaPuntosEmision = null;
     this.accion = 'LST';
     this.cargando = true;
     this.errors = [];
 
-    const response = <any> await this.servicioPuntoEmision.obtenerPuntoEmision();
+    const response = <any> await this.servicioPuntoEmision.paginacion(pagina);
     
     if (response.status) {
-      this.listaPuntosEmision = response.data;
+      this.listaPuntosEmision = response.data.data;
+      this.porPagina = response.data.per_page;
+      this.total = response.data.total;
     } else {
       for (const i in response.data) {
         this.errors.push(response.data[i]);
@@ -107,7 +112,7 @@ export class PuntosEmisionComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.getPuntosEmision();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });
@@ -134,7 +139,7 @@ export class PuntosEmisionComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.getPuntosEmision();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });

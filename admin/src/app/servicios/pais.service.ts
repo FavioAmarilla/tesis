@@ -13,8 +13,24 @@ export class ServicioPais {
     private http: HttpClient
   ) { }
 
-  async obtenerPais(id?, pagina = '') {
-    let url = (id && id !== '') ? `${API}/pais/show/${id}` : `${API}/pais`;
+  async obtenerPais(id?) {
+    const url = (id) ? `${API}/pais/show/${id}` : `${API}/pais`;
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return new Promise(resolve => {
+      this.http.get(url, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
+  }
+
+  async paginacion(pagina = '') {
+    let url = `${API}/pais/paginate`;
     url = (pagina) ? `${url}?page=${pagina}` : url;
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');

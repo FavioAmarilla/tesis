@@ -16,13 +16,16 @@ export class LineaProductoComponent implements OnInit {
   public lineaProducto: LineaProducto;
   public listaLineas: LineaProducto;
   public errores = [];
+  public paginaActual = 1;
+  public porPagina;
+  public total;
 
   constructor(
     private servicioLineaProducto: ServicioLineaProducto
   ) {  }
 
   ngOnInit() {
-    this.obtenerLineas();
+    this.paginacion();
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -37,16 +40,19 @@ export class LineaProductoComponent implements OnInit {
     }
   }
 
-  async obtenerLineas() {
+  async paginacion(pagina?) {
+    this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaLineas = null;
     this.accion = 'LST';
     this.cargando = true;
     this.errores = [];
 
-    const response = <any> await this.servicioLineaProducto.obtenerLinea();
+    const response = <any> await this.servicioLineaProducto.paginacion(pagina);
 
     if (response.status) {
-      this.listaLineas = response.data;
+      this.listaLineas = response.data.data;
+      this.porPagina = response.data.per_page;
+      this.total = response.data.total;
     } else {
       for (const i in response.data) {
         this.errores.push(response.data[i]);
@@ -89,7 +95,7 @@ export class LineaProductoComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerLineas();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });
@@ -116,7 +122,7 @@ export class LineaProductoComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerLineas();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });

@@ -29,6 +29,24 @@ export class ServicioProducto {
     });
   }
 
+  async paginacion(pagina = '') {
+    let url = `${API}/producto/paginate`;
+    url = (pagina) ? `${url}?page=${pagina}` : url;
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return new Promise(resolve => {
+      this.http.get(url, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
+  }
+
   async registrar(producto) {
     const json = JSON.stringify(producto);
     const params = 'json=' + json;

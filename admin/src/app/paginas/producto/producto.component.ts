@@ -28,6 +28,9 @@ export class ProductoComponent implements OnInit {
   public listaLineas: LineaProducto;
   public errors = [];
   public cargando: boolean = false;
+  public paginaActual = 1;
+  public porPagina;
+  public total;
 
   public fileUploaderConfig = {
     multiple: false,
@@ -52,7 +55,7 @@ export class ProductoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.obtenerProductos();
+    this.paginacion();
     this.obtenerImpuestos();
     this.obtenerLineasProducto();
   }
@@ -93,16 +96,19 @@ export class ProductoComponent implements OnInit {
     }
   }
 
-  async obtenerProductos() {
+  async paginacion(pagina?) {
+    this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaProductos = null;
     this.accion = 'LST';
     this.cargando = true;
     this.errors = [];
 
-    const response = <any> await this.servicioProducto.obtenerProducto();
+    const response = <any> await this.servicioProducto.paginacion(pagina);
 
     if (response.status) {
-      this.listaProductos = response.data;
+      this.listaProductos = response.data.data;
+      this.porPagina = response.data.per_page;
+      this.total = response.data.total;
     } else {
       for (const i in response.data) {
         this.errors.push(response.data[i]);
@@ -145,7 +151,7 @@ export class ProductoComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerProductos();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });
@@ -172,7 +178,7 @@ export class ProductoComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerProductos();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });

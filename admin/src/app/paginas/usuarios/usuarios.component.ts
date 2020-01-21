@@ -20,6 +20,9 @@ export class UsuariosComponent implements OnInit {
   public listaUsuario: Usuario;
   public cargando: boolean = false;
   public errores = [];
+  public paginaActual = 1;
+  public porPagina;
+  public total;
 
   public fileUploaderConfig = {
     multiple: false,
@@ -42,7 +45,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.obtenerUsuarios();
+    this.paginacion();
   }
 
   viewForm(flag, accion, limpiarError?) {
@@ -57,16 +60,19 @@ export class UsuariosComponent implements OnInit {
     }
   }
 
-  async obtenerUsuarios() {
+  async paginacion(pagina?) {
+    this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaUsuario = null;
     this.accion = 'LST';
     this.cargando = true;
     this.errores = [];
 
-    const response = <any> await this.servicioUsuario.obtenerUsuarios();
+    const response = <any> await this.servicioUsuario.paginacion(pagina);
 
     if (response.status) {
-      this.listaUsuario = response.data;
+      this.listaUsuario = response.data.data;
+      this.porPagina = response.data.per_page;
+      this.total = response.data.total;
     } else {
       for (const i in response.data) {
         this.errores.push(response.data[i]);
@@ -81,7 +87,7 @@ export class UsuariosComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioUsuario.obtenerUsuarios(id);
+    const response = <any> await this.servicioUsuario.paginacion(id);
 
     if (response.status) {
       this.usuario = response.data;
@@ -109,7 +115,7 @@ export class UsuariosComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerUsuarios();
+          this.paginacion();
           this.viewForm(false, 'LST');
         }
       });
@@ -136,7 +142,7 @@ export class UsuariosComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerUsuarios();
+          this.paginacion();
           this.viewForm(false, 'LST');
         }
       });

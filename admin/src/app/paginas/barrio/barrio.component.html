@@ -20,7 +20,7 @@
                 </th>
               </thead>
               <tbody>
-                <tr *ngFor="let row of listaBarrio">
+                <tr *ngFor="let row of listaBarrio | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
                   <td>
                     {{ row.ciudad.nombre }}
                   </td>
@@ -33,8 +33,11 @@
                 </tr>
               </tbody>
             </table>
+            <div *ngIf="!cargando && !form && accion == 'LST'">
+              <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="barrio" [porPagina]="porPagina" [total]="total"></app-paginacion>
+            </div>
             <div class="row justify-content-center align-items-center col-md-12">
-              <span *ngIf="cargando && !form && action == 'LST'" class="spinner-border spinner-border-lg spinner-table" role="status" aria-hidden="true"></span>
+              <span *ngIf="cargando && !form && accion == 'LST'" class="spinner-border spinner-border-lg spinner-table" role="status" aria-hidden="true"></span>
             </div>
           </div>
         </div>
@@ -57,12 +60,12 @@
                   <input type="text" class="form-control" placeholder="Nombre" name="nombre" [(ngModel)]="barrio.nombre">
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-success" (click)="registrar()" *ngIf="action == 'INS'">
-                        <span *ngIf="cargando && action == 'INS'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <button type="button" class="btn btn-success" (click)="registrar()" *ngIf="accion == 'INS'">
+                        <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
                         Guardar
                     </button>
-                    <button type="button" class="btn btn-warning" (click)="actualizar()" *ngIf="action == 'UPD'">
-                        <span *ngIf="cargando && action == 'UPD'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <button type="button" class="btn btn-warning" (click)="actualizar()" *ngIf="accion == 'UPD'">
+                        <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
                         Actualizar
                     </button>
                     <button type="button" class="btn btn-danger" (click)="mostrarFormulario(false, 'LST')">

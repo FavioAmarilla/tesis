@@ -14,11 +14,15 @@ export class BarrioComponent implements OnInit {
 
   public cargando: boolean = false;
   public form = false;
-  public action: string = '';
+  public accion: string = '';
   public barrio: Barrio;
   public listaBarrio: Barrio;
   public listaCiudad: Ciudad;
   public errors = [];
+  public paginaActual = 1;
+  public porPagina;
+  public total;
+
 
   constructor(
     private servicioBarrio: ServicioBarrio,
@@ -28,15 +32,15 @@ export class BarrioComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.obtenerBarrios();
+    this.paginacion();
     this.obtenerCiudades();
   }
 
-  mostrarFormulario(flag, action, limpiarError?) {
+  mostrarFormulario(flag, accion, limpiarError?) {
     this.form = flag
-    this.action = action;
+    this.accion = accion;
 
-    if (flag && action == 'INS') {
+    if (flag && accion == 'INS') {
       this.barrio = new Barrio(null, null, null);
     }
     if (limpiarError) {
@@ -55,16 +59,19 @@ export class BarrioComponent implements OnInit {
     }
   }
 
-  async obtenerBarrios() {
+  async paginacion(pagina?) {
+    this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaBarrio = null;
-    this.action = "LST";
+    this.accion = "LST";
     this.cargando = true;
     this.errors = [];
 
-    const response = <any> await this.servicioBarrio.obtenerBarrio();
+    const response = <any> await this.servicioBarrio.paginacion(pagina);
 
     if (response.status) {
-      this.listaBarrio = response.data;
+      this.listaBarrio = response.data.data;
+      this.porPagina = response.data.per_page;
+      this.total = response.data.total;
     } else {
       for (const i in response.data) {
         this.errors.push(response.data[i]);
@@ -75,7 +82,7 @@ export class BarrioComponent implements OnInit {
   }
 
   async obtenerBarrio(id) {
-    this.action = 'LST';
+    this.accion = 'LST';
     this.cargando = true;
 
     this.errors = [];
@@ -107,7 +114,7 @@ export class BarrioComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerBarrios();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });
@@ -134,7 +141,7 @@ export class BarrioComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerBarrios();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });

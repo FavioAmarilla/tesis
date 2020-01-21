@@ -20,6 +20,9 @@ export class EmpresaComponent implements OnInit {
   public empresa: Empresa;
   public listaEmpresas: Empresa;
   public errores = [];
+  public paginaActual = 1;
+  public porPagina;
+  public total;
 
   public fileUploaderConfig = {
     multiple: false,
@@ -42,7 +45,7 @@ export class EmpresaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.obtenerEmpresas();
+    this.paginacion();
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -56,17 +59,19 @@ export class EmpresaComponent implements OnInit {
       this.errores = [];
     }
   }
-
-  async obtenerEmpresas() {
+  async paginacion(pagina?) {
+    this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaEmpresas = null;
     this.accion = 'LST';
     this.cargando = true;
     this.errores = [];
 
-    const response = <any> await this.servicioEmpresa.obtenerEmpresa();
+    const response = <any> await this.servicioEmpresa.paginacion(pagina);
 
     if (response.status) {
-      this.listaEmpresas = response.data;
+      this.listaEmpresas = response.data.data;
+      this.porPagina = response.data.per_page;
+      this.total = response.data.total;
     } else {
       for (const i in response.data) {
         this.errores.push(response.data[i]);
@@ -109,7 +114,7 @@ export class EmpresaComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerEmpresas();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });
@@ -136,7 +141,7 @@ export class EmpresaComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerEmpresas();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });

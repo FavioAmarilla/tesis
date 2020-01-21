@@ -25,7 +25,7 @@ export class PaisComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.obtenerPaises();
+    this.paginacion();
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -40,15 +40,14 @@ export class PaisComponent implements OnInit {
     }
   }
 
-  async obtenerPaises(pagina?) {
+  async paginacion(pagina?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaPaises = null;
     this.accion = 'LST';
     this.cargando = true;
     this.errors = [];
 
-    const response = <any> await this.servicioPais.obtenerPais('', pagina);
-
+    const response = <any> await this.servicioPais.paginacion(pagina);
     if (response.status) {
       this.listaPaises = response.data.data;
       this.porPagina = response.data.per_page;
@@ -95,7 +94,7 @@ export class PaisComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerPaises();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });
@@ -122,7 +121,7 @@ export class PaisComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerPaises();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });

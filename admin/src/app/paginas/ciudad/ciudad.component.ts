@@ -19,6 +19,9 @@ export class CiudadComponent implements OnInit {
   public listaCiudades: Ciudad;
   public listaPaises: Pais;
   public errores = [];
+  public paginaActual = 1;
+  public porPagina;
+  public total;
 
   constructor(
     private servicioCiudad: ServicioCiudad,
@@ -28,7 +31,7 @@ export class CiudadComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.obtenerCiudades();
+    this.paginacion();
     this.obtenerPaises();
   }
 
@@ -46,6 +49,7 @@ export class CiudadComponent implements OnInit {
 
   async obtenerPaises() {
     const response = <any>await this.servicioPais.obtenerPais();
+
     if (response.status) {
       this.listaPaises = response.data;
     } else {
@@ -55,16 +59,19 @@ export class CiudadComponent implements OnInit {
     }
   }
 
-  async obtenerCiudades() {
+  async paginacion(pagina?) {
+    this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaCiudades = null;
     this.accion = 'LST';
     this.cargando = true;
     this.errores = [];
 
-    const response = <any> await this.servicioCiudad.obtenerCiudad();
+    const response = <any> await this.servicioCiudad.paginacion(pagina);
 
     if (response.status) {
-      this.listaCiudades = response.data;
+      this.listaCiudades = response.data.data;
+      this.porPagina = response.data.per_page;
+      this.total = response.data.total;
     } else {
       for (const i in response.data) {
         this.errores.push(response.data[i]);
@@ -107,7 +114,7 @@ export class CiudadComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerCiudades();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });
@@ -134,7 +141,7 @@ export class CiudadComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       }).then((result) => {
         if (result.value) {
-          this.obtenerCiudades();
+          this.paginacion();
           this.mostrarFormulario(false, 'LST');
         }
       });
