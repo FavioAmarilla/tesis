@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServicioUsuario } from '../../servicios/usuario.service';
 import { Usuario } from '../../modelos/usuario';
+import swal from'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +35,17 @@ export class LoginComponent implements OnInit {
     if (response.success) {
       this.router.navigate(['/dashboard']);
     } else {
-      this.errores.push('Credenciales no validas');
+      swal.fire({
+        text: "Acceso Denegado",
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
+          this.usuario.email = ""
+          this.usuario.clave_acceso = ""
+        }
+      });
     };
 
     this.cargando = false;
