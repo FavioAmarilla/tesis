@@ -117,9 +117,9 @@ export class ServicioUsuario {
     });
   }
 
-  obtenerUsuario() {
+  async obtenerUsuario() {
     if (!this.usuario) { this.validarToken(); }
-    return (this.usuario) ? { ...this.usuario } : null;
+    return await (this.usuario) ? { ...this.usuario } : null;
   }
 
   async cargarToken() {

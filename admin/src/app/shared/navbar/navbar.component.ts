@@ -25,7 +25,7 @@ export class NavbarComponent implements OnInit {
   @ViewChild('navbar-cmp', { static: false }) button;
 
   public url: string;
-  public user: Usuario;
+  public usuario: Usuario;
 
   constructor(
     location: Location,
@@ -47,12 +47,13 @@ export class NavbarComponent implements OnInit {
     this.router.events.subscribe((event) => {
       this.sidebarClose();
     });
+
     this.obtenerUsuario();
 
     this.servicioUsuario.loginEmitter
     .subscribe(response => {
-      this.user = response;
-      console.log(this.user);
+      this.usuario = response;
+      console.log(this.usuario);
     });
 
     this.servicioUsuario.logoutEmitter
@@ -126,11 +127,11 @@ export class NavbarComponent implements OnInit {
 
   cerrarSession() {
     this.servicioUsuario.cerrarSession();
-    this.user = null;
+    this.usuario = null;
   }
 
   async obtenerUsuario() {
-    this.user = await this.servicioUsuario.obtenerUsuario();
+    this.usuario = await this.servicioUsuario.obtenerUsuario();
   }
 
 }
