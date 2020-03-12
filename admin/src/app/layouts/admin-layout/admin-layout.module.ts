@@ -22,6 +22,7 @@ import { PerfilComponent } from '../../paginas/perfil/perfil.component';
 import { PaisComponent } from '../../paginas/pais/pais.component';
 import { CiudadComponent } from '../../paginas/ciudad/ciudad.component';
 import { BarrioComponent } from '../../paginas/barrio/barrio.component';
+import { BreadcrumbComponent } from "../../shared/breadcrumb/breadcrumb.component";
 
 import { PaginacionComponent } from '../../shared/paginacion/paginacion.component';
 
@@ -49,7 +50,8 @@ import { PaginacionComponent } from '../../shared/paginacion/paginacion.componen
     PaisComponent,
     CiudadComponent,
     BarrioComponent,
-    PaginacionComponent
+    PaginacionComponent,
+    BreadcrumbComponent
   ]
 })
 

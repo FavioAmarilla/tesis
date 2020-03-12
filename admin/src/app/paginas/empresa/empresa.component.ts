@@ -4,6 +4,8 @@ import { Empresa } from 'app/modelos/empresa';
 import { environment } from 'environments/environment';
 import swal from'sweetalert2';
 
+const pagina = "Empresas";
+
 const API = environment.api; 
 
 @Component({

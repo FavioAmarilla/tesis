@@ -5,6 +5,7 @@ import { environment } from 'environments/environment';
 import swal from'sweetalert2';
 
 const API = environment.api;
+const pagina = "Usuarios";
 
 @Component({
   selector: 'app-usuarios',

@@ -5,6 +5,8 @@ import { ServicioPuntoEmision } from '../../servicios/punto-emision.service';
 import { ServicioSucursal } from '../../servicios/sucursal.service';
 import swal from'sweetalert2';
 
+const pagina = "Puntos de emision";
+
 @Component({
   selector: 'app-puntos-emision',
   templateUrl: './puntos-emision.component.html',

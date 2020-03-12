@@ -1,13 +1,12 @@
+<div class="sidebar-wrapper bg-dark">
+    <div class="logo d-flex justify-content-center">
+        <a [routerLink]="['/dashboard']" class="simple-text logo-normal">
+            <img src="assets/img/logo-super.png" width="150" height="45">
+        </a>
+    </div>
 
-<div class="sidebar-wrapper">
-  <div class="logo d-flex justify-content-center">
-    <a [routerLink]="['/dashboard']" class="simple-text logo-normal">
-      <img src="assets/img/logo-super.png" width="150" height="45">
-    </a>
-  </div>
-  
-    <ul class="nav" *ngIf="usuario">
-        <li *ngFor="let menuItem of menuItems" routerLinkActive="active" class="{{menuItem.class}}">
+    <ul class="nav menu" *ngIf="usuario">
+        <li *ngFor="let menuItem of menuItems" routerLinkActive="active" class="menu-class">
             <a [routerLink]="[menuItem.path]">
                 <i class="{{menuItem.icon}}"></i>
                 <p>{{menuItem.title}}</p>

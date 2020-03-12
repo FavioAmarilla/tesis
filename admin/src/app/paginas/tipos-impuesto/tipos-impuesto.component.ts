@@ -3,6 +3,8 @@ import { TipoImpuesto } from '../../modelos/tipo-impuesto';
 import { ServicioTipoImpuesto } from 'app/servicios/tipo-impuesto.service';
 import swal from 'sweetalert2';
 
+const pagina = "Tipos de Impuesto";
+
 @Component({
   selector: 'app-tipos-impuesto',
   templateUrl: './tipos-impuesto.component.html'

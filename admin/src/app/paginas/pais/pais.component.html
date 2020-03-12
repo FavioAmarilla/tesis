@@ -1,9 +1,11 @@
+<app-breadcrumb [pagina]=pagina></app-breadcrumb>
+
 <div class="row">
     <div class="col-md-12">
       
       <div class="card" *ngIf="!form">
         <div class="card-header">
-          <button class="btn btn-primary" (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
+          <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
         </div>
         <div class="card-body">
           <div class="table-responsive">

@@ -3,6 +3,8 @@ import { Pais } from '../../modelos/pais';
 import { ServicioPais } from '../../servicios/pais.service';
 import swal from 'sweetalert2';
 
+const pagina = "Paises";
+
 @Component({
   selector: 'app-pais',
   templateUrl: './pais.component.html',

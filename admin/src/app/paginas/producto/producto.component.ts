@@ -10,6 +10,8 @@ import * as JsBarcode from 'jsbarcode';
 import { v4 as uuid } from 'uuid';
 import swal from 'sweetalert2';
 
+const pagina = "Productos";
+
 const API = environment.api;
 
 @Component({

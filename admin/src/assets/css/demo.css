@@ -233,3 +233,12 @@
   top: 33%;
   left: 43%;
 }
+
+
+.nopadding {
+  padding: 0px;
+}
+
+.nomargin{
+  margin: 0px;
+}

@@ -5,6 +5,8 @@ import { ServicioPais } from '../../servicios/pais.service';
 import { Pais } from '../../modelos/pais';
 import swal from 'sweetalert2';
 
+const pagina = "Ciudades";
+
 @Component({
   selector: 'app-ciudad',
   templateUrl: './ciudad.component.html',

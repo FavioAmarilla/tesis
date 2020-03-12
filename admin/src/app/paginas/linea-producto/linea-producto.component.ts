@@ -3,6 +3,8 @@ import { ServicioLineaProducto } from '../../servicios/linea-producto.service';
 import { LineaProducto } from 'app/modelos/linea-producto';
 import swal from'sweetalert2';
 
+const pagina = "Lineas de Producto";
+
 @Component({
   selector: 'app-linea-producto',
   templateUrl: './linea-producto.component.html',

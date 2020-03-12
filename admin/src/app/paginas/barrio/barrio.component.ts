@@ -5,6 +5,8 @@ import { ServicioCiudad } from '../../servicios/ciudad.service';
 import { ServicioBarrio } from '../../servicios/barrio.service';
 import swal from'sweetalert2';
 
+const pagina = "Barrios";
+
 @Component({
   selector: 'app-barrio',
   templateUrl: './barrio.component.html',

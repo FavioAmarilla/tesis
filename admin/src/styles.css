@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+.sidebar-wrapper::-webkit-scrollbar {
+	width: 7px;
+}
+
+.sidebar-wrapper::-webkit-scrollbar-thumb {
+	background: #5c5c5c;
+	border-radius: 5px;
+}
+.nopadding{
+    padding: 0px;
+}
+
+.nomargin{
+    margin: 0px;
+}

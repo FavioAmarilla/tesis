@@ -4,6 +4,8 @@ import { Carrusel } from '../../modelos/carrusel';
 import { environment } from 'environments/environment';
 import swal from'sweetalert2';
 
+const pagina = "Banners";
+
 const API = environment.api;
 
 @Component({
