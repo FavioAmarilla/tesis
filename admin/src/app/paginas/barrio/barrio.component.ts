@@ -3,9 +3,7 @@ import { Barrio } from '../../modelos/barrio';
 import { Ciudad } from 'app/modelos/ciudad';
 import { ServicioCiudad } from '../../servicios/ciudad.service';
 import { ServicioBarrio } from '../../servicios/barrio.service';
-import swal from'sweetalert2';
-
-const pagina = "Barrios";
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-barrio',
@@ -51,7 +49,7 @@ export class BarrioComponent implements OnInit {
   }
 
   async obtenerCiudades() {
-    const response = <any> await this.servicioCiudad.obtenerCiudad();
+    const response: any = await this.servicioCiudad.obtenerCiudad();
     if (response.status) {
       this.listaCiudad = response.data;
     } else {
@@ -68,7 +66,7 @@ export class BarrioComponent implements OnInit {
     this.cargando = true;
     this.errors = [];
 
-    const response = <any> await this.servicioBarrio.paginacion(pagina);
+    const response: any = await this.servicioBarrio.paginacion(pagina);
 
     if (response.status) {
       this.listaBarrio = response.data.data;
@@ -88,7 +86,7 @@ export class BarrioComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response = <any> await this.servicioBarrio.obtenerBarrio(id);
+    const response: any = await this.servicioBarrio.obtenerBarrio(id);
 
     if (response.status) {
       this.barrio = response.data;
@@ -105,7 +103,7 @@ export class BarrioComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response = <any> await this.servicioBarrio.registrar(this.barrio);
+    const response: any = await this.servicioBarrio.registrar(this.barrio);
 
     this.cargando = false;
     if (response.status) {
@@ -132,7 +130,7 @@ export class BarrioComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response = <any> await this.servicioBarrio.actualizar(this.barrio, this.barrio.identificador);
+    const response: any = await this.servicioBarrio.actualizar(this.barrio, this.barrio.identificador);
 
     this.cargando = false;
     if (response.status) {

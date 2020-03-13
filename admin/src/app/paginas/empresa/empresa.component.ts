@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ServicioEmpresa } from '../../servicios/empresa.service';
 import { Empresa } from 'app/modelos/empresa';
 import { environment } from 'environments/environment';
-import swal from'sweetalert2';
-
-const pagina = "Empresas";
+import swal from 'sweetalert2';
 
 const API = environment.api; 
 
@@ -68,7 +66,7 @@ export class EmpresaComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response = <any> await this.servicioEmpresa.paginacion(pagina);
+    const response: any = await this.servicioEmpresa.paginacion(pagina);
 
     if (response.status) {
       this.listaEmpresas = response.data.data;

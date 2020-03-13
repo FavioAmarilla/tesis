@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ServicioLineaProducto } from '../../servicios/linea-producto.service';
 import { LineaProducto } from 'app/modelos/linea-producto';
-import swal from'sweetalert2';
-
-const pagina = "Lineas de Producto";
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-linea-producto',
@@ -49,7 +47,7 @@ export class LineaProductoComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response = <any> await this.servicioLineaProducto.paginacion(pagina);
+    const response: any = await this.servicioLineaProducto.paginacion(pagina);
 
     if (response.status) {
       this.listaLineas = response.data.data;
@@ -69,7 +67,7 @@ export class LineaProductoComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioLineaProducto.obtenerLinea(id);
+    const response: any = await this.servicioLineaProducto.obtenerLinea(id);
 
     if (response.status) {
       this.lineaProducto = response.data;
@@ -86,7 +84,7 @@ export class LineaProductoComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioLineaProducto.registrar(this.lineaProducto);
+    const response: any = await this.servicioLineaProducto.registrar(this.lineaProducto);
 
     this.cargando = false;
     if (response.status) {
@@ -113,7 +111,7 @@ export class LineaProductoComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioLineaProducto.actualizar(this.lineaProducto, this.lineaProducto.identificador);
+    const response: any = await this.servicioLineaProducto.actualizar(this.lineaProducto, this.lineaProducto.identificador);
 
     this.cargando = false;
     if (response.status) {

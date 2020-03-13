@@ -3,8 +3,6 @@ import { Pais } from '../../modelos/pais';
 import { ServicioPais } from '../../servicios/pais.service';
 import swal from 'sweetalert2';
 
-const pagina = "Paises";
-
 @Component({
   selector: 'app-pais',
   templateUrl: './pais.component.html',
@@ -49,7 +47,7 @@ export class PaisComponent implements OnInit {
     this.cargando = true;
     this.errors = [];
 
-    const response = <any> await this.servicioPais.paginacion(pagina);
+    const response: any = await this.servicioPais.paginacion(pagina);
     if (response.status) {
       this.listaPaises = response.data.data;
       this.porPagina = response.data.per_page;
@@ -68,7 +66,7 @@ export class PaisComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response = <any> await this.servicioPais.obtenerPais(id);
+    const response: any = await this.servicioPais.obtenerPais(id);
 
     if (response.status) {
       this.pais = response.data;
@@ -85,7 +83,7 @@ export class PaisComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response = <any> await this.servicioPais.registrar(this.pais);
+    const response: any = await this.servicioPais.registrar(this.pais);
 
     this.cargando = false;
     if (response.status) {
@@ -112,7 +110,7 @@ export class PaisComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response = <any> await this.servicioPais.actualizar(this.pais, this.pais.identificador);
+    const response: any = await this.servicioPais.actualizar(this.pais, this.pais.identificador);
 
     this.cargando = false;
     if (response.status) {

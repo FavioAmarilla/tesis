@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ServicioCarrusel } from '../../servicios/carrusel.service';
 import { Carrusel } from '../../modelos/carrusel';
 import { environment } from 'environments/environment';
-import swal from'sweetalert2';
-
-const pagina = "Banners";
+import swal from 'sweetalert2';
 
 const API = environment.api;
 
@@ -70,7 +68,7 @@ export class CarruselComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response = <any> await this.servicioCarrusel.paginacion(pagina);
+    const response: any = await this.servicioCarrusel.paginacion(pagina);
 
     if (response.status) {
       this.listaSlide = response.data.data;
@@ -90,10 +88,11 @@ export class CarruselComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioCarrusel.obtenerCarrusel(id);
+    const response: any = await this.servicioCarrusel.obtenerCarrusel(id);
 
     if (response.status) {
       this.slide = response.data;
+      this.mostrarFormulario(true, 'UPD');
     } else {
       for (const i in response.data) {
         this.errores.push(response.data[i]);
@@ -106,7 +105,7 @@ export class CarruselComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioCarrusel.registrar(this.slide);
+    const response: any = await this.servicioCarrusel.registrar(this.slide);
 
     this.cargando = false;
     if (response.status) {
@@ -133,7 +132,7 @@ export class CarruselComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioCarrusel.actualizar(this.slide, this.slide.identificador);
+    const response: any = await this.servicioCarrusel.actualizar(this.slide, this.slide.identificador);
 
     this.cargando = false;
     if (response.status) {
@@ -161,7 +160,7 @@ export class CarruselComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioCarrusel.eliminar(id);
+    const response: any = await this.servicioCarrusel.eliminar(id);
 
     this.cargando = false;
     if (response.status) {

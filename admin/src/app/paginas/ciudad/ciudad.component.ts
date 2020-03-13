@@ -5,8 +5,6 @@ import { ServicioPais } from '../../servicios/pais.service';
 import { Pais } from '../../modelos/pais';
 import swal from 'sweetalert2';
 
-const pagina = "Ciudades";
-
 @Component({
   selector: 'app-ciudad',
   templateUrl: './ciudad.component.html',
@@ -68,7 +66,7 @@ export class CiudadComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response = <any> await this.servicioCiudad.paginacion(pagina);
+    const response: any = await this.servicioCiudad.paginacion(pagina);
 
     if (response.status) {
       this.listaCiudades = response.data.data;
@@ -132,7 +130,7 @@ export class CiudadComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioCiudad.actualizar(this.ciudad, this.ciudad.identificador);
+    const response: any = await this.servicioCiudad.actualizar(this.ciudad, this.ciudad.identificador);
 
     this.cargando = false;
     if (response.status) {

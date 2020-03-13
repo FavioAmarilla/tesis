@@ -1,0 +1,34 @@
+@import 'paper-dashboard/variables';
+@import 'paper-dashboard/mixins';
+
+.btn-success { @include btn-styles($primary-color, $primary-states-color); }
+.btn-primary { @include btn-styles($success-color, $success-states-color); }
+
+.table-responsive {
+    overflow-y: scroll !important;
+    overflow: initial !important;
+}
+
+.content {
+    overflow: hidden;
+}
+
+.card {
+    box-shadow: none;
+}
+
+.ngx-pagination .current {
+    background: $success-color !important;
+}
+
+.text-primary, .breadcrumb-item a {
+    color: $success-color !important;
+}
+
+.sidebar .nav li > a {
+    padding: 6px !important;
+}
+
+.sidebar .sidebar-wrapper {
+    padding-bottom: initial !important;
+}

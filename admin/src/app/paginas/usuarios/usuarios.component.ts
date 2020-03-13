@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ServicioUsuario } from '../../servicios/usuario.service';
 import { Usuario } from '../../modelos/usuario';
 import { environment } from 'environments/environment';
-import swal from'sweetalert2';
+import swal from 'sweetalert2';
 
 const API = environment.api;
-const pagina = "Usuarios";
 
 @Component({
   selector: 'app-usuarios',
@@ -68,7 +67,7 @@ export class UsuariosComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response = <any> await this.servicioUsuario.paginacion(pagina);
+    const response: any = await this.servicioUsuario.paginacion(pagina);
 
     if (response.status) {
       this.listaUsuario = response.data.data;
@@ -88,7 +87,7 @@ export class UsuariosComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioUsuario.obtenerUsuarios(id);
+    const response: any = await this.servicioUsuario.obtenerUsuarios(id);
     
     if (response.status) {
       this.usuario = response.data;
@@ -105,7 +104,7 @@ export class UsuariosComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioUsuario.registrar(this.usuario);
+    const response: any = await this.servicioUsuario.registrar(this.usuario);
 
     this.cargando = false;
     if (response.status) {
@@ -132,7 +131,7 @@ export class UsuariosComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioUsuario.actualizar(this.usuario, this.usuario.identificador);
+    const response: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.identificador);
 
     this.cargando = false;
     if (response.status) {

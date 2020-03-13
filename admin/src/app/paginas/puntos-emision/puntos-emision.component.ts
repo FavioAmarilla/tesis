@@ -3,9 +3,7 @@ import { PuntoEmision } from '../../modelos/punto-emision';
 import { Sucursal } from '../../modelos/sucursal';
 import { ServicioPuntoEmision } from '../../servicios/punto-emision.service';
 import { ServicioSucursal } from '../../servicios/sucursal.service';
-import swal from'sweetalert2';
-
-const pagina = "Puntos de emision";
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-puntos-emision',
@@ -48,7 +46,7 @@ export class PuntosEmisionComponent implements OnInit {
   }
 
   async obtenerSucursales() {
-    const response = <any> await this.servicioSucursal.obtenerSucursal();
+    const response: any = await this.servicioSucursal.obtenerSucursal();
 
     if (response.status) {
       this.listaSucursal = response.data;
@@ -66,7 +64,7 @@ export class PuntosEmisionComponent implements OnInit {
     this.cargando = true;
     this.errors = [];
 
-    const response = <any> await this.servicioPuntoEmision.paginacion(pagina);
+    const response: any = await this.servicioPuntoEmision.paginacion(pagina);
     
     if (response.status) {
       this.listaPuntosEmision = response.data.data;
@@ -86,7 +84,7 @@ export class PuntosEmisionComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response = <any> await this.servicioPuntoEmision.obtenerPuntoEmision(id);
+    const response: any = await this.servicioPuntoEmision.obtenerPuntoEmision(id);
 
     if (response.status) {
       this.puntoEmision = response.data;
@@ -103,7 +101,7 @@ export class PuntosEmisionComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response = <any> await this.servicioPuntoEmision.registrar(this.puntoEmision);
+    const response: any = await this.servicioPuntoEmision.registrar(this.puntoEmision);
     console.log(response);
     this.cargando = false;
     if (response.status) {
@@ -130,7 +128,7 @@ export class PuntosEmisionComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response = <any> await this.servicioPuntoEmision.actualizar(this.puntoEmision, this.puntoEmision.identificador);
+    const response: any = await this.servicioPuntoEmision.actualizar(this.puntoEmision, this.puntoEmision.identificador);
 
     this.cargando = false;
     if (response.status) {

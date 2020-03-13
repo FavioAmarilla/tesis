@@ -10,8 +10,6 @@ import * as JsBarcode from 'jsbarcode';
 import { v4 as uuid } from 'uuid';
 import swal from 'sweetalert2';
 
-const pagina = "Productos";
-
 const API = environment.api;
 
 @Component({
@@ -75,7 +73,7 @@ export class ProductoComponent implements OnInit {
   }
 
   async obtenerImpuestos() {
-    const response = <any> await this.servicioImpuesto.obtenerImpuesto();
+    const response: any = await this.servicioImpuesto.obtenerImpuesto();
 
     if (response.status) {
       this.listaImpuestos = response.data;
@@ -87,7 +85,7 @@ export class ProductoComponent implements OnInit {
   }
 
   async obtenerLineasProducto() {
-    const response = <any> await this.servicioLineaProducto.obtenerLinea();
+    const response: any = await this.servicioLineaProducto.obtenerLinea();
 
     if (response.status) {
       this.listaLineas = response.data;
@@ -105,7 +103,7 @@ export class ProductoComponent implements OnInit {
     this.cargando = true;
     this.errors = [];
 
-    const response = <any> await this.servicioProducto.paginacion(pagina);
+    const response: any = await this.servicioProducto.paginacion(pagina);
 
     if (response.status) {
       this.listaProductos = response.data.data;
@@ -125,7 +123,7 @@ export class ProductoComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response = <any> await this.servicioProducto.obtenerProducto(id);
+    const response: any = await this.servicioProducto.obtenerProducto(id);
 
     if (response.status) {
       this.producto = response.data;
@@ -142,7 +140,7 @@ export class ProductoComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response = <any> await this.servicioProducto.registrar(this.producto);
+    const response: any = await this.servicioProducto.registrar(this.producto);
 
     this.cargando = false;
     if (response.status) {
@@ -169,7 +167,7 @@ export class ProductoComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response = <any> await this.servicioProducto.actualizar(this.producto, this.producto.identificador);
+    const response: any = await this.servicioProducto.actualizar(this.producto, this.producto.identificador);
 
     this.cargando = false;
     if (response.status) {

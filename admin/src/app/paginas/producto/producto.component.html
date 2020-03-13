@@ -1,4 +1,4 @@
-<app-breadcrumb [pagina]=pagina></app-breadcrumb>
+<app-breadcrumb pagina="Productos"></app-breadcrumb>
 <div class="row">
     <div class="col-md-12">
 
@@ -109,18 +109,18 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <button type="button" id="generateBarcode" class="btn btn-primary" (click)="generarCodigoBarras()">Generar código de barras</button>
+                            <button type="button" id="generateBarcode" class="btn btn-success" (click)="generarCodigoBarras()">Generar código de barras</button>
                         </div>
                         <div class="form-group">
                             <input type="hidden" class="form-control" name="codigo_barras" [(ngModel)]="producto.codigo_barras">
                             <svg id="barcode"></svg>
                         </div>
                         <div class="form-group">
-                            <button type="button" class="btn btn-success" (click)="registrar()" *ngIf="accion == 'INS'">
+                            <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'">
                                 <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
                                 Guardar
                             </button>
-                            <button type="button" class="btn btn-warning" (click)="actualizar()" *ngIf="accion == 'UPD'">
+                            <button type="button" class="btn btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'">
                                 <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
                                 Actualizar
                             </button>

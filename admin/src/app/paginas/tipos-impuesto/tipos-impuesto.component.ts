@@ -3,8 +3,6 @@ import { TipoImpuesto } from '../../modelos/tipo-impuesto';
 import { ServicioTipoImpuesto } from 'app/servicios/tipo-impuesto.service';
 import swal from 'sweetalert2';
 
-const pagina = "Tipos de Impuesto";
-
 @Component({
   selector: 'app-tipos-impuesto',
   templateUrl: './tipos-impuesto.component.html'
@@ -48,7 +46,7 @@ export class TiposImpuestoComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response = <any> await this.impuestoService.paginacion(pagina);
+    const response: any = await this.impuestoService.paginacion(pagina);
 
     if (response.status) {
       this.listaImpuesto = response.data.data
@@ -68,7 +66,7 @@ export class TiposImpuestoComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.impuestoService.obtenerImpuesto(id);
+    const response: any = await this.impuestoService.obtenerImpuesto(id);
 
     if (response.status) {
       this.tipoImpuesto = response.data;
@@ -85,7 +83,7 @@ export class TiposImpuestoComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.impuestoService.registrar(this.tipoImpuesto);
+    const response: any = await this.impuestoService.registrar(this.tipoImpuesto);
 
     this.cargando = false;
     if (response.status) {
@@ -112,7 +110,7 @@ export class TiposImpuestoComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.impuestoService.actualizar(this.tipoImpuesto, this.tipoImpuesto.identificador);
+    const response: any = await this.impuestoService.actualizar(this.tipoImpuesto, this.tipoImpuesto.identificador);
 
     this.cargando = false;
     if (response.status) {
