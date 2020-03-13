@@ -3,13 +3,10 @@
 }
 
 .sidebar-wrapper::-webkit-scrollbar-thumb {
-	background: #5c5c5c;
+	background-color: #5c5c5c;
 	border-radius: 5px;
 }
-.nopadding{
-    padding: 0px;
-}
 
-.nomargin{
-    margin: 0px;
+.content .card {
+	border-radius: 0px !important;
 }

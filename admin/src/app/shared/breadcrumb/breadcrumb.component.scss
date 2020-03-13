@@ -1,3 +1,19 @@
-.breadcrumb{
+nav{
     width: 100% !important;
 }
+
+.breadcrumb {
+    border-bottom: 1px solid #ddd;
+    background-color: #f4f3ef !important;
+}
+
+nav ol li, a {
+    color: #51cbce !important;
+    font-size: 17px;
+}
+
+nav ol li {
+    color: #51cbce !important;
+    font-size: 17px;
+}
+
