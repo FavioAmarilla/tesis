@@ -88,8 +88,8 @@ export class UsuariosComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any> await this.servicioUsuario.paginacion(id);
-
+    const response = <any> await this.servicioUsuario.obtenerUsuarios(id);
+    
     if (response.status) {
       this.usuario = response.data;
       this.viewForm(true, 'UPD');
