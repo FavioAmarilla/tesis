@@ -18,7 +18,7 @@ class PuntoEmisionController extends BaseController
      */
     public function index()
     {
-        $puntosEmision = PuntoEmision::orderBy('id_sucursal','asc')->paginate(5)->load('sucursal');
+        $puntosEmision = PuntoEmision::with('sucursal')->orderBy('id_sucursal','asc')->paginate(5);
         return $this->sendResponse($puntosEmision, '');
     }
 

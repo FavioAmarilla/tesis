@@ -120,7 +120,7 @@ class UserController extends BaseController {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id, Request $request) {
         $user = User::find($id);
         $json = $request->input('json', null);
         $input = json_decode($json, true);

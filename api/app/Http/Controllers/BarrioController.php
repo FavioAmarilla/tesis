@@ -18,7 +18,7 @@ class BarrioController extends BaseController
      */
     public function index()
     {
-        $barrios = Barrio::orderBy('id_ciudad', 'desc')->paginate(5)->load('ciudad');
+        $barrios = Barrio::with('ciudad')->orderBy('id_ciudad', 'desc')->paginate(5);
 
         return $this->sendResponse($barrios, '');
     }
