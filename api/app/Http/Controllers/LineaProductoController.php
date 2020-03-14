@@ -18,7 +18,7 @@ class LineaProductoController extends BaseController
      */
     public function index()
     {
-        $lineas = LineaProducto::orderBy('descripcion','desc')->get();
+        $lineas = LineaProducto::orderBy('descripcion','desc')->paginate(5);
         return $this->sendResponse($lineas, '');
     }
 

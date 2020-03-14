@@ -18,7 +18,7 @@ class EmpresaController extends BaseController
      */
     public function index()
     {
-        $empresas = Empresa::orderBy('created_at', 'desc')->get();
+        $empresas = Empresa::orderBy('created_at', 'desc')->paginate(5);
 
         return $this->sendResponse($empresas, '');
     }

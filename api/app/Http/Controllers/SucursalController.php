@@ -17,7 +17,7 @@ class SucursalController extends BaseController
      */
     public function index()
     {
-        $sucursales = Sucursal::orderBy('id_empresa','desc')->get()->load('empresa')->load('pais')->load('ciudad');
+        $sucursales = Sucursal::orderBy('id_empresa','desc')->paginate(5)->load('empresa')->load('pais')->load('ciudad');
         return $this->sendResponse($sucursales, '');
     }
 

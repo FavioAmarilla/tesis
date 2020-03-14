@@ -18,7 +18,7 @@ class ProductoController extends BaseController
      */
     public function index()
     {
-        $productos = Producto::orderBy('descripcion', 'desc')->get()->load('lineaProducto')->load('tipoImpuesto');
+        $productos = Producto::orderBy('descripcion', 'desc')->paginate(5)->load('lineaProducto')->load('tipoImpuesto');
 
         return $this->sendResponse($productos, '');
     }

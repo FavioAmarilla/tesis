@@ -18,7 +18,7 @@ class CiudadController extends BaseController
      */
     public function index()
     {
-        $ciudades = Ciudad::orderBy('id_pais', 'asc')->get()->load('pais');
+        $ciudades = Ciudad::orderBy('id_pais', 'asc')->paginate(5)->load('pais');
 
         return $this->sendResponse($ciudades, '');
     }

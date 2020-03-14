@@ -18,7 +18,7 @@ class SlideController extends BaseController
      */
     public function index()
     {
-        $slides = Slide::orderBy('created_at','desc')->get();
+        $slides = Slide::orderBy('created_at','desc')->paginate(5);
         return $this->sendResponse($slides, '');
     }
 
