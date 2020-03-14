@@ -23,14 +23,6 @@ class BarrioController extends BaseController
         return $this->sendResponse($barrios, '');
     }
 
-    public function paginate()
-    {
-        $paginate = Barrio::orderBy('id_ciudad', 'desc')->paginate(5);
-        $paginate->load('ciudad');
-
-        return $this->sendResponse($paginate, '');
-    }
-
     /**
      * Show the form for creating a new resource.
      *

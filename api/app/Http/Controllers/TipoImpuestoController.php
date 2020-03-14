@@ -22,13 +22,6 @@ class TipoImpuestoController extends BaseController
         return $this->sendResponse($impuestos, '');
     }
 
-    public function paginate()
-    {
-        $paginate = TipoImpuesto::orderBy('valor', 'desc')->paginate(5);
-
-        return $this->sendResponse($paginate, '');
-    }
-
     /**
      * Show the form for creating a new resource.
      *

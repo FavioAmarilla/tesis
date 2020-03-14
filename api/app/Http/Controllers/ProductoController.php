@@ -23,14 +23,6 @@ class ProductoController extends BaseController
         return $this->sendResponse($productos, '');
     }
 
-    public function paginate()
-    {
-        $paginate = Producto::orderBy('descripcion', 'desc')->paginate(5);
-        $paginate->load('lineaProducto')->load('tipoImpuesto');
-
-        return $this->sendResponse($paginate, '');
-    }
-
     /**
      * Show the form for creating a new resource.
      *

@@ -22,14 +22,6 @@ class PuntoEmisionController extends BaseController
         return $this->sendResponse($puntosEmision, '');
     }
 
-    public function paginate()
-    {
-        $paginate = PuntoEmision::orderBy('id_sucursal', 'desc')->paginate(5);
-        $paginate->load('sucursal');
-
-        return $this->sendResponse($paginate, '');
-    }
-
     /**
      * Show the form for creating a new resource.
      *

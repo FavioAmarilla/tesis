@@ -22,13 +22,6 @@ class LineaProductoController extends BaseController
         return $this->sendResponse($lineas, '');
     }
 
-    public function paginate()
-    {
-        $paginate = LineaProducto::orderBy('descripcion', 'desc')->paginate(5);
-
-        return $this->sendResponse($paginate, '');
-    }
-
     /**
      * Show the form for creating a new resource.
      *

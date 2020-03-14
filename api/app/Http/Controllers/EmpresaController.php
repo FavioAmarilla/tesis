@@ -23,13 +23,6 @@ class EmpresaController extends BaseController
         return $this->sendResponse($empresas, '');
     }
 
-    public function paginate()
-    {
-        $paginate = Empresa::orderBy('nombre', 'desc')->paginate(5);
-
-        return $this->sendResponse($paginate, '');
-    }
-
     /**
      * Show the form for creating a new resource.
      *

@@ -23,14 +23,6 @@ class CiudadController extends BaseController
         return $this->sendResponse($ciudades, '');
     }
 
-    public function paginate()
-    {
-        $paginate = Ciudad::orderBy('id_pais', 'asc')->paginate(5);
-        $paginate->load('pais');
-
-        return $this->sendResponse($paginate, '');
-    }
-
     /**
      * Show the form for creating a new resource.
      *

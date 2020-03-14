@@ -21,14 +21,6 @@ class SucursalController extends BaseController
         return $this->sendResponse($sucursales, '');
     }
 
-    public function paginate()
-    {
-        $paginate = Sucursal::orderBy('id_empresa', 'desc')->paginate(5);
-        $paginate->load('empresa')->load('pais')->load('ciudad');
-
-        return $this->sendResponse($paginate, '');
-    }
-
     /**
      * Show the form for creating a new resource.
      *
