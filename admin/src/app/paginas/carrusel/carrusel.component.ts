@@ -46,7 +46,7 @@ export class CarruselComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.paginacion();
+    this.paginacion(this.paginaActual);
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -68,7 +68,7 @@ export class CarruselComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response: any = await this.servicioCarrusel.paginacion(pagina);
+    const response: any = await this.servicioCarrusel.obtenerCarrusel(null, pagina);
 
     if (response.status) {
       this.listaSlide = response.data.data;

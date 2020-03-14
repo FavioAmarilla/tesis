@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServicioUsuario } from '../../servicios/usuario.service';
+import { ServicioAlertas } from '../../servicios/alertas.service';
 import { Usuario } from '../../modelos/usuario';
-import swal from'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -14,10 +14,11 @@ export class LoginComponent implements OnInit {
 
   public usuario: Usuario
   public errores = [];
-  public cargando: boolean = false;
+  public cargando = false;
 
   constructor(
     private servicioUsuario: ServicioUsuario,
+    private servicioAlertas: ServicioAlertas,
     private router: Router
   ) {
     this.usuario = new Usuario(null, null, null, null, null);
@@ -35,17 +36,7 @@ export class LoginComponent implements OnInit {
     if (response.success) {
       this.router.navigate(['/dashboard']);
     } else {
-      swal.fire({
-        text: "Acceso Denegado",
-        icon: 'error',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.usuario.email = ""
-          this.usuario.clave_acceso = ""
-        }
-      });
+      this.servicioAlertas.dialogoError('Acceso Denegado', 'El email y/o contraseña no son correctos');
     };
 
     this.cargando = false;

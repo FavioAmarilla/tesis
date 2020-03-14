@@ -31,7 +31,7 @@ export class CiudadComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.paginacion();
+    this.paginacion(this.paginaActual);
     this.obtenerPaises();
   }
 
@@ -51,7 +51,7 @@ export class CiudadComponent implements OnInit {
     const response = <any>await this.servicioPais.obtenerPais();
 
     if (response.status) {
-      this.listaPaises = response.data;
+      this.listaPaises = response.data.data;
     } else {
       for (const i in response.data) {
         this.errores.push(response.data[i]);
@@ -66,7 +66,7 @@ export class CiudadComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response: any = await this.servicioCiudad.paginacion(pagina);
+    const response: any = await this.servicioCiudad.obtenerCiudad(null, pagina);
 
     if (response.status) {
       this.listaCiudades = response.data.data;

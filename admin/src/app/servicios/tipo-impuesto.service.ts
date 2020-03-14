@@ -13,8 +13,9 @@ export class ServicioTipoImpuesto {
     private http: HttpClient
   ) { }
 
-  async obtenerImpuesto(id?) {
-    const url = (id) ? `${API}/tipoImpuesto/show/${id}` : `${API}/tipoImpuesto`;
+  async obtenerImpuesto(id?, pagina?) {
+    let url = (id) ? `${API}/tipoImpuesto/${id}` : `${API}/tipoImpuesto`;
+    url = (pagina) ? `${url}?page=${pagina}` : url;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
@@ -53,24 +54,6 @@ export class ServicioTipoImpuesto {
 
     return new Promise(resolve => {
       this.http.put(`${API}/tipoImpuesto/update/${id}`, params, { headers: headers }).subscribe(
-        (response: any) => {
-          resolve(response);
-        },
-        error => {
-          resolve(error);
-        }
-      );
-    });
-  }
-
-  async paginacion(pagina = '') {
-    let url = `${API}/tipoImpuesto/paginate`;
-    url = (pagina) ? `${url}?page=${pagina}` : url;
-
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-    return new Promise(resolve => {
-      this.http.get(url, { headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

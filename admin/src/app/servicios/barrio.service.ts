@@ -13,26 +13,9 @@ export class ServicioBarrio {
     private http: HttpClient
   ) { }
 
-  async obtenerBarrio(id?) {
-    const url = (id) ? `${API}/barrio/show/${id}` : `${API}/barrio`;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-    return new Promise(resolve => {
-      this.http.get(url, { headers }).subscribe(
-        (response: any) => {
-          resolve(response);
-        },
-        error => {
-          resolve(error);
-        }
-      );
-    });
-  }
-
-  async paginacion(pagina = '') {
-    let url = `${API}/barrio/paginate`;
+  async obtenerBarrio(id?, pagina?) {
+    let url = (id) ? `${API}/barrio/${id}` : `${API}/barrio`;
     url = (pagina) ? `${url}?page=${pagina}` : url;
-
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {

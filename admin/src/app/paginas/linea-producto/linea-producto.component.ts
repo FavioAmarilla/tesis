@@ -25,7 +25,7 @@ export class LineaProductoComponent implements OnInit {
   ) {  }
 
   ngOnInit() {
-    this.paginacion();
+    this.paginacion(this.paginaActual);
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -47,7 +47,7 @@ export class LineaProductoComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response: any = await this.servicioLineaProducto.paginacion(pagina);
+    const response: any = await this.servicioLineaProducto.obtenerLinea(null, pagina);
 
     if (response.status) {
       this.listaLineas = response.data.data;

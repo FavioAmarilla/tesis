@@ -12,26 +12,9 @@ export class ServicioPuntoEmision {
     private http: HttpClient
   ) { }
 
-  async obtenerPuntoEmision(id?) {
-    const url = (id) ? `${API}/puntoEmision/show/${id}` : `${API}/puntoEmision`;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-    return new Promise(resolve => {
-      this.http.get(url, { headers }).subscribe(
-        (response: any) => {
-          resolve(response);
-        },
-        error => {
-          resolve(error);
-        }
-      );
-    });
-  }
-
-  async paginacion(pagina = '') {
-    let url = `${API}/puntoEmision/paginate`;
+  async obtenerPuntoEmision(id?, pagina?) {
+    let url = (id) ? `${API}/puntoEmision/${id}` : `${API}/puntoEmision`;
     url = (pagina) ? `${url}?page=${pagina}` : url;
-
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {

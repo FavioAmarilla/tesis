@@ -55,7 +55,7 @@ export class ProductoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.paginacion();
+    this.paginacion(this.paginaActual);
     this.obtenerImpuestos();
     this.obtenerLineasProducto();
   }
@@ -76,7 +76,7 @@ export class ProductoComponent implements OnInit {
     const response: any = await this.servicioImpuesto.obtenerImpuesto();
 
     if (response.status) {
-      this.listaImpuestos = response.data;
+      this.listaImpuestos = response.data.data;
     } else {
       for (const i in response.data) {
         this.errors.push(response.data[i]);
@@ -88,7 +88,7 @@ export class ProductoComponent implements OnInit {
     const response: any = await this.servicioLineaProducto.obtenerLinea();
 
     if (response.status) {
-      this.listaLineas = response.data;
+      this.listaLineas = response.data.data;
     } else {
       for (const i in response.data) {
         this.errors.push(response.data[i]);
@@ -103,7 +103,7 @@ export class ProductoComponent implements OnInit {
     this.cargando = true;
     this.errors = [];
 
-    const response: any = await this.servicioProducto.paginacion(pagina);
+    const response: any = await this.servicioProducto.obtenerProducto(null, pagina);
 
     if (response.status) {
       this.listaProductos = response.data.data;

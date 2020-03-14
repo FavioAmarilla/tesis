@@ -13,26 +13,9 @@ export class ServicioEmpresa {
     private http: HttpClient
   ) {}
 
-  async obtenerEmpresa(id?) {
-    const url = (id) ? `${API}/empresa/show/${id}` : `${API}/empresa`;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-    return new Promise(resolve => {
-      this.http.get(url, { headers }).subscribe(
-        (response: any) => {
-          resolve(response);
-        },
-        error => {
-          resolve(error);
-        }
-      );
-    });
-  }
-
-  async paginacion(pagina = '') {
-    let url = `${API}/empresa/paginate`;
+  async obtenerEmpresa(id?, pagina?) {
+    let url = (id) ? `${API}/empresa/${id}` : `${API}/empresa`;
     url = (pagina) ? `${url}?page=${pagina}` : url;
-
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {

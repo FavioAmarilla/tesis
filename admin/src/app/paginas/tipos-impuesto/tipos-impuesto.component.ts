@@ -24,7 +24,7 @@ export class TiposImpuestoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.paginacion();
+    this.paginacion(this.paginaActual);
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -46,7 +46,7 @@ export class TiposImpuestoComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response: any = await this.impuestoService.paginacion(pagina);
+    const response: any = await this.impuestoService.obtenerImpuesto(null, pagina);
 
     if (response.status) {
       this.listaImpuesto = response.data.data

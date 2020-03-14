@@ -25,7 +25,7 @@ export class PaisComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.paginacion();
+    this.paginacion(this.paginaActual);
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -47,7 +47,7 @@ export class PaisComponent implements OnInit {
     this.cargando = true;
     this.errors = [];
 
-    const response: any = await this.servicioPais.paginacion(pagina);
+    const response: any = await this.servicioPais.obtenerPais(null, pagina);
     if (response.status) {
       this.listaPaises = response.data.data;
       this.porPagina = response.data.per_page;

@@ -45,7 +45,7 @@ export class EmpresaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.paginacion();
+    this.paginacion(this.paginaActual);
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -66,7 +66,7 @@ export class EmpresaComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response: any = await this.servicioEmpresa.paginacion(pagina);
+    const response: any = await this.servicioEmpresa.obtenerEmpresa(null, pagina);
 
     if (response.status) {
       this.listaEmpresas = response.data.data;

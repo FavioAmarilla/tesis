@@ -32,7 +32,7 @@ export class BarrioComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.paginacion();
+    this.paginacion(this.paginaActual);
     this.obtenerCiudades();
   }
 
@@ -51,7 +51,7 @@ export class BarrioComponent implements OnInit {
   async obtenerCiudades() {
     const response: any = await this.servicioCiudad.obtenerCiudad();
     if (response.status) {
-      this.listaCiudad = response.data;
+      this.listaCiudad = response.data.data;
     } else {
       for (const i in response.data) {
         this.errors.push(response.data[i]);
@@ -66,7 +66,7 @@ export class BarrioComponent implements OnInit {
     this.cargando = true;
     this.errors = [];
 
-    const response: any = await this.servicioBarrio.paginacion(pagina);
+    const response: any = await this.servicioBarrio.obtenerBarrio(null, pagina);
 
     if (response.status) {
       this.listaBarrio = response.data.data;

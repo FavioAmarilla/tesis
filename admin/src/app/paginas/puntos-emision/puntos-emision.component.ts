@@ -29,7 +29,7 @@ export class PuntosEmisionComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.paginacion();
+    this.paginacion(this.paginaActual);
     this.obtenerSucursales();
   }
 
@@ -64,7 +64,7 @@ export class PuntosEmisionComponent implements OnInit {
     this.cargando = true;
     this.errors = [];
 
-    const response: any = await this.servicioPuntoEmision.paginacion(pagina);
+    const response: any = await this.servicioPuntoEmision.obtenerPuntoEmision(null, pagina);
     
     if (response.status) {
       this.listaPuntosEmision = response.data.data;
