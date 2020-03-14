@@ -37,6 +37,7 @@
                                 </td>
                                 <td class="text-right">
                                     <button class="btn btn-sm btn-warning" (click)="obtenerUsuario(row.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
+                                    <button class="btn btn-sm" (click)="activarDesactivarUsuario(row.identificador, (row.estado) ? 'desactivar' : 'activar')" [ngClass]="{'btn-danger': row.estado, 'btn-primary': !row.estado}" [title]="(row.estado) ? 'Desactivar Usuario' : 'Activar Usuario'"><i class="fas" [ngClass]="{'fa-times': row.estado, 'fa-check-square': !row.estado}"></i></button> &nbsp;
                                 </td>
                             </tr>
                         </tbody>

@@ -1,6 +1,6 @@
 import { Injectable, OnInit, Output, EventEmitter } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Usuario } from '../modelos/usuario';
 import { Router } from '@angular/router';
 
@@ -66,26 +66,9 @@ export class ServicioUsuario {
     });
   }
 
-  async obtenerUsuarios(id?) {
-    const url = (id) ? `${API}/user/show/${id}` : `${API}/user`;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-    return new Promise(resolve => {
-      this.http.get(url, { headers }).subscribe(
-        (response: any) => {
-          resolve(response);
-        },
-        error => {
-          resolve(error);
-        }
-      );
-    });
-  }
-
-  async paginacion(pagina = '') {
-    let url = `${API}/user/paginate`;
+  async obtenerUsuarios(id?, pagina?) {
+    let url = (id) ? `${API}/user/${id}` : `${API}/user`;
     url = (pagina) ? `${url}?page=${pagina}` : url;
-
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
@@ -107,6 +90,25 @@ export class ServicioUsuario {
 
     return new Promise(resolve => {
       this.http.put(`${API}/user/update/${id}`, params, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
+        }
+      );
+    });
+  }
+
+  activarDesactivarUsuario(id, accion) {
+    const estado = (accion === 'activar') ? 1 : 0;
+    const json = JSON.stringify({estado});
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams().append('json', json);
+
+    return new Promise(resolve => {
+      this.http.delete(`${API}/user/${id}`, { headers: headers, params: params }).subscribe(
         (response: any) => {
           resolve(response);
         },

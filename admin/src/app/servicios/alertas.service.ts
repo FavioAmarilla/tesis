@@ -1,6 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import swal from 'sweetalert2';
+import { ServicioUsuario } from './usuario.service';
+import { ServicioBarrio } from './barrio.service';
+import { ServicioCarrusel } from './carrusel.service';
+import { ServicioCiudad } from './ciudad.service';
+import { ServicioEmpresa } from './empresa.service';
+import { ServicioLineaProducto } from './linea-producto.service';
+import { ServicioPais } from './pais.service';
+import { ServicioProducto } from './producto.service';
+import { ServicioPuntoEmision } from './punto-emision.service';
+import { ServicioSucursal } from './sucursal.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +18,18 @@ import swal from 'sweetalert2';
 export class ServicioAlertas {
 
   constructor(
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private servicioBarrio: ServicioBarrio,
+    private servicioCarrusel: ServicioCarrusel,
+    private servicioCiudad: ServicioCiudad,
+    private servicioEmpresa: ServicioEmpresa,
+    private servicioLineaProducto: ServicioLineaProducto,
+    private servicioPais: ServicioPais,
+    private servicioProducto: ServicioProducto,
+    private servicioPuntoEmision: ServicioPuntoEmision,
+    private servicioSucursal: ServicioSucursal,
+    private servicioTipoImpuesto: ServicioUsuario,
+    private servicioUsuario: ServicioUsuario
   ) { }
 
   dialogoConfirmacion(titulo, mensaje, accion, preConfirm?) {
@@ -32,7 +53,8 @@ export class ServicioAlertas {
         showLoaderOnConfirm: true,
         preConfirm: async (request) => {
           if (preConfirm) {
-            return await preConfirm;
+            // Importante que sea asi para que encuentre la referencia correcta del this en el servicio
+            return await this[preConfirm.servicio][preConfirm.callback](preConfirm.data, accion);
           }
           return null;
         },

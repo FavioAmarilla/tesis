@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ServicioUsuario } from '../../servicios/usuario.service';
+import { ServicioAlertas } from '../../servicios/alertas.service';
 import { Usuario } from '../../modelos/usuario';
 import { environment } from 'environments/environment';
 import swal from 'sweetalert2';
@@ -39,16 +40,17 @@ export class UsuariosComponent implements OnInit {
   };
 
   constructor(
-    private servicioUsuario: ServicioUsuario
+    private servicioUsuario: ServicioUsuario,
+    private servicioAlertas: ServicioAlertas
   ) {
     this.url = environment.api;
   }
 
   ngOnInit() {
-    this.paginacion();
+    this.paginacion(this.paginaActual);
   }
 
-  viewForm(flag, accion, limpiarError?) {
+  mostrarFormulario(flag, accion, limpiarError?) {
     this.form = flag
     this.accion = accion;
 
@@ -67,7 +69,7 @@ export class UsuariosComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response: any = await this.servicioUsuario.paginacion(pagina);
+    const response: any = await this.servicioUsuario.obtenerUsuarios(null, pagina);
 
     if (response.status) {
       this.listaUsuario = response.data.data;
@@ -88,10 +90,10 @@ export class UsuariosComponent implements OnInit {
 
     this.errores = [];
     const response: any = await this.servicioUsuario.obtenerUsuarios(id);
-    
+
     if (response.status) {
       this.usuario = response.data;
-      this.viewForm(true, 'UPD');
+      this.mostrarFormulario(true, 'UPD');
     } else {
       for (const i in response.data) {
         this.errores.push(response.data[i]);
@@ -116,14 +118,14 @@ export class UsuariosComponent implements OnInit {
       }).then((result) => {
         if (result.value) {
           this.paginacion();
-          this.viewForm(false, 'LST');
+          this.mostrarFormulario(false, 'LST');
         }
       });
     } else {
       for (const i in response.data) {
         this.errores.push(response.data[i]);
       }
-      this.viewForm(true, 'INS');
+      this.mostrarFormulario(true, 'INS');
     }
   }
 
@@ -143,14 +145,14 @@ export class UsuariosComponent implements OnInit {
       }).then((result) => {
         if (result.value) {
           this.paginacion();
-          this.viewForm(false, 'LST');
+          this.mostrarFormulario(false, 'LST');
         }
       });
     } else {
       for (const i in response.data) {
         this.errores.push(response.data[i]);
       }
-      this.viewForm(true, 'UPD');
+      this.mostrarFormulario(true, 'UPD');
     }
   }
 
@@ -158,6 +160,20 @@ export class UsuariosComponent implements OnInit {
     console.log(event.response);
     const data = JSON.parse(event.response);
     this.usuario.imagen = data.data;
+  }
+
+  async activarDesactivarUsuario(id, accion) {
+    const preConfirm = {servicio: 'servicioUsuario', callback: 'activarDesactivarUsuario', data: id};
+    const titulo = '¿Estas seguro?';
+    const mensaje = 'No podras utilizar este usuario tras realizar esta acción';
+    const resultado: any = await this.servicioAlertas.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
+
+    if (resultado.status) {
+      this.servicioAlertas.dialogoExito('',  resultado.message);
+      this.paginacion(1);
+    } else {
+      this.servicioAlertas.dialogoError('', resultado.message);
+    }
   }
 
 }
