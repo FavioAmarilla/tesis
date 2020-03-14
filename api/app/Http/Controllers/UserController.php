@@ -8,25 +8,16 @@ use Validator;
 use App\Http\Controllers\BaseController as BaseController;
 use App\User;
 
-class UserController extends BaseController
-{
+class UserController extends BaseController {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $users = User::orderBy('nombre_completo', 'desc')->get();
+    public function index() {
+        $users = User::orderBy('nombre_completo', 'desc')->paginate(5);
 
         return $this->sendResponse($users, '');
-    }
-
-    public function paginate()
-    {
-        $paginate = User::orderBy('nombre_completo', 'desc')->paginate(5);
-
-        return $this->sendResponse($paginate, '');
     }
 
     /**
@@ -34,8 +25,7 @@ class UserController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
         //
     }
 
@@ -45,8 +35,7 @@ class UserController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $json = $request->input('json', null);
         $input = json_decode($json, true);
 
@@ -77,8 +66,7 @@ class UserController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         $user = User::find($id);
 
         if (is_object($user)) {
@@ -94,8 +82,7 @@ class UserController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         //
     }
 
@@ -106,8 +93,7 @@ class UserController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $json = $request->input('json', null);
         $input = json_decode($json, true);
 
@@ -134,13 +120,26 @@ class UserController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id) {
+        $user = User::find($id);
+        $json = $request->input('json', null);
+        $input = json_decode($json, true);
+
+        if ($user) {
+            $user->estado = $input['estado'];
+            
+            if ($user->update()) {
+                return $this->sendResponse($user, 'Usuario actualizado');
+            }
+
+            return $this->sendResponse($user, 'Hubo un problema al intentar desactivar el usuario');
+        }
+
+        return $this->sendError('No se ha encontrado el usuario', null);
     }
 
 
-    public function signIn(Request $request){
+    public function signIn(Request $request) {
         $jwtAuth = new \JwtAuth();
         $json = $request->input('json', null);
         $array = json_decode($json, true);
