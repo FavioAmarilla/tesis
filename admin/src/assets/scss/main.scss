@@ -6,11 +6,17 @@
 
 .table-responsive {
     overflow-y: scroll !important;
-    overflow: initial !important;
+    overflow: auto !important;
 }
 
 .content {
     overflow: hidden;
+    padding: 0 15px !important;
+}
+
+.main-panel .container {
+    margin-top: 56px;
+    min-height: calc(100vh - 120px);
 }
 
 .card {
