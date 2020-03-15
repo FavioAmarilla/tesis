@@ -52,7 +52,7 @@ export class ServicioPuntoEmision {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/puntoEmision/update/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/puntoEmision/${id}`, params, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

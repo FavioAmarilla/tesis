@@ -53,7 +53,7 @@ export class ServicioTipoImpuesto {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/tipoImpuesto/update/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/tipoImpuesto/${id}`, params, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

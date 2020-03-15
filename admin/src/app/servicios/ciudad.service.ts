@@ -53,7 +53,7 @@ export class ServicioCiudad {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/ciudad/update/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/ciudad/${id}`, params, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

@@ -53,7 +53,7 @@ export class ServicioProducto {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/producto/update/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/producto/${id}`, params, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

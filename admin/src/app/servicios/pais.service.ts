@@ -53,7 +53,7 @@ export class ServicioPais {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/pais/update/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/pais/${id}`, params, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

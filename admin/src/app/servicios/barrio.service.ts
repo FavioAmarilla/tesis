@@ -53,7 +53,7 @@ export class ServicioBarrio {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/barrio/update/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/barrio/${id}`, params, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
