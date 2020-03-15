@@ -19,25 +19,23 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('user', 'UserController');
 Route::group(['prefix' => 'user'], function () {
-    Route::post('signIn', 'UserController@signIn');
-    Route::post('checkToken', 'UserController@checkToken');
-    Route::post('upload', 'UserController@upload');
-    Route::get('getImage/{filename}', 'UserController@getImage');
+    Route::post('signIn', ['as' => 'user.signIn', 'uses' => 'UserController@signIn']);
+    Route::post('checkToken', ['as' => 'user.checkToken', 'uses' => 'UserController@checkToken']);
+    Route::post('upload', ['as' => 'user.upload', 'uses' => 'UserController@upload']);
+    Route::get('getImage/{filename}', ['as' => 'user.getImage', 'uses' => 'UserController@getImage']);
 });
 
 Route::resource('producto', 'ProductoController');
 Route::group(['prefix' => 'producto'], function () {
-    Route::get('search/{search}', 'ProductoController@search');
-    Route::post('upload', 'ProductoController@upload');
-    Route::get('getImage/{filename}', 'ProductoController@getImage');
+    Route::get('search/{search}', ['as' => 'producto.search', 'uses' => 'ProductoController@search']);
+    Route::post('upload', ['as' => 'producto.upload', 'uses' => 'ProductoController@upload']);
+    Route::get('getImage/{filename}', ['as' => 'producto.getImage', 'uses' => 'ProductoController@getImage']);
 });
 
 Route::resource('slide', 'SlideController');
 Route::group(['prefix' => 'slide'], function () {
-    Route::delete('delete/{id}', 'SlideController@destroy');
-    Route::post('upload', 'SlideController@upload');
-    Route::get('getImage/{filename}', 'SlideController@getImage');
-    Route::get('paginate', 'SlideController@paginate');
+    Route::post('upload', ['as' => 'slide.upload', 'uses' => 'SlideController@upload']);
+    Route::get('getImage/{filename}', ['as' => 'slide.getImage', 'uses' => 'SlideController@getImage']);
 });
 
 Route::resource('lineaProducto', 'LineaProductoController');
@@ -45,17 +43,12 @@ Route::resource('tipoImpuesto', 'TipoImpuestoController');
 
 Route::resource('empresa', 'EmpresaController');
 Route::group(['prefix' => 'empresa'], function () {
-    Route::post('upload', 'EmpresaController@upload');
-    Route::get('getImage/{filename}', 'EmpresaController@getImage');
+    Route::post('upload', ['as' => 'empresa.upload', 'uses' => 'EmpresaController@upload']);
+    Route::get('getImage/{filename}', ['as' => 'empresa.getImage', 'uses' => 'EmpresaController@getImage']);
 });
 
 Route::resource('puntoEmision', 'PuntoEmisionController');
 Route::resource('pais', 'PaisController');
 Route::resource('ciudad', 'CiudadController');
-
 Route::resource('barrio', 'BarrioController');
-Route::group(['prefix' => 'barrio'], function () {
-    Route::get('paginate', 'BarrioController@paginate');
-});
-
 Route::resource('sucursal', 'SucursalController');
