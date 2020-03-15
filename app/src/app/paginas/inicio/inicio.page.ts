@@ -48,7 +48,7 @@ export class PaginaInicio implements OnInit {
     this.servicioProducto.obtenerProductos().subscribe(
       (response: any) => {
         if (response.status) {
-          this.productos = response.data;
+          this.productos = response.data.data;
         }
         this.cargando = false;
       },
@@ -63,7 +63,7 @@ export class PaginaInicio implements OnInit {
     this.servicioCarrusel.obtenerCarrusel().subscribe(
       (response: any) => {
         if (response.status) {
-          this.slides = response.data;
+          this.slides = response.data.data;
         }
       },
       error => {

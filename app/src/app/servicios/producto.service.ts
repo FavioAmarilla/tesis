@@ -20,7 +20,7 @@ export class ServicioProducto {
 
   obtenerProducto(id) {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.get(`${API}producto/getProducto/${id}`, {headers});
+    return this.http.get(`${API}producto/${id}`, {headers});
   }
 
 }
