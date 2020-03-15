@@ -46,10 +46,8 @@ export class ServicioCarrito {
     });
   }
 
-  async obtenerPosicion(productos, producto) {
-    const index = await productos.findIndex(
-      (elemento, pos) => { if (elemento.identificador == producto.identificador) return pos }
-    );
+  obtenerPosicion(productos, producto) {
+    const index = productos.findIndex(elemento => elemento.identificador == producto.identificador);
     return index;
   }
 
@@ -58,13 +56,14 @@ export class ServicioCarrito {
       const productos = await this.obtenerCarrito() || [];
       const existe = productos.find(elemento => elemento.identificador == producto.identificador );
       if (existe) {
-        const index = await this.obtenerPosicion(productos, producto);
-        productos.splice(index, 1);
-        this.set('carrito', productos);
-        resolve(true);
-      } else {
-        resolve(false);
+        const index = this.obtenerPosicion(productos, producto);
+        if (index != -1) {
+          productos.splice(index, 1);
+          this.set('carrito', productos);
+          return resolve(true);
+        }
       }
+      return resolve(false);
     });
   }
 
@@ -97,12 +96,13 @@ export class ServicioCarrito {
       const existe = favoritos.find(elemento => elemento.identificador == producto.identificador);
       if (existe) {
         const index = await this.obtenerPosicion(favoritos, producto);
-        favoritos.splice(index, 1);
-        this.set('favorito', favoritos);
-        resolve(true);
-      } else {
-        resolve(false);
+        if (index != -1) {
+          favoritos.splice(index, 1);
+          this.set('favorito', favoritos);
+          resolve(true);
+        }
       }
+      resolve(false);
     });
   }
 
