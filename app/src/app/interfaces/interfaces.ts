@@ -18,7 +18,7 @@ export interface Producto {
     cantidad?: number;
 }
 
-export interface Slides {
+export interface Banner {
     identificador?: number;
     titulo?: string;
     descripcion?: string;

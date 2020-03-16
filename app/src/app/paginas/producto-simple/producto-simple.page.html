@@ -29,13 +29,13 @@
             <div class="w-100"></div>
             <div class="input-group col-md-6 d-flex mb-3">
               <span class="input-group-btn mr-2">
-                <button type="button" class="quantity-left-minus btn" data-type="minus" (click)="setCantidad('DI')">
+                <button type="button" class="quantity-left-minus btn" data-type="minus" (click)="asignarCantidad('DI')">
                   <i class="ion-ios-remove"></i>
                 </button>
               </span>
               <input type="text" name="cantidad" class="form-control input-number" min="1" max="100" ngmode [(ngModel)]="cantidad">
               <span class="input-group-btn ml-2">
-                <button type="button" class="quantity-right-plus btn" data-type="plus" (click)="setCantidad('AU')">
+                <button type="button" class="quantity-right-plus btn" data-type="plus" (click)="asignarCantidad('AU')">
                   <i class="ion-ios-add"></i>
                 </button>
               </span>

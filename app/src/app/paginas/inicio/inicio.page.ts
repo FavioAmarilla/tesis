@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ServicioProducto } from '../../servicios/producto.service';
-import { Producto, Slides, LineaProducto } from '../../interfaces/interfaces';
+import { Producto, Banner, LineaProducto } from '../../interfaces/interfaces';
 import { Router } from '@angular/router';
 import { ServicioCarrusel } from 'src/app/servicios/carrusel.service';
 import { environment } from '../../../environments/environment';
 import { ServicioLineasProducto } from 'src/app/servicios/linea-producto.service';
 import { ServicioCarrito } from 'src/app/servicios/carrito.service';
 import { UiService } from 'src/app/servicios/ui.service';
+import { IonSlides } from '@ionic/angular';
 
 @Component({
   selector: 'app-inicio',
@@ -17,10 +18,19 @@ export class PaginaInicio implements OnInit {
 
   public cargando = true;
   public productos: Producto;
-  public slides: Slides;
+  public slides: Banner;
   public lineasProducto: LineaProducto;
   public API: string;
   public slideImgUrl: string;
+  @ViewChild(IonSlides, { static: true }) slider: IonSlides;
+  public slideOptions = {
+    initialSlide: 0,
+    slidesPerView: 1,
+    speed: 800,
+    autoplay: {
+      delay: 3000
+    }
+  };
 
   constructor(
     private servicioCarrito: ServicioCarrito,
@@ -64,6 +74,7 @@ export class PaginaInicio implements OnInit {
       (response: any) => {
         if (response.status) {
           this.slides = response.data.data;
+          console.log(this.slides);
         }
       },
       error => {

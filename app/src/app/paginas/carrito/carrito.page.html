@@ -18,6 +18,26 @@
       <div class="row">
         <div class="col-md-12">
           <div class="cart-list">
+            <!-- <div class="row" *ngFor="let producto of productos">
+              <div class="col-md-10">
+
+              </div>
+              <div class="col-md-2">
+                <div class="row">
+                  <img *ngIf="producto" class="img" [src]="producto.archivo_img | productImage | urlSanitizer">
+                </div>
+                <div class="row">
+                  <p>Nombre del Producto</p>
+                  <p>5.000 Gs.</p>
+                  <input type="cantidad">
+                  <div style="display: flex;">
+                    <span class="ion-ios-close"></span>
+                    <span class="ion-ios-check"></span>
+                </div>
+                </div>
+              </div>
+            </div> -->
+
             <table class="table">
               <thead class="thead-primary">
                 <tr class="text-center">
@@ -33,7 +53,6 @@
                 <tr class="text-center" *ngFor="let producto of productos">
                   <td class="product-remove">
                     <a (click)="confirmarParaEliminarDelCarrito(producto)">
-                    <!-- <a href="#"> -->
                       <span class="ion-ios-close"></span>
                     </a>
                   </td>
