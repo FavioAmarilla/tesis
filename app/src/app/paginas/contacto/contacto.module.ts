@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { PaginaContacto } from './contacto.page';
 import { ModuloComponentes } from '../../componentes/componentes.module';
+import { AgmCoreModule } from '@agm/core';
 
 const routes: Routes = [
   {
@@ -21,7 +22,10 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ModuloComponentes
+    ModuloComponentes,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBuZNII7koDWPXeKDT9IeSEuWezvQqlZ8c'
+    }),
   ],
   declarations: [PaginaContacto]
 })
