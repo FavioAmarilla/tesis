@@ -56,7 +56,7 @@
                 <h3><a [routerLink]="['/producto-simple', producto.identificador]">{{ producto.descripcion | truncateText:20 }}</a></h3>
                 <div class="d-flex"> 
                   <div class="pricing">
-                    <p class="price"><span class="price-sale">Gs. {{ producto.precio_venta }}</span></p>
+                    <p class="price"><span class="price-sale">Gs. {{ producto.precio_venta | numberFormat}}</span></p>
                   </div>
                 </div>
                 <div class="bottom-area d-flex px-3">

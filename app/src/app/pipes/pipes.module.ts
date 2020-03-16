@@ -5,6 +5,7 @@ import { ProductImagePipe } from './product-image.pipe';
 import { SlideImagePipe } from './slide-image.pipe';
 import { LineaProductoImagePipe } from './linea-producto-image.pipe';
 import { TruncateTextPipe } from './truncate-text.pipe';
+import { NumberFormatPipe } from './number-format.pipe';
 
 @NgModule({
   declarations: [
@@ -12,14 +13,16 @@ import { TruncateTextPipe } from './truncate-text.pipe';
     ProductImagePipe,
     SlideImagePipe,
     LineaProductoImagePipe,
-    TruncateTextPipe
+    TruncateTextPipe,
+    NumberFormatPipe
   ],
   exports: [
     UrlSanitizerPipe,
     ProductImagePipe,
     SlideImagePipe,
     LineaProductoImagePipe,
-    TruncateTextPipe
+    TruncateTextPipe,
+    NumberFormatPipe
   ],
   imports: [
     CommonModule
