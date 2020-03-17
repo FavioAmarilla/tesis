@@ -48,13 +48,16 @@
 
             <div class="m-2">
               <a [routerLink]="['/producto-simple', producto.identificador]" class="img-prod">
-                <img *ngIf="producto" [src]="producto.archivo_img | productImage | urlSanitizer" width="253" height="253">
+                <img *ngIf="producto" [src]="producto.archivo_img | productImage | urlSanitizer" height="253"
+                  style="width: 100%;">
                 <div class="overlay"></div>
               </a>
               <hr class="mt-2 mb-0 ml-2 mr-2 border-top">
               <div class="text py-3 pb-4 px-3 text-center">
-                <h3><a [routerLink]="['/producto-simple', producto.identificador]">{{ producto.descripcion | truncateText:20 }}</a></h3>
-                <div class="d-flex"> 
+                <h3><a
+                    [routerLink]="['/producto-simple', producto.identificador]">{{ producto.descripcion | truncateText:20 }}</a>
+                </h3>
+                <div class="d-flex">
                   <div class="pricing">
                     <p class="price"><span class="price-sale">Gs. {{ producto.precio_venta | numberFormat}}</span></p>
                   </div>
