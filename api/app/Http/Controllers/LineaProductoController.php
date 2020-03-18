@@ -11,15 +11,28 @@ use App\LineaProducto;
 
 class LineaProductoController extends BaseController
 {
-    /**
+       /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $lineas = LineaProducto::orderBy('descripcion','desc')->paginate(5);
-        return $this->sendResponse($lineas, '');
+        $query = LineaProducto::with(['pais']);
+
+        $descripcion = $request->query('descripcion');
+        if ($descripcion) {
+            $query->where('descripcion', 'LIKE', '%'.$descripcion.'%');
+        }
+
+        $paginar = $request->query('paginar');
+        if ($paginar) {
+            $query->paginate(5);
+        }
+
+        $lineas = $query->orderBy('codigo','asc')->get();
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $lineas);
     }
 
     /**
@@ -40,22 +53,24 @@ class LineaProductoController extends BaseController
      */
     public function store(Request $request)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $descripcion = $request->input("descripcion");
 
-        $validator = Validator::make($input, [
+        $validator = Validator::make($request->all(), [
             'descripcion'  => 'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(true, 'Error de validacion', $validator->errors());
         }
 
         $linea = new LineaProducto();
-        $linea->descripcion = $input['descripcion'];
-        $linea->save();
+        $linea->descripcion = $descripcion;
 
-        return $this->sendResponse($linea, 'Linea de producto registrada');
+        if ($linea->save()) {
+            return $this->sendResponse(true, 'Linea de Producto registrada', $linea);
+        }else{
+            return $this->sendResponse(false, 'Linea de Producto no registrada', null);
+        }
     }
 
     /**
@@ -66,12 +81,12 @@ class LineaProductoController extends BaseController
      */
     public function show($id)
     {
-        $linea = LineaProducto::find($id);
+        $empresa = LineaProducto::find($id);
 
-        if (is_object($linea)) {
-            return $this->sendResponse($linea, '');
+        if (is_object($empresa)) {
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $empresa);
         }else{
-            return $this->sendError('Linea de producto no definida', null);
+            return $this->sendResponse(false, 'No se encontro la Linea de Producto', null);
         }
     }
 
@@ -95,19 +110,28 @@ class LineaProductoController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $descripcion = $request->input("descripcion");
 
-        $validator = Validator::make($input, [
-            'descripcion'   => 'required'
+        $validator = Validator::make($request->all(), [
+            'descripcion'  => 'required'
         ]);
 
         if ($validator->fails()) {
             return $this->sendError('Error de validacion', $validator->errors());
         }
 
-        $linea = LineaProducto::where('identificador', $id)->update($input);
-        return $this->sendResponse($input, 'Linea de producto actualizada');
+        $linea = LineaProducto::find($id);
+        if ($linea) {
+            $linea->descripcion = $descripcion;
+
+            if ($linea->save()) {
+                return $this->sendResponse(true, 'Linea de Producto actualizada', $linea);
+            }else{
+                return $this->sendResponse(false, 'Linea de Producto no actualizada', null);
+            }
+        }else{
+            return $this->sendResponse(false, 'No se encontro la Linea de Producto', null);
+        }
     }
 
     /**
@@ -120,5 +144,4 @@ class LineaProductoController extends BaseController
     {
         //
     }
-
 }

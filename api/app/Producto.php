@@ -10,7 +10,7 @@ class Producto extends Model
     protected $table = 'pr_productos';
 
     protected $fillable =[
-        'identificador', 'id_linea', 'id_tipo_impuesto', 'vr_unidad_medida', 'descripcion', 'codigo_barras', 'costo_unitario', 'precio_venta', 'archivo_img',
+        'identificador', 'id_linea', 'id_tipo_impuesto', 'vr_unidad_medida', 'descripcion', 'codigo_barras', 'costo_unitario', 'precio_venta', 'imagen',
     ];
 
     //obtener linea de producto

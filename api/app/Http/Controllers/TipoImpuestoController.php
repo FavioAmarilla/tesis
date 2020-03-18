@@ -11,15 +11,33 @@ use App\TipoImpuesto;
 
 class TipoImpuestoController extends BaseController
 {
-    /**
+       /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $impuestos = TipoImpuesto::orderBy('valor','desc')->paginate(5);
-        return $this->sendResponse($impuestos, '');
+        $query = TipoImpuesto::all();
+
+        $descripcion = $request->query('descripcion');
+        if ($descripcion) {
+            $query->where('descripcion', 'LIKE', '%'.$descripcion.'%');
+        }
+
+        $valor = $request->query('valor');
+        if ($valor) {
+            $query->where('valor', '=', $valor);
+        }
+
+        $paginar = $request->query('paginar');
+        if ($paginar) {
+            $query->paginate(5);
+        }
+
+        $impuesto = $query->orderBy('valor', 'asc')->get();
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $impuesto);
     }
 
     /**
@@ -40,24 +58,27 @@ class TipoImpuestoController extends BaseController
      */
     public function store(Request $request)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $descripcion = $request->input("descripcion");
+        $valor = $request->input("valor");
 
-        $validator = Validator::make($input, [
-            'descripcion'     => 'required', 
-            'valor'           => 'required',
+        $validator = Validator::make($request->all(), [
+            'descripcion'  => 'required',
+            'valor'  => 'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
         $impuesto = new TipoImpuesto();
-        $impuesto->descripcion = $input['descripcion'];
-        $impuesto->valor = $input['valor'];
-        $impuesto->save();
+        $impuesto->descripcion = $descripcion;
+        $impuesto->valor = $valor;
 
-        return $this->sendResponse($impuesto, 'Tipo de impuesto registrado');
+        if ($impuesto->save()) {
+            return $this->sendResponse(true, 'Tipo de Impuesto registrado', $impuesto);
+        }else{
+            return $this->sendResponse(false, 'Tipo de Impuesto no registrado', null);
+        }
     }
 
     /**
@@ -68,12 +89,12 @@ class TipoImpuestoController extends BaseController
      */
     public function show($id)
     {
-        $impuesto = TipoImpuesto::find($id);
+        $pais = Pais::find($id);
 
-        if (is_object($impuesto)) {
-            return $this->sendResponse($impuesto, '');
+        if (is_object($pais)) {
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $pais);
         }else{
-            return $this->sendError('Tipo de impuesto no definido', null);
+            return $this->sendResponse(false, 'No se encontro la Pais', null);
         }
     }
 
@@ -97,20 +118,31 @@ class TipoImpuestoController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $descripcion = $request->input("descripcion");
+        $valor = $request->input("valor");
 
-        $validator = Validator::make($input, [
-            'descripcion'   => 'required',
-            'valor'   => 'required'
+        $validator = Validator::make($request->all(), [
+            'descripcion'  => 'required',
+            'valor'  => 'required'
         ]);
-            
+
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
-        $impuesto = TipoImpuesto::where('identificador', $id)->update($input);
-        return $this->sendResponse($input, 'Tipo de impuesto actualizado');
+        $impuesto = TipoImpuesto::find($id);
+        if ($pais) {
+            $impuesto->descripcion = $descripcion;
+            $impuesto->valor = $valor;
+
+            if ($impuesto->save()) {
+                return $this->sendResponse(true, 'Tipo de Impuesto actualizado', $impuesto);
+            }else{
+                return $this->sendResponse(false, 'Tipo de Impuesto no actualizado', null);
+            }
+        }else{
+            return $this->sendResponse(false, 'No se encontro la Pais', null);
+        }
     }
 
     /**

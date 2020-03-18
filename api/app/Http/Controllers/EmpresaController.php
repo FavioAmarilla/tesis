@@ -11,16 +11,39 @@ use App\Empresa;
 
 class EmpresaController extends BaseController
 {
-    /**
+       /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $empresas = Empresa::orderBy('created_at', 'desc')->paginate(5);
+        $query = Empresa::all();
 
-        return $this->sendResponse($empresas, '');
+        $codigo = $request->query('codigo');
+        if ($codigo) {
+            $query->where('codigo', 'LIKE', '%'.$codigo.'%');
+        }
+        
+        $nombre = $request->query('nombre');
+        if ($nombre) {
+            $query->where('nombre', 'LIKE', '%'.$nombre.'%');
+        }
+
+        $numero_documento = $request->query('numero_documento');
+        if ($numero_documento) {
+            $query->where('numero_documento', 'LIKE', '%'.$numero_documento.'%');
+        }
+
+        $paginar = $request->query('paginar');
+        if ($paginar) {
+            $query->paginate(5);
+        }
+
+        $ciudades = $query->orderBy('codigo','asc')->get();
+        
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $ciudades);
     }
 
     /**
@@ -41,28 +64,35 @@ class EmpresaController extends BaseController
      */
     public function store(Request $request)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $codigo = $request->input("codigo");
+        $nombre = $request->input("nombre");
+        $numero_documento = $request->input("numero_documento");
+        $imagen = $request->file('imagen');
+        $image_name = time().$imagen->getClientOriginalName();
 
-        $validator = Validator::make($input, [
-            'nombre'            => 'required|unique:fnd_parm_empresas', 
-            'numero_documento'  => 'required', 
-            'codigo'            => 'required', 
-            'imagen'            => 'required'
+        $validator = Validator::make($request->all(), [
+            'codigo'  => 'required',
+            'nombre'  => 'required',
+            'numero_documento'  => 'required',
+            'imagen'   =>  'required|image|mimes:jpeg,jpg,png,gif',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
         $empresa = new Empresa();
-        $empresa->nombre = $input['nombre'];
-        $empresa->numero_documento = $input['numero_documento'];
-        $empresa->codigo = $input['codigo'];
-        $empresa->imagen = $input['imagen'];
-        $empresa->save();
+        $empresa->codigo = $codigo;
+        $empresa->nombre = $nombre;
+        $empresa->numero_documento = $numero_documento;
+        $empresa->imagen = $image_name;
 
-        return $this->sendResponse($empresa, 'Empresa registrada');
+        if ($empresa->save()) {
+            Storage::disk('empresa')->put($image_name, \File::get($imagen));
+            return $this->sendResponse(true, 'Empresa registrada', $empresa);
+        }else{
+            return $this->sendResponse(false, 'Empresa no registrada', null);
+        }
     }
 
     /**
@@ -76,9 +106,9 @@ class EmpresaController extends BaseController
         $empresa = Empresa::find($id);
 
         if (is_object($empresa)) {
-            return $this->sendResponse($empresa, '');
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $empresa);
         }else{
-            return $this->sendError('Empresa no definida', null);
+            return $this->sendResponse(false, 'No se encontro la Empresa', null);
         }
     }
 
@@ -102,22 +132,40 @@ class EmpresaController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
-
-        $validator = Validator::make($input, [
-            'nombre'            => 'required', 
-            'numero_documento'  => 'required', 
-            'codigo'            => 'required', 
-            'imagen'            => 'required'
+        $codigo = $request->input("codigo");
+        $nombre = $request->input("nombre");
+        $numero_documento = $request->input("numero_documento");
+        $imagen = $request->file('imagen');
+        $image_name = time().$imagen->getClientOriginalName();
+        
+        $validator = Validator::make($request->all(), [
+            'codigo'  => 'required',
+            'nombre'  => 'required',
+            'numero_documento'  => 'required',
+            'imagen'   =>  'required|image|mimes:jpeg,jpg,png,gif',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
+        
 
-        $empresa = Empresa::where('identificador', $id)->update($input);
-        return $this->sendResponse($input, 'Empresa actualizada');
+        $empresa = Empresa::find($id);
+        if ($empresa) {
+            $empresa->codigo = $codigo;
+            $empresa->nombre = $nombre;
+            $empresa->numero_documento = $numero_documento;
+            $empresa->imagen = $image_name;
+    
+            if ($empresa->save()) {
+                Storage::disk('empresa')->put($image_name, \File::get($imagen));
+                return $this->sendResponse(true, 'Empresa actualizada', $empresa);
+            }else{
+                return $this->sendResponse(false, 'Empresa no actualizada', null);
+            }
+        }else{
+            return $this->sendResponse(false, 'No se encontro la Empresa', null);
+        }
     }
 
     /**
@@ -131,35 +179,13 @@ class EmpresaController extends BaseController
         //
     }
 
-    public function upload(Request $request){
-        $image = $request->file('file0');
-
-        $validator = Validator::make($request->all(), [
-            'file0'      =>  'required|image|mimes:jpeg,jpg,png,gif',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
-        }else{
-            if ($image) {
-                $image_name = time().$image->getClientOriginalName();
-                Storage::disk('empresa')->put($image_name, \File::get($image));
-    
-                return $this->sendResponse($image_name, 'Imagen subida');
-            }else{
-                return $this->sendError('Error al subir imagen', null);
-            }    
-        }
-        return response()->json($data);
-    }
-
     public function getImage($filename){
         $isset = Storage::disk('empresa')->exists($filename);
         if ($isset) {
             $file = Storage::disk('empresa')->get($filename);
             return new Response($file);
         }else{
-            return $this->sendError('La imagen no existe', null);
+            return $this->sendResponse('La imagen no existe', null);
         }
     }
 }

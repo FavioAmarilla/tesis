@@ -11,16 +11,28 @@ use App\Pais;
 
 class PaisController extends BaseController
 {
-    /**
+       /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $paises = Pais::orderBy('nombre', 'asc')->paginate(5);
+        $query = Pais::all();
 
-        return $this->sendResponse($paises, '');
+        $nombre = $request->query('nombre');
+        if ($nombre) {
+            $query->where('nombre', 'LIKE', '%'.$nombre.'%');
+        }
+
+        $paginar = $request->query('paginar');
+        if ($paginar) {
+            $query->paginate(5);
+        }
+
+        $pais = $query->orderBy('nombre', 'asc')->get();
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $pais);
     }
 
     /**
@@ -41,22 +53,24 @@ class PaisController extends BaseController
      */
     public function store(Request $request)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $nombre = $request->input("nombre");
 
-        $validator = Validator::make($input, [
+        $validator = Validator::make($request->all(), [
             'nombre'  => 'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
         $pais = new Pais();
-        $pais->nombre = $input['nombre'];
-        $pais->save();
+        $pais->nombre = $nombre;
 
-        return $this->sendResponse($pais, 'Pais registrado');
+        if ($pais->save()) {
+            return $this->sendResponse(true, 'Pais registrado', $pais);
+        }else{
+            return $this->sendResponse(false, 'Pais no registrado', null);
+        }
     }
 
     /**
@@ -70,9 +84,9 @@ class PaisController extends BaseController
         $pais = Pais::find($id);
 
         if (is_object($pais)) {
-            return $this->sendResponse($pais, '');
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $pais);
         }else{
-            return $this->sendError('Pais no definido', null);
+            return $this->sendResponse(false, 'No se encontro la Pais', null);
         }
     }
 
@@ -96,19 +110,27 @@ class PaisController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $nombre = $request->input("nombre");
 
-        $validator = Validator::make($input, [
-            'nombre'          => 'required'
+        $validator = Validator::make($request->all(), [
+            'nombre'  => 'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
-        $pais = Pais::where('identificador', $id)->update($input);
-        return $this->sendResponse($input, 'Pais actualizado');
+        $pais = Pais::find($id);
+        if ($pais) {
+            $pais->nombre = $nombre;
+            if ($pais->save()) {
+                return $this->sendResponse(true, 'Pais actualizado', $pais);
+            }else{
+                return $this->sendResponse(false, 'Pais no actualizado', null);
+            }
+        }else{
+            return $this->sendResponse(false, 'No se encontro la Pais', null);
+        }
     }
 
     /**

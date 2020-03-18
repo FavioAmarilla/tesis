@@ -16,11 +16,31 @@ class BarrioController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $barrios = Barrio::with('ciudad')->orderBy('id_ciudad', 'desc')->paginate(5);
+        $query = Barrio::with(['ciudad']);
 
-        return $this->sendResponse($barrios, '');
+        $id_ciudad = $request->query('id_ciudad');
+        if ($id_ciudad) {
+            $query->where('id_ciudad', '=', $id_ciudad);
+        }
+
+        $nombre = $request->query('nombre');
+        if ($nombre) {
+            $query->where('nombre', 'LIKE', '%'.$nombre.'%');
+        }
+
+        $paginar = $request->query('paginar');
+        if ($paginar) {
+            $query->paginate(5);
+        }
+
+        $barrios = $query->orderBy('id_ciudad','asc')
+        ->orderBy('nombre', 'asc')->get();
+        
+        
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $barrios);
     }
 
     /**
@@ -41,24 +61,27 @@ class BarrioController extends BaseController
      */
     public function store(Request $request)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $id_ciudad = $request->input("id_ciudad");
+        $nombre = $request->input("nombre");
 
-        $validator = Validator::make($input, [
+        $validator = Validator::make($request->all(), [
             'id_ciudad'  => 'required',
             'nombre'  => 'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
         $barrio = new Barrio();
-        $barrio->nombre = $input['nombre'];
-        $barrio->id_ciudad = $input['id_ciudad'];
-        $barrio->save();
+        $barrio->id_ciudad = $id_ciudad;
+        $barrio->nombre = $nombre;
 
-        return $this->sendResponse($barrio, 'Barrio registrado');
+        if ($barrio->save()) {
+            return $this->sendResponse(true, 'Barrio registrado', $barrio);
+        }else{
+            return $this->sendResponse(false, 'Barrio no registrado', null);
+        }
     }
 
     /**
@@ -72,9 +95,9 @@ class BarrioController extends BaseController
         $barrio = Barrio::find($id);
 
         if (is_object($barrio)) {
-            return $this->sendResponse($barrio, '');
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $barrio);
         }else{
-            return $this->sendError('Barrio no definido', null);
+            return $this->sendResponse(false, 'No se encontro el Barrio', null);
         }
     }
 
@@ -98,20 +121,30 @@ class BarrioController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $id_ciudad = $request->input("id_ciudad");
+        $nombre = $request->input("nombre");
 
-        $validator = Validator::make($input, [
-            'id_ciudad'     => 'required',
-            'nombre'        => 'required'
+        $validator = Validator::make($request->all(), [
+            'id_ciudad'  => 'required',
+            'nombre'  => 'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
-        $barrio = Barrio::where('identificador', $id)->update($input);
-        return $this->sendResponse($input, 'Barrio actualizado');
+        $barrio = Barrio::find($id);
+        if ($barrio) {
+            $barrio->id_ciudad = $id_ciudad;
+            $barrio->nombre = $nombre;
+            if ($barrio->save()) {
+                return $this->sendResponse(true, 'Barrio actualizado', $barrio);
+            }else{
+                return $this->sendResponse(false, 'Barrio no actualizado', null);
+            }
+        }else{
+            return $this->sendResponse(false, 'No se encontro el Barrio', null);
+        }
     }
 
     /**

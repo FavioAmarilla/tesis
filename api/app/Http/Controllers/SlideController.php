@@ -11,15 +11,34 @@ use App\Slide;
 
 class SlideController extends BaseController
 {
-    /**
+       /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $slides = Slide::orderBy('created_at','desc')->paginate(5);
-        return $this->sendResponse($slides, '');
+        $query = Slide::all();
+
+        $titulo = $request->query('titulo');
+        if ($titulo) {
+            $query->where('titulo', 'LIKE', '%'.$titulo.'%');
+        }
+        
+        $descripcion = $request->query('descripcion');
+        if ($descripcion) {
+            $query->where('descripcion', 'LIKE', '%'.$descripcion.'%');
+        }
+
+        $paginar = $request->query('paginar');
+        if ($paginar) {
+            $query->paginate(5);
+        }
+
+        $slides = $query->orderBy('titulo','asc')->get();
+        
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $slides);
     }
 
     /**
@@ -40,26 +59,32 @@ class SlideController extends BaseController
      */
     public function store(Request $request)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $titulo = $request->input("titulo");
+        $descripcion = $request->input("descripcion");
+        $imagen = $request->file('imagen');
+        $image_name = time().$imagen->getClientOriginalName();
 
-        $validator = Validator::make($input, [
-            'titulo'       => 'required', 
+        $validator = Validator::make($request->all(), [
+            'titulo'  => 'required',
             'descripcion'  => 'required',
-            'archivo_img'  => 'required'
+            'imagen'   =>  'required|image|mimes:jpeg,jpg,png,gif',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
         $slide = new Slide();
-        $slide->titulo = $input['titulo'];
-        $slide->descripcion = $input['descripcion'];
-        $slide->archivo_img = $input['archivo_img'];
-        $slide->save();
+        $slide->titulo = $titulo;
+        $slide->descripcion = $descripcion;
+        $slide->imagen = $image_name;
 
-        return $this->sendResponse($slide, 'Slide registrado');
+        if ($slide->save()) {
+            Storage::disk('slides')->put($image_name, \File::get($imagen));
+            return $this->sendResponse(true, 'Slide registrado', $slide);
+        }else{
+            return $this->sendResponse(false, 'Slide no registrado', null);
+        }
     }
 
     /**
@@ -73,9 +98,9 @@ class SlideController extends BaseController
         $slide = Slide::find($id);
 
         if (is_object($slide)) {
-            return $this->sendResponse($slide, '');
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $slide);
         }else{
-            return $this->sendError('Slide no definido', null);
+            return $this->sendResponse(false, 'No se encontro el Banner', null);
         }
     }
 
@@ -99,21 +124,37 @@ class SlideController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $titulo = $request->input("titulo");
+        $descripcion = $request->input("descripcion");
+        $imagen = $request->file('imagen');
+        $image_name = time().$imagen->getClientOriginalName();
 
-        $validator = Validator::make($input, [
-            'titulo'        => 'required',  
-            'descripcion'   => 'required',
-            'archivo_img'   => 'required'
+        $validator = Validator::make($request->all(), [
+            'titulo'  => 'required',
+            'descripcion'  => 'required',
+            'imagen'   =>  'required|image|mimes:jpeg,jpg,png,gif',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
+        
 
-        $slide = Slide::where('identificador', $id)->update($input);
-        return $this->sendResponse($input, 'Slide actualizado');
+        $slide = Slide::find($id);
+        if ($empresa) {
+            $slide->titulo = $titulo;
+            $slide->descripcion = $descripcion;
+            $slide->imagen = $image_name;
+    
+            if ($slide->save()) {
+                Storage::disk('slides')->put($image_name, \File::get($imagen));
+                return $this->sendResponse(true, 'Slide actualizado', $slide);
+            }else{
+                return $this->sendResponse(false, 'Slide no actualizado', null);
+            }
+        }else{
+            return $this->sendResponse(false, 'No se encontro el Slide', null);
+        }
     }
 
     /**
@@ -124,40 +165,7 @@ class SlideController extends BaseController
      */
     public function destroy($id)
     {
-        $slide = Slide::where('identificador', $id)->first();
-        if (empty($slide)) {
-            return $this->sendError('Error', 'Slide no encontrado');
-        }
-
-        Storage::disk('slides')->delete($slide->archivo_img);
-        $delete = $slide->delete();
-        if ($delete) {
-            return $this->sendResponse(null, 'Slide eliminado');
-        }else{
-            return $this->sendError(null, 'Slide no eliminado');
-        }
-    }
-
-    public function upload(Request $request){
-        $image = $request->file('file0');
-
-        $validator = Validator::make($request->all(), [
-            'file0'      =>  'required|image|mimes:jpeg,jpg,png,gif',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
-        }else{
-            if ($image) {
-                $image_name = time().$image->getClientOriginalName();
-                Storage::disk('slides')->put($image_name, \File::get($image));
-    
-                return $this->sendResponse($image_name, 'Imagen subida');
-            }else{
-                return $this->sendError('Error al subir imagen', null);
-            }    
-        }
-        return response()->json($data);
+        //
     }
 
     public function getImage($filename){

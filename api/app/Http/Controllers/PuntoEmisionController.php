@@ -11,15 +11,45 @@ use App\PuntoEmision;
 
 class PuntoEmisionController extends BaseController
 {
-    /**
+       /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $puntosEmision = PuntoEmision::with('sucursal')->orderBy('id_sucursal','asc')->paginate(5);
-        return $this->sendResponse($puntosEmision, '');
+        $query = PuntoEmision::with(['sucursal']);
+
+        $id_sucursal = $request->query('id_sucursal');
+        if ($id_sucursal) {
+            $query->where('id_sucursal', '=', $id_sucursal);
+        }
+
+        $nombre = $request->query('nombre');
+        if ($nombre) {
+            $query->where('nombre', 'LIKE', '%'.$nombre.'%');
+        }
+
+        $codigo = $request->query('codigo');
+        if ($codigo) {
+            $query->where('codigo', 'LIKE', '%'.$codigo.'%');
+        }
+
+        $vr_tipo = $request->query('vr_tipo');
+        if ($vr_tipo) {
+            $query->where('vr_tipo', 'LIKE', '%'.$vr_tipo.'%');
+        }
+
+        $paginar = $request->query('paginar');
+        if ($paginar) {
+            $query->paginate(5);
+        }
+
+        $emision = $query->orderBy('vr_tipo','asc')->orderBy('codigo','asc')
+        ->orderBy('nombre', 'asc')->get();
+        
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $emision);
     }
 
     /**
@@ -40,28 +70,33 @@ class PuntoEmisionController extends BaseController
      */
     public function store(Request $request)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $id_sucursal = $request->input("id_sucursal");
+        $nombre = $request->input("nombre");
+        $codigo = $request->input("codigo");
+        $vr_tipo = $request->input("vr_tipo");
 
-        $validator = Validator::make($input, [
-            'nombre'        => 'required', 
-            'codigo'        => 'required',
-            'vr_tipo'       => 'required',
-            'id_sucursal'   => 'required',
+        $validator = Validator::make($request->all(), [
+            'id_sucursal'  => 'required',
+            'nombre'  => 'required',
+            'codigo'  => 'required',
+            'vr_tipo'  => 'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
-        $puntoEmision = new PuntoEmision();
-        $puntoEmision->nombre = $input['nombre'];
-        $puntoEmision->codigo = $input['codigo'];
-        $puntoEmision->vr_tipo = $input['vr_tipo'];
-        $puntoEmision->id_sucursal = $input['id_sucursal'];
-        $puntoEmision->save();
+        $emision = new PuntoEmision();
+        $emision->id_sucursal = $id_sucursal;
+        $emision->nombre = $nombre;
+        $emision->codigo = $codigo;
+        $emision->vr_tipo = $vr_tipo;
 
-        return $this->sendResponse($puntoEmision, 'Punto de emision registrado');
+        if ($emision->save()) {
+            return $this->sendResponse(true, 'Punto de Emision registrado', $emision);
+        }else{
+            return $this->sendResponse(false, 'Punto de Emision no registrado', null);
+        }
     }
 
     /**
@@ -72,12 +107,12 @@ class PuntoEmisionController extends BaseController
      */
     public function show($id)
     {
-        $puntoEmision = PuntoEmision::find($id);
+        $emision = PuntoEmision::find($id);
 
-        if (is_object($puntoEmision)) {
-            return $this->sendResponse($puntoEmision, '');
+        if (is_object($emision)) {
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $emision);
         }else{
-            return $this->sendError('Punto de emision no definido', null);
+            return $this->sendResponse(false, 'No se encontro el Punto de Emision', null);
         }
     }
 
@@ -101,22 +136,37 @@ class PuntoEmisionController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $id_sucursal = $request->input("id_sucursal");
+        $nombre = $request->input("nombre");
+        $codigo = $request->input("codigo");
+        $vr_tipo = $request->input("vr_tipo");
 
-        $validator = Validator::make($input, [
-            'nombre'        => 'required', 
-            'codigo'        => 'required',
-            'vr_tipo'       => 'required',
-            'id_sucursal'   => 'required',
+        $validator = Validator::make($request->all(), [
+            'id_sucursal'  => 'required',
+            'nombre'  => 'required',
+            'codigo'  => 'required',
+            'vr_tipo'  => 'required'
         ]);
-            
+
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
-        $puntoEmision = PuntoEmision::where('identificador', $id)->update($input);
-        return $this->sendResponse($input, 'Punto de emision actualizado');
+        $emision = PuntoEmision::find($id);
+        if ($ciudad) {
+            $emision->id_sucursal = $id_sucursal;
+            $emision->nombre = $nombre;
+            $emision->codigo = $codigo;
+            $emision->vr_tipo = $vr_tipo;
+
+            if ($emision->save()) {
+                return $this->sendResponse(true, 'Punto de Emision actualizado', $emision);
+            }else{
+                return $this->sendResponse(false, 'Punto de Emision no actualizado', null);
+            }
+        }else{
+            return $this->sendResponse(false, 'No se encontro el Punto de Emision', null);
+        }
     }
 
     /**

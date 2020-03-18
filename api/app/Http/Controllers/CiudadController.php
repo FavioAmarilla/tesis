@@ -11,16 +11,35 @@ use App\Ciudad;
 
 class CiudadController extends BaseController
 {
-    /**
+       /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $ciudades = Ciudad::with('pais')->orderBy('id_pais', 'asc')->paginate(5);
+        $query = Ciudad::with(['pais']);
 
-        return $this->sendResponse($ciudades, '');
+        $id_pais = $request->query('id_pais');
+        if ($id_pais) {
+            $query->where('id_pais', '=', $id_pais);
+        }
+
+        $nombre = $request->query('nombre');
+        if ($nombre) {
+            $query->where('nombre', 'LIKE', '%'.$nombre.'%');
+        }
+
+        $paginar = $request->query('paginar');
+        if ($paginar) {
+            $query->paginate(5);
+        }
+
+        $ciudades = $query->orderBy('id_pais','asc')
+        ->orderBy('nombre', 'asc')->get();
+        
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $ciudades);
     }
 
     /**
@@ -41,24 +60,27 @@ class CiudadController extends BaseController
      */
     public function store(Request $request)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $id_pais = $request->input("id_pais");
+        $nombre = $request->input("nombre");
 
-        $validator = Validator::make($input, [
+        $validator = Validator::make($request->all(), [
             'id_pais'  => 'required',
             'nombre'  => 'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
         $ciudad = new Ciudad();
-        $ciudad->nombre = $input['nombre'];
-        $ciudad->id_pais = $input['id_pais'];
-        $ciudad->save();
+        $ciudad->id_pais = $id_pais;
+        $ciudad->nombre = $nombre;
 
-        return $this->sendResponse($ciudad, 'Ciudad registrada');
+        if ($ciudad->save()) {
+            return $this->sendResponse(true, 'Ciudad registrada', $ciudad);
+        }else{
+            return $this->sendResponse(false, 'Ciudad no registrada', null);
+        }
     }
 
     /**
@@ -72,9 +94,9 @@ class CiudadController extends BaseController
         $ciudad = Ciudad::find($id);
 
         if (is_object($ciudad)) {
-            return $this->sendResponse($ciudad, '');
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $ciudad);
         }else{
-            return $this->sendError('Ciudad no definida', null);
+            return $this->sendResponse(false, 'No se encontro la Ciudad', null);
         }
     }
 
@@ -98,20 +120,30 @@ class CiudadController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $id_pais = $request->input("id_pais");
+        $nombre = $request->input("nombre");
 
-        $validator = Validator::make($input, [
+        $validator = Validator::make($request->all(), [
             'id_pais'  => 'required',
-            'nombre'          => 'required'
+            'nombre'  => 'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
-        $ciudad = Ciudad::where('identificador', $id)->update($input);
-        return $this->sendResponse($input, 'Ciudad actualizada');
+        $ciudad = Barrio::find($id);
+        if ($ciudad) {
+            $ciudad->id_pais = $id_pais;
+            $ciudad->nombre = $nombre;
+            if ($ciudad->save()) {
+                return $this->sendResponse(true, 'Ciudad actualizada', $ciudad);
+            }else{
+                return $this->sendResponse(false, 'Ciudad no actualizada', null);
+            }
+        }else{
+            return $this->sendResponse(false, 'No se encontro la Ciudad', null);
+        }
     }
 
     /**

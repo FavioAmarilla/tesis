@@ -11,16 +11,59 @@ use App\Producto;
 
 class ProductoController extends BaseController
 {
-    /**
+       /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $productos = Producto::with(['lineaProducto', 'tipoImpuesto'])->orderBy('descripcion', 'desc')->paginate(5);
+        $query = Producto::with(['lineaProducto', 'tipoImpuesto']);
 
-        return $this->sendResponse($productos, '');
+        $id_linea = $request->query('id_linea');
+        if ($id_linea) {
+            $query->where('id_linea', '=', $id_linea);
+        }
+
+        $id_tipo_impuesto = $request->query('id_tipo_impuesto');
+        if ($id_tipo_impuesto) {
+            $query->where('id_tipo_impuesto', '=', $id_tipo_impuesto);
+        }
+        
+        $vr_unidad_medida = $request->query('vr_unidad_medida');
+        if ($vr_unidad_medida) {
+            $query->where('vr_unidad_medida', 'LIKE', '%'.$vr_unidad_medida.'%');
+        }
+
+        $descripcion = $request->query('descripcion');
+        if ($descripcion) {
+            $query->where('descripcion', 'LIKE', '%'.$descripcion.'%');
+        }
+
+        $codigo_barras = $request->query('codigo_barras');
+        if ($codigo_barras) {
+            $query->where('codigo_barras', 'LIKE', '%'.$codigo_barras.'%');
+        }
+
+        $costo_unitario = $request->query('costo_unitario');
+        if ($costo_unitario) {
+            $query->where('costo_unitario', '=', $costo_unitario);
+        }
+
+        $precio_venta = $request->query('precio_venta');
+        if ($precio_venta) {
+            $query->where('precio_venta', '=', $precio_venta);
+        }
+
+        $paginar = $request->query('paginar');
+        if ($paginar) {
+            $query->paginate(5);
+        }
+
+        $productos = $query->orderBy('nombre','asc')->get();
+        
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $productos);
     }
 
     /**
@@ -41,8 +84,15 @@ class ProductoController extends BaseController
      */
     public function store(Request $request)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $id_linea = $request->input("id_linea");
+        $id_tipo_impuesto = $request->input("id_tipo_impuesto");
+        $vr_unidad_medida = $request->input("vr_unidad_medida");
+        $descripcion = $request->input("descripcion");
+        $codigo_barras = $request->input("codigo_barras");
+        $costo_unitario = $request->input("costo_unitario");
+        $precio_venta = $request->input("precio_venta");
+        $imagen = $request->file('imagen');
+        $image_name = time().$imagen->getClientOriginalName();
 
         $validator = Validator::make($input, [
             'id_linea'          => 'required', 
@@ -52,25 +102,29 @@ class ProductoController extends BaseController
             'codigo_barras'     => 'required|unique:pr_productos',
             'costo_unitario'    => 'required', 
             'precio_venta'      => 'required', 
-            'archivo_img'       => 'required'
+            'imagen'       => 'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
         $producto = new Producto();
-        $producto->id_linea = $input['id_linea'];
-        $producto->id_tipo_impuesto = $input['id_tipo_impuesto'];
-        $producto->vr_unidad_medida = $input['vr_unidad_medida'];
-        $producto->descripcion = $input['descripcion'];
-        $producto->codigo_barras = $input['codigo_barras'];
-        $producto->costo_unitario = $input['costo_unitario'];
-        $producto->precio_venta = $input['precio_venta'];
-        $producto->archivo_img = $input['archivo_img'];
-        $producto->save();
+        $producto->id_linea = $id_linea;
+        $producto->id_tipo_impuesto = $id_tipo_impuesto;
+        $producto->vr_unidad_medida = $vr_unidad_medida;
+        $producto->descripcion = $descripcion;
+        $producto->codigo_barras = $codigo_barras;
+        $producto->costo_unitario = $costo_unitario;
+        $producto->precio_venta = $precio_venta;
+        $producto->imagen = $image_name;
 
-        return $this->sendResponse($producto, 'Producto registrado');
+        if ($producto->save()) {
+            Storage::disk('producto')->put($image_name, \File::get($imagen));
+            return $this->sendResponse(true, 'Producto registrado', $producto);
+        }else{
+            return $this->sendResponse(false, 'Producto no registrado', null);
+        }
     }
 
     /**
@@ -81,12 +135,12 @@ class ProductoController extends BaseController
      */
     public function show($id)
     {
-        $producto = Producto::find($id)->load('lineaProducto')->load('tipoImpuesto');
+        $empresa = Empresa::find($id);
 
-        if (is_object($producto)) {
-            return $this->sendResponse($producto, '');
+        if (is_object($empresa)) {
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $empresa);
         }else{
-            return $this->sendError('Producto no definido', null);
+            return $this->sendResponse(false, 'No se encontro la Empresa', null);
         }
     }
 
@@ -110,29 +164,51 @@ class ProductoController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
-
+        $id_linea = $request->input("id_linea");
+        $id_tipo_impuesto = $request->input("id_tipo_impuesto");
+        $vr_unidad_medida = $request->input("vr_unidad_medida");
+        $descripcion = $request->input("descripcion");
+        $codigo_barras = $request->input("codigo_barras");
+        $costo_unitario = $request->input("costo_unitario");
+        $precio_venta = $request->input("precio_venta");
+        $imagen = $request->file('imagen');
+        $image_name = time().$imagen->getClientOriginalName();
+        
         $validator = Validator::make($input, [
             'id_linea'          => 'required', 
             'id_tipo_impuesto'  => 'required', 
             'vr_unidad_medida'  => 'required',  
-            'descripcion'       => 'required',
-            'codigo_barras'     => 'required',
+            'descripcion'       => 'required|unique:pr_productos',
+            'codigo_barras'     => 'required|unique:pr_productos',
             'costo_unitario'    => 'required', 
             'precio_venta'      => 'required', 
-            'archivo_img'       => 'required'
+            'imagen'       => 'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
-
-        unset($input['linea_producto']);
-        unset($input['tipo_impuesto']);
-
-        $producto = Producto::where('identificador', $id)->update($input);
-        return $this->sendResponse($input, 'Producto actualizado');
+        
+        $producto = Producto::find($id);
+        if ($empresa) {
+            $producto->id_linea = $id_linea;
+            $producto->id_tipo_impuesto = $id_tipo_impuesto;
+            $producto->vr_unidad_medida = $vr_unidad_medida;
+            $producto->descripcion = $descripcion;
+            $producto->codigo_barras = $codigo_barras;
+            $producto->costo_unitario = $costo_unitario;
+            $producto->precio_venta = $precio_venta;
+            $producto->imagen = $image_name;
+    
+            if ($producto->save()) {
+                Storage::disk('producto')->put($image_name, \File::get($imagen));
+                return $this->sendResponse(true, 'Producto actualizado', $producto);
+            }else{
+                return $this->sendResponse(false, 'Producto no actualizado', null);
+            }
+        }else{
+            return $this->sendResponse(false, 'No se encontro el Producto', null);
+        }
     }
 
     /**
@@ -144,35 +220,6 @@ class ProductoController extends BaseController
     public function destroy($id)
     {
         //
-    }
-
-    public function search($search)
-    {
-        $productos = Producto::where('descripcion','LIKE', "%{$search}%")->orderBy('created_at', 'desc')->get()->load('lineaProducto')->load('tipoImpuesto');
-
-        return $this->sendResponse($productos, '');
-    }
-
-    public function upload(Request $request){
-        $image = $request->file('file0');
-
-        $validator = Validator::make($request->all(), [
-            'file0'      =>  'required|image|mimes:jpeg,jpg,png,gif',
-        ]);
-
-        if ($validator->fails()) {
-            return $theis->sendError('Error de validacion', $validator->errors());
-        }else{
-            if ($image) {
-                $image_name = time().$image->getClientOriginalName();
-                Storage::disk('productos')->put($image_name, \File::get($image));
-    
-                return $this->sendResponse($image_name, 'Imagen subida');
-            }else{
-                return $this->sendError('Error al subir imagen', null);
-            }    
-        }
-        return response()->json($data);
     }
 
     public function getImage($filename){

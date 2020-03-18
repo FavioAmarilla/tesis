@@ -15,9 +15,16 @@ class SucursalController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sucursales = Sucursal::orderBy('id_empresa','desc')->paginate(5)->load('empresa')->load('pais')->load('ciudad');
+        $query = Sucursal::with(['empresa', 'pais', 'ciudad']);
+
+        $ecommerce = $request->query('ecommerce');
+        if ($ecommerce) {
+            $query->where('ecommerce', '=', $ecommerce);
+        }
+
+        $sucursales = $query->orderBy('id_empresa','desc')->paginate(5);
         return $this->sendResponse($sucursales, '');
     }
 

@@ -15,9 +15,26 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $users = User::orderBy('nombre_completo', 'desc')->paginate(5);
+        $query = User::all();
 
-        return $this->sendResponse($users, '');
+        $nombre_completo = $request->query('nombre_completo');
+        if ($nombre_completo) {
+            $query->where('nombre_completo', 'LIKE', '%'.$nombre_completo.'%');
+        }
+
+        $email = $request->query('email');
+        if ($email) {
+            $query->where('email', 'LIKE', '%'.$email.'%');
+        }
+
+        $paginar = $request->query('paginar');
+        if ($paginar) {
+            $query->paginate(5);
+        }
+
+        $usuarios = $query->orderBy('nombre_completo', 'asc')->get();
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $usuarios);
     }
 
     /**
@@ -36,28 +53,35 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $nombre_completo = $request->input("nombre_completo");
+        $email = $request->input("email");
+        $clave_acceso = hash('sha256', $request->input("clave_acceso"));
+        $imagen = $request->file('imagen');
+        $image_name = time().$imagen->getClientOriginalName();
 
-        $validator = Validator::make($input, [
-            'nombre_completo'   =>  'required',
-            'email'             =>  'required|email|unique:fnd_usuarios',
-            'clave_acceso'      =>  'required',
-            'imagen'            =>  'required'
+        $validator = Validator::make($request->all(), [
+            'nombre_completo'  => 'required',
+            'email'  => 'required',
+            'clave_acceso'  => 'required',
+            'imagen'   =>  'required|image|mimes:jpeg,jpg,png,gif',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
-        $user = new User();
-        $user->nombre_completo = $input['nombre_completo'];
-        $user->email = $input['email'];
-        $user->clave_acceso = hash('sha256', $input['clave_acceso']);
-        $user->imagen = $input['imagen'];
-        $user->save();
+        $usuario = new User();
+        $usuario->nombre_completo = $nombre_completo;
+        $usuario->email = $email;
+        $usuario->clave_acceso = $clave_acceso;
+        $usuario->imagen = $image_name;
 
-        return $this->sendResponse($user, 'Usuario registrado');
+        if ($usuario->save()) {
+            Storage::disk('usuarios')->put($image_name, \File::get($imagen));
+            return $this->sendResponse(true, 'Usuario registrado', $usuario);
+        }else{
+            return $this->sendResponse(false, 'Usuario no registrado', null);
+        }
     }
 
     /**
@@ -94,24 +118,39 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $nombre_completo = $request->input("nombre_completo");
+        $email = $request->input("email");
+        $clave_acceso = hash('sha256', $request->input("clave_acceso"));
+        $imagen = $request->file('imagen');
+        $image_name = time().$imagen->getClientOriginalName();
 
-        $validator = Validator::make($input, [
-            'nombre_completo'   =>  'required',
-            'email'             =>  'required',
-            'clave_acceso'      =>  'required',
-            'imagen'            =>  'required',
+        $validator = Validator::make($request->all(), [
+            'nombre_completo'  => 'required',
+            'email'  => 'required',
+            'clave_acceso'  => 'required',
+            'imagen'   =>  'required|image|mimes:jpeg,jpg,png,gif',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
-        $input['clave_acceso'] = hash('sha256', $input['clave_acceso']);
-
-        $user = User::where('identificador', $id)->update($input);
-        return $this->sendResponse($input, 'Usuario actualizado');
+        $usuario = User::find($id);
+        if ($usuario) {
+            $usuario->nombre_completo = $nombre_completo;
+            $usuario->email = $email;
+            $usuario->clave_acceso = $clave_acceso;
+            $usuario->imagen = $image_name;
+    
+            if ($usuario->save()) {
+                Storage::disk('usuarios')->put($image_name, \File::get($imagen));
+                return $this->sendResponse(true, 'Usuario actualizado', $usuario);
+            }else{
+                return $this->sendResponse(false, 'Usuario no actualizado', null);
+            }
+        }else{
+            return $this->sendResponse(false, 'No se encontro el Usuario', null);
+        }
     }
 
     /**
@@ -170,29 +209,6 @@ class UserController extends BaseController {
         $user = $jwt->checkToken($token, true);
 
         return $this->sendResponse($user, '');
-    }
-
-
-    public function upload(Request $request){
-        $image = $request->file('file0');
-
-        $validator = \Validator::make($request->all(), [
-            'file0'      =>  'required|image|mimes:jpeg,jpg,png,gif',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
-        }else{
-            if ($image) {
-                $image_name = time().$image->getClientOriginalName();
-                \Storage::disk('usuarios')->put($image_name, \File::get($image));
-    
-                return $this->sendResponse($image_name, 'Imagen subida');
-            }else{
-                return $this->sendError('Error al subir imagen', null);
-            }    
-        }
-        return response()->json($data);
     }
 
     public function getImage($filename){
