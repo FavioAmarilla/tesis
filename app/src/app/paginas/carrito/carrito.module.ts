@@ -8,6 +8,8 @@ import { IonicModule } from '@ionic/angular';
 import { PaginaCarrito } from './carrito.page';
 import { ModuloComponentes } from '../../componentes/componentes.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
+import { UbicacionPage } from '../modals/ubicacion/ubicacion.page';
+import { AgmCoreModule } from '@agm/core';
 
 const routes: Routes = [
   {
@@ -23,8 +25,10 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ModuloComponentes,
-    PipesModule
+    PipesModule,
+    AgmCoreModule
   ],
-  declarations: [PaginaCarrito]
+  declarations: [PaginaCarrito, UbicacionPage],
+  entryComponents: [UbicacionPage]
 })
-export class ModuloPaginaCarrito {}
+export class ModuloPaginaCarrito { }

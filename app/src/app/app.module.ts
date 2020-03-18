@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { IonicStorageModule } from '@ionic/storage';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { AgmCoreModule } from '@agm/core';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -26,15 +27,18 @@ import { ServicioUsuario } from './servicios/usuario.service';
     IonicStorageModule.forRoot({
       name: '__mydb',
       driverOrder: ['sqlite', 'websql', 'indexeddb']
-    })
+    }),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBuZNII7koDWPXeKDT9IeSEuWezvQqlZ8c'
+    }),
   ],
   providers: [
     StatusBar,
     SplashScreen,
     InAppBrowser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    ServicioUsuario,
+    ServicioUsuario
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

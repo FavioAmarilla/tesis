@@ -2,41 +2,12 @@
 
 <ion-content>
 
-  <div class="hero-wrap hero-bread" style="background-image: url('assets/images/bg_1.jpg');">
+  <section class="ftco-section ftco-cart" style="padding-top: 40px;">
     <div class="container">
-      <div class="row no-gutters slider-text align-items-center justify-content-center">
-        <div class="col-md-9 text-center">
-          <p class="breadcrumbs"><span class="mr-2"><a routerLink="/">Inicio</a></span> <span>Carrito</span></p>
-          <h1 class="mb-0 bread">Mi Carrito</h1>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <section class="ftco-section ftco-cart">
-    <div class="container">
+
       <div class="row">
         <div class="col-md-12">
           <div class="cart-list">
-            <!-- <div class="row" *ngFor="let producto of productos">
-              <div class="col-md-10">
-
-              </div>
-              <div class="col-md-2">
-                <div class="row">
-                  <img *ngIf="producto" class="img" [src]="producto.archivo_img | productImage | urlSanitizer">
-                </div>
-                <div class="row">
-                  <p>Nombre del Producto</p>
-                  <p>5.000 Gs.</p>
-                  <input type="cantidad">
-                  <div style="display: flex;">
-                    <span class="ion-ios-close"></span>
-                    <span class="ion-ios-check"></span>
-                </div>
-                </div>
-              </div>
-            </div> -->
 
             <table class="table">
               <thead class="thead-primary">
@@ -56,91 +27,131 @@
                       <span class="ion-ios-close"></span>
                     </a>
                   </td>
-  
+
                   <td class="image-prod">
                     <img *ngIf="producto" class="img" [src]="producto.archivo_img | productImage | urlSanitizer">
                   </td>
-  
+
                   <td class="product-name">
                     <h3>{{ producto.descripcion }}</h3>
                   </td>
-  
+
                   <td class="price">{{ producto.precio_venta }}</td>
-  
+
                   <td class="quantity">
                     <div class="input-group mb-3">
-                      <input type="text" name="quantity" class="quantity form-control input-number" value="{{ producto.cantidad }}" min="1"
-                        max="100">
+                      <input type="text" name="quantity" class="quantity form-control input-number"
+                        value="{{ producto.cantidad }}" min="1" max="100">
                     </div>
                   </td>
-  
+
                   <td class="total">{{producto.precio_venta * producto.cantidad}}
               </tbody>
             </table>
           </div>
         </div>
       </div>
-      <div class="row justify-content-end">
-        <div class="col-lg-4 mt-5 cart-wrap">
+
+      <div class="row">
+        <div class="col-md-12 mt-5">
           <div class="cart-total mb-3">
-            <h3>Coupon Code</h3>
-            <p>Enter your coupon code if you have one</p>
+            <p>Sucursal</p>
             <form action="#" class="info">
               <div class="form-group">
-                <label for="">Coupon code</label>
-                <input type="text" class="form-control text-left px-3" placeholder="">
+                <select name="" id="" class="form-control text-left px-3" placeholder="Pais">
+                  <option value="0">--Seleccione--</option>
+                </select>
               </div>
             </form>
           </div>
-          <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
         </div>
+      </div>
+
+      <div class="row">
         <div class="col-lg-4 mt-5 cart-wrap">
           <div class="cart-total mb-3">
-            <h3>Estimate shipping and tax</h3>
-            <p>Enter your destination to get a shipping estimate</p>
+            <h3>Cupon de descuento</h3>
+            <p>Ingrese su código de cupón si tiene uno</p>
             <form action="#" class="info">
               <div class="form-group">
-                <label for="">Country</label>
-                <input type="text" class="form-control text-left px-3" placeholder="">
-              </div>
-              <div class="form-group">
-                <label for="country">State/Province</label>
-                <input type="text" class="form-control text-left px-3" placeholder="">
-              </div>
-              <div class="form-group">
-                <label for="country">Zip/Postal Code</label>
-                <input type="text" class="form-control text-left px-3" placeholder="">
+                <input type="text" class="form-control text-left px-3" placeholder="Código promocional">
               </div>
             </form>
           </div>
-          <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p>
+          <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Aplicar Cupon</a></p>
         </div>
+
         <div class="col-lg-4 mt-5 cart-wrap">
           <div class="cart-total mb-3">
-            <h3>Cart Totals</h3>
+            <h3>Datos de Envío</h3>
+            <p>Ingrese su destino para el envio</p>
+            <form action="#" class="info">
+              <div class="form-group">
+                <select name="" id="" class="form-control text-left px-3" placeholder="Pais">
+                  <option value="0">--Seleccione--</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <select name="" id="" class="form-control text-left px-3" placeholder="Ciudad">
+                  <option value="0">--Seleccione--</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <select name="" id="" class="form-control text-left px-3" placeholder="Barrio">
+                  <option value="0">--Seleccione--</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control text-left px-3" placeholder="Direccion">
+              </div>
+              <div class="form-group">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend btn-ubicacion" data-toggle="modal" data-target="#modalUbicacion"
+                    (click)="abrirModal()">
+                    <span class=" input-group-text"> <span class="icon-map-marker"></span> </span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Ubicación" aria-label="Ubicación"
+                    aria-describedby="basic-addon1">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-lg-4 mt-5 cart-wrap">
+          <div class="cart-total mb-3">
+            <h3>Totales de carrito</h3>
             <p class="d-flex">
-              <span>Subtotal</span>
-              <span>$20.60</span>
+              <span>Sub Total</span>
+              <span style="text-align: right;">100.000 Gs.</span>
             </p>
             <p class="d-flex">
               <span>Delivery</span>
-              <span>$0.00</span>
+              <span style="text-align: right;">10.000 Gs.</span>
             </p>
             <p class="d-flex">
-              <span>Discount</span>
-              <span>$3.00</span>
+              <span>Descuento</span>
+              <span style="text-align: right;">20.000 Gs.</span>
             </p>
-            <hr>
+            <hr style="border-top: 1px solid rgba(0,0,0,.05)">
             <p class="d-flex total-price">
-              <span>Total</span>
-              <span>$17.60</span>
+              <span><b>Total</b></span>
+              <span style="text-align: right;"><b>90.000 Gs.</b></span>
             </p>
           </div>
-          <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+          <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Pagar</a></p>
         </div>
+
       </div>
+
+
     </div>
+
+
   </section>
 
+
+
   <app-footer [cargando]="cargando"></app-footer>
+
 </ion-content>

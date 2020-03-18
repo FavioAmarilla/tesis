@@ -1,0 +1,21 @@
+<!-- modal para seleccionar ubicacion -->
+<ion-content>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modalUbicacionLabel">Seleccione su ubicación</h5>
+    </div>
+
+    <div class="modal-body">
+      <agm-map [zoom]="15" [latitude]="latitud" [longitude]="longitud" (mapClick)="obtenerMarker($event)">
+        <agm-marker *ngFor="let marca of marker" [latitude]="marca.latitude" [longitude]="marca.longitude"></agm-marker>
+      </agm-map>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary bg-primary btn-hover-primary">Aceptar</button>
+      <button type="button" class="btn btn-secondary bg-secondary" (click)="cerrarModal()">Cerrar</button>
+    </div>
+  </div>
+
+
+</ion-content>

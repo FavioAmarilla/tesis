@@ -6492,12 +6492,10 @@ a.close.disabled {
   vertical-align: text-top !important;
 }
 
-.bg-primary {
-  background-color: #007bff !important;
-}
-
 a.bg-primary:hover, a.bg-primary:focus, button.bg-primary:hover, button.bg-primary:focus {
-  background-color: #0062cc !important;
+  background-color: white !important;
+  border-color: #079a4a !important;
+  color: #079a4a !important;
 }
 
 .bg-secondary {
@@ -6505,7 +6503,9 @@ a.bg-primary:hover, a.bg-primary:focus, button.bg-primary:hover, button.bg-prima
 }
 
 a.bg-secondary:hover, a.bg-secondary:focus, button.bg-secondary:hover, button.bg-secondary:focus {
-  background-color: #545b62 !important;
+  background-color: white !important;
+  border-color: #545b62 !important;
+  color: #545b62 !important;
 }
 
 .bg-success {
@@ -9853,7 +9853,6 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
   cursor: pointer;
 }
 
-
 .ftco-navbar-light .navbar-nav>.nav-item>.nav-link:hover {
   background-color: var(--teal);
   color: white;
@@ -10439,14 +10438,6 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
 
 .bg-light {
   background: #f7f6f2 !important;
-}
-
-.bg-primary {
-  background: #079A4A;
-}
-
-.bg-secondary {
-  background: #ffe6eb !important;
 }
 
 .bg-color-1 {
