@@ -15,7 +15,7 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
-        $query = User::all();
+        $query = User::orderBy('nombre_completo', 'asc');
 
         $nombre_completo = $request->query('nombre_completo');
         if ($nombre_completo) {
@@ -30,7 +30,7 @@ class UserController extends BaseController {
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
 
-        $data = $query->orderBy('nombre_completo', 'asc')->$listar();
+        $data = $query->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
