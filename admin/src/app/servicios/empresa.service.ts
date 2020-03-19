@@ -13,22 +13,14 @@ export class ServicioEmpresa {
     private http: HttpClient
   ) { }
 
-  async obtenerEmpresa(id?, pagina?, filtros?) {
-    let url = (id) ? `${API}/empresa/${id}` : `${API}/empresa`;
-    url = (pagina) ? `${url}?page=${pagina}` : url;
+  async obtenerEmpresa(id?, parametros?) {
+    const url = (id) ? `${API}/empresa/${id}` : `${API}/empresa`;
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    let params = new HttpParams();
-    for (let key in filtros) {
-      params.append(key, filtros[key]);
-    }
-
-    let options = {
-      params
-    }
+    const params = new HttpParams({fromObject: parametros});
 
     return new Promise(resolve => {
-      this.http.get(url, options).subscribe(
+      this.http.get(url, {params}).subscribe(
         (response: any) => {
           console.log('empresa:', response);
           resolve(response);

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 const API = environment.api;
 @Injectable({
@@ -12,13 +12,14 @@ export class ServicioPuntoEmision {
     private http: HttpClient
   ) { }
 
-  async obtenerPuntoEmision(id?, pagina?) {
-    let url = (id) ? `${API}/puntoEmision/${id}` : `${API}/puntoEmision`;
-    url = (pagina) ? `${url}?page=${pagina}` : url;
+  async obtenerPuntoEmision(id?, parametros?) {
+    const url = (id) ? `${API}/puntoEmision/${id}` : `${API}/puntoEmision`;
+
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams({ fromObject: parametros });
 
     return new Promise(resolve => {
-      this.http.get(url, { headers }).subscribe(
+      this.http.get(url, { headers, params }).subscribe(
         (response: any) => {
           resolve(response);
         },

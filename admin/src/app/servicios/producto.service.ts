@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'environments/environment';
 
 const API = environment.api;
@@ -13,13 +13,14 @@ export class ServicioProducto {
     private http: HttpClient
   ) { }
 
-  async obtenerProducto(id?, pagina?) {
-    let url = (id) ? `${API}/producto/${id}` : `${API}/producto`;
-    url = (pagina) ? `${url}?page=${pagina}` : url;
+  async obtenerProducto(id?, parametros?) {
+    const url = (id) ? `${API}/producto/${id}` : `${API}/producto`;
+
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams({ fromObject: parametros });
 
     return new Promise(resolve => {
-      this.http.get(url, { headers }).subscribe(
+      this.http.get(url, { headers, params }).subscribe(
         (response: any) => {
           resolve(response);
         },

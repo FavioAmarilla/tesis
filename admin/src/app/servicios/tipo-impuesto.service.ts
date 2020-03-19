@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 const API = environment.api;
 
@@ -13,13 +13,14 @@ export class ServicioTipoImpuesto {
     private http: HttpClient
   ) { }
 
-  async obtenerImpuesto(id?, pagina?) {
-    let url = (id) ? `${API}/tipoImpuesto/${id}` : `${API}/tipoImpuesto`;
-    url = (pagina) ? `${url}?page=${pagina}` : url;
+  async obtenerImpuesto(id?, parametros?) {
+    const url = (id) ? `${API}/tipoImpuesto/${id}` : `${API}/tipoImpuesto`;
+
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams({ fromObject: parametros });
 
     return new Promise(resolve => {
-      this.http.get(url, { headers }).subscribe(
+      this.http.get(url, { headers, params }).subscribe(
         (response: any) => {
           resolve(response);
         },

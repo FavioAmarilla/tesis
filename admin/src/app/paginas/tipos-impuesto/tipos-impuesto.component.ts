@@ -46,7 +46,12 @@ export class TiposImpuestoComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response: any = await this.impuestoService.obtenerImpuesto(null, pagina);
+    const parametros = {
+      paginar: true,
+      page: this.paginaActual
+    };
+
+    const response: any = await this.impuestoService.obtenerImpuesto(null, parametros);
 
     if (response.status) {
       this.listaImpuesto = response.data.data

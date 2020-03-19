@@ -64,8 +64,13 @@ export class PuntosEmisionComponent implements OnInit {
     this.cargando = true;
     this.errors = [];
 
-    const response: any = await this.servicioPuntoEmision.obtenerPuntoEmision(null, pagina);
-    
+    const parametros = {
+      paginar: true,
+      page: this.paginaActual
+    };
+
+    const response: any = await this.servicioPuntoEmision.obtenerPuntoEmision(null, parametros);
+
     if (response.status) {
       this.listaPuntosEmision = response.data.data;
       this.porPagina = response.data.per_page;

@@ -61,13 +61,14 @@ export class ServicioUsuario {
     });
   }
 
-  async obtenerUsuarios(id?, pagina?) {
-    let url = (id) ? `${API}/user/${id}` : `${API}/user`;
-    url = (pagina) ? `${url}?page=${pagina}` : url;
+  async obtenerUsuarios(id?, parametros?) {
+    const url = (id) ? `${API}/user/${id}` : `${API}/user`;
+
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams({ fromObject: parametros });
 
     return new Promise(resolve => {
-      this.http.get(url, { headers }).subscribe(
+      this.http.get(url, { headers, params }).subscribe(
         (response: any) => {
           resolve(response);
         },

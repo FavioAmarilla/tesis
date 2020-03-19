@@ -68,7 +68,12 @@ export class CarruselComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response: any = await this.servicioCarrusel.obtenerCarrusel(null, pagina);
+    const parametros = {
+      paginar: true,
+      page: this.paginaActual
+    };
+
+    const response: any = await this.servicioCarrusel.obtenerCarrusel(null, parametros);
 
     if (response.status) {
       this.listaSlide = response.data.data;

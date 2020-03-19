@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'environments/environment';
 
 const API = environment.api;
@@ -13,13 +13,14 @@ export class ServicioCarrusel {
     private http: HttpClient
   ) {}
 
-  async obtenerCarrusel(id?, pagina?) {
-    let url = (id) ? `${API}/slide/${id}` : `${API}/slide`;
-    url = (pagina) ? `${url}?page=${pagina}` : url;
+  async obtenerCarrusel(id?, parametros?) {
+    const url = (id) ? `${API}/slide/${id}` : `${API}/slide`;
+
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams({ fromObject: parametros });
 
     return new Promise(resolve => {
-      this.http.get(url, { headers }).subscribe(
+      this.http.get(url, { headers, params }).subscribe(
         (response: any) => {
           resolve(response);
         },

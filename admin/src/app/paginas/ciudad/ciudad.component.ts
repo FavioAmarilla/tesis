@@ -66,7 +66,12 @@ export class CiudadComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response: any = await this.servicioCiudad.obtenerCiudad(null, pagina);
+    const parametros = {
+      paginar: true,
+      page: this.paginaActual
+    };
+
+    const response: any = await this.servicioCiudad.obtenerCiudad(null, parametros);
 
     if (response.status) {
       this.listaCiudades = response.data.data;

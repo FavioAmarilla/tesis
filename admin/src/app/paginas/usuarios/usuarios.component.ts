@@ -69,7 +69,12 @@ export class UsuariosComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response: any = await this.servicioUsuario.obtenerUsuarios(null, pagina);
+    const parametros = {
+      paginar: true,
+      page: this.paginaActual
+    };
+
+    const response: any = await this.servicioUsuario.obtenerUsuarios(null, parametros);
 
     if (response.status) {
       this.listaUsuario = response.data.data;

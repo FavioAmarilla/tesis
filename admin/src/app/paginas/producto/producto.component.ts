@@ -103,7 +103,12 @@ export class ProductoComponent implements OnInit {
     this.cargando = true;
     this.errors = [];
 
-    const response: any = await this.servicioProducto.obtenerProducto(null, pagina);
+    const parametros = {
+      paginar: true,
+      page: this.paginaActual
+    };
+
+    const response: any = await this.servicioProducto.obtenerProducto(null, parametros);
 
     if (response.status) {
       this.listaProductos = response.data.data;

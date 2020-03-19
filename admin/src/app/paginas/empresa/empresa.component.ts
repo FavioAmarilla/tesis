@@ -69,11 +69,12 @@ export class EmpresaComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    let filtros = {
-      'paginar': true
+    const parametros = {
+      paginar: true,
+      page: this.paginaActual
     };
 
-    const response: any = await this.servicioEmpresa.obtenerEmpresa(null, pagina, filtros);
+    const response: any = await this.servicioEmpresa.obtenerEmpresa(null, parametros);
 
     if (response.status) {
       this.listaEmpresas = response.data.data;

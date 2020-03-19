@@ -47,7 +47,12 @@ export class LineaProductoComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response: any = await this.servicioLineaProducto.obtenerLinea(null, pagina);
+    const parametros = {
+      paginar: true,
+      page: this.paginaActual
+    };
+
+    const response: any = await this.servicioLineaProducto.obtenerLinea(null, parametros);
 
     if (response.status) {
       this.listaLineas = response.data.data;

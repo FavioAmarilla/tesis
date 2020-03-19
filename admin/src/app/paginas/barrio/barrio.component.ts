@@ -66,7 +66,12 @@ export class BarrioComponent implements OnInit {
     this.cargando = true;
     this.errors = [];
 
-    const response: any = await this.servicioBarrio.obtenerBarrio(null, pagina);
+    const parametros = {
+      paginar: true,
+      page: this.paginaActual
+    };
+
+    const response: any = await this.servicioBarrio.obtenerBarrio(null, parametros);
 
     if (response.status) {
       this.listaBarrio = response.data.data;
