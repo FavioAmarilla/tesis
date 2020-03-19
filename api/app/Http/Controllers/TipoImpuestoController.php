@@ -18,7 +18,7 @@ class TipoImpuestoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = TipoImpuesto::all();
+        $query = TipoImpuesto::orderBy('valor', 'asc');
 
         $descripcion = $request->query('descripcion');
         if ($descripcion) {
@@ -33,7 +33,7 @@ class TipoImpuestoController extends BaseController
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
 
-        $data = $query->orderBy('valor', 'asc')->$listar();
+        $data = $query->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $impuesto);
     }
