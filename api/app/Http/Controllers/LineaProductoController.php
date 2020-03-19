@@ -18,7 +18,7 @@ class LineaProductoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = LineaProducto::all();
+        $query = LineaProducto::orderBy('descripcion', 'asc');
 
         $descripcion = $request->query('descripcion');
         if ($descripcion) {
@@ -28,7 +28,7 @@ class LineaProductoController extends BaseController
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
 
-        $data = $query->orderBy('descripcion', 'asc')->$listar();
+        $data = $query->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
