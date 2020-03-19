@@ -14,7 +14,7 @@ class UserController extends BaseController {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index(Request $request) {
         $query = User::all();
 
         $nombre_completo = $request->query('nombre_completo');
@@ -29,12 +29,12 @@ class UserController extends BaseController {
 
         $paginar = $request->query('paginar');
         if ($paginar) {
-            $query->paginate(5);
+            $data = $query->orderBy('nombre_completo','asc')->paginate(5);
+        }else{
+            $data = $query->orderBy('nombre_completo','asc')->get();
         }
-
-        $usuarios = $query->orderBy('nombre_completo', 'asc')->get();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $usuarios);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
 
     /**

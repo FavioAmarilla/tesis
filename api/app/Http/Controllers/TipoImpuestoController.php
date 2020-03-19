@@ -32,10 +32,10 @@ class TipoImpuestoController extends BaseController
 
         $paginar = $request->query('paginar');
         if ($paginar) {
-            $query->paginate(5);
+            $barrios = $query->orderBy('valor','asc')->paginate(5);
+        }else{
+            $barrios = $query->orderBy('valor','asc')->get();
         }
-
-        $impuesto = $query->orderBy('valor', 'asc')->get();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $impuesto);
     }
@@ -89,12 +89,12 @@ class TipoImpuestoController extends BaseController
      */
     public function show($id)
     {
-        $pais = Pais::find($id);
+        $impuesto = TipoImpuesto::find($id);
 
-        if (is_object($pais)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $pais);
+        if (is_object($impuesto)) {
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $impuesto);
         }else{
-            return $this->sendResponse(false, 'No se encontro la Pais', null);
+            return $this->sendResponse(false, 'No se encontro el Tipo de Impuesto', null);
         }
     }
 

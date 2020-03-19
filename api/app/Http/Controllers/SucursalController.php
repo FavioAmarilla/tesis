@@ -10,22 +10,65 @@ use App\Sucursal;
 
 class SucursalController extends BaseController
 {
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $query = Sucursal::with(['empresa', 'pais', 'ciudad']);
+        $query = Sucursal::with(['empresa']);
+
+        $id_empresa = $request->query('id_empresa');
+        if ($id_empresa) {
+            $query->where('id_empresa', '=', $id_empresa);
+        }
+
+        $codigo = $request->query('codigo');
+        if ($codigo) {
+            $query->where('codigo', 'LIKE', '%'.$codigo.'%');
+        }
+
+        $nombre = $request->query('nombre');
+        if ($nombre) {
+            $query->where('nombre', 'LIKE', '%'.$nombre.'%');
+        }
+
+        $telefono = $request->query('telefono');
+        if ($telefono) {
+            $query->where('telefono', 'LIKE', '%'.$telefono.'%');
+        }
+
+        $id_pais = $request->query('id_pais');
+        if ($id_pais) {
+            $query->where('id_pais', '=', $id_pais);
+        }
+
+        $id_ciudad = $request->query('id_ciudad');
+        if ($id_ciudad) {
+            $query->where('id_ciudad', '=', $id_ciudad);
+        }
+
+        $direccion = $request->query('direccion');
+        if ($direccion) {
+            $query->where('direccion', 'LIKE', '%'.$direccion.'%');
+        }
 
         $ecommerce = $request->query('ecommerce');
         if ($ecommerce) {
-            $query->where('ecommerce', '=', $ecommerce);
+            $query->where('ecommerce', 'LIKE', '%'.$ecommerce.'%');
         }
 
-        $sucursales = $query->orderBy('id_empresa','desc')->paginate(5);
-        return $this->sendResponse($sucursales, '');
+        $paginar = $request->query('paginar');
+        if ($paginar) {
+            $sucursales = $query->orderBy('id_ciudad','asc')
+            ->orderBy('nombre', 'asc')->paginate(5);
+        }else{
+            $sucursales = $query->orderBy('id_ciudad','asc')
+            ->orderBy('nombre', 'asc')->get();
+        }
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $sucursales);
     }
 
     /**
@@ -46,8 +89,14 @@ class SucursalController extends BaseController
      */
     public function store(Request $request)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $id_empresa = $request->input("id_empresa");
+        $codigo = $request->input("codigo");
+        $nombre = $request->input("nombre");
+        $telefono = $request->input("telefono");
+        $id_pais = $request->input("id_pais");
+        $id_ciudad = $request->input("id_ciudad");
+        $direccion = $request->input("direccion");
+        $ecommerce = $request->input("ecommerce");
 
         $validator = Validator::make($input, [
             'id_empresa'  => 'required',
@@ -61,21 +110,24 @@ class SucursalController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
         $sucursal = new Sucursal();
-        $sucursal->id_empresa = $input['id_empresa'];
-        $sucursal->codigo = $input['codigo'];
-        $sucursal->nombre = $input['nombre'];
-        $sucursal->telefono = $input['telefono'];
-        $sucursal->id_pais = $input['id_pais'];
-        $sucursal->id_ciudad = $input['id_ciudad'];
-        $sucursal->direccion = $input['direccion'];
-        $sucursal->ecommerce = $input['ecommerce'];
-        $sucursal->save();
+        $sucursal->id_empresa = $id_empresa;
+        $sucursal->codigo = $codigo;
+        $sucursal->nombre = $nombre;
+        $sucursal->telefono = $telefono;
+        $sucursal->id_pais = $id_pais;
+        $sucursal->id_ciudad = $id_ciudad;
+        $sucursal->direccion = $direccion;
+        $sucursal->ecommerce = $ecommerce;
 
-        return $this->sendResponse($sucursal, 'Sucursal registrada');
+        if ($sucursal->save()) {
+            return $this->sendResponse(true, 'Sucursal registrada', $sucursal);
+        }else{
+            return $this->sendResponse(false, 'Sucursal no registrada', null);
+        }
     }
 
     /**
@@ -86,12 +138,12 @@ class SucursalController extends BaseController
      */
     public function show($id)
     {
-        $puntoEmision = PuntoEmision::find($id);
+        $sucursal = Sucursal::find($id);
 
-        if (is_object($puntoEmision)) {
-            return $this->sendResponse($puntoEmision, '');
+        if (is_object($sucursal)) {
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $sucursal);
         }else{
-            return $this->sendError('Sucursal no definida', null);
+            return $this->sendResponse(false, 'No se encontro la Sucursal', null);
         }
     }
 
@@ -115,8 +167,14 @@ class SucursalController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $id_empresa = $request->input("id_empresa");
+        $codigo = $request->input("codigo");
+        $nombre = $request->input("nombre");
+        $telefono = $request->input("telefono");
+        $id_pais = $request->input("id_pais");
+        $id_ciudad = $request->input("id_ciudad");
+        $direccion = $request->input("direccion");
+        $ecommerce = $request->input("ecommerce");
 
         $validator = Validator::make($input, [
             'id_empresa'  => 'required',
@@ -128,13 +186,29 @@ class SucursalController extends BaseController
             'direccion'   => 'required',
             'ecommerce'   => 'required',
         ]);
-            
+
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }
 
-        $puntoEmision = PuntoEmision::where('identificador', $id)->update($input);
-        return $this->sendResponse($input, 'Sucursal actualizada');
+        $sucursal = Sucursal::find($id);
+        if ($barrio) {
+            $sucursal->id_empresa = $id_empresa;
+            $sucursal->codigo = $codigo;
+            $sucursal->nombre = $nombre;
+            $sucursal->telefono = $telefono;
+            $sucursal->id_pais = $id_pais;
+            $sucursal->id_ciudad = $id_ciudad;
+            $sucursal->direccion = $direccion;
+            $sucursal->ecommerce = $ecommerce;
+            if ($sucursal->save()) {
+                return $this->sendResponse(true, 'Sucursal actualizada', $sucursal);
+            }else{
+                return $this->sendResponse(false, 'Sucursal no actualizada', null);
+            }
+        }else{
+            return $this->sendResponse(false, 'No se encontro la Sucursal', null);
+        }
     }
 
     /**

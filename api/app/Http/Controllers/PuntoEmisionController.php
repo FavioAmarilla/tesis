@@ -42,14 +42,14 @@ class PuntoEmisionController extends BaseController
 
         $paginar = $request->query('paginar');
         if ($paginar) {
-            $query->paginate(5);
+            $data = $query->orderBy('vr_tipo','asc')->orderBy('codigo','asc')
+            ->orderBy('nombre', 'asc')->paginate(5);
+        }else{
+            $data = $query->orderBy('vr_tipo','asc')->orderBy('codigo','asc')
+            ->orderBy('nombre', 'asc')->get();
         }
-
-        $emision = $query->orderBy('vr_tipo','asc')->orderBy('codigo','asc')
-        ->orderBy('nombre', 'asc')->get();
         
-        
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $emision);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
 
     /**

@@ -11,6 +11,7 @@ use App\Barrio;
 
 class BarrioController extends BaseController
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -32,15 +33,14 @@ class BarrioController extends BaseController
 
         $paginar = $request->query('paginar');
         if ($paginar) {
-            $query->paginate(5);
+            $data = $query->orderBy('id_ciudad','asc')
+            ->orderBy('nombre', 'asc')->paginate(5);
+        }else{
+            $data = $query->orderBy('id_ciudad','asc')
+            ->orderBy('nombre', 'asc')->get();
         }
-
-        $barrios = $query->orderBy('id_ciudad','asc')
-        ->orderBy('nombre', 'asc')->get();
         
-        
-        
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $barrios);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
 
     /**

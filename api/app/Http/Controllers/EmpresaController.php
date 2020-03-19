@@ -37,13 +37,12 @@ class EmpresaController extends BaseController
 
         $paginar = $request->query('paginar');
         if ($paginar) {
-            $query->paginate(5);
+            $data = $query->orderBy('codigo','asc')->paginate(5);
+        }else{
+            $data = $query->orderBy('codigo','asc')->get();
         }
-
-        $ciudades = $query->orderBy('codigo','asc')->get();
         
-        
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $ciudades);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
 
     /**

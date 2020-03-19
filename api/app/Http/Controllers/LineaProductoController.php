@@ -18,7 +18,7 @@ class LineaProductoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = LineaProducto::with(['pais']);
+        $query = LineaProducto::all();
 
         $descripcion = $request->query('descripcion');
         if ($descripcion) {
@@ -27,12 +27,12 @@ class LineaProductoController extends BaseController
 
         $paginar = $request->query('paginar');
         if ($paginar) {
-            $query->paginate(5);
+            $data = $query->orderBy('descripcion','asc')->paginate(5);
+        }else{
+            $data = $query->orderBy('descripcion','asc')->get();
         }
-
-        $lineas = $query->orderBy('codigo','asc')->get();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $lineas);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
 
     /**

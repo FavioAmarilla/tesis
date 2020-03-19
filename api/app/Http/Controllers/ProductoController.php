@@ -57,13 +57,12 @@ class ProductoController extends BaseController
 
         $paginar = $request->query('paginar');
         if ($paginar) {
-            $query->paginate(5);
+            $data = $query->orderBy('descripcion', 'asc')->paginate(5);
+        }else{
+            $data = $query->orderBy('descripcion', 'asc')->get();
         }
-
-        $productos = $query->orderBy('nombre','asc')->get();
         
-        
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $productos);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
 
     /**
@@ -135,12 +134,12 @@ class ProductoController extends BaseController
      */
     public function show($id)
     {
-        $empresa = Empresa::find($id);
+        $producto = Producto::find($id);
 
-        if (is_object($empresa)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $empresa);
+        if (is_object($producto)) {
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $producto);
         }else{
-            return $this->sendResponse(false, 'No se encontro la Empresa', null);
+            return $this->sendResponse(false, 'No se encontro el Producto', null);
         }
     }
 

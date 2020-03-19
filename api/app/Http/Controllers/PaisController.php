@@ -27,12 +27,12 @@ class PaisController extends BaseController
 
         $paginar = $request->query('paginar');
         if ($paginar) {
-            $query->paginate(5);
+            $data = $query->orderBy('nombre', 'asc')->paginate(5);
+        }else{
+            $data = $query->orderBy('nombre', 'asc')->get();
         }
-
-        $pais = $query->orderBy('nombre', 'asc')->get();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $pais);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
 
     /**
