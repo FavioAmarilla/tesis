@@ -18,7 +18,7 @@ class PaisController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Pais::all();
+        $query = Pais::orderBy('nombre', 'asc');
 
         $nombre = $request->query('nombre');
         if ($nombre) {
@@ -28,7 +28,7 @@ class PaisController extends BaseController
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
 
-        $data = $query->orderBy('nombre', 'asc')->$listar();
+        $data = $query->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
