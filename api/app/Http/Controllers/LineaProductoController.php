@@ -26,11 +26,9 @@ class LineaProductoController extends BaseController
         }
 
         $paginar = $request->query('paginar');
-        if ($paginar) {
-            $data = $query->orderBy('descripcion','asc')->paginate(5);
-        }else{
-            $data = $query->orderBy('descripcion','asc')->get();
-        }
+        $listar = (boolval($paginar)) ? 'paginate' : 'get';
+
+        $data = $query->orderBy('descripcion', 'asc')->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }

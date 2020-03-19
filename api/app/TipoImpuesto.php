@@ -8,6 +8,7 @@ class TipoImpuesto extends Model
 {
     protected $primaryKey = 'identificador';
     protected $table = 'fnd_tipos_impuesto';
+    protected $perPage = 10;
     
     protected $fillable = [
         'identificador', 'descripcion', 'valor',

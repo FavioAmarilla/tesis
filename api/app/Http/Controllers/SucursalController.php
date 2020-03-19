@@ -60,13 +60,9 @@ class SucursalController extends BaseController
         }
 
         $paginar = $request->query('paginar');
-        if ($paginar) {
-            $sucursales = $query->orderBy('id_ciudad','asc')
-            ->orderBy('nombre', 'asc')->paginate(5);
-        }else{
-            $sucursales = $query->orderBy('id_ciudad','asc')
-            ->orderBy('nombre', 'asc')->get();
-        }
+        $listar = (boolval($paginar)) ? 'paginate' : 'get';
+
+        $data = $query->orderBy('id_ciudad', 'asc')->orderBy('nombre', 'asc')->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $sucursales);
     }

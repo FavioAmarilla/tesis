@@ -31,11 +31,9 @@ class SlideController extends BaseController
         }
 
         $paginar = $request->query('paginar');
-        if ($paginar) {
-            $data = $query->orderBy('titulo','asc')->paginate(5);
-        }else{
-            $data = $query->orderBy('titulo','asc')->get();
-        }
+        $listar = (boolval($paginar)) ? 'paginate' : 'get';
+
+        $data = $query->orderBy('titulo', 'asc')->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }

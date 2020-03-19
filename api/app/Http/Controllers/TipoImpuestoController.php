@@ -31,11 +31,9 @@ class TipoImpuestoController extends BaseController
         }
 
         $paginar = $request->query('paginar');
-        if ($paginar) {
-            $barrios = $query->orderBy('valor','asc')->paginate(5);
-        }else{
-            $barrios = $query->orderBy('valor','asc')->get();
-        }
+        $listar = (boolval($paginar)) ? 'paginate' : 'get';
+
+        $data = $query->orderBy('valor', 'asc')->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $impuesto);
     }

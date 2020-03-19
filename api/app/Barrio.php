@@ -8,6 +8,7 @@ class Barrio extends Model
 {
     protected $primaryKey = 'identificador';
     protected $table = 'geo_barrios';
+    protected $perPage = 10;
 
     protected $fillable =[
         'identificador', 'id_ciudad', 'nombre',

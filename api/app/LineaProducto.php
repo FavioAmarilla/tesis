@@ -8,6 +8,7 @@ class LineaProducto extends Model
 {
     protected $primaryKey = 'identificador';
     protected $table = 'pr_lineas_prod';
+    protected $perPage = 10;
 
     protected $fillable = [
         'identificador', 'descripcion', 'archivo_img',

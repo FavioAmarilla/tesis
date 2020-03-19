@@ -28,11 +28,9 @@ class UserController extends BaseController {
         }
 
         $paginar = $request->query('paginar');
-        if ($paginar) {
-            $data = $query->orderBy('nombre_completo','asc')->paginate(5);
-        }else{
-            $data = $query->orderBy('nombre_completo','asc')->get();
-        }
+        $listar = (boolval($paginar)) ? 'paginate' : 'get';
+
+        $data = $query->orderBy('nombre_completo', 'asc')->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }

@@ -8,6 +8,7 @@ class Empresa extends Model
 {
     protected $primaryKey = 'identificador';
     protected $table = 'fnd_parm_empresas';
+    protected $perPage = 10;
 
     protected $fillable =[
         'identificador',

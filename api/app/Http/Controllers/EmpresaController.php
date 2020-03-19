@@ -18,7 +18,7 @@ class EmpresaController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Empresa::orderBy('codigo','asc');
+        $query = Empresa::orderBy('codigo', 'asc');
 
         $codigo = $request->query('codigo');
         if ($codigo) {
@@ -36,11 +36,9 @@ class EmpresaController extends BaseController
         }
 
         $paginar = $request->query('paginar');
-        if ($paginar) {
-            $data = $query->paginate(5);
-        }else{
-            $data = $query->get();
-        }
+        $listar = (boolval($paginar)) ? 'paginate' : 'get';
+        
+        $data = $query->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }

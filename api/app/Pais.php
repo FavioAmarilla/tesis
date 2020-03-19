@@ -8,6 +8,7 @@ class Pais extends Model
 {
     protected $primaryKey = 'identificador';
     protected $table = 'geo_paises';
+    protected $perPage = 10;
 
     protected $fillable =[
         'identificador', 'nombre',

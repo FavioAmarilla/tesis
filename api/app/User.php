@@ -12,6 +12,7 @@ class User extends Authenticatable
 
     protected $table = 'fnd_usuarios';
     protected $primaryKey = 'identificador';
+    protected $perPage = 10;
 
     /**
      * The attributes that are mass assignable.

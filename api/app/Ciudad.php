@@ -8,6 +8,7 @@ class Ciudad extends Model
 {
     protected $primaryKey = 'identificador';
     protected $table = 'geo_ciudades';
+    protected $perPage = 10;
 
     protected $fillable =[
         'identificador', 'id_pais', 'nombre',

@@ -8,6 +8,7 @@ class Sucursal extends Model
 {
     protected $primaryKey = 'identificador';
     protected $table = 'fnd_sucursales';
+    protected $perPage = 10;
     
     protected $fillable = [
         'identificador', 'id_empresa', 'codigo', 'nombre', 'telefono', 'id_pais', 'id_ciudad', 'direccion', 'ecommerce'

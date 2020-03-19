@@ -31,14 +31,9 @@ class CiudadController extends BaseController
         }
 
         $paginar = $request->query('paginar');
-        if ($paginar) {
-            $data = $query->orderBy('id_pais','asc')
-            ->orderBy('nombre', 'asc')->paginate(5);
-        }else{
-            $data = $query->orderBy('id_pais','asc')
-            ->orderBy('nombre', 'asc')->get();
-        }
-        
+        $listar = (boolval($paginar)) ? 'paginate' : 'get';
+
+        $data = $query->orderBy('id_pais', 'asc')->orderBy('nombre', 'asc')->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }

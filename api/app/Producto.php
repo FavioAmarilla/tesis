@@ -8,6 +8,7 @@ class Producto extends Model
 {
     protected $primaryKey = 'identificador';
     protected $table = 'pr_productos';
+    protected $perPage = 10;
 
     protected $fillable =[
         'identificador', 'id_linea', 'id_tipo_impuesto', 'vr_unidad_medida', 'descripcion', 'codigo_barras', 'costo_unitario', 'precio_venta', 'imagen',
