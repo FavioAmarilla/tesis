@@ -38,16 +38,16 @@ class JwtAuth extends BaseController
             $decoded = JWT::decode($jwt, $this->key, ['HS256']);
 
             if (is_null($getToken)) {
-                return $this->sendResponse($jwt, 'Autenticacion');
+                return $this->sendResponse(true, 'Autenticacion', $jwt);
             } else {
-                return $this->sendResponse($decoded, 'Autenticacion');
+                return $this->sendResponse(true, 'Autenticacion', $decoded);
             }
         } else {
-            return $this->sendError('Acceso denegado');
+            return $this->sendResponse(false, 'Acceso denegado', null);
         }
     }
 
-    public function checkToken($jwt, $getIdentity =false){
+    public function checkToken($jwt){
         $auth = false;
 
         try {
@@ -65,10 +65,8 @@ class JwtAuth extends BaseController
             $auth = false;
         }
 
-        if ($getIdentity) {
-            $auth = $decoded;
-        }
-
+        $auth = $decoded;
+        
         return $auth;
     }
 

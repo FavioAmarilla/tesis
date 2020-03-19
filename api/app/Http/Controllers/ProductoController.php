@@ -90,8 +90,7 @@ class ProductoController extends BaseController
         $codigo_barras = $request->input("codigo_barras");
         $costo_unitario = $request->input("costo_unitario");
         $precio_venta = $request->input("precio_venta");
-        $imagen = $request->file('imagen');
-        $image_name = time().$imagen->getClientOriginalName();
+        $imagen = $request->input("imagen");
 
         $validator = Validator::make($input, [
             'id_linea'          => 'required', 
@@ -101,7 +100,7 @@ class ProductoController extends BaseController
             'codigo_barras'     => 'required|unique:pr_productos',
             'costo_unitario'    => 'required', 
             'precio_venta'      => 'required', 
-            'imagen'       => 'required'
+            'imagen'        => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -116,10 +115,9 @@ class ProductoController extends BaseController
         $producto->codigo_barras = $codigo_barras;
         $producto->costo_unitario = $costo_unitario;
         $producto->precio_venta = $precio_venta;
-        $producto->imagen = $image_name;
+        $producto->imagen = $imagen;
 
         if ($producto->save()) {
-            Storage::disk('producto')->put($image_name, \File::get($imagen));
             return $this->sendResponse(true, 'Producto registrado', $producto);
         }else{
             return $this->sendResponse(false, 'Producto no registrado', null);
@@ -170,8 +168,7 @@ class ProductoController extends BaseController
         $codigo_barras = $request->input("codigo_barras");
         $costo_unitario = $request->input("costo_unitario");
         $precio_venta = $request->input("precio_venta");
-        $imagen = $request->file('imagen');
-        $image_name = time().$imagen->getClientOriginalName();
+        $imagen = $request->input("imagen");
         
         $validator = Validator::make($input, [
             'id_linea'          => 'required', 
@@ -197,10 +194,9 @@ class ProductoController extends BaseController
             $producto->codigo_barras = $codigo_barras;
             $producto->costo_unitario = $costo_unitario;
             $producto->precio_venta = $precio_venta;
-            $producto->imagen = $image_name;
+            $producto->imagen = $imagen;
     
             if ($producto->save()) {
-                Storage::disk('producto')->put($image_name, \File::get($imagen));
                 return $this->sendResponse(true, 'Producto actualizado', $producto);
             }else{
                 return $this->sendResponse(false, 'Producto no actualizado', null);
@@ -221,13 +217,36 @@ class ProductoController extends BaseController
         //
     }
 
+
+    public function upload(Request $request){
+        $image = $request->file('file0');
+
+        $validator = Validator::make($request->all(), [
+            'file0'      =>  'required|image|mimes:jpeg,jpg,png,gif',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Error de validacion', $validator->errors());
+        }else{
+            if ($image) {
+                $image_name = time().$image->getClientOriginalName();
+                Storage::disk('productos')->put($image_name, \File::get($image));
+
+                return $this->sendResponse(true, 'Imagen subida', $image_name);
+            }else{
+                return $this->sendResponse(false, 'Error al subir imagen', null);
+            }    
+        }
+        return response()->json($data);
+    }
+
     public function getImage($filename){
         $isset = Storage::disk('productos')->exists($filename);
         if ($isset) {
             $file = Storage::disk('productos')->get($filename);
             return new Response($file);
         }else{
-            return $this->sendError('La imagen no existe', null);
+            return $this->sendResponse(false, 'La imagen no existe', null);
         }
     }
     

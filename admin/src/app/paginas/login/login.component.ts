@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
     if (response.success) {
       this.router.navigate(['/dashboard']);
     } else {
-      this.servicioAlertas.dialogoError('Acceso Denegado', 'El email y/o contraseña no son correctos');
+      this.servicioAlertas.dialogoError('Acceso Denegado', response.message);
     };
 
     this.cargando = false;

@@ -45,12 +45,13 @@ export class SidebarComponent implements OnInit {
         this.servicioUsuario.loginEmitter
         .subscribe(response => {
             this.usuario = response;
-            console.log(this.usuario);
+            console.log('loginEmitter: ',this.usuario);
         });
 
         this.servicioUsuario.logoutEmitter
         .subscribe(event => {
             this.obtenerUsuario();
+            console.log('logoutEmitter: ',this.usuario);
         });
     }
 

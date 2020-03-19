@@ -18,7 +18,7 @@ class EmpresaController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Empresa::all();
+        $query = Empresa::orderBy('codigo','asc');
 
         $codigo = $request->query('codigo');
         if ($codigo) {
@@ -37,9 +37,9 @@ class EmpresaController extends BaseController
 
         $paginar = $request->query('paginar');
         if ($paginar) {
-            $data = $query->orderBy('codigo','asc')->paginate(5);
+            $data = $query->paginate(5);
         }else{
-            $data = $query->orderBy('codigo','asc')->get();
+            $data = $query->get();
         }
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
@@ -66,14 +66,13 @@ class EmpresaController extends BaseController
         $codigo = $request->input("codigo");
         $nombre = $request->input("nombre");
         $numero_documento = $request->input("numero_documento");
-        $imagen = $request->file('imagen');
-        $image_name = time().$imagen->getClientOriginalName();
+        $imagen = $request->input("imagen");
 
         $validator = Validator::make($request->all(), [
             'codigo'  => 'required',
             'nombre'  => 'required',
             'numero_documento'  => 'required',
-            'imagen'   =>  'required|image|mimes:jpeg,jpg,png,gif',
+            'imagen'   =>  'required',
         ]);
 
         if ($validator->fails()) {
@@ -84,10 +83,9 @@ class EmpresaController extends BaseController
         $empresa->codigo = $codigo;
         $empresa->nombre = $nombre;
         $empresa->numero_documento = $numero_documento;
-        $empresa->imagen = $image_name;
+        $empresa->imagen = $imagen;
 
         if ($empresa->save()) {
-            Storage::disk('empresa')->put($image_name, \File::get($imagen));
             return $this->sendResponse(true, 'Empresa registrada', $empresa);
         }else{
             return $this->sendResponse(false, 'Empresa no registrada', null);
@@ -134,14 +132,13 @@ class EmpresaController extends BaseController
         $codigo = $request->input("codigo");
         $nombre = $request->input("nombre");
         $numero_documento = $request->input("numero_documento");
-        $imagen = $request->file('imagen');
-        $image_name = time().$imagen->getClientOriginalName();
+        $imagen = $request->input("imagen");
         
         $validator = Validator::make($request->all(), [
             'codigo'  => 'required',
             'nombre'  => 'required',
             'numero_documento'  => 'required',
-            'imagen'   =>  'required|image|mimes:jpeg,jpg,png,gif',
+            'imagen'   =>  'required',
         ]);
 
         if ($validator->fails()) {
@@ -178,13 +175,35 @@ class EmpresaController extends BaseController
         //
     }
 
+    public function upload(Request $request){
+        $image = $request->file('file0');
+
+        $validator = Validator::make($request->all(), [
+            'file0'      =>  'required|image|mimes:jpeg,jpg,png,gif',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Error de validacion', $validator->errors());
+        }else{
+            if ($image) {
+                $image_name = time().$image->getClientOriginalName();
+                Storage::disk('empresa')->put($image_name, \File::get($image));
+
+                return $this->sendResponse(true, 'Imagen subida', $image_name);
+            }else{
+                return $this->sendResponse(false, 'Error al subir imagen', null);
+            }    
+        }
+        return response()->json($data);
+    }
+
     public function getImage($filename){
         $isset = Storage::disk('empresa')->exists($filename);
         if ($isset) {
             $file = Storage::disk('empresa')->get($filename);
             return new Response($file);
         }else{
-            return $this->sendResponse('La imagen no existe', null);
+            return $this->sendResponse(false, 'La imagen no existe', null);
         }
     }
 }

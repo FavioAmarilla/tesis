@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'environments/environment';
 
 const API = environment.api;
@@ -11,16 +11,26 @@ export class ServicioEmpresa {
 
   constructor(
     private http: HttpClient
-  ) {}
+  ) { }
 
-  async obtenerEmpresa(id?, pagina?) {
+  async obtenerEmpresa(id?, pagina?, filtros?) {
     let url = (id) ? `${API}/empresa/${id}` : `${API}/empresa`;
     url = (pagina) ? `${url}?page=${pagina}` : url;
+
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let params = new HttpParams();
+    for (let key in filtros) {
+      params.append(key, filtros[key]);
+    }
+
+    let options = {
+      params
+    }
 
     return new Promise(resolve => {
-      this.http.get(url, { headers }).subscribe(
+      this.http.get(url, options).subscribe(
         (response: any) => {
+          console.log('empresa:', response);
           resolve(response);
         },
         error => {
@@ -31,12 +41,10 @@ export class ServicioEmpresa {
   }
 
   async registrar(empresa) {
-    const json = JSON.stringify(empresa);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/empresa`, params, { headers: headers }).subscribe(
+      this.http.post(`${API}/empresa`, empresa, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -48,12 +56,10 @@ export class ServicioEmpresa {
   }
 
   async actualizar(empresa, id) {
-    const json = JSON.stringify(empresa);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/empresa/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/empresa/${id}`, empresa, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

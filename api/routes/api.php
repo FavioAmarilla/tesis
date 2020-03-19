@@ -21,17 +21,20 @@ Route::resource('user', 'UserController');
 Route::group(['prefix' => 'user'], function () {
     Route::post('signIn', ['as' => 'user.signIn', 'uses' => 'UserController@signIn']);
     Route::post('checkToken', ['as' => 'user.checkToken', 'uses' => 'UserController@checkToken']);
+    Route::post('upload', ['as' => 'user.upload', 'uses' => 'UserController@upload']);
     Route::get('getImage/{filename}', ['as' => 'user.getImage', 'uses' => 'UserController@getImage']);
 });
 
 Route::resource('producto', 'ProductoController');
 Route::group(['prefix' => 'producto'], function () {
     Route::get('search/{search}', ['as' => 'producto.search', 'uses' => 'ProductoController@search']);
+    Route::post('upload', ['as' => 'producto.upload', 'uses' => 'ProductoController@upload']);
     Route::get('getImage/{filename}', ['as' => 'producto.getImage', 'uses' => 'ProductoController@getImage']);
 });
 
 Route::resource('slide', 'SlideController');
 Route::group(['prefix' => 'slide'], function () {
+    Route::post('upload', ['as' => 'slide.upload', 'uses' => 'SlideController@upload']);
     Route::get('getImage/{filename}', ['as' => 'slide.getImage', 'uses' => 'SlideController@getImage']);
 });
 
@@ -40,6 +43,7 @@ Route::resource('tipoImpuesto', 'TipoImpuestoController');
 
 Route::resource('empresa', 'EmpresaController');
 Route::group(['prefix' => 'empresa'], function () {
+    Route::post('upload', ['as' => 'empresa.upload', 'uses' => 'EmpresaController@upload']);
     Route::get('getImage/{filename}', ['as' => 'empresa.getImage', 'uses' => 'EmpresaController@getImage']);
 });
 

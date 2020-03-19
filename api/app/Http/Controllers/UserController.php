@@ -56,14 +56,13 @@ class UserController extends BaseController {
         $nombre_completo = $request->input("nombre_completo");
         $email = $request->input("email");
         $clave_acceso = hash('sha256', $request->input("clave_acceso"));
-        $imagen = $request->file('imagen');
-        $image_name = time().$imagen->getClientOriginalName();
+        $imagen = $request->input('imagen');
 
         $validator = Validator::make($request->all(), [
             'nombre_completo'  => 'required',
             'email'  => 'required',
             'clave_acceso'  => 'required',
-            'imagen'   =>  'required|image|mimes:jpeg,jpg,png,gif',
+            'imagen'   =>  'required',
         ]);
 
         if ($validator->fails()) {
@@ -74,10 +73,9 @@ class UserController extends BaseController {
         $usuario->nombre_completo = $nombre_completo;
         $usuario->email = $email;
         $usuario->clave_acceso = $clave_acceso;
-        $usuario->imagen = $image_name;
+        $usuario->imagen = $imagen;
 
         if ($usuario->save()) {
-            Storage::disk('usuarios')->put($image_name, \File::get($imagen));
             return $this->sendResponse(true, 'Usuario registrado', $usuario);
         }else{
             return $this->sendResponse(false, 'Usuario no registrado', null);
@@ -96,7 +94,7 @@ class UserController extends BaseController {
         if (is_object($user)) {
             return $this->sendResponse($user, 'Success');
         }else{
-            return $this->sendError('El usuario no existe', null);
+            return $this->sendResponse(false,'El usuario no existe', null);
         }
     }
 
@@ -121,14 +119,13 @@ class UserController extends BaseController {
         $nombre_completo = $request->input("nombre_completo");
         $email = $request->input("email");
         $clave_acceso = hash('sha256', $request->input("clave_acceso"));
-        $imagen = $request->file('imagen');
-        $image_name = time().$imagen->getClientOriginalName();
+        $imagen = $request->input('imagen');
 
         $validator = Validator::make($request->all(), [
             'nombre_completo'  => 'required',
             'email'  => 'required',
             'clave_acceso'  => 'required',
-            'imagen'   =>  'required|image|mimes:jpeg,jpg,png,gif',
+            'imagen'   =>  'required',
         ]);
 
         if ($validator->fails()) {
@@ -140,10 +137,9 @@ class UserController extends BaseController {
             $usuario->nombre_completo = $nombre_completo;
             $usuario->email = $email;
             $usuario->clave_acceso = $clave_acceso;
-            $usuario->imagen = $image_name;
+            $usuario->imagen = $imagen;
     
             if ($usuario->save()) {
-                Storage::disk('usuarios')->put($image_name, \File::get($imagen));
                 return $this->sendResponse(true, 'Usuario actualizado', $usuario);
             }else{
                 return $this->sendResponse(false, 'Usuario no actualizado', null);
@@ -160,42 +156,43 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id, Request $request) {
-        $user = User::find($id);
-        $json = $request->input('json', null);
-        $input = json_decode($json, true);
+        $estado = $request->input("estado");
 
+        $user = User::find($id);
         if ($user) {
-            $user->estado = $input['estado'];
+            $user->estado = $estado;
             
             if ($user->update()) {
-                return $this->sendResponse($user, 'Usuario actualizado');
+                return $this->sendResponse(true, 'Usuario actualizado', $user);
+            }else{
+                return $this->sendResponse(false, 'Usuario no actualizado', $user);
             }
 
-            return $this->sendResponse($user, 'Hubo un problema al intentar desactivar el usuario');
+        }else{
+            return $this->sendResponse(true, 'No se encontro el usuario', $usuario);
         }
-
-        return $this->sendError('No se ha encontrado el usuario', null);
     }
 
 
     public function signIn(Request $request) {
         $jwtAuth = new \JwtAuth();
-        $json = $request->input('json', null);
-        $array = json_decode($json, true);
+        
+        $email = $request->input("email");
+        $clave_acceso = hash('sha256', $request->input("clave_acceso"));
+        $getToken = $request->input("getToken");
             
-        $validator = Validator::make($array, [
+        $validator = Validator::make($request->all(), [
             'email'     =>  'required|email',
             'clave_acceso'  =>  'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }else{
-            $pwd = hash('sha256', $array['clave_acceso']);
-            if (!empty($array['getToken'])) {
-                $data = $jwtAuth->signIn($array['email'], $pwd, true);
+            if (!empty($getToken)) {
+                $data = $jwtAuth->signIn($email, $clave_acceso, true);
             }else{
-                $data = $jwtAuth->signIn($array['email'], $pwd);
+                $data = $jwtAuth->signIn($email, $clave_acceso);
             }
         }
 
@@ -203,21 +200,47 @@ class UserController extends BaseController {
     }
 
     public function checkToken(Request $request) {
-        $token = $request->header('Authorization');
-            
+        $token = $request->get('Authorization');
         $jwt = new \JwtAuth();
-        $user = $jwt->checkToken($token, true);
+        $user = $jwt->checkToken($token);
 
-        return $this->sendResponse($user, '');
+        if ($user) {
+            return $this->sendResponse(true, 'Login exitoso', $user);
+        }else{
+            return $this->sendResponse(false, 'El usuario no existe', $user);
+        }
+
+    }
+
+    public function upload(Request $request){
+        $image = $request->file('file0');
+
+        $validator = Validator::make($request->all(), [
+            'file0'      =>  'required|image|mimes:jpeg,jpg,png,gif',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Error de validacion', $validator->errors());
+        }else{
+            if ($image) {
+                $image_name = time().$image->getClientOriginalName();
+                Storage::disk('usuarios')->put($image_name, \File::get($image));
+
+                return $this->sendResponse(true, 'Imagen subida', $image_name);
+            }else{
+                return $this->sendResponse(false, 'Error al subir imagen', null);
+            }    
+        }
+        return response()->json($data);
     }
 
     public function getImage($filename){
-        $isset = \Storage::disk('usuarios')->exists($filename);
+        $isset = Storage::disk('usuarios')->exists($filename);
         if ($isset) {
-            $file = \Storage::disk('usuarios')->get($filename);
+            $file = Storage::disk('usuarios')->get($filename);
             return new Response($file);
         }else{
-            return $this->sendError('La imagen no existe', null);
+            return $this->sendResponse(false, 'La imagen no existe', null);
         }
     }
 }

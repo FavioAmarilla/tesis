@@ -3,8 +3,9 @@ import { ServicioEmpresa } from '../../servicios/empresa.service';
 import { Empresa } from 'app/modelos/empresa';
 import { environment } from 'environments/environment';
 import swal from 'sweetalert2';
+import { ServicioAlertas } from 'app/servicios/alertas.service';
 
-const API = environment.api; 
+const API = environment.api;
 
 @Component({
   selector: 'app-empresa',
@@ -28,7 +29,7 @@ export class EmpresaComponent implements OnInit {
     multiple: false,
     formatsAllowed: '.jpg,.png,.jpeg,.gif',
     maxSize: '50',
-    uploadAPI:  {
+    uploadAPI: {
       url: `${API}/empresa/upload`
     },
     theme: 'attachPin',
@@ -39,7 +40,8 @@ export class EmpresaComponent implements OnInit {
   };
 
   constructor(
-    private servicioEmpresa: ServicioEmpresa
+    private servicioEmpresa: ServicioEmpresa,
+    private servicioAlerta: ServicioAlertas
   ) {
     this.url = environment.api;
   }
@@ -59,6 +61,7 @@ export class EmpresaComponent implements OnInit {
       this.errores = [];
     }
   }
+
   async paginacion(pagina?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaEmpresas = null;
@@ -66,16 +69,18 @@ export class EmpresaComponent implements OnInit {
     this.cargando = true;
     this.errores = [];
 
-    const response: any = await this.servicioEmpresa.obtenerEmpresa(null, pagina);
+    let filtros = {
+      'paginar': true
+    };
+
+    const response: any = await this.servicioEmpresa.obtenerEmpresa(null, pagina, filtros);
 
     if (response.status) {
       this.listaEmpresas = response.data.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
     }
 
     this.cargando = false;
@@ -84,7 +89,6 @@ export class EmpresaComponent implements OnInit {
   async obtenerEmpresa(id) {
     this.accion = "LST";
     this.cargando = true;
-
     this.errores = [];
     const response = <any>await this.servicioEmpresa.obtenerEmpresa(id);
 
@@ -107,22 +111,11 @@ export class EmpresaComponent implements OnInit {
 
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
-      this.mostrarFormulario(true, 'INS');
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
@@ -134,26 +127,16 @@ export class EmpresaComponent implements OnInit {
 
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
-      this.mostrarFormulario(true, 'UPD');
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
   subirImagen(event) {
+    console.log(event);
     const data = JSON.parse(event.response);
     this.empresa.imagen = data.data;
   }

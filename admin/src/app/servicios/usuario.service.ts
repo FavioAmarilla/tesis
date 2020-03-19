@@ -23,15 +23,12 @@ export class ServicioUsuario {
   ) {}
 
   iniciarSession(usuario: any) {
-    const json = JSON.stringify(usuario);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/user/signIn`, params, {headers})
+      this.http.post(`${API}/user/signIn`, usuario, {headers})
       .subscribe(
         async (response: any) => {
-          console.log('response: ', response);
           if (response.status) {
             // se guarda el token en el Storage
             await this.guardarToken(response.data);
@@ -136,14 +133,18 @@ export class ServicioUsuario {
 
   async validarToken(): Promise<boolean> {
     await this.cargarToken();
-    if (!this.token) {
+    if (this.token == null) {
       this.router.navigate(['/login']);
       return Promise.resolve(false);
     }
 
+    let data = {
+        'Authorization': this.token
+    };
+
     return new Promise<boolean>(resolve => {
-      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').append('Authorization', this.token);
-      this.http.post(`${API}/user/checkToken`, {}, {headers})
+      const headers = new HttpHeaders().set('Content-Type', 'application/json');
+      this.http.post(`${API}/user/checkToken`, data, {headers})
       .subscribe(
         (response: any) => {
           if (response.status) {
