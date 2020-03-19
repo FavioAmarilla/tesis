@@ -31,12 +31,10 @@ export class ServicioTipoImpuesto {
   }
 
   async registrar(tipoImpuesto) {
-    const json = JSON.stringify(tipoImpuesto);
-    const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/tipoImpuesto`, params, { headers: headers }).subscribe(
+      this.http.post(`${API}/tipoImpuesto`, tipoImpuesto, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -48,12 +46,10 @@ export class ServicioTipoImpuesto {
   }
 
   async actualizar(tipoImpuesto, id) {
-    const json = JSON.stringify(tipoImpuesto);
-    const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/tipoImpuesto/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/tipoImpuesto/${id}`, tipoImpuesto, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

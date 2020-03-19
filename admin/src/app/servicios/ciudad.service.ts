@@ -31,12 +31,10 @@ export class ServicioCiudad {
   }
 
   async registrar(ciudad) {
-    const json = JSON.stringify(ciudad);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/ciudad`, params, { headers: headers }).subscribe(
+      this.http.post(`${API}/ciudad`, ciudad, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -48,12 +46,10 @@ export class ServicioCiudad {
   }
 
   async actualizar(ciudad, id) {
-    const json = JSON.stringify(ciudad);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/ciudad/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/ciudad/${id}`, ciudad, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

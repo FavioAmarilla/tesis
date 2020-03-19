@@ -31,12 +31,10 @@ export class ServicioSucursal {
   }
 
   async registrar(sucursal) {
-    const json = JSON.stringify(sucursal);
-    const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/sucursal`, params, { headers: headers }).subscribe(
+      this.http.post(`${API}/sucursal`, sucursal, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -48,12 +46,10 @@ export class ServicioSucursal {
   }
 
   async actualizar(sucursal, id) {
-    const json = JSON.stringify(sucursal);
-    const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/sucursal/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/sucursal/${id}`, sucursal, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

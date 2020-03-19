@@ -30,12 +30,10 @@ export class ServicioPuntoEmision {
   }
 
   async registrar(puntoEmision) {
-    const json = JSON.stringify(puntoEmision);
-    const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/puntoEmision`, params, { headers: headers }).subscribe(
+      this.http.post(`${API}/puntoEmision`, puntoEmision, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -47,12 +45,10 @@ export class ServicioPuntoEmision {
   }
 
   async actualizar(puntoEmision, id) {
-    const json = JSON.stringify(puntoEmision);
-    const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/puntoEmision/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/puntoEmision/${id}`, puntoEmision, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

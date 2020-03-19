@@ -31,12 +31,10 @@ export class ServicioCarrusel {
   }
 
   async registrar(slide) {
-    const json = JSON.stringify(slide);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/slide`, params, { headers: headers }).subscribe(
+      this.http.post(`${API}/slide`, slide, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -48,12 +46,10 @@ export class ServicioCarrusel {
   }
 
   async actualizar(slide, id) {
-    const json = JSON.stringify(slide);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/slide/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/slide/${id}`, slide, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -65,7 +61,7 @@ export class ServicioCarrusel {
   }
 
   async eliminar(id) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
       this.http.delete(`${API}/slide/delete/${id}`, {headers: headers}).subscribe(

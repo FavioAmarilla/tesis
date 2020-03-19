@@ -31,12 +31,10 @@ export class ServicioProducto {
   }
 
   async registrar(producto) {
-    const json = JSON.stringify(producto);
-    const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/producto`, params, { headers: headers }).subscribe(
+      this.http.post(`${API}/producto`, producto, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -48,12 +46,10 @@ export class ServicioProducto {
   }
 
   async actualizar(producto, id) {
-    const json = JSON.stringify(producto);
-    const params = 'json=' + json;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/producto/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/producto/${id}`, producto, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

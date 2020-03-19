@@ -47,12 +47,10 @@ export class ServicioUsuario {
   }
 
   async registrar(user) {
-    const json = JSON.stringify(user);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/user`, params, { headers: headers }).subscribe(
+      this.http.post(`${API}/user`, user, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -81,12 +79,10 @@ export class ServicioUsuario {
   }
 
   async actualizar(user, id) {
-    const json = JSON.stringify(user);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/user/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/user/${id}`, user, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -101,7 +97,7 @@ export class ServicioUsuario {
     const estado = (accion === 'activar') ? 1 : 0;
     const json = JSON.stringify({estado});
 
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const params = new HttpParams().append('json', json);
 
     return new Promise(resolve => {

@@ -31,12 +31,10 @@ export class ServicioPais {
   }
 
   async registrar(pais) {
-    const json = JSON.stringify(pais);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/pais`, params, { headers: headers }).subscribe(
+      this.http.post(`${API}/pais`, pais, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -48,12 +46,10 @@ export class ServicioPais {
   }
 
   async actualizar(pais, id) {
-    const json = JSON.stringify(pais);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/pais/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/pais/${id}`, pais, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

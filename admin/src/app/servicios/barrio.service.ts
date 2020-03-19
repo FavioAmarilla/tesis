@@ -31,12 +31,10 @@ export class ServicioBarrio {
   }
 
   async registrar(barrio) {
-    const json = JSON.stringify(barrio);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/barrio`, params, { headers: headers }).subscribe(
+      this.http.post(`${API}/barrio`, barrio, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -48,12 +46,10 @@ export class ServicioBarrio {
   }
 
   async actualizar(barrio, id) {
-    const json = JSON.stringify(barrio);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/barrio/${id}`, params, { headers: headers }).subscribe(
+      this.http.put(`${API}/barrio/${id}`, barrio, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
