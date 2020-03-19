@@ -35,7 +35,7 @@ class TipoImpuestoController extends BaseController
 
         $data = $query->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $impuesto);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
 
     /**
