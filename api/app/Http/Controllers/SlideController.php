@@ -18,7 +18,7 @@ class SlideController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Slide::all();
+        $query = Slide::orderBy('titulo', 'asc');
 
         $titulo = $request->query('titulo');
         if ($titulo) {
@@ -33,7 +33,7 @@ class SlideController extends BaseController
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
 
-        $data = $query->orderBy('titulo', 'asc')->$listar();
+        $data = $query->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
