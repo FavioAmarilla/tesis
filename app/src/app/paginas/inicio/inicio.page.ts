@@ -16,8 +16,8 @@ import { IonSlides } from '@ionic/angular';
 })
 export class PaginaInicio implements OnInit {
 
-  public cargando_slide = true;
-  public cargando_producto = true;
+  public cargandoSlide = true;
+  public cargandoProducto = true;
   public productos: Producto;
   public slides: Banner;
   public lineasProducto: LineaProducto;
@@ -54,7 +54,7 @@ export class PaginaInicio implements OnInit {
   }
 
   async obtenerProductos() {
-    this.cargando_producto= true;
+    this.cargandoProducto = true;
     const response: any = await this.servicioProducto.obtenerProducto();
 
     if (response.status) {
@@ -62,19 +62,19 @@ export class PaginaInicio implements OnInit {
     } else {
 
     }
-    this.cargando_producto = false;
+    this.cargandoProducto = false;
   }
 
   async obtenerCarrusel() {
-    this.cargando_slide = true;
+    this.cargandoSlide = true;
     const response: any = await this.servicioCarrusel.obtenerCarrusel();
-    
+
     if (response.status) {
       this.slides = response.data;
     } else {
 
     }
-    this.cargando_slide = false;
+    this.cargandoSlide = false;
   }
 
   async agregarAlCarrito(id) {

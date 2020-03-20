@@ -6,6 +6,7 @@ import { SlideImagePipe } from './slide-image.pipe';
 import { LineaProductoImagePipe } from './linea-producto-image.pipe';
 import { TruncateTextPipe } from './truncate-text.pipe';
 import { NumberFormatPipe } from './number-format.pipe';
+import { UnidadMedidaPipe } from './unidad-medida.pipe';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { NumberFormatPipe } from './number-format.pipe';
     SlideImagePipe,
     LineaProductoImagePipe,
     TruncateTextPipe,
-    NumberFormatPipe
+    NumberFormatPipe,
+    UnidadMedidaPipe
   ],
   exports: [
     UrlSanitizerPipe,
@@ -22,7 +24,8 @@ import { NumberFormatPipe } from './number-format.pipe';
     SlideImagePipe,
     LineaProductoImagePipe,
     TruncateTextPipe,
-    NumberFormatPipe
+    NumberFormatPipe,
+    UnidadMedidaPipe
   ],
   imports: [
     CommonModule

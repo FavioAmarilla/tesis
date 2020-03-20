@@ -4,6 +4,7 @@ import { ServicioProducto } from '../../servicios/producto.service';
 import { Producto } from '../../interfaces/interfaces';
 import { ServicioCarrito } from '../../servicios/carrito.service';
 import { UiService } from '../../servicios/ui.service';
+import { ServicioGeneral } from 'src/app/servicios/general.service';
 
 @Component({
   selector: 'app-producto-simple',
@@ -17,12 +18,15 @@ export class PaginaProductoSimple implements OnInit {
   public producto: Producto;
 
   public cantidad: number = 1;
+  public minimo = 1;
+  public valor = 1;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private servicioProducto: ServicioProducto,
     private servicioCarrito: ServicioCarrito,
+    private servicioGeneral: ServicioGeneral,
     private uiService: UiService
   ) {
     this.route.params.subscribe(
@@ -42,6 +46,8 @@ export class PaginaProductoSimple implements OnInit {
     if (response.status) {
       this.cargando = false;
       this.producto = response.data;
+      this.cantidad = this.minimo = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida, 'minimo');
+      this.valor = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida);
     } else {
       this.router.navigate(['/']);
     }
@@ -50,10 +56,10 @@ export class PaginaProductoSimple implements OnInit {
 
   asignarCantidad(accion) {
     if (accion == 'DI') {
-      this.cantidad = (this.cantidad > 1) ? this.cantidad - 1 : 1;
+      this.cantidad = (this.cantidad > this.minimo) ? this.cantidad - this.valor : this.minimo;
     }
     if (accion == 'AU') {
-      this.cantidad += 1;
+      this.cantidad += this.valor;
     }
   }
 
