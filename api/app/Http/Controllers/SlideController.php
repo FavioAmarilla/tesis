@@ -135,7 +135,7 @@ class SlideController extends BaseController
         
 
         $slide = Slide::find($id);
-        if ($empresa) {
+        if ($slide) {
             $slide->titulo = $titulo;
             $slide->descripcion = $descripcion;
             $slide->imagen = $imagen;
@@ -169,7 +169,7 @@ class SlideController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
         }else{
             if ($image) {
                 $image_name = time().$image->getClientOriginalName();
@@ -180,7 +180,6 @@ class SlideController extends BaseController
                 return $this->sendResponse(false, 'Error al subir imagen', null);
             }    
         }
-        return response()->json($data);
     }
 
     public function getImage($filename){

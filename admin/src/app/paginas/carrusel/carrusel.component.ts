@@ -3,6 +3,7 @@ import { ServicioCarrusel } from '../../servicios/carrusel.service';
 import { Carrusel } from '../../modelos/carrusel';
 import { environment } from 'environments/environment';
 import swal from 'sweetalert2';
+import { ServicioAlertas } from 'app/servicios/alertas.service';
 
 const API = environment.api;
 
@@ -28,7 +29,7 @@ export class CarruselComponent implements OnInit {
     multiple: false,
     formatsAllowed: '.jpg,.png,.jpeg,.gif',
     maxSize: '50',
-    uploadAPI:  {
+    uploadAPI: {
       url: `${API}/slide/upload`
     },
     theme: 'attachPin',
@@ -40,7 +41,8 @@ export class CarruselComponent implements OnInit {
   public carrusel: Carrusel;
 
   constructor(
-    private servicioCarrusel: ServicioCarrusel
+    private servicioCarrusel: ServicioCarrusel,
+    private servicioAlerta: ServicioAlertas
   ) {
     this.url = environment.api;
   }
@@ -80,9 +82,7 @@ export class CarruselComponent implements OnInit {
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
     }
 
     this.cargando = false;
@@ -99,9 +99,7 @@ export class CarruselComponent implements OnInit {
       this.slide = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
     }
     this.cargando = false;
   }
@@ -114,22 +112,11 @@ export class CarruselComponent implements OnInit {
 
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
-      this.mostrarFormulario(true, 'INS');
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
@@ -141,22 +128,11 @@ export class CarruselComponent implements OnInit {
 
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
-      this.mostrarFormulario(true, 'UPD');
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
@@ -169,27 +145,18 @@ export class CarruselComponent implements OnInit {
 
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
   subirImagen(event) {
+    console.log(event.response);
     const data = JSON.parse(event.response);
-    this.slide.archivo_img = data.data;
+    this.slide.imagen = data.data;
   }
 
 }

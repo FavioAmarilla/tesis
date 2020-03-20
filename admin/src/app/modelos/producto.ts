@@ -8,6 +8,6 @@ export class Producto {
         public codigo_barras: string,
         public costo_unitario: number,
         public precio_venta: number,
-        public archivo_img: string
+        public imagen: string
     ) {}
 };

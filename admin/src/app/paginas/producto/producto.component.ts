@@ -9,6 +9,7 @@ import { TipoImpuesto } from '../../modelos/tipo-impuesto';
 import * as JsBarcode from 'jsbarcode';
 import { v4 as uuid } from 'uuid';
 import swal from 'sweetalert2';
+import { ServicioAlertas } from 'app/servicios/alertas.service';
 
 const API = environment.api;
 
@@ -49,7 +50,8 @@ export class ProductoComponent implements OnInit {
   constructor(
     private servicioProducto: ServicioProducto,
     private servicioImpuesto: ServicioTipoImpuesto,
-    private servicioLineaProducto: ServicioLineaProducto
+    private servicioLineaProducto: ServicioLineaProducto,
+    private servicioAlerta: ServicioAlertas
   ) {
     this.url = environment.api;
   }
@@ -76,11 +78,10 @@ export class ProductoComponent implements OnInit {
     const response: any = await this.servicioImpuesto.obtenerImpuesto();
 
     if (response.status) {
-      this.listaImpuestos = response.data.data;
+      this.listaImpuestos = response.data;
     } else {
-      for (const i in response.data) {
-        this.errors.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
+      this.mostrarFormulario(false, 'LST');
     }
   }
 
@@ -88,11 +89,10 @@ export class ProductoComponent implements OnInit {
     const response: any = await this.servicioLineaProducto.obtenerLinea();
 
     if (response.status) {
-      this.listaLineas = response.data.data;
+      this.listaLineas = response.data;
     } else {
-      for (const i in response.data) {
-        this.errors.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
+      this.mostrarFormulario(false, 'LST');
     }
   }
 
@@ -115,9 +115,7 @@ export class ProductoComponent implements OnInit {
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {
-      for (const i in response.data) {
-        this.errors.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
     }
 
     this.cargando = false;
@@ -134,9 +132,8 @@ export class ProductoComponent implements OnInit {
       this.producto = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
-      for (const i in response.data) {
-        this.errors.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
+      this.mostrarFormulario(false, 'LST');
     }
     this.cargando = false;
   }
@@ -149,22 +146,11 @@ export class ProductoComponent implements OnInit {
 
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errors.push(response.data[i]);
-      }
-      this.mostrarFormulario(true, 'INS');
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
@@ -176,28 +162,17 @@ export class ProductoComponent implements OnInit {
 
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errors.push(response.data[i]);
-      }
-      this.mostrarFormulario(true, 'UPD');
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
   subirImagen(event) {
     const data = JSON.parse(event.response);
-    this.producto.archivo_img = data.data;
+    this.producto.imagen = data.data;
   }
 
   generarCodigoBarras() {

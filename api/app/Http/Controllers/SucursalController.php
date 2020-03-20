@@ -64,7 +64,7 @@ class SucursalController extends BaseController
 
         $data = $query->orderBy('id_ciudad', 'asc')->orderBy('nombre', 'asc')->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $sucursales);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
     }
 
     /**

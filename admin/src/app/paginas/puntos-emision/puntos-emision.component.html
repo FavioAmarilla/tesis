@@ -81,7 +81,8 @@
               <div class="form-group">
                 <label for="Tipo">Tipo</label>
                 <select class="form-control" name="vr_tipo" [(ngModel)]="puntoEmision.vr_tipo">
-                  <option selected value="ON">ONLINE</option>
+                  <option value="" disabled selected>--Seleccionar--</option>
+                  <option value="ON">ONLINE</option>
                   <option value="PI">PRE IMPRESO</option>
                   <option value="AI">AUTO IMPRESO</option>
                 </select>

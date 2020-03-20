@@ -41,7 +41,7 @@ export class UsuariosComponent implements OnInit {
 
   constructor(
     private servicioUsuario: ServicioUsuario,
-    private servicioAlertas: ServicioAlertas
+    private servicioAlerta: ServicioAlertas
   ) {
     this.url = environment.api;
   }
@@ -81,9 +81,7 @@ export class UsuariosComponent implements OnInit {
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
     }
 
     this.cargando = false;
@@ -92,72 +90,46 @@ export class UsuariosComponent implements OnInit {
   async obtenerUsuario(id) {
     this.accion = 'LST';
     this.cargando = true;
-
     this.errores = [];
     const response: any = await this.servicioUsuario.obtenerUsuarios(id);
 
+    console.log(response);
     if (response.status) {
       this.usuario = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
     }
     this.cargando = false;
   }
 
   async registrar() {
     this.cargando = true;
-
     this.errores = [];
     const response: any = await this.servicioUsuario.registrar(this.usuario);
 
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
-      this.mostrarFormulario(true, 'INS');
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
   async actualizar() {
     this.cargando = true;
-
     this.errores = [];
     const response: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.identificador);
 
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
-      this.mostrarFormulario(true, 'UPD');
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
@@ -174,10 +146,10 @@ export class UsuariosComponent implements OnInit {
     const resultado: any = await this.servicioAlertas.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
 
     if (resultado.status) {
-      this.servicioAlertas.dialogoExito('',  resultado.message);
+      this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion(1);
     } else {
-      this.servicioAlertas.dialogoError('', resultado.message);
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 

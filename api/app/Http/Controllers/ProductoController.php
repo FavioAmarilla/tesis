@@ -90,7 +90,7 @@ class ProductoController extends BaseController
         $precio_venta = $request->input("precio_venta");
         $imagen = $request->input("imagen");
 
-        $validator = Validator::make($input, [
+        $validator = Validator::make($request->all(), [
             'id_linea'          => 'required', 
             'id_tipo_impuesto'  => 'required', 
             'vr_unidad_medida'  => 'required',  
@@ -168,12 +168,12 @@ class ProductoController extends BaseController
         $precio_venta = $request->input("precio_venta");
         $imagen = $request->input("imagen");
         
-        $validator = Validator::make($input, [
+        $validator = Validator::make($request->all(), [
             'id_linea'          => 'required', 
             'id_tipo_impuesto'  => 'required', 
             'vr_unidad_medida'  => 'required',  
-            'descripcion'       => 'required|unique:pr_productos',
-            'codigo_barras'     => 'required|unique:pr_productos',
+            'descripcion'       => 'required',
+            'codigo_barras'     => 'required',
             'costo_unitario'    => 'required', 
             'precio_venta'      => 'required', 
             'imagen'       => 'required'
@@ -184,7 +184,7 @@ class ProductoController extends BaseController
         }
         
         $producto = Producto::find($id);
-        if ($empresa) {
+        if ($producto) {
             $producto->id_linea = $id_linea;
             $producto->id_tipo_impuesto = $id_tipo_impuesto;
             $producto->vr_unidad_medida = $vr_unidad_medida;

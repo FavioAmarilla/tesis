@@ -97,9 +97,8 @@ export class EmpresaComponent implements OnInit {
       this.empresa = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
+      this.mostrarFormulario(false, 'LST');
     }
     this.cargando = false;
   }

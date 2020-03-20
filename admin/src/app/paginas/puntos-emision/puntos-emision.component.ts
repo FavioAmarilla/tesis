@@ -4,6 +4,7 @@ import { Sucursal } from '../../modelos/sucursal';
 import { ServicioPuntoEmision } from '../../servicios/punto-emision.service';
 import { ServicioSucursal } from '../../servicios/sucursal.service';
 import swal from 'sweetalert2';
+import { ServicioAlertas } from 'app/servicios/alertas.service';
 
 @Component({
   selector: 'app-puntos-emision',
@@ -25,7 +26,8 @@ export class PuntosEmisionComponent implements OnInit {
 
   constructor(
     private servicioPuntoEmision: ServicioPuntoEmision,
-    private servicioSucursal: ServicioSucursal
+    private servicioSucursal: ServicioSucursal,
+    private servicioAlerta: ServicioAlertas
   ) { }
 
   ngOnInit() {
@@ -51,9 +53,8 @@ export class PuntosEmisionComponent implements OnInit {
     if (response.status) {
       this.listaSucursal = response.data;
     } else {
-      for (const i in response.data) {
-        this.errors.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.mostrarFormulario(false, 'LST');
     }
   }
 
@@ -76,9 +77,7 @@ export class PuntosEmisionComponent implements OnInit {
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {
-      for (const i in response.data) {
-        this.errors.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoExito(response.message, '');
     }
 
     this.cargando = false;
@@ -95,9 +94,8 @@ export class PuntosEmisionComponent implements OnInit {
       this.puntoEmision = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
-      for (const i in response.data) {
-        this.errors.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.mostrarFormulario(false, 'LST');
     }
     this.cargando = false;
   }
@@ -110,22 +108,11 @@ export class PuntosEmisionComponent implements OnInit {
     console.log(response);
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errors.push(response.data[i]);
-      }
-      this.mostrarFormulario(true, 'INS');
+      this.servicioAlerta.dialogoExito(response.message, '');
     }
   }
 
@@ -137,22 +124,11 @@ export class PuntosEmisionComponent implements OnInit {
 
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errors.push(response.data[i]);
-      }
-      this.mostrarFormulario(true, 'UPD');
+      this.servicioAlerta.dialogoExito(response.message, '');
     }
   }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 use App\User;
 
@@ -90,7 +91,7 @@ class UserController extends BaseController {
         $user = User::find($id);
 
         if (is_object($user)) {
-            return $this->sendResponse($user, 'Success');
+            return $this->sendResponse(true, 'Listado obtenido exitosamente', $user);
         }else{
             return $this->sendResponse(false,'El usuario no existe', null);
         }

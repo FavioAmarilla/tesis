@@ -33,7 +33,8 @@
                                     {{ row.descripcion }}
                                 </td>
                                 <td>
-                                    <img *ngIf="row.archivo_img" src="{{url + '/slide/getImage/' + row.archivo_img}}" width="50" height="50">
+                                    <img *ngIf="row.imagen" src="{{url + '/slide/getImage/' + row.imagen}}" width="50" height="50">
+                                    <img *ngIf="!row.imagen" src="https://via.placeholder.com/150" width="100" height="100">     
                                 </td>
                                 <td class="text-right">
                                     <button class="btn btn-sm btn-warning" (click)="obtenerCarrusel(row.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
@@ -57,10 +58,11 @@
                 <div class="table-responsive">
                     <form>
                         <div class="form-group">
-                            <label for="archivo_img">Imagen</label>
+                            <label for="imagen">Imagen</label>
                 
-                            <div *ngIf="slide && slide.archivo_img">
-                                <img src="{{url + '/slide/getImage/' + slide.archivo_img}}" width="100" height="100">
+                            <div *ngIf="slide && slide.imagen"> 
+                                <img *ngIf="slide.imagen" src="{{url + '/slide/getImage/' + slide.imagen}}" width="100" height="100">
+                                <img *ngIf="!slide.imagen" src="https://via.placeholder.com/150" width="100" height="100">    
                             </div>
                 
                             <angular-file-uploader

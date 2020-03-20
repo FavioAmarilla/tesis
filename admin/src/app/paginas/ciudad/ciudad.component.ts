@@ -4,6 +4,7 @@ import { ServicioCiudad } from '../../servicios/ciudad.service';
 import { ServicioPais } from '../../servicios/pais.service';
 import { Pais } from '../../modelos/pais';
 import swal from 'sweetalert2';
+import { ServicioAlertas } from 'app/servicios/alertas.service';
 
 @Component({
   selector: 'app-ciudad',
@@ -25,7 +26,8 @@ export class CiudadComponent implements OnInit {
 
   constructor(
     private servicioCiudad: ServicioCiudad,
-    private servicioPais: ServicioPais
+    private servicioPais: ServicioPais,
+    private servicioAlerta: ServicioAlertas
   ) {
     this.cargando = false;
    }
@@ -51,11 +53,10 @@ export class CiudadComponent implements OnInit {
     const response = <any>await this.servicioPais.obtenerPais();
 
     if (response.status) {
-      this.listaPaises = response.data.data;
+      this.listaPaises = response.data
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
+      this.mostrarFormulario(false, 'LST');
     }
   }
 
@@ -74,13 +75,11 @@ export class CiudadComponent implements OnInit {
     const response: any = await this.servicioCiudad.obtenerCiudad(null, parametros);
 
     if (response.status) {
-      this.listaCiudades = response.data.data;
+      this.listaCiudades = response.data.data;;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
     }
 
     this.cargando = false;
@@ -97,9 +96,8 @@ export class CiudadComponent implements OnInit {
       this.ciudad = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
+      this.servicioAlerta.dialogoError(response.message, '');
+      this.mostrarFormulario(false, 'LST');
     }
     this.cargando = false;
   }
@@ -112,22 +110,11 @@ export class CiudadComponent implements OnInit {
 
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
-      this.mostrarFormulario(true, 'INS');
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
@@ -139,22 +126,11 @@ export class CiudadComponent implements OnInit {
 
     this.cargando = false;
     if (response.status) {
-      swal.fire({
-        text: response.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.value) {
-          this.paginacion();
-          this.mostrarFormulario(false, 'LST');
-        }
-      });
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
     } else {
-      for (const i in response.data) {
-        this.errores.push(response.data[i]);
-      }
-      this.mostrarFormulario(true, 'UPD');
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 

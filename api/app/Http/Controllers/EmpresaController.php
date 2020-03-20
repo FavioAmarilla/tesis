@@ -149,10 +149,9 @@ class EmpresaController extends BaseController
             $empresa->codigo = $codigo;
             $empresa->nombre = $nombre;
             $empresa->numero_documento = $numero_documento;
-            $empresa->imagen = $image_name;
+            $empresa->imagen = $imagen;
     
             if ($empresa->save()) {
-                Storage::disk('empresa')->put($image_name, \File::get($imagen));
                 return $this->sendResponse(true, 'Empresa actualizada', $empresa);
             }else{
                 return $this->sendResponse(false, 'Empresa no actualizada', null);

@@ -4,7 +4,7 @@
 
         <div class="card" *ngIf="!form">
             <div class="card-header">
-                <button class="btn btn-primary pull-right" (click)="mostrarProducto(true, 'INS', true)">Agregar</button>
+                <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -64,8 +64,9 @@
                         <div class="form-group">
                             <label for="image">Imagen</label>
 
-                            <div *ngIf="producto && producto.archivo_img">
-                                <img src="{{url + '/producto/getImage/' + producto.archivo_img}}" width="100" height="100">
+                            <div *ngIf="producto && producto.imagen">
+                                <img *ngIf="producto.imagen" src="{{url + '/producto/getImage/' + producto.imagen}}" width="100" height="100">
+                                <img *ngIf="!producto.imagen" src="https://via.placeholder.com/150" width="100" height="100">                                
                             </div>
 
                             <angular-file-uploader [config]="fileUploaderConfig" [resetUpload]=resetVar
@@ -79,7 +80,7 @@
                         <div class="form-group">
                             <label for="vr_unidad_medida">Unidad de medida</label>
                             <select name="vr_unidad_medida" id="vr_unidad_medida" class="form-control" [(ngModel)]="producto.vr_unidad_medida">
-                                <option value="" disabled selected>Seleccione una unidad de medida</option>
+                                <option value="" disabled selected>--Seleccione--</option>
                                 <option value="UN">Unidad</option>
                                 <option value="KG">Kilogramo</option>
                                 <option value="ME">Metro</option>
@@ -97,14 +98,14 @@
                         <div class="form-group">
                             <label for="id_tipo_impuesto">Tipo de impuesto</label>
                             <select name="id_tipo_impuesto" id="id_tipo_impuesto" class="form-control" [(ngModel)]="producto.id_tipo_impuesto">
-                                <option value="" disabled selected>Seleccione el tipo de impuesto</option>
+                                <option value="" disabled selected>--Seleccione--</option>
                                 <option *ngFor="let impuesto of listaImpuestos" value="{{impuesto.identificador}}">{{impuesto.descripcion}}</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="id_linea">Linea del producto</label>
                             <select name="id_linea" id="id_linea" class="form-control" [(ngModel)]="producto.id_linea">
-                                <option value="" disabled selected>Seleccione la linea del producto</option>
+                                <option value="" disabled selected>--Seleccione--</option>
                                 <option *ngFor="let linea of listaLineas" value="{{linea.identificador}}">{{linea.descripcion}}</option>
                             </select>
                         </div>
@@ -124,7 +125,7 @@
                                 <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
                                 Actualizar
                             </button>
-                            <button type="button" class="btn btn-danger" (click)="mostrarProducto(false, 'LST')">
+                            <button type="button" class="btn btn-danger" (click)="mostrarFormulario(false, 'LST')">
                               Cancelar
                             </button>
                         </div>
