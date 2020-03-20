@@ -1,6 +1,9 @@
 <app-header></app-header>
 
 <ion-content>
+  <div *ngIf="cargando_slide" class="row justify-content-center">
+    <span class="spinner-border spinner-border-lg spinner-table mt-4 text-primary" role="status" aria-hidden="true"></span>
+  </div>
 
   <ion-slides *ngIf="slides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions">
     <ion-slide class="slider-item" style="background-image: url(assets/images/banner-super-home.jpg);">
@@ -16,14 +19,13 @@
         </div>
       </div>
     </ion-slide>
-    <ion-slide *ngFor="let slide of slides" class="slider-item" [style]="slide.archivo_img | slideImage">
+    <ion-slide *ngFor="let slide of slides" class="slider-item" [style]="slide.imagen | slideImage">
       <div class="overlay"></div>
       <div class="container">
         <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
           <div class="col-md-12 text-center">
             <h1 class="mb-2">{{ slide.titulo }}</h1>
             <h2 class="subheading mb-4">{{ slide.descripcion }}</h2>
-            <!-- <p><a href="#"style="background-image: url(assets/images/bg_1.jpg);" class="btn btn-primary">View Details</a></p> -->
           </div>
         </div>
       </div>
@@ -42,13 +44,16 @@
       </div>
     </div>
     <div class="container">
+      <div *ngIf="cargando_slide" class="row justify-content-center">
+        <span class="spinner-border spinner-border-lg spinner-table mt-4  text-primary" role="status" aria-hidden="true"></span>
+      </div>
+
       <div class="row">
         <div class="col-sm-12 col-md-6 col-lg-3" *ngFor="let producto of productos">
           <div class="product">
-
             <div class="m-2">
               <a [routerLink]="['/producto-simple', producto.identificador]" class="img-prod">
-                <img *ngIf="producto" [src]="producto.archivo_img | productImage | urlSanitizer" height="253"
+                <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="253"
                   style="width: 100%;">
                 <div class="overlay"></div>
               </a>
@@ -59,7 +64,7 @@
                 </h3>
                 <div class="d-flex">
                   <div class="pricing">
-                    <p class="price"><span class="price-sale">Gs. {{ producto.precio_venta | numberFormat}}</span></p>
+                    <p class="price"><span class="price-sale">{{ producto.precio_venta | numberFormat}} Gs.</span></p>
                   </div>
                 </div>
                 <div class="bottom-area d-flex px-3">

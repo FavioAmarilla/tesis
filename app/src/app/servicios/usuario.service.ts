@@ -24,39 +24,44 @@ export class ServicioUsuario {
     private router: Router
   ) { }
 
-  registro(usuario: Usuario) {
-    const json = JSON.stringify(usuario);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-    return this.http.post(`${API}user`, params, {headers});
-  }
-
-  iniciarSession(usuario: any) {
-    const json = JSON.stringify(usuario);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+  async registro(usuario: Usuario) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}user/signIn`, params, {headers})
-      .subscribe(
-        async (response: any) => {
-          if (response.status) {
-            // se guarda el token en el Storage
-            await this.guardarToken(response.data);
-            this.emitter.emit(this.user);
-            resolve({success: true});
-          } else {
-            this.token = null;
-            this.storage.remove('token');
-            resolve({success: false, error: response});
-          }
+      this.http.post(`${API}user`, usuario, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error);
         }
       );
     });
   }
 
-  obtenerUsuario() {
+  async iniciarSession(usuario: any) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return new Promise(resolve => {
+      this.http.post(`${API}user/signIn`, usuario, { headers })
+        .subscribe(
+          async (response: any) => {
+            if (response.status) {
+              // se guarda el token en el Storage
+              await this.guardarToken(response.data);
+              this.emitter.emit(this.user);
+              resolve({ success: true });
+            } else {
+              this.token = null;
+              this.storage.remove('token');
+              resolve({ success: false, error: response });
+            }
+          }
+        );
+    });
+  }
+
+  async obtenerUsuario() {
     if (!this.user) { this.validarToken(); }
     return { ...this.user };
   }
@@ -74,27 +79,30 @@ export class ServicioUsuario {
   async validarToken(): Promise<boolean> {
     await this.cargarToken();
     if (!this.token) {
-      // this.router.navigate(['/login']);
       return Promise.resolve(false);
     }
 
+    let data = {
+      'Authorization': this.token
+    };
+
     return new Promise<boolean>(resolve => {
-      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').append('Authorization', this.token);
-      this.http.post(`${API}user/checkToken`, {}, {headers})
-      .subscribe(
-        (response: any) => {
-          if (response.status) {
-            this.user = response.data;
-            resolve(true);
-          } else {
-            resolve(false);
+      const headers = new HttpHeaders().set('Content-Type', 'application/json')
+      this.http.post(`${API}user/checkToken`, data, { headers })
+        .subscribe(
+          (response: any) => {
+            if (response.status) {
+              this.user = response.data;
+              resolve(true);
+            } else {
+              resolve(false);
+            }
           }
-        }
-      );
+        );
     });
   }
 
-  cerrarSession() {
+  async cerrarSession() {
     this.token = null;
     this.storage.remove('token');
     this.router.navigate(['/inicio']);

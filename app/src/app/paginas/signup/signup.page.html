@@ -1,29 +1,33 @@
-
-
-
 <ion-content>
 
-    <app-header></app-header>
-  
-    <div class="wrapper fadeInDown">
-        <div id="formContent">
-      
-          <div class="fadeIn first">
-            <br>
-          </div>
-      
-          <form>
-            <input type="text" class="fadeIn third" name="nombre_completo" placeholder="Nombre completo" [(ngModel)]="usuario.nombre_completo">
-            <input type="text" class="fadeIn second" name="email" placeholder="E-mail" [(ngModel)]="usuario.email">
-            <input type="text" class="fadeIn third" name="clave_acceso" placeholder="Password" [(ngModel)]="usuario.clave_acceso">
-            <input type="button" class="fadeIn fourth" value="Aceptar" (click)="registro()">
-          </form>
-      
-        </div>
+  <app-header></app-header>
+  <br>
+
+  <div class="wrapper fadeInDown">
+    <form class="form-signup">
+      <img src="assets/images/icon.png" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal" style="margin-top: 0px !important;">Registrese</h1>
+      <div class="form-group">
+        <input type="text" class="form-control" name="nombre_completo" placeholder="Nombre completo"
+          [(ngModel)]="usuario.nombre_completo">
       </div>
-    ​
-  
-    <app-footer [cargando]="cargando"></app-footer>
-  </ion-content>
-  
-  
+      <div class="form-group">
+        <input type="email" class="form-control " name="email" placeholder="E-mail" [(ngModel)]="usuario.email">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" name="clave_acceso" placeholder="Password"
+          [(ngModel)]="usuario.clave_acceso">
+      </div>
+
+      <button type="submit" class="btn btn-lg bg-primary" (click)="registro()">
+        <span *ngIf="cargando" class="spinner-border spinner-border-sm spinner-table" role="status"
+          aria-hidden="true"></span>
+        Acceder
+      </button>
+    </form>
+
+  </div>
+  ​
+
+  <app-footer [cargando]="cargando"></app-footer>
+</ion-content>

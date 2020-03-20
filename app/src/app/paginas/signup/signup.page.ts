@@ -10,17 +10,17 @@ import { UiService } from '../../servicios/ui.service';
 })
 export class SignupPage implements OnInit {
 
-  public cargando = true;
+  public cargando = false;
 
   public usuario: Usuario = {
     identificador: 0,
-    nombre_completo: '', 
-    email: '', 
+    nombre_completo: '',
+    email: '',
     clave_acceso: ''
   };
 
   constructor(
-    private ServicioUsuario: ServicioUsuario,
+    private servicioUsuario: ServicioUsuario,
     private uiService: UiService
   ) { }
 
@@ -32,34 +32,16 @@ export class SignupPage implements OnInit {
   }
 
   async registro() {
-    this.ServicioUsuario.registro(this.usuario).subscribe(
-      (response: any) => {
-
-        if (response.status) {
-          this.uiService.alerta(response.message);
-        } else {
-          if (response.data) {
-            if (response.data.nombre_completo) {
-              this.uiService.alerta(response.data.nombre_completo[0]);
-              return;
-            }
-            if (response.data.email) {
-              this.uiService.alerta(response.data.email[0]);
-              return;
-            }
-            if (response.data.clave_acceso) {
-              this.uiService.alerta(response.data.clave_acceso[0]);
-              return;
-            }
-          } else {
-            this.uiService.alerta('Error no definido');
-          }
-        }
-      },
-      error => {
-        console.log('error:', error);
-      }
-    );
+    this.cargando = true;
+    const response: any = await this.servicioUsuario.registro(this.usuario);
+    
+    this.cargando = false;
+    if (response.status) {
+      this.uiService.alerta(response.message);
+    } else {
+      this.uiService.alerta(response.message);
+    }
   }
+
 
 }

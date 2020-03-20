@@ -29,14 +29,14 @@
                   </td>
 
                   <td class="image-prod">
-                    <img *ngIf="producto" class="img" [src]="producto.archivo_img | productImage | urlSanitizer">
+                    <img *ngIf="producto" class="img" [src]="producto.imagen | productImage | urlSanitizer">
                   </td>
 
                   <td class="product-name">
                     <h3>{{ producto.descripcion }}</h3>
                   </td>
 
-                  <td class="price">{{ producto.precio_venta }}</td>
+                  <td class="price">{{ producto.precio_venta | numberFormat}} Gs.</td>
 
                   <td class="quantity">
                     <div class="input-group mb-3">
@@ -45,7 +45,7 @@
                     </div>
                   </td>
 
-                  <td class="total">{{producto.precio_venta * producto.cantidad}}
+                  <td class="total">{{producto.precio_venta * producto.cantidad | numberFormat}} Gs. </td>
               </tbody>
             </table>
           </div>

@@ -16,7 +16,8 @@ import { IonSlides } from '@ionic/angular';
 })
 export class PaginaInicio implements OnInit {
 
-  public cargando = true;
+  public cargando_slide = true;
+  public cargando_producto = true;
   public productos: Producto;
   public slides: Banner;
   public lineasProducto: LineaProducto;
@@ -37,7 +38,6 @@ export class PaginaInicio implements OnInit {
     private uiService: UiService,
     private servicioProducto: ServicioProducto,
     private servicioCarrusel: ServicioCarrusel,
-    private lineaProdService: ServicioLineasProducto,
     private router: Router
   ) {
     this.API = environment.api;
@@ -53,93 +53,56 @@ export class PaginaInicio implements OnInit {
     this.router.navigate([url]);
   }
 
-  obtenerProductos() {
-    this.cargando = true;
-    this.servicioProducto.obtenerProductos().subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.productos = response.data.data;
-        }
-        this.cargando = false;
-      },
-      error => {
-        console.log(error);
-        this.cargando = false;
-      }
-    );
+  async obtenerProductos() {
+    this.cargando_producto= true;
+    const response: any = await this.servicioProducto.obtenerProducto();
+
+    if (response.status) {
+      this.productos = response.data;
+    } else {
+
+    }
+    this.cargando_producto = false;
   }
 
-  obtenerCarrusel() {
-    this.servicioCarrusel.obtenerCarrusel().subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.slides = response.data.data;
-          console.log(this.slides);
-        }
-      },
-      error => {
-        console.log(error);
-      }
-    );
-  }
+  async obtenerCarrusel() {
+    this.cargando_slide = true;
+    const response: any = await this.servicioCarrusel.obtenerCarrusel();
+    
+    if (response.status) {
+      this.slides = response.data;
+    } else {
 
-  obtenerLineasProducto() {
-    this.lineaProdService.obtenerLineas().subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.lineasProducto = response.data;
-        }
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    }
+    this.cargando_slide = false;
   }
 
   async agregarAlCarrito(id) {
-    this.servicioProducto.obtenerProducto(id).subscribe(
-      (response: any) => {
-        console.log(response);
-        if (response.status) {
+    const response: any = await this.servicioProducto.obtenerProducto(id);
 
-          const product = response.data;
-          product.cantidad = 1;
-          const add = this.servicioCarrito.agregarAlCarrito(product);
-          if (add) this.uiService.toast('El producto ha sido añadido al carrito');
-          else this.uiService.toast('No se pudo añadir el producto al carrito');
-
-        } else {
-          this.uiService.toast('No se pudo añadir el producto al carrito');
-        }
-      },
-      error => {
-        console.log(error);
-        this.uiService.toast('No se pudo añadir el producto al carrito');
-      }
-    );
+    if (response.status) {
+      const product = response.data;
+      product.cantidad = 1;
+      const add = this.servicioCarrito.agregarAlCarrito(product);
+      if (add) this.uiService.toast('El producto ha sido añadido al carrito');
+      else this.uiService.toast('No se pudo añadir el producto al carrito');
+    } else {
+      this.uiService.toast('No se pudo añadir el producto al carrito');
+    }
   }
 
   async agregarAFavoritos(id) {
-    this.servicioProducto.obtenerProducto(id).subscribe(
-      (response: any) => {
-        console.log(response);
-        if (response.status) {
+    const response: any = await this.servicioProducto.obtenerProducto(id);
 
-          const product = response.data;
-          product.cantidad = 1;
-          const add = this.servicioCarrito.agregarAFavoritos(product);
-          if (add) this.uiService.toast('El producto ha sido añadido a sus favoritos');
-          else this.uiService.toast('No se pudo añadir el producto a sus favoritos');
-
-        } else {
-          this.uiService.toast('No se pudo añadir el producto a sus favoritos');
-        }
-      },
-      error => {
-        console.log(error);
-        this.uiService.toast('No se pudo añadir el producto a sus favoritos');
-      }
-    );
+    if (response.status) {
+      const product = response.data;
+      product.cantidad = 1;
+      const add = this.servicioCarrito.agregarAFavoritos(product);
+      if (add) this.uiService.toast('El producto ha sido añadido a sus favoritos');
+      else this.uiService.toast('No se pudo añadir el producto a sus favoritos');
+    } else {
+      this.uiService.toast('No se pudo añadir el producto a sus favoritos');
+    }
   }
 
 }

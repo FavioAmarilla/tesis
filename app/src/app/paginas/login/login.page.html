@@ -1,35 +1,30 @@
-
-
-
 <ion-content>
 
   <app-header></app-header>
 
+  <br>
+
   <div class="wrapper fadeInDown">
-      <div id="formContent">
-        <!-- Tabs Titles -->
-    
-        <!-- Icon -->
-        <div class="fadeIn first">
-          <br>
-        </div>
-    
-        <!-- Login Form -->
-        <form (ngSubmit)="iniciarSession()" [formGroup]="angForm">
-          <input type="text" class="fadeIn second" name="emaill" placeholder="Email" formControlName="email">
-          <input type="password" class="fadeIn third" name="password" placeholder="Contraseña" formControlName="clave_acceso">
-          <input type="submit" class="fadeIn fourth" value="Acceder">
-        </form>
-    
-        <!-- Remind Passowrd -->
-        <div id="formFooter">
-          <a class="underlineHover" href="#">Olvido su Contraseña?</a>
-        </div>
-    
+
+    <form class="form-signin">
+      <img src="assets/images/icon.png" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal" style="margin-top: 0px !important;">Ingrece sus Credenciales</h1>
+      <div class="form-group">
+        <input type="email" class="form-control" name="email" placeholder="Email" [(ngModel)]="email">
       </div>
-    </div>
+      <div class="form-group">
+        <input type="password" class="form-control" name="clave_acceso" placeholder="Contraseña"
+          [(ngModel)]="clave_acceso">
+      </div>
+
+      <button type="submit" class="btn btn-lg bg-primary" (click)="iniciarSession()">
+        <span *ngIf="cargando" class="spinner-border spinner-border-sm spinner-table" role="status"
+          aria-hidden="true"></span>
+        Acceder
+      </button>
+    </form>
+  </div>
   ​
 
   <app-footer [cargando]="cargando"></app-footer>
 </ion-content>
-

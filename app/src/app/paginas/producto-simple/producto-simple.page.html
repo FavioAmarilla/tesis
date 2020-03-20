@@ -1,29 +1,18 @@
 <app-header></app-header>
 
 <ion-content>
-
-  <div class="hero-wrap hero-bread" style="background-image: url('assets/images/bg_1.jpg');">
-    <div class="container">
-      <div class="row no-gutters slider-text align-items-center justify-content-center">
-        <div class="col-md-9 text-center">
-          <p class="breadcrumbs"><span class="mr-2"><a routerLink="/">Inicio</a></span> <span class="mr-2"><a href="index.html">Producto</a></span> <span>Producto Simple</span></p>
-          <h1 class="mb-0 bread">Producto Simple</h1>
-        </div>
-      </div>
-    </div>
-  </div>
   
   <section class="ftco-section" *ngIf="producto">
     <div class="container">
       <div class="row">
         <div class="col-lg-6 mb-5">
           <a href="#" class="image-popup">
-            <img *ngIf="producto" class="img-fluid" [src]="producto.archivo_img | productImage | urlSanitizer">    
+            <img *ngIf="producto" class="img-fluid" [src]="producto.imagen | productImage | urlSanitizer">    
           </a>
         </div>
         <div class="col-lg-6 product-details pl-md-5">
           <h3>{{ producto.descripcion }}</h3>
-          <p class="price"><span>Gs. {{ producto.precio_venta }}</span></p>
+          <p class="price"><span>{{ producto.precio_venta | numberFormat}} Gs.</span></p>
           
           <div class="row mt-4">
             <div class="w-100"></div>

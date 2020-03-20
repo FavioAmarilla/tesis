@@ -13,55 +13,38 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class LoginPage implements OnInit {
 
-  angForm: FormGroup;
+  public usuario: Usuario;
   public cargando = false;
   public token;
+
 
   constructor(
     private servicioUsuario: ServicioUsuario,
     private uiService: UiService,
-    private formBuilder: FormBuilder,
-    private localStorage: Storage,
     private router: Router
   ) {
-    this.createForm();
+    this.usuario = {
+      identificador: null,
+      nombre_completo: null,
+      email: null,
+      clave_acceso: null
+    };
+    this.cargando = false;
   }
 
-  ngOnInit() {}
-
-  createForm() {
-    this.angForm = this.formBuilder.group({
-      identificador: [0],
-      email: ['', Validators.required],
-      clave_acceso: ['', [Validators.required, Validators.email]]
-    });
-  }
+  ngOnInit() { }
 
   async iniciarSession() {
-    // this.cargando = true;
-    // obtener token de autenticacion
-    const response: any = await this.servicioUsuario.iniciarSession(this.angForm.value);
+    this.cargando = true;
+
+    const response: any = await this.servicioUsuario.iniciarSession(this.usuario);
+
+    this.cargando = false;
     if (response.success) {
       this.router.navigate(['/inicio']);
-    } else this.errorLogin(response.error);
-  }
-
-  errorLogin(response: any) {
-    this.cargando = false;
-    if (response.data) {
-      if (response.data.email) {
-        this.uiService.alerta(response.data.email[0]);
-        return;
-      }
-      if (response.data.clave_acceso) {
-        this.uiService.alerta(response.data.clave_acceso[0]);
-        return;
-      }
     } else {
-      this.uiService.alerta(response.message);
+      this.uiService.alerta(response.error);
     }
-
-    this.localStorage.clear();
   }
 
 }

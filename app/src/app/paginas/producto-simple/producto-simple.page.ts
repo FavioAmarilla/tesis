@@ -28,30 +28,24 @@ export class PaginaProductoSimple implements OnInit {
     this.route.params.subscribe(
       params => {
         this.id = + params['id'];
-        this.obtenerProducto();
+        this.obtenerProducto(this.id);
       }
     );
   }
 
   ngOnInit() { }
 
-  obtenerProducto() {
+  async obtenerProducto(id) {
     this.cargando = true;
+    const response: any = await this.servicioProducto.obtenerProducto(id);
 
-    this.servicioProducto.obtenerProducto(this.id).subscribe(
-      (response: any) => {
-        if (response.status) {
-          this.cargando = false;
-          this.producto = response.data;
-        } else {
-          this.router.navigate(['/']);
-        }
-      },
-      error => {
-        console.log(error);
-        this.router.navigate(['/']);
-      }
-    );
+    if (response.status) {
+      this.cargando = false;
+      this.producto = response.data;
+    } else {
+      this.router.navigate(['/']);
+    }
+    this.cargando = false;
   }
 
   asignarCantidad(accion) {
@@ -66,7 +60,7 @@ export class PaginaProductoSimple implements OnInit {
   async agregarAlCarrito() {
     this.producto.cantidad = this.cantidad;
     const add = await this.servicioCarrito.agregarAlCarrito(this.producto);
-    
+
     if (add) this.uiService.toast('El producto ha sido añadido al carrito');
     else this.uiService.toast('No se pudo añadir el producto al carrito');
   }
