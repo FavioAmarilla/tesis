@@ -143,9 +143,9 @@ export class UsuariosComponent implements OnInit {
     const preConfirm = {servicio: 'servicioUsuario', callback: 'activarDesactivarUsuario', data: id};
     const titulo = '¿Estas seguro?';
     const mensaje = 'No podras utilizar este usuario tras realizar esta acción';
-    const resultado: any = await this.servicioAlertas.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
+    const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
 
-    if (resultado.status) {
+    if (response.status) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion(1);
     } else {
