@@ -56,7 +56,7 @@ export class PaisComponent implements OnInit {
 
     const response: any = await this.servicioPais.obtenerPais(null, parametros);
     if (response.status) {
-      this.listaPaises = response.data.data;
+      this.listaPaises = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {

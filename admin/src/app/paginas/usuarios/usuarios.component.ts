@@ -77,7 +77,7 @@ export class UsuariosComponent implements OnInit {
     const response: any = await this.servicioUsuario.obtenerUsuarios(null, parametros);
 
     if (response.status) {
-      this.listaUsuario = response.data.data;
+      this.listaUsuario = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {
@@ -136,7 +136,7 @@ export class UsuariosComponent implements OnInit {
   subirImagen(event) {
     console.log(event.response);
     const data = JSON.parse(event.response);
-    this.usuario.imagen = data.data;
+    this.usuario.imagen = data;
   }
 
   async activarDesactivarUsuario(id, accion) {

@@ -56,7 +56,7 @@ export class TiposImpuestoComponent implements OnInit {
     const response: any = await this.impuestoService.obtenerImpuesto(null, parametros);
 
     if (response.status) {
-      this.listaImpuesto = response.data.data;
+      this.listaImpuesto = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;;
     } else {

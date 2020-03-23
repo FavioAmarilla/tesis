@@ -77,7 +77,7 @@ export class EmpresaComponent implements OnInit {
     const response: any = await this.servicioEmpresa.obtenerEmpresa(null, parametros);
 
     if (response.status) {
-      this.listaEmpresas = response.data.data;
+      this.listaEmpresas = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {
@@ -138,7 +138,7 @@ export class EmpresaComponent implements OnInit {
   subirImagen(event) {
     console.log(event);
     const data = JSON.parse(event.response);
-    this.empresa.imagen = data.data;
+    this.empresa.imagen = data;
   }
 
 }

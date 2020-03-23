@@ -57,7 +57,7 @@ export class LineaProductoComponent implements OnInit {
     const response: any = await this.servicioLineaProducto.obtenerLinea(null, parametros);
 
     if (response.status) {
-      this.listaLineas = response.data.data;
+      this.listaLineas = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {

@@ -74,7 +74,7 @@ export class BarrioComponent implements OnInit {
     const response: any = await this.servicioBarrio.obtenerBarrio(null, parametros);
 
     if (response.status) {
-      this.listaBarrio = response.data.data;
+      this.listaBarrio = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {

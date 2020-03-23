@@ -111,7 +111,7 @@ export class ProductoComponent implements OnInit {
     const response: any = await this.servicioProducto.obtenerProducto(null, parametros);
 
     if (response.status) {
-      this.listaProductos = response.data.data;
+      this.listaProductos = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {
@@ -172,7 +172,7 @@ export class ProductoComponent implements OnInit {
 
   subirImagen(event) {
     const data = JSON.parse(event.response);
-    this.producto.imagen = data.data;
+    this.producto.imagen = data;
   }
 
   generarCodigoBarras() {

@@ -10,9 +10,12 @@ class BaseController extends Controller
         $response = [
             'status'    => $status,
             'message'   => $message,
-            'data'      => $result
         ];
 
-        return response()->json($response);
+        if (!collect($result)->has('current_page')) { $result = ['data' => $result]; }
+
+        $combined = $response->union($result);
+
+        return response()->json($combined);
     }
 }

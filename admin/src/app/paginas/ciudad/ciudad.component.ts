@@ -75,7 +75,7 @@ export class CiudadComponent implements OnInit {
     const response: any = await this.servicioCiudad.obtenerCiudad(null, parametros);
 
     if (response.status) {
-      this.listaCiudades = response.data.data;;
+      this.listaCiudades = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {

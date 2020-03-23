@@ -78,7 +78,7 @@ export class CarruselComponent implements OnInit {
     const response: any = await this.servicioCarrusel.obtenerCarrusel(null, parametros);
 
     if (response.status) {
-      this.listaSlide = response.data.data;
+      this.listaSlide = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {
@@ -156,7 +156,7 @@ export class CarruselComponent implements OnInit {
   subirImagen(event) {
     console.log(event.response);
     const data = JSON.parse(event.response);
-    this.slide.imagen = data.data;
+    this.slide.imagen = data;
   }
 
 }
