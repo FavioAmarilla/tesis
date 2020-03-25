@@ -2479,37 +2479,16 @@ a.btn.disabled, fieldset:disabled a.btn {
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
+  color: white !important;
+  background-color: #079a4a !important;
+  border-color: #079a4a !important;
+  cursor: pointer !important;
 }
 
 .btn-primary:hover {
-  color: #fff;
-  background-color: #0069d9;
-  border-color: #0062cc;
-}
-
-.btn-primary:focus, .btn-primary.focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
-  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
-}
-
-.btn-primary.disabled, .btn-primary:disabled {
-  color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
-.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show>.btn-primary.dropdown-toggle {
-  color: #fff;
-  background-color: #0062cc;
-  border-color: #005cbf;
-}
-
-.btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus, .show>.btn-primary.dropdown-toggle:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
-  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+  color: #079a4a !important;
+  background-color: white !important;
+  border-color: #079a4a !important;
 }
 
 .btn-secondary {
@@ -10782,11 +10761,10 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
 }
 
 .product .text h3 {
-  font-size: 14px;
-  margin-bottom: 5px;
+  font-size: 13px;
+  margin-bottom: 2px;
   font-weight: 300;
   text-transform: uppercase;
-  letter-spacing: 1px;
   font-family: "Poppins", Arial, sans-serif;
 }
 
@@ -10819,16 +10797,7 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
 }
 
 .product .text .bottom-area {
-  position: absolute;
-  bottom: 15px;
-  left: 0;
-  right: 0;
-  opacity: 0;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  -webkit-transition: all 0.3s ease;
-  -ms-transition: all 0.3s ease;
-  transition: all 0.3s ease;
+  margin-top: 20px;
 }
 
 .product .text .bottom-area a {
@@ -10841,25 +10810,12 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   -ms-border-radius: 50%;
-  border-radius: 50%;
+  border-radius: 50%; 
+  cursor: pointer;
 }
 
 .product .text .bottom-area .m-auto {
   margin: 0 auto;
-}
-
-.product:hover {
-  -webkit-box-shadow: 0px 7px 15px -5px rgba(0, 0, 0, 0.07);
-  -moz-box-shadow: 0px 7px 15px -5px rgba(0, 0, 0, 0.07);
-  box-shadow: 0px 7px 15px -5px rgba(0, 0, 0, 0.07);
-}
-
-.product:hover .pricing {
-  opacity: 0;
-}
-
-.product:hover .text .bottom-area {
-  opacity: 1;
 }
 
 .product-details h3 {
@@ -11417,7 +11373,7 @@ textarea.form-control {
 }
 
 .ftco-section {
-  padding: 6em 0;
+  padding: 40px;
   position: relative;
 }
 

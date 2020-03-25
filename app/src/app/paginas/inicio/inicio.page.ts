@@ -8,6 +8,7 @@ import { ServicioLineasProducto } from 'src/app/servicios/linea-producto.service
 import { ServicioCarrito } from 'src/app/servicios/carrito.service';
 import { UiService } from 'src/app/servicios/ui.service';
 import { IonSlides } from '@ionic/angular';
+import { ServicioGeneral } from 'src/app/servicios/general.service';
 
 @Component({
   selector: 'app-inicio',
@@ -38,6 +39,7 @@ export class PaginaInicio implements OnInit {
     private uiService: UiService,
     private servicioProducto: ServicioProducto,
     private servicioCarrusel: ServicioCarrusel,
+    private servicioGeneral: ServicioGeneral,
     private router: Router
   ) {
     this.API = environment.api;
@@ -77,32 +79,18 @@ export class PaginaInicio implements OnInit {
     this.cargandoSlide = false;
   }
 
-  async agregarAlCarrito(id) {
-    const response: any = await this.servicioProducto.obtenerProducto(id);
-
-    if (response.status) {
-      const product = response.data;
-      product.cantidad = 1;
-      const add = this.servicioCarrito.agregarAlCarrito(product);
-      if (add) this.uiService.toast('El producto ha sido añadido al carrito');
-      else this.uiService.toast('No se pudo añadir el producto al carrito');
-    } else {
-      this.uiService.toast('No se pudo añadir el producto al carrito');
-    }
+  async agregarAlCarrito(producto: any) {
+    producto.cantidad = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida, 'medida');
+    const add = this.servicioCarrito.agregarAlCarrito(producto);
+    if (add) this.uiService.toast('El producto ha sido añadido al carrito');
+    else this.uiService.toast('No se pudo añadir el producto al carrito');
   }
 
-  async agregarAFavoritos(id) {
-    const response: any = await this.servicioProducto.obtenerProducto(id);
-
-    if (response.status) {
-      const product = response.data;
-      product.cantidad = 1;
-      const add = this.servicioCarrito.agregarAFavoritos(product);
-      if (add) this.uiService.toast('El producto ha sido añadido a sus favoritos');
-      else this.uiService.toast('No se pudo añadir el producto a sus favoritos');
-    } else {
-      this.uiService.toast('No se pudo añadir el producto a sus favoritos');
-    }
+  async agregarAFavoritos(producto: any) {
+    producto.cantidad = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida, 'medida');
+    const add = this.servicioCarrito.agregarAFavoritos(producto);
+    if (add) this.uiService.toast('El producto ha sido añadido a sus favoritos');
+    else this.uiService.toast('No se pudo añadir el producto a sus favoritos');
   }
 
 }

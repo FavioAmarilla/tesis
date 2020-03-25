@@ -2,7 +2,8 @@
 
 <ion-content>
   <div *ngIf="cargandoSlide" class="row justify-content-center">
-    <span class="spinner-border spinner-border-lg spinner-table mt-4 text-primary" role="status" aria-hidden="true"></span>
+    <span class="spinner-border spinner-border-lg spinner-table mt-4 text-primary" role="status"
+      aria-hidden="true"></span>
   </div>
 
   <ion-slides *ngIf="slides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions">
@@ -45,7 +46,8 @@
     </div>
     <div class="container">
       <div *ngIf="cargandoProducto" class="row justify-content-center">
-        <span class="spinner-border spinner-border-lg spinner-table mt-4  text-primary" role="status" aria-hidden="true"></span>
+        <span class="spinner-border spinner-border-lg spinner-table mt-4  text-primary" role="status"
+          aria-hidden="true"></span>
       </div>
 
       <div class="row">
@@ -58,7 +60,7 @@
                 <div class="overlay"></div>
               </a>
               <hr class="mt-2 mb-0 ml-2 mr-2 border-top">
-              <div class="text py-3 pb-4 px-3 text-center">
+              <div class="text py-3 px-3 text-center">
                 <h3><a
                     [routerLink]="['/producto-simple', producto.identificador]">{{ producto.descripcion | truncateText:20 }}</a>
                 </h3>
@@ -70,15 +72,15 @@
                 <div class="bottom-area d-flex px-3">
                   <div class="m-auto d-flex">
                     <a [routerLink]="['/producto-simple', producto.identificador]"
-                      class="add-to-cart d-flex justify-content-center align-items-center text-center">
+                      class="btn-producto d-flex justify-content-center align-items-center text-center">
                       <span><i class="ion-ios-menu"></i></span>
                     </a>
-                    <a (click)="agregarAlCarrito(producto.identificador)"
-                      class="buy-now d-flex justify-content-center align-items-center mx-1">
+                    <a (click)="agregarAlCarrito(producto)"
+                      class="btn-producto d-flex justify-content-center align-items-center text-center ml-1">
                       <span><i class="ion-ios-cart"></i></span>
                     </a>
-                    <a (click)="agregarAFavoritos(producto.identificador)"
-                      class="heart d-flex justify-content-center align-items-center ">
+                    <a (click)="agregarAFavoritos(producto)"
+                      class="btn-producto d-flex justify-content-center align-items-center text-center ml-1">
                       <span><i class="ion-ios-heart"></i></span>
                     </a>
                   </div>
