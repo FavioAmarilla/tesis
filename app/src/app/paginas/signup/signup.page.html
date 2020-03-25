@@ -19,11 +19,14 @@
           [(ngModel)]="usuario.clave_acceso">
       </div>
 
-      <button type="submit" class="btn btn-lg bg-primary" (click)="registro()">
-        <span *ngIf="cargando" class="spinner-border spinner-border-sm spinner-table" role="status"
-          aria-hidden="true"></span>
-        Acceder
-      </button>
+
+      <p (click)="registro()">
+        <a class="btn btn-primary py-3 px-4">
+          <span *ngIf="cargando" class="spinner-border spinner-border-sm spinner-table" role="status"
+            aria-hidden="true"></span>
+          Registrarse
+        </a>
+      </p>
     </form>
 
   </div>
