@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 class BaseController extends Controller
 {
     public function sendResponse($status, $message, $result){
-        $response = [
+        $response = collect([
             'status'    => $status,
             'message'   => $message,
-        ];
+        ]);
 
         if (!collect($result)->has('current_page')) { $result = ['data' => $result]; }
 
