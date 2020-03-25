@@ -61,7 +61,6 @@ class UserController extends BaseController {
             'nombre_completo'  => 'required',
             'email'  => 'required',
             'clave_acceso'  => 'required',
-            'imagen'   =>  'required',
         ]);
 
         if ($validator->fails()) {
@@ -124,7 +123,6 @@ class UserController extends BaseController {
             'nombre_completo'  => 'required',
             'email'  => 'required',
             'clave_acceso'  => 'required',
-            'imagen'   =>  'required',
         ]);
 
         if ($validator->fails()) {
