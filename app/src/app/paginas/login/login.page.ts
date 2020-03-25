@@ -40,6 +40,7 @@ export class LoginPage implements OnInit {
     const response: any = await this.servicioUsuario.iniciarSession(this.usuario);
 
     this.cargando = false;
+    console.log(response);
     if (response.success) {
       this.router.navigate(['/inicio']);
     } else {
