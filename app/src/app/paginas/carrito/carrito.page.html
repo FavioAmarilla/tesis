@@ -2,11 +2,24 @@
 
 <ion-content>
 
-  <section class="ftco-section ftco-cart" style="padding-top: 40px;">
+  <section class="ftco-section ftco-cart" style="padding-top: 20px;">
     <div class="container">
 
       <div class="row">
         <div class="col-md-12">
+          <div class="cart-total">
+            <label>Sucursal</label>
+            <select name="sucursal" class="form-control text-left px-3" placeholder="Sucursal">
+              <option value="0" selected>--Seleccione--</option>
+              <option *ngFor="let sucursal of listaSucursales" value="{{ sucursal.id }}"> {{ sucursal.nombre }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 mt-4">
           <div class="cart-list">
 
             <table class="table">
@@ -20,8 +33,8 @@
                   <th>Total</th>
                 </tr>
               </thead>
-              <tbody *ngIf="productos">
-                <tr class="text-center" *ngFor="let producto of productos">
+              <tbody *ngIf="listaCarrito">
+                <tr class="text-center" *ngFor="let producto of listaCarrito">
                   <td class="product-remove">
                     <a (click)="confirmarParaEliminarDelCarrito(producto)">
                       <span class="ion-ios-close"></span>
@@ -52,101 +65,21 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-12 mt-5">
-          <div class="cart-total mb-3">
-            <p>Sucursal</p>
-            <form action="#" class="info">
-              <div class="form-group">
-                <select name="" id="" class="form-control text-left px-3" placeholder="Pais">
-                  <option value="0">--Seleccione--</option>
-                </select>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="col-lg-4 mt-5 cart-wrap">
-          <div class="cart-total mb-3">
-            <h3>Cupon de descuento</h3>
-            <p>Ingrese su código de cupón si tiene uno</p>
-            <form action="#" class="info">
-              <div class="form-group">
-                <input type="text" class="form-control text-left px-3" placeholder="Código promocional">
-              </div>
-            </form>
-          </div>
-          <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Aplicar Cupon</a></p>
+      <div class="row mt-4">
+        <div class="col">
+          <span class="float-right">
+            <p (click)="redireccionar('/checkout')">
+              <a class="btn btn-primary py-3 px-4">
+                Pagar
+              </a>
+            </p>
+          </span>
         </div>
-
-        <div class="col-lg-4 mt-5 cart-wrap">
-          <div class="cart-total mb-3">
-            <h3>Datos de Envío</h3>
-            <p>Ingrese su destino para el envio</p>
-            <form action="#" class="info">
-              <div class="form-group">
-                <select name="" id="" class="form-control text-left px-3" placeholder="Pais">
-                  <option value="0">--Seleccione--</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <select name="" id="" class="form-control text-left px-3" placeholder="Ciudad">
-                  <option value="0">--Seleccione--</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <select name="" id="" class="form-control text-left px-3" placeholder="Barrio">
-                  <option value="0">--Seleccione--</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <input type="text" class="form-control text-left px-3" placeholder="Direccion">
-              </div>
-              <div class="form-group">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend btn-ubicacion" data-toggle="modal" data-target="#modalUbicacion"
-                    (click)="abrirModal()">
-                    <span class=" input-group-text"> <span class="icon-map-marker"></span> </span>
-                  </div>
-                  <input type="text" class="form-control" placeholder="Ubicación" aria-label="Ubicación"
-                    aria-describedby="basic-addon1">
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div class="col-lg-4 mt-5 cart-wrap">
-          <div class="cart-total mb-3">
-            <h3>Totales de carrito</h3>
-            <p class="d-flex">
-              <span>Sub Total</span>
-              <span style="text-align: right;">100.000 Gs.</span>
-            </p>
-            <p class="d-flex">
-              <span>Delivery</span>
-              <span style="text-align: right;">10.000 Gs.</span>
-            </p>
-            <p class="d-flex">
-              <span>Descuento</span>
-              <span style="text-align: right;">20.000 Gs.</span>
-            </p>
-            <hr style="border-top: 1px solid rgba(0,0,0,.05)">
-            <p class="d-flex total-price">
-              <span><b>Total</b></span>
-              <span style="text-align: right;"><b>90.000 Gs.</b></span>
-            </p>
-          </div>
-          <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Pagar</a></p>
-        </div>
-
       </div>
 
 
     </div>
-
 
   </section>
 

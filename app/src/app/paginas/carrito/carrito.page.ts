@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ServicioCarrito } from 'src/app/servicios/carrito.service';
-import { Producto } from 'src/app/interfaces/interfaces';
+import { Producto, Sucursal } from 'src/app/interfaces/interfaces';
 import { UiService } from 'src/app/servicios/ui.service';
-import { AlertController, ModalController } from '@ionic/angular';
-import { UbicacionPage } from '../modals/ubicacion/ubicacion.page';
+import { AlertController } from '@ionic/angular';
+import { SucursalService } from 'src/app/servicios/sucursal.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-carrito',
@@ -13,23 +14,30 @@ import { UbicacionPage } from '../modals/ubicacion/ubicacion.page';
 export class PaginaCarrito implements OnInit {
 
   public cargando = true;
-  public productos: Producto;
-  public totales = {};
+  public listaCarrito: Producto;
+  public listaSucursales: Sucursal;
 
   constructor(
+    private router: Router,
     private servicioCarrito: ServicioCarrito,
+    private servicioSucursal: SucursalService,
     private uiService: UiService,
-    private alertaCtrl: AlertController,
-    private modalCtrl: ModalController
+    private alertaCtrl: AlertController
   ) {
     this.obtenerCarrito();
+    this.obtenerSucursalesEcommerce();
   }
 
   ngOnInit() { }
 
+  redireccionar(url) {
+    this.router.navigate([url]);
+  }
+
   async obtenerCarrito() {
-    this.productos = await this.servicioCarrito.obtenerCarrito();
+    this.listaCarrito = await this.servicioCarrito.obtenerCarrito();
     this.cargando = false;
+    console.log('listaCarrito:', this.listaCarrito);
   }
 
   async confirmarParaEliminarDelCarrito(product) {
@@ -64,16 +72,21 @@ export class PaginaCarrito implements OnInit {
     }
   }
 
-  async abrirModal() {
-    const modal = await this.modalCtrl.create({
-      component: UbicacionPage
-    });
+  async obtenerSucursalesEcommerce() {
+    this.cargando = true;
+    let parametros = {
+      ecommerce: 'S'
+    }
 
-    modal.onWillDismiss().then(data => {
-      console.log('MODAL DATA', data);
-    });
+    const response: any = await this.servicioSucursal.obtenerSucursalesEcommerce(null, parametros);
 
-    return await modal.present();
+    console.log(response);
+    if (response.status) {
+      this.listaSucursales = response.data;
+    } else {
+
+    }
+    this.cargando = false;
   }
 
 

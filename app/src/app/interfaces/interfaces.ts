@@ -28,5 +28,33 @@ export interface Banner {
 export interface LineaProducto {
     identificador?: number;
     descripcion?: string;
-    archivo_img?: string;
+}
+
+export interface Sucursal {
+    identificador?: number
+    id_empresa?: number
+    codigo?: string
+    nombre?: string
+    telefono?: string
+    id_pais?: number
+    id_ciudad?: number
+    direccion?: string
+    ecommerce?: string
+}
+
+export interface Pais {
+    identificador?: number
+    nombre?: string
+}
+
+export interface Ciudad {
+    identificador?: number
+    id_pais?: number
+    nombre?: string
+}
+
+export interface Barrio {
+    identificador?: number
+    id_ciudad?: number
+    nombre?: string
 }
