@@ -8,6 +8,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 
 import { AdminLayoutRoutes } from './admin-layout.routing';
 
+import { ComponentesModule } from 'app/componentes/componentes.module';
+
 import { DashboardComponent } from '../../paginas/dashboard/dashboard.component';
 
 import { LoginComponent } from '../../paginas/login/login.component';
@@ -22,7 +24,7 @@ import { PerfilComponent } from '../../paginas/perfil/perfil.component';
 import { PaisComponent } from '../../paginas/pais/pais.component';
 import { CiudadComponent } from '../../paginas/ciudad/ciudad.component';
 import { BarrioComponent } from '../../paginas/barrio/barrio.component';
-import { BreadcrumbComponent } from "../../shared/breadcrumb/breadcrumb.component";
+import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
 
 import { PaginacionComponent } from '../../shared/paginacion/paginacion.component';
 
@@ -34,7 +36,8 @@ import { PaginacionComponent } from '../../shared/paginacion/paginacion.componen
     ReactiveFormsModule,
     NgbModule,
     AngularFileUploaderModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    ComponentesModule
   ],
   declarations: [
     DashboardComponent,

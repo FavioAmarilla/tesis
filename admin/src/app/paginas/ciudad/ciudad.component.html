@@ -66,6 +66,9 @@
               <label for="Nombre">Nombre</label>
               <input type="text" class="form-control" placeholder="Nombre" name="nombre" [(ngModel)]="ciudad.nombre">
             </div>
+
+            <app-mapa></app-mapa>
+
             <div class="form-group">
               <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'">
                 <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm" role="status"
