@@ -22,10 +22,10 @@ class CiudadController extends BaseController
 
         $identificador = $request->query('identificador');
         if ($identificador) {
-            $query->whereIn('identificador', $identificador);
+            if (is_array($identificador)) $query->whereIn('identificador', $identificador);
+            else $query->where('identificador', '=', $identificador);
         }
-
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $where);
+        
         $id_pais = $request->query('id_pais');
         if ($id_pais) {
             $query->where('id_pais', '=', $id_pais);
