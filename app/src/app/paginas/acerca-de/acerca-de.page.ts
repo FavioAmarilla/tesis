@@ -9,7 +9,9 @@ export class PaginaAcercaDe implements OnInit {
 
   public cargando = true;
 
-  constructor() { }
+  constructor() { 
+    this.cargando = false;
+  }
 
   ngOnInit() {
     const tsthis = this;

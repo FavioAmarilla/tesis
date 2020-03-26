@@ -17,12 +17,13 @@ import { AlertaService } from 'src/app/servicios/alerta.service';
 })
 export class PaginaInicio implements OnInit {
 
-  public cargandoSlide = true;
-  public cargandoProducto = true;
+  public API: string;
+  public cargando = true;
+
   public productos: Producto;
   public slides: Banner;
   public lineasProducto: LineaProducto;
-  public API: string;
+
   public slideImgUrl: string;
   @ViewChild(IonSlides, { static: true }) slider: IonSlides;
   public slideOptions = {
@@ -44,11 +45,12 @@ export class PaginaInicio implements OnInit {
   ) {
     this.API = environment.api;
     this.slideImgUrl = this.API + 'producto/getImage/';
+
+    this.obtenerProductos();
+    this.obtenerCarrusel();
   }
 
   ngOnInit() {
-    this.obtenerProductos();
-    this.obtenerCarrusel();
   }
 
   redireccionar(url) {
@@ -56,27 +58,27 @@ export class PaginaInicio implements OnInit {
   }
 
   async obtenerProductos() {
-    this.cargandoProducto = true;
     const response: any = await this.servicioProducto.obtenerProducto();
 
     if (response.status) {
       this.productos = response.data;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
+      this.cargando = false;
     }
-    this.cargandoProducto = false;
   }
 
   async obtenerCarrusel() {
-    this.cargandoSlide = true;
     const response: any = await this.servicioCarrusel.obtenerCarrusel();
 
     if (response.status) {
       this.slides = response.data;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
+      this.cargando = false;
     }
-    this.cargandoSlide = false;
+
+    this.cargando = false;
   }
 
   async agregarAlCarrito(producto: any) {

@@ -18,10 +18,11 @@ export class PaginaListaDeseos implements OnInit {
     private servicioCarrito: CarritoService,
     private alertaCtrl: AlertController,
     private servicioAlerta: AlertaService
-  ) { }
+  ) {
+    this.obtenerFavoritos();
+  }
 
   ngOnInit() {
-    this.obtenerFavoritos();
   }
 
   async obtenerFavoritos() {

@@ -1,11 +1,11 @@
-<ion-content>
 
-  <app-header></app-header>
+
+<ion-content>
+  <app-header [cargando]="cargando"></app-header>
 
   <br>
 
   <div class="wrapper fadeInDown">
-
     <form class="form-signin">
       <img src="assets/images/icon.png" alt="" width="72" height="72">
       <h1 class="h3 mb-3 font-weight-normal" style="margin-top: 0px !important;">Ingrese sus Credenciales</h1>
@@ -16,17 +16,17 @@
         <input type="password" class="form-control" name="clave_acceso" placeholder="Contraseña"
           [(ngModel)]="usuario.clave_acceso">
       </div>
-      
+
       <p (click)="iniciarSession()">
         <a class="btn btn-primary py-3 px-4">
-          <span *ngIf="cargando" class="spinner-border spinner-border-sm spinner-table" role="status"
-          aria-hidden="true"></span>
-        Acceder
+          <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status"
+            aria-hidden="true"></span>
+          Acceder
         </a>
       </p>
     </form>
   </div>
-  ​
 
   <app-footer [cargando]="cargando"></app-footer>
+
 </ion-content>

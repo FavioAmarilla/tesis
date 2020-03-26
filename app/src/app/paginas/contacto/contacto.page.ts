@@ -34,6 +34,7 @@ export class PaginaContacto implements OnInit {
     });
 
     const marker = new mapboxgl.Marker().setLngLat([this.latitud, this.longitud]).addTo(mapa);
+    this.cargando = false;
   }
 
 

@@ -12,7 +12,8 @@ import { AlertaService } from 'src/app/servicios/alerta.service';
 export class LoginPage implements OnInit {
 
   public usuario: Usuario;
-  public cargando = false;
+  public cargando = true;
+  public cargandoBoton = false;
   public token;
 
 
@@ -33,16 +34,16 @@ export class LoginPage implements OnInit {
   ngOnInit() { }
 
   async iniciarSession() {
-    this.cargando = true;
-
+    this.cargandoBoton = true;
     const response: any = await this.servicioUsuario.iniciarSession(this.usuario);
 
-    this.cargando = false;
+    this.cargandoBoton = false;
     if (response.success) {
       this.router.navigate(['/inicio']);
     } else {
       this.servicioAlerta.dialogoError('Usuario y/o Contraseña no validos', '');
     }
+    
   }
 
 }

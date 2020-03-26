@@ -24,8 +24,8 @@ export class PaginaCarrito implements OnInit {
     private alertaCtrl: AlertController,
     private servicioAlerta: AlertaService
   ) {
-    this.obtenerCarrito();
     this.obtenerSucursalesEcommerce();
+    this.obtenerCarrito();
   }
 
   ngOnInit() { }
@@ -82,8 +82,8 @@ export class PaginaCarrito implements OnInit {
       this.listaSucursales = response.data;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
+      this.cargando = false;
     }
-    this.cargando = false;
   }
 
 

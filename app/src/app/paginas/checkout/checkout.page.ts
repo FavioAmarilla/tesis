@@ -68,12 +68,14 @@ export class CheckoutPage implements OnInit {
   }
   datosEnvioSelect(value, select) {
     if (select === 'pais') {
+      this.cargando = true;
       this.mostrarCiudades = false
 
       this.datosEnvio.pais = value;
       this.obtenerCiudades(value);
     }
     if (select === 'ciudad') {
+      this.cargando = true;
       this.mostrarBarrios = false
 
       this.datosEnvio.ciudad = value;
@@ -89,8 +91,11 @@ export class CheckoutPage implements OnInit {
     if (response.status) {
       this.listaPaises = response.data;
     } else {
+      this.cargando = false;
       this.servicioAlerta.dialogoError(response.message, '');
     }
+
+    this.cargando = false;
   }
 
   async obtenerCiudades(id_pais) {
@@ -105,8 +110,11 @@ export class CheckoutPage implements OnInit {
       this.listaCiudades = response.data;
       this.mostrarCiudades = true
     } else {
+      this.cargando = false;
       this.servicioAlerta.dialogoError(response.message, '');
     }
+
+    this.cargando = false;
   }
 
   async obtenerBarrios(id_ciudad) {
@@ -119,8 +127,11 @@ export class CheckoutPage implements OnInit {
       this.listaBarrios = response.data;
       this.mostrarBarrios = true;
     } else {
+      this.cargando = false;
       this.servicioAlerta.dialogoError(response.message, '');
     }
+
+    this.cargando = false;
   }
 
 }

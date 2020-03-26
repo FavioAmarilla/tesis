@@ -1,4 +1,11 @@
-<app-header></app-header>
+<app-header [cargando]="cargando"></app-header>
+
+<div *ngIf="cargando" id="overlay">
+	<div class="text-center">
+		<p>Cargando...</p>
+		<img src="assets/images/cargando.gif">
+	</div>
+</div>
 
 <ion-content>
 	<section class="ftco-section" style="padding-top: 40px;">

@@ -1,5 +1,5 @@
 import { UsuarioService } from '../../servicios/usuario.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
+  @Input() cargando;
   public usuario: any = null;
 
   constructor(
@@ -19,11 +20,11 @@ export class HeaderComponent implements OnInit {
 
   async ngOnInit() {
     this.servicioUsuario.emitter
-    .subscribe(
-      response => {
-        this.usuario = response;
-      }
-    );
+      .subscribe(
+        response => {
+          this.usuario = response;
+        }
+      );
   }
 
   redireccionar(url) {

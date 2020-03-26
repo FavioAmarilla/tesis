@@ -1,11 +1,6 @@
-<app-header></app-header>
+<app-header [cargando]="cargando"></app-header>
 
 <ion-content>
-  <div *ngIf="cargandoSlide" class="row justify-content-center">
-    <span class="spinner-border spinner-border-lg spinner-table mt-4 text-primary" role="status"
-      aria-hidden="true"></span>
-  </div>
-
   <ion-slides *ngIf="slides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions">
     <ion-slide class="slider-item" style="background-image: url(assets/images/banner-super-home.jpg);">
       <div class="overlay"></div>
@@ -34,7 +29,6 @@
   </ion-slides>
 
 
-
   <section class="ftco-section">
     <div class="container">
       <div class="row justify-content-center mb-3 pb-3">
@@ -45,11 +39,6 @@
       </div>
     </div>
     <div class="container">
-      <div *ngIf="cargandoProducto" class="row justify-content-center">
-        <span class="spinner-border spinner-border-lg spinner-table mt-4  text-primary" role="status"
-          aria-hidden="true"></span>
-      </div>
-
       <div class="row">
         <div class="col-sm-12 col-md-6 col-lg-3" *ngFor="let producto of productos">
           <div class="product">
