@@ -52,3 +52,4 @@ Route::resource('pais', 'PaisController');
 Route::resource('ciudad', 'CiudadController');
 Route::resource('barrio', 'BarrioController');
 Route::resource('sucursal', 'SucursalController');
+Route::resource('cuponDescuento', 'CuponDescuentoController');
