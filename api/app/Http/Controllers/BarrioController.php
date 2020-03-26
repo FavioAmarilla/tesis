@@ -31,6 +31,11 @@ class BarrioController extends BaseController
             $query->where('nombre', 'LIKE', '%'.$nombre.'%');
         }
 
+        $activo = $request->query('activo');
+        if ($activo) {
+            $query->where('activo', '=', $activo);
+        }
+
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
         
