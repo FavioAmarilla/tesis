@@ -13,7 +13,7 @@ import { AgmCoreModule } from '@agm/core';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ServicioUsuario } from './servicios/usuario.service';
+import { UsuarioService } from './servicios/usuario.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,7 +37,7 @@ import { ServicioUsuario } from './servicios/usuario.service';
     SplashScreen,
     InAppBrowser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    ServicioUsuario
+    UsuarioService
   ],
   bootstrap: [AppComponent]
 })

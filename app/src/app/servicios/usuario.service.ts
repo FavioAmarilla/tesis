@@ -11,7 +11,7 @@ const API = environment.api;
 @Injectable({
   providedIn: 'root'
 })
-export class ServicioUsuario {
+export class UsuarioService {
 
   token: string = null;
   private user: Usuario = null;

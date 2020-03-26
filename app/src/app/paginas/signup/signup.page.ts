@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../interfaces/interfaces';
-import { ServicioUsuario } from '../../servicios/usuario.service';
-import { UiService } from '../../servicios/ui.service';
+import { UsuarioService } from '../../servicios/usuario.service';
+import { AlertaService } from 'src/app/servicios/alerta.service';
 
 @Component({
   selector: 'app-signup',
@@ -20,8 +20,8 @@ export class SignupPage implements OnInit {
   };
 
   constructor(
-    private servicioUsuario: ServicioUsuario,
-    private uiService: UiService
+    private servicioUsuario: UsuarioService,
+    private servicioAlerta: AlertaService
   ) { }
 
   ngOnInit() {
@@ -34,12 +34,12 @@ export class SignupPage implements OnInit {
   async registro() {
     this.cargando = true;
     const response: any = await this.servicioUsuario.registro(this.usuario);
-    
+
     this.cargando = false;
     if (response.status) {
-      this.uiService.alerta(response.message);
+      this.servicioAlerta.dialogoExito(response.message, '');
     } else {
-      this.uiService.alerta(response.message);
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 

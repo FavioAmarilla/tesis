@@ -95,10 +95,4 @@ export class ServicioAlertas {
     });
   }
 
-  toastrExito(titulo, mensaje) {
-    this.toastr.success(mensaje, titulo, {
-      positionClass: 'toast-top-right',
-      tapToDismiss: true
-    });
-  }
 }

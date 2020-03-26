@@ -5,6 +5,7 @@ import { CiudadService } from 'src/app/servicios/ciudad.service';
 import { BarrioService } from 'src/app/servicios/barrio.service';
 import { ModalController } from '@ionic/angular';
 import { UbicacionPage } from '../modals/ubicacion/ubicacion.page';
+import { AlertaService } from 'src/app/servicios/alerta.service';
 
 @Component({
   selector: 'app-checkout',
@@ -29,7 +30,9 @@ export class CheckoutPage implements OnInit {
     private servicioPais: PaisService,
     private servicioCiudad: CiudadService,
     private servicioBarrio: BarrioService,
+    private servicioAlerta: AlertaService,
     private modalCtrl: ModalController
+
   ) {
     this.inicializarDatosEnvio();
     this.obtenerPaises();
@@ -86,7 +89,7 @@ export class CheckoutPage implements OnInit {
     if (response.status) {
       this.listaPaises = response.data;
     } else {
-
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
@@ -102,7 +105,7 @@ export class CheckoutPage implements OnInit {
       this.listaCiudades = response.data;
       this.mostrarCiudades = true
     } else {
-
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
@@ -116,7 +119,7 @@ export class CheckoutPage implements OnInit {
       this.listaBarrios = response.data;
       this.mostrarBarrios = true;
     } else {
-
+      this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 

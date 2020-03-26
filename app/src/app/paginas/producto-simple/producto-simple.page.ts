@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ServicioProducto } from '../../servicios/producto.service';
+import { ProductoService } from '../../servicios/producto.service';
 import { Producto } from '../../interfaces/interfaces';
-import { ServicioCarrito } from '../../servicios/carrito.service';
-import { UiService } from '../../servicios/ui.service';
-import { ServicioGeneral } from 'src/app/servicios/general.service';
+import { CarritoService } from '../../servicios/carrito.service';
+import { GeneralService } from 'src/app/servicios/general.service';
+import { AlertaService } from 'src/app/servicios/alerta.service';
 
 @Component({
   selector: 'app-producto-simple',
@@ -24,10 +24,10 @@ export class PaginaProductoSimple implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private servicioProducto: ServicioProducto,
-    private servicioCarrito: ServicioCarrito,
-    private servicioGeneral: ServicioGeneral,
-    private uiService: UiService
+    private servicioProducto: ProductoService,
+    private servicioCarrito: CarritoService,
+    private servicioGeneral: GeneralService,
+    private servicioAlerta: AlertaService
   ) {
     this.route.params.subscribe(
       params => {
@@ -49,6 +49,7 @@ export class PaginaProductoSimple implements OnInit {
       this.cantidad = this.minimo = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida, 'minimo');
       this.valor = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida);
     } else {
+      this.servicioAlerta.dialogoError(response.message, '');
       this.router.navigate(['/']);
     }
     this.cargando = false;
@@ -67,8 +68,8 @@ export class PaginaProductoSimple implements OnInit {
     this.producto.cantidad = this.cantidad;
     const add = await this.servicioCarrito.agregarAlCarrito(this.producto);
 
-    if (add) this.uiService.toast('El producto ha sido añadido al carrito');
-    else this.uiService.toast('No se pudo añadir el producto al carrito');
+    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido al carrito', '');
+    else this.servicioAlerta.dialogoError('No se pudo añadir el producto al carrito', '');
   }
 
 }

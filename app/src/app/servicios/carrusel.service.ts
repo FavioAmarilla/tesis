@@ -8,7 +8,7 @@ const API = environment.api;
 @Injectable({
   providedIn: 'root'
 })
-export class ServicioCarrusel {
+export class CarruselService {
 
   constructor(
     private http: HttpClient

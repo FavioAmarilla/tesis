@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ServicioProducto } from '../../servicios/producto.service';
+import { ProductoService } from '../../servicios/producto.service';
 import { Producto, Banner, LineaProducto } from '../../interfaces/interfaces';
 import { Router } from '@angular/router';
-import { ServicioCarrusel } from 'src/app/servicios/carrusel.service';
+import { CarruselService } from 'src/app/servicios/carrusel.service';
 import { environment } from '../../../environments/environment';
-import { ServicioLineasProducto } from 'src/app/servicios/linea-producto.service';
-import { ServicioCarrito } from 'src/app/servicios/carrito.service';
-import { UiService } from 'src/app/servicios/ui.service';
+import { LineasProductoService } from 'src/app/servicios/linea-producto.service';
+import { CarritoService } from 'src/app/servicios/carrito.service';
 import { IonSlides } from '@ionic/angular';
-import { ServicioGeneral } from 'src/app/servicios/general.service';
+import { GeneralService } from 'src/app/servicios/general.service';
+import { AlertaService } from 'src/app/servicios/alerta.service';
 
 @Component({
   selector: 'app-inicio',
@@ -35,11 +35,11 @@ export class PaginaInicio implements OnInit {
   };
 
   constructor(
-    private servicioCarrito: ServicioCarrito,
-    private uiService: UiService,
-    private servicioProducto: ServicioProducto,
-    private servicioCarrusel: ServicioCarrusel,
-    private servicioGeneral: ServicioGeneral,
+    private servicioCarrito: CarritoService,
+    private servicioProducto: ProductoService,
+    private servicioCarrusel: CarruselService,
+    private servicioGeneral: GeneralService,
+    private servicioAlerta: AlertaService,
     private router: Router
   ) {
     this.API = environment.api;
@@ -62,7 +62,7 @@ export class PaginaInicio implements OnInit {
     if (response.status) {
       this.productos = response.data;
     } else {
-
+      this.servicioAlerta.dialogoError(response.message, '');
     }
     this.cargandoProducto = false;
   }
@@ -74,7 +74,7 @@ export class PaginaInicio implements OnInit {
     if (response.status) {
       this.slides = response.data;
     } else {
-
+      this.servicioAlerta.dialogoError(response.message, '');
     }
     this.cargandoSlide = false;
   }
@@ -82,15 +82,17 @@ export class PaginaInicio implements OnInit {
   async agregarAlCarrito(producto: any) {
     producto.cantidad = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida, 'medida');
     const add = this.servicioCarrito.agregarAlCarrito(producto);
-    if (add) this.uiService.toast('El producto ha sido añadido al carrito');
-    else this.uiService.toast('No se pudo añadir el producto al carrito');
+
+    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido al carrito', '');
+    else this.servicioAlerta.dialogoError('No se pudo añadir el producto al carrito', '');
   }
 
   async agregarAFavoritos(producto: any) {
     producto.cantidad = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida, 'medida');
     const add = this.servicioCarrito.agregarAFavoritos(producto);
-    if (add) this.uiService.toast('El producto ha sido añadido a sus favoritos');
-    else this.uiService.toast('No se pudo añadir el producto a sus favoritos');
+
+    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido sus favoritos', '');
+    else this.servicioAlerta.dialogoError('No se pudo añadir el producto sus favoritos', '');
   }
 
 }

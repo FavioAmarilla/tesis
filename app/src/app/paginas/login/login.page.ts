@@ -1,10 +1,8 @@
-import { ServicioUsuario } from 'src/app/servicios/usuario.service';
+import { UsuarioService } from 'src/app/servicios/usuario.service';
 import { Usuario } from '../../interfaces/interfaces';
 import { Component, OnInit } from '@angular/core';
-import { UiService } from 'src/app/servicios/ui.service';
-import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AlertaService } from 'src/app/servicios/alerta.service';
 
 @Component({
   selector: 'app-login',
@@ -19,8 +17,8 @@ export class LoginPage implements OnInit {
 
 
   constructor(
-    private servicioUsuario: ServicioUsuario,
-    private uiService: UiService,
+    private servicioUsuario: UsuarioService,
+    private servicioAlerta: AlertaService,
     private router: Router
   ) {
     this.usuario = {
@@ -40,11 +38,10 @@ export class LoginPage implements OnInit {
     const response: any = await this.servicioUsuario.iniciarSession(this.usuario);
 
     this.cargando = false;
-    console.log(response);
     if (response.success) {
       this.router.navigate(['/inicio']);
     } else {
-      this.uiService.alerta(response.error);
+      this.servicioAlerta.dialogoError('Usuario y/o Contraseña no validos', '');
     }
   }
 

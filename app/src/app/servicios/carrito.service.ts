@@ -4,7 +4,7 @@ import { Storage } from '@ionic/storage';
 @Injectable({
   providedIn: 'root'
 })
-export class ServicioCarrito {
+export class CarritoService {
 
   constructor(
     private storage: Storage

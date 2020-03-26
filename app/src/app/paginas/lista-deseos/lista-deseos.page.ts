@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { ServicioCarrito } from '../../servicios/carrito.service';
-import { UiService } from '../../servicios/ui.service';
+import { CarritoService } from '../../servicios/carrito.service';
 import { Producto } from '../../interfaces/interfaces';
+import { AlertaService } from 'src/app/servicios/alerta.service';
 
 @Component({
   selector: 'app-lista-deseos',
@@ -15,9 +15,9 @@ export class PaginaListaDeseos implements OnInit {
   public productos: Producto;
 
   constructor(
-    private servicioCarrito: ServicioCarrito,
+    private servicioCarrito: CarritoService,
     private alertaCtrl: AlertController,
-    private uiService: UiService
+    private servicioAlerta: AlertaService
   ) { }
 
   ngOnInit() {
@@ -37,7 +37,7 @@ export class PaginaListaDeseos implements OnInit {
           text: 'Cancelar',
           role: 'cancel',
           handler: (blah) => {
-            this.uiService.toast('Producto no eliminado');
+            this.servicioAlerta.dialogoError('El producto no ha sido eliminado ', '');
           }
         }, {
           text: 'Aceptar',
@@ -55,10 +55,10 @@ export class PaginaListaDeseos implements OnInit {
   async eliminarDeFavoritos(producto) {
     const eliminado = await this.servicioCarrito.eliminarDeFavoritos(producto);
     if (eliminado) {
-      this.uiService.toast('El producto ha sido eliminado de tu lista de deseos');
+      this.servicioAlerta.dialogoExito('El producto ha sido eliminado de tu lista de deseos', '');
       this.obtenerFavoritos();
     } else {
-      this.uiService.toast('No se pudo eliminar el producto de tu lista de deseos');
+      this.servicioAlerta.dialogoError('No se pudo eliminar el producto de tu lista de deseos', '');
     }
   }
 

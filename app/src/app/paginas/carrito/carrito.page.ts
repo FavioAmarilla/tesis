@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ServicioCarrito } from 'src/app/servicios/carrito.service';
+import { CarritoService } from 'src/app/servicios/carrito.service';
 import { Producto, Sucursal } from 'src/app/interfaces/interfaces';
-import { UiService } from 'src/app/servicios/ui.service';
 import { AlertController } from '@ionic/angular';
 import { SucursalService } from 'src/app/servicios/sucursal.service';
 import { Router } from '@angular/router';
+import { AlertaService } from 'src/app/servicios/alerta.service';
 
 @Component({
   selector: 'app-carrito',
@@ -19,10 +19,10 @@ export class PaginaCarrito implements OnInit {
 
   constructor(
     private router: Router,
-    private servicioCarrito: ServicioCarrito,
+    private servicioCarrito: CarritoService,
     private servicioSucursal: SucursalService,
-    private uiService: UiService,
-    private alertaCtrl: AlertController
+    private alertaCtrl: AlertController,
+    private servicioAlerta: AlertaService
   ) {
     this.obtenerCarrito();
     this.obtenerSucursalesEcommerce();
@@ -37,7 +37,6 @@ export class PaginaCarrito implements OnInit {
   async obtenerCarrito() {
     this.listaCarrito = await this.servicioCarrito.obtenerCarrito();
     this.cargando = false;
-    console.log('listaCarrito:', this.listaCarrito);
   }
 
   async confirmarParaEliminarDelCarrito(product) {
@@ -48,7 +47,7 @@ export class PaginaCarrito implements OnInit {
           text: 'Cancelar',
           role: 'cancel',
           handler: (blah) => {
-            this.uiService.toast('Producto no eliminado');
+            this.servicioAlerta.dialogoError('Producto no eliminado', '');
           }
         }, {
           text: 'Aceptar',
@@ -65,10 +64,10 @@ export class PaginaCarrito implements OnInit {
   async eliminarDelCarrito(product) {
     const eliminado = await this.servicioCarrito.eliminarDelCarrito(product);
     if (eliminado) {
-      this.uiService.toast('El producto ha sido eliminado al carrito');
+      this.servicioAlerta.dialogoExito('El producto ha sido eliminado al carrito', '');
       this.obtenerCarrito();
     } else {
-      this.uiService.toast('El producto no ha sido eliminado del carrito');
+      this.servicioAlerta.dialogoError('El producto no ha sido eliminado del carrito', '');
     }
   }
 
@@ -79,12 +78,10 @@ export class PaginaCarrito implements OnInit {
     }
 
     const response: any = await this.servicioSucursal.obtenerSucursalesEcommerce(null, parametros);
-
-    console.log(response);
     if (response.status) {
       this.listaSucursales = response.data;
     } else {
-
+      this.servicioAlerta.dialogoError(response.message, '');
     }
     this.cargando = false;
   }

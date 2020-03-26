@@ -7,7 +7,7 @@ const API = environment.api;
 @Injectable({
   providedIn: 'root'
 })
-export class ServicioLineasProducto {
+export class LineasProductoService {
 
   constructor(
     private http: HttpClient
