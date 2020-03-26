@@ -23,4 +23,9 @@ class Pais extends Model
     public function sucursales(){
         return $this->hasMany('App\Sucursal');
     }
+
+    //obtener todos los parametros de un pais
+    public function parametros(){
+        return $this->hasMany('App\EcParametros');
+    }
 }

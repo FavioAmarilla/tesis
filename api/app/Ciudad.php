@@ -28,4 +28,9 @@ class Ciudad extends Model
     public function sucursales(){
         return $this->hasMany('App\Sucursal');
     }
+
+    //obtener todos los parametros de una ciudad
+    public function parametros(){
+        return $this->hasMany('App\EcParamCiudades');
+    }
 }

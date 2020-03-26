@@ -53,3 +53,5 @@ Route::resource('ciudad', 'CiudadController');
 Route::resource('barrio', 'BarrioController');
 Route::resource('sucursal', 'SucursalController');
 Route::resource('cuponDescuento', 'CuponDescuentoController');
+Route::resource('ecParametro', 'EcParametrosController');
+Route::resource('ecParamCiudad', 'EcParamCiudadesController');
