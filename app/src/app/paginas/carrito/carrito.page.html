@@ -59,7 +59,19 @@
                   </td>
 
                   <td class="total">{{producto.precio_venta * producto.cantidad | numberFormat}} Gs. </td>
+                </tr>
               </tbody>
+              <tfoot>
+                <tr>
+                  <td > <h5>Total</h5></td>
+                  <td ></td>
+                  <td ></td>
+                  <td ></td>
+                  <td ></td>
+
+                  <td class="total text-rigth"><h5>{{totales.subtotal | numberFormat}} Gs.</h5> </td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </div>
@@ -69,7 +81,7 @@
       <div class="row mt-4">
         <div class="col">
           <span class="float-right">
-            <p (click)="redireccionar('/checkout')">
+            <p (click)="checkout()">
               <a class="btn btn-primary py-3 px-4">
                 Pagar
               </a>

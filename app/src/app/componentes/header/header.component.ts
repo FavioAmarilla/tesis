@@ -14,12 +14,12 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private servicioUsuario: UsuarioService
+    private UsuarioService: UsuarioService
   ) {
   }
 
   async ngOnInit() {
-    this.servicioUsuario.emitter
+    this.UsuarioService.emitter
       .subscribe(
         response => {
           this.usuario = response;
@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
   }
 
   cerrarSession() {
-    this.servicioUsuario.cerrarSession();
+    this.UsuarioService.cerrarSession();
     this.usuario = null;
   }
 

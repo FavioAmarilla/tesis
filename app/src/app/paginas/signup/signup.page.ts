@@ -21,7 +21,7 @@ export class SignupPage implements OnInit {
   };
 
   constructor(
-    private servicioUsuario: UsuarioService,
+    private UsuarioService: UsuarioService,
     private servicioAlerta: AlertaService
   ) {
     this.cargando = false;
@@ -36,7 +36,7 @@ export class SignupPage implements OnInit {
 
   async registro() {
     this.cargandoBoton = true;
-    const response: any = await this.servicioUsuario.registro(this.usuario);
+    const response: any = await this.UsuarioService.registro(this.usuario);
 
     this.cargandoBoton = false;
     if (response.status) {
