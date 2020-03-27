@@ -37,7 +37,7 @@ class EcParametrosController extends BaseController
         }
 
         $paginar = $request->query('paginar');
-        $listar = (boolval($paginar)) ? 'paginate' : 'get';
+        $listar = (boolval($paginar)) ? 'paginate' : 'first';
 
         $data = $query->orderBy('identificador', 'asc')->$listar();
         
