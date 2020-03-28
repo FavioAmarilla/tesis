@@ -25,7 +25,7 @@ export class EcParametrosService {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });

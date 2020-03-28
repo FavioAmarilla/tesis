@@ -113,7 +113,7 @@ export class PaginaCarrito implements OnInit {
   async obtenerParametrosEcommerce() {
     const response: any = await this.servicioEcParametros.obtenerParametros();
 
-    if (response.status) {
+    if (response.success) {
       this.parametros = response.data;
     } else {
       this.cargando = false;
