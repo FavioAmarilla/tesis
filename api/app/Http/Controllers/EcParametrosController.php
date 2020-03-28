@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 use App\EcParametros;
 use App\EcParamCiudades;
+use App\EcParamSucursal;
 
 class EcParametrosController extends BaseController
 {
@@ -37,7 +38,7 @@ class EcParametrosController extends BaseController
         }
 
         $paginar = $request->query('paginar');
-        $listar = (boolval($paginar)) ? 'paginate' : 'get';
+        $listar = (boolval($paginar)) ? 'paginate' : 'first';
 
         $data = $query->orderBy('identificador', 'asc')->$listar();
         
@@ -66,6 +67,7 @@ class EcParametrosController extends BaseController
         $costo_delivery = $request->input("costo_delivery");
         $id_pais = $request->input("id_pais");
         $ciudades = json_decode($request->input("ciudades"), true);
+        $sucursales = json_decode($request->input("sucursales"), true);
 
         $validator = Validator::make($request->all(), [
             'monto_minimo'  => 'required',
@@ -86,15 +88,31 @@ class EcParametrosController extends BaseController
         if (count($ciudades) <= 0) {
             return $this->sendResponse(false, 'Debe agregar por lo menos una ciudad', null, 400);
         }
+        //validar que los datos de sucursale habilitadas llegaron
+        if (count($sucursales) <= 0) {
+            return $this->sendResponse(false, 'Debe agregar por lo menos una sucursal', null);
+        }
 
         if ($parametro->save()) {
+            
             for ($i=0; $i <= count($ciudades) - 1 ; $i++) {
                 $paramCiudades = new EcParamCiudades();
                 $paramCiudades->id_ec_parametro = $parametro->identificador;
                 $paramCiudades->id_ciudad = $ciudades[$i];
                 $paramCiudades->activo = 'S';
                 if (!$paramCiudades->save()) {
-                    return $this->sendResponse(true, 'Ciudades de parametro registrados', $paramCiudades, 201);
+                    return $this->sendResponse(true, 'Ciudades de parametro no registrados', $paramCiudades, 201);
+                    break;
+                }
+            }
+
+            for ($i=0; $i <= count($sucursales) - 1 ; $i++) {
+                $paramSucursal = new EcParamSucursal();
+                $paramSucursal->id_ec_parametro = $parametro->identificador;
+                $paramSucursal->id_sucursal = $sucursales[$i];
+                $paramSucursal->activo = 'S';
+                if (!$paramSucursal->save()) {
+                    return $this->sendResponse(true, 'Sucursales de parametro  no registrados', $paramSucursal, 400);
                     break;
                 }
             }
@@ -146,6 +164,7 @@ class EcParametrosController extends BaseController
         $costo_delivery = $request->input("costo_delivery");
         $id_pais = $request->input("id_pais");
         $ciudades = json_decode($request->input("ciudades"), true);
+        $sucursales = json_decode($request->input("sucursales"), true);
 
         $validator = Validator::make($request->all(), [
             'monto_minimo'  => 'required',
@@ -157,9 +176,13 @@ class EcParametrosController extends BaseController
             return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
-         //validar que los datos de ciudades habilitadas llegaron
-         if (count($ciudades) <= 0) {
+        // validar que los datos de ciudades habilitadas llegaron
+        if (count($ciudades) <= 0) {
             return $this->sendResponse(false, 'Debe agregar por lo menos una ciudad', null, 400);
+        }
+        //validar que los datos de sucursale habilitadas llegaron
+        if (count($sucursales) <= 0) {
+            return $this->sendResponse(false, 'Debe agregar por lo menos una sucursal', null);
         }
 
         $parametro = EcParametros::find($id);
@@ -182,8 +205,22 @@ class EcParametrosController extends BaseController
                 }
 
                 
+                $paramSucursal = EcParamSucursal::where('id_ec_parametro', $id)->delete();
+                for ($i=0; $i <= count($sucursales) - 1 ; $i++) {
+                    $paramSucursal = new EcParamSucursal();
+                    $paramSucursal->id_ec_parametro = $parametro->identificador;
+                    $paramSucursal->id_sucursal = $sucursales[$i];
+                    $paramSucursal->activo = 'S';
+                    if (!$paramSucursal->save()) {
+                        return $this->sendResponse(true, 'Sucursales de parametro  no registrados', $paramSucursal, 400);
+                        break;
+                    }
+                }
+                
                 return $this->sendResponse(true, 'Parametro actualizado', $parametro, 200);
             }
+            
+            return $this->sendResponse(false, 'Parametro no actualizado', null, 400);
             
             return $this->sendResponse(false, 'Parametro no actualizado', null, 400);
         }

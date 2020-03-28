@@ -8,12 +8,22 @@
         <div class="col-lg-4 cart-wrap">
           <div class="cart-total mb-3">
             <h3>Cupon de descuento</h3>
-            <p>Ingrese su código de cupón si tiene uno</p>
-            <form action="#" class="info">
-              <div class="form-group">
-                <input type="text" class="form-control text-left px-3" placeholder="Código promocional">
-              </div>
-            </form>
+            <div class="form-group">
+              <p>Ingrese su código de cupón si tiene uno</p>
+              <input type="text" class="form-control text-left px-3" placeholder="Código promocional"
+                [(ngModel)]="cuponDescuento.codigo" (focusout)="obtenerCupones()">
+            </div>
+            <div class="form-group" *ngIf="this.cuponDescuento.length > 0">
+              <p class="d-flex">
+                <span>{{ cuponDescuento.descripcion }}</span>
+                <span style="text-align: right;">{{ cuponDescuento.porcentaje | numberFormat }} %</span>
+              </p>
+            </div>
+            <div class="form-group" *ngIf="this.cuponDescuento.length == 0 && submitCuponDescuento">
+              <p class="text-danger">
+                No existe el cupon de descuento
+              </p>
+            </div>
           </div>
         </div>
 
@@ -79,20 +89,20 @@
             <h3>Totales de carrito</h3>
             <p class="d-flex">
               <span>Sub Total</span>
-              <span style="text-align: right;">100.000 Gs.</span>
+              <span style="text-align: right;">{{ totales.subtotal | numberFormat }} Gs.</span>
             </p>
             <p class="d-flex">
               <span>Delivery</span>
-              <span style="text-align: right;">10.000 Gs.</span>
+              <span style="text-align: right;">{{ totales.delivery | numberFormat }} Gs.</span>
             </p>
             <p class="d-flex">
               <span>Descuento</span>
-              <span style="text-align: right;">20.000 Gs.</span>
+              <span style="text-align: right;">{{ totales.descuento | numberFormat }} Gs.</span>
             </p>
             <hr style="border-top: 1px solid rgba(0,0,0,.05)">
             <p class="d-flex total-price">
               <span><b>Total</b></span>
-              <span style="text-align: right;"><b>90.000 Gs.</b></span>
+              <span style="text-align: right;"><b>{{ totales.total | numberFormat }} Gs.</b></span>
             </p>
           </div>
         </div>

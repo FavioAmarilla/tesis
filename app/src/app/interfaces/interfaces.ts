@@ -58,3 +58,27 @@ export interface Barrio {
     id_ciudad?: number
     nombre?: string
 }
+
+export interface CuponDescuento {
+    identificador?: number
+    descripcion?: number
+    codigo?: string
+    porc_descuento?: number
+    fecha_desde?: string
+    fecha_hasta?: string
+    usado?: string
+}
+
+export interface EcParametro {
+    identificador?: number
+    monto_minimo?: number
+    costo_delivery?: number
+    id_pais?: number
+}
+
+export interface EcParamCiudad {
+    identificador?: number
+    id_ec_parametro?: number
+    id_ciudad?: number
+    activo?: number
+}

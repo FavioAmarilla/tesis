@@ -18,7 +18,7 @@ export class LoginPage implements OnInit {
 
 
   constructor(
-    private servicioUsuario: UsuarioService,
+    private UsuarioService: UsuarioService,
     private servicioAlerta: AlertaService,
     private router: Router
   ) {
@@ -35,7 +35,7 @@ export class LoginPage implements OnInit {
 
   async iniciarSession() {
     this.cargandoBoton = true;
-    const response: any = await this.servicioUsuario.iniciarSession(this.usuario);
+    const response: any = await this.UsuarioService.iniciarSession(this.usuario);
 
     this.cargandoBoton = false;
     if (response.success) {

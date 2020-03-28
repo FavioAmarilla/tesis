@@ -33,4 +33,9 @@ class Sucursal extends Model
     public function ciudad(){
         return $this->belongsTo('App\Ciudad', 'id_ciudad');
     }
+
+     //obtener todos los parametros por sucursal
+     public function parametros(){
+        return $this->hasMany('App\EcParamSucursal');
+    }
 }

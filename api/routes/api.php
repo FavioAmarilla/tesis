@@ -55,3 +55,4 @@ Route::resource('sucursal', 'SucursalController');
 Route::resource('cuponDescuento', 'CuponDescuentoController');
 Route::resource('ecParametro', 'EcParametrosController');
 Route::resource('ecParamCiudad', 'EcParamCiudadesController');
+Route::resource('ecParamSucursal', 'EcParamSucursalController');

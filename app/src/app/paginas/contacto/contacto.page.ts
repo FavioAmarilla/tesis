@@ -30,7 +30,7 @@ export class PaginaContacto implements OnInit {
       container: 'mapa',
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [this.latitud, this.longitud],
-      zoom: 15
+      zoom: 14
     });
 
     const marker = new mapboxgl.Marker().setLngLat([this.latitud, this.longitud]).addTo(mapa);
