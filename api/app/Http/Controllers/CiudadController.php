@@ -74,6 +74,7 @@ class CiudadController extends BaseController
     {
         $id_pais = $request->input("id_pais");
         $nombre = $request->input("nombre");
+        $poligono = $request->input('poligono');
 
         $validator = Validator::make($request->all(), [
             'id_pais'  => 'required',
