@@ -43,7 +43,7 @@ export class PaginaProductoSimple implements OnInit {
     this.cargando = true;
     const response: any = await this.servicioProducto.obtenerProducto(id);
 
-    if (response.status) {
+    if (response.success) {
       this.cargando = false;
       this.producto = response.data;
       this.cantidad = this.minimo = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida, 'minimo');

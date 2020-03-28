@@ -33,7 +33,7 @@ class UserController extends BaseController {
 
         $data = $query->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -64,7 +64,7 @@ class UserController extends BaseController {
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $usuario = new User();
@@ -74,10 +74,10 @@ class UserController extends BaseController {
         $usuario->imagen = $imagen;
 
         if ($usuario->save()) {
-            return $this->sendResponse(true, 'Usuario registrado', $usuario);
-        }else{
-            return $this->sendResponse(false, 'Usuario no registrado', null);
+            return $this->sendResponse(true, 'Usuario registrado', $usuario, 201);
         }
+        
+        return $this->sendResponse(false, 'Usuario no registrado', null, 400);
     }
 
     /**
@@ -90,10 +90,10 @@ class UserController extends BaseController {
         $user = User::find($id);
 
         if (is_object($user)) {
-            return $this->sendResponse(true, 'Listado obtenido exitosamente', $user);
-        }else{
-            return $this->sendResponse(false,'El usuario no existe', null);
+            return $this->sendResponse(true, 'Listado obtenido exitosamente', $user, 200);
         }
+        
+        return $this->sendResponse(false,'El usuario no existe', null, 404);
     }
 
     /**
@@ -126,7 +126,7 @@ class UserController extends BaseController {
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $usuario = User::find($id);
@@ -137,13 +137,13 @@ class UserController extends BaseController {
             $usuario->imagen = $imagen;
     
             if ($usuario->save()) {
-                return $this->sendResponse(true, 'Usuario actualizado', $usuario);
-            }else{
-                return $this->sendResponse(false, 'Usuario no actualizado', null);
+                return $this->sendResponse(true, 'Usuario actualizado', $usuario, 200);
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Usuario', null);
+
+            return $this->sendResponse(false, 'Usuario no actualizado', null, 400);
         }
+        
+        return $this->sendResponse(false, 'No se encontro el Usuario', null, 404);
     }
 
     /**
@@ -160,14 +160,13 @@ class UserController extends BaseController {
             $user->estado = $estado;
             
             if ($user->update()) {
-                return $this->sendResponse(true, 'Usuario actualizado', $user);
-            }else{
-                return $this->sendResponse(false, 'Usuario no actualizado', $user);
+                return $this->sendResponse(true, 'Usuario actualizado', $user, 200);
             }
-
-        }else{
-            return $this->sendResponse(true, 'No se encontro el usuario', $usuario);
+            
+            return $this->sendResponse(false, 'Usuario no actualizado', $user, 400);
         }
+        
+        return $this->sendResponse(true, 'No se encontro el usuario', $usuario, 404);
     }
 
 
@@ -184,7 +183,7 @@ class UserController extends BaseController {
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }else{
             if (!empty($getToken)) {
                 $data = $jwtAuth->signIn($email, $clave_acceso, true);
@@ -202,10 +201,10 @@ class UserController extends BaseController {
         $user = $jwt->checkToken($token);
 
         if ($user) {
-            return $this->sendResponse(true, 'Login exitoso', $user);
-        }else{
-            return $this->sendResponse(false, 'El usuario no existe', $user);
+            return $this->sendResponse(true, 'Login exitoso', $user, 200);
         }
+        
+        return $this->sendResponse(false, 'El usuario no existe', $user, 404);
 
     }
 
@@ -217,18 +216,17 @@ class UserController extends BaseController {
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
-        }else{
-            if ($image) {
-                $image_name = time().$image->getClientOriginalName();
-                Storage::disk('usuarios')->put($image_name, \File::get($image));
-
-                return $this->sendResponse(true, 'Imagen subida', $image_name);
-            }else{
-                return $this->sendResponse(false, 'Error al subir imagen', null);
-            }    
+            return $this->sendError('Error de validacion', $validator->errors(), 400);
         }
-        return response()->json($data);
+        
+        if ($image) {
+            $image_name = time().$image->getClientOriginalName();
+            Storage::disk('usuarios')->put($image_name, \File::get($image));
+
+            return $this->sendResponse(true, 'Imagen subida', $image_name, 200);
+        }
+        
+        return $this->sendResponse(false, 'Error al subir imagen', null, 400);
     }
 
     public function getImage($filename){
@@ -236,8 +234,8 @@ class UserController extends BaseController {
         if ($isset) {
             $file = Storage::disk('usuarios')->get($filename);
             return new Response($file);
-        }else{
-            return $this->sendResponse(false, 'La imagen no existe', null);
         }
+        
+        return $this->sendResponse(false, 'La imagen no existe', null, 404);
     }
 }

@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 
 class BaseController extends Controller
 {
-    public function sendResponse($status, $message, $result){
+    public function sendResponse($success, $message, $result, $status){
         $response = collect([
-            'status'    => $status,
+            'success'    => $success,
             'message'   => $message,
         ]);
 
@@ -16,6 +16,6 @@ class BaseController extends Controller
 
         $combined = $response->union($result);
 
-        return response()->json($combined);
+        return response()->json($combined, $status);
     }
 }

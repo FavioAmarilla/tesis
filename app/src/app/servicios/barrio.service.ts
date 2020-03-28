@@ -25,7 +25,7 @@ export class BarrioService {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });

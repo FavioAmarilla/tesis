@@ -26,7 +26,7 @@ export class ServicioEmpresa {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -41,7 +41,7 @@ export class ServicioEmpresa {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -56,7 +56,7 @@ export class ServicioEmpresa {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });

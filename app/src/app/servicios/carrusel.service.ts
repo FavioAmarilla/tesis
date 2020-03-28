@@ -26,7 +26,7 @@ export class CarruselService {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });

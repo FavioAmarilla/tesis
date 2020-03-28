@@ -77,7 +77,7 @@ export class CarruselComponent implements OnInit {
 
     const response: any = await this.servicioCarrusel.obtenerCarrusel(null, parametros);
 
-    if (response.status) {
+    if (response.success) {
       this.listaSlide = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
@@ -95,7 +95,7 @@ export class CarruselComponent implements OnInit {
     this.errores = [];
     const response: any = await this.servicioCarrusel.obtenerCarrusel(id);
 
-    if (response.status) {
+    if (response.success) {
       this.slide = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
@@ -111,7 +111,7 @@ export class CarruselComponent implements OnInit {
     const response: any = await this.servicioCarrusel.registrar(this.slide);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -127,7 +127,7 @@ export class CarruselComponent implements OnInit {
     const response: any = await this.servicioCarrusel.actualizar(this.slide, this.slide.identificador);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -144,7 +144,7 @@ export class CarruselComponent implements OnInit {
     const response: any = await this.servicioCarrusel.eliminar(id);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');

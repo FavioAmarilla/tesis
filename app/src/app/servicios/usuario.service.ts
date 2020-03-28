@@ -33,7 +33,7 @@ export class UsuarioService {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -46,7 +46,7 @@ export class UsuarioService {
       this.http.post(`${API}user/signIn`, usuario, { headers })
         .subscribe(
           async (response: any) => {
-            if (response.status) {
+            if (response.success) {
               // se guarda el token en el Storage
               await this.guardarToken(response.data);
               this.emitter.emit(this.user);
@@ -91,7 +91,7 @@ export class UsuarioService {
       this.http.post(`${API}user/checkToken`, data, { headers })
         .subscribe(
           (response: any) => {
-            if (response.status) {
+            if (response.success) {
               this.user = response.data;
               resolve(true);
             } else {

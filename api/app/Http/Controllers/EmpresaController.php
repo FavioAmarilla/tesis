@@ -40,7 +40,7 @@ class EmpresaController extends BaseController
         
         $data = $query->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -74,7 +74,7 @@ class EmpresaController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $empresa = new Empresa();
@@ -84,10 +84,10 @@ class EmpresaController extends BaseController
         $empresa->imagen = $imagen;
 
         if ($empresa->save()) {
-            return $this->sendResponse(true, 'Empresa registrada', $empresa);
-        }else{
-            return $this->sendResponse(false, 'Empresa no registrada', null);
+            return $this->sendResponse(true, 'Empresa registrada', $empresa, 201);
         }
+        
+        return $this->sendResponse(false, 'Empresa no registrada', null, 400);
     }
 
     /**
@@ -101,10 +101,10 @@ class EmpresaController extends BaseController
         $empresa = Empresa::find($id);
 
         if (is_object($empresa)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $empresa);
-        }else{
-            return $this->sendResponse(false, 'No se encontro la Empresa', null);
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $empresa, 200);
         }
+        
+        return $this->sendResponse(false, 'No se encontro la Empresa', null, 404);
     }
 
     /**
@@ -152,13 +152,13 @@ class EmpresaController extends BaseController
             $empresa->imagen = $imagen;
     
             if ($empresa->save()) {
-                return $this->sendResponse(true, 'Empresa actualizada', $empresa);
-            }else{
-                return $this->sendResponse(false, 'Empresa no actualizada', null);
+                return $this->sendResponse(true, 'Empresa actualizada', $empresa, 200);
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro la Empresa', null);
+            
+            return $this->sendResponse(false, 'Empresa no actualizada', null, 400);
         }
+        
+        return $this->sendResponse(false, 'No se encontro la Empresa', null, 404);
     }
 
     /**
@@ -180,27 +180,27 @@ class EmpresaController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
-        }else{
-            if ($image) {
-                $image_name = time().$image->getClientOriginalName();
-                Storage::disk('empresa')->put($image_name, \File::get($image));
-
-                return $this->sendResponse(true, 'Imagen subida', $image_name);
-            }else{
-                return $this->sendResponse(false, 'Error al subir imagen', null);
-            }    
+            return $this->sendError('Error de validacion', $validator->errors(), 400);
         }
-        return response()->json($data);
+
+        if ($image) {
+            $image_name = time().$image->getClientOriginalName();
+            Storage::disk('empresa')->put($image_name, \File::get($image));
+
+            return $this->sendResponse(true, 'Imagen subida', $image_name, 200);
+        }
+        
+        return $this->sendResponse(false, 'Error al subir imagen', null, 400);
     }
 
     public function getImage($filename){
         $isset = Storage::disk('empresa')->exists($filename);
+
         if ($isset) {
             $file = Storage::disk('empresa')->get($filename);
             return new Response($file);
-        }else{
-            return $this->sendResponse(false, 'La imagen no existe', null);
         }
+
+        return $this->sendResponse(false, 'La imagen no existe', null, 404);
     }
 }

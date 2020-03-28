@@ -56,7 +56,7 @@ export class LineaProductoComponent implements OnInit {
 
     const response: any = await this.servicioLineaProducto.obtenerLinea(null, parametros);
 
-    if (response.status) {
+    if (response.success) {
       this.listaLineas = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
@@ -74,7 +74,7 @@ export class LineaProductoComponent implements OnInit {
     this.errores = [];
     const response: any = await this.servicioLineaProducto.obtenerLinea(id);
 
-    if (response.status) {
+    if (response.success) {
       this.lineaProducto = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
@@ -91,7 +91,7 @@ export class LineaProductoComponent implements OnInit {
     const response: any = await this.servicioLineaProducto.registrar(this.lineaProducto);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -107,7 +107,7 @@ export class LineaProductoComponent implements OnInit {
     const response: any = await this.servicioLineaProducto.actualizar(this.lineaProducto, this.lineaProducto.identificador);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');

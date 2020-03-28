@@ -77,7 +77,7 @@ export class ProductoComponent implements OnInit {
   async obtenerImpuestos() {
     const response: any = await this.servicioImpuesto.obtenerImpuesto();
 
-    if (response.status) {
+    if (response.success) {
       this.listaImpuestos = response.data;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
@@ -88,7 +88,7 @@ export class ProductoComponent implements OnInit {
   async obtenerLineasProducto() {
     const response: any = await this.servicioLineaProducto.obtenerLinea();
 
-    if (response.status) {
+    if (response.success) {
       this.listaLineas = response.data;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
@@ -110,7 +110,7 @@ export class ProductoComponent implements OnInit {
 
     const response: any = await this.servicioProducto.obtenerProducto(null, parametros);
 
-    if (response.status) {
+    if (response.success) {
       this.listaProductos = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
@@ -128,7 +128,7 @@ export class ProductoComponent implements OnInit {
     this.errors = [];
     const response: any = await this.servicioProducto.obtenerProducto(id);
 
-    if (response.status) {
+    if (response.success) {
       this.producto = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
@@ -145,7 +145,7 @@ export class ProductoComponent implements OnInit {
     const response: any = await this.servicioProducto.registrar(this.producto);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -161,7 +161,7 @@ export class ProductoComponent implements OnInit {
     const response: any = await this.servicioProducto.actualizar(this.producto, this.producto.identificador);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');

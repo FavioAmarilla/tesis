@@ -24,7 +24,7 @@ export class ServicioPuntoEmision {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -39,7 +39,7 @@ export class ServicioPuntoEmision {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -54,7 +54,7 @@ export class ServicioPuntoEmision {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });

@@ -25,7 +25,7 @@ export class LineasProductoService {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });

@@ -76,7 +76,7 @@ export class UsuariosComponent implements OnInit {
 
     const response: any = await this.servicioUsuario.obtenerUsuarios(null, parametros);
 
-    if (response.status) {
+    if (response.success) {
       this.listaUsuario = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
@@ -94,7 +94,7 @@ export class UsuariosComponent implements OnInit {
     const response: any = await this.servicioUsuario.obtenerUsuarios(id);
 
     console.log(response);
-    if (response.status) {
+    if (response.success) {
       this.usuario = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
@@ -109,7 +109,7 @@ export class UsuariosComponent implements OnInit {
     const response: any = await this.servicioUsuario.registrar(this.usuario);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -124,7 +124,7 @@ export class UsuariosComponent implements OnInit {
     const response: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.identificador);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -145,7 +145,7 @@ export class UsuariosComponent implements OnInit {
     const mensaje = 'No podras utilizar este usuario tras realizar esta acción';
     const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
 
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion(1);
     } else {

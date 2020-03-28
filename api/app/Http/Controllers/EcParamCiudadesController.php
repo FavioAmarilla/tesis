@@ -35,7 +35,7 @@ class EcParamCiudadesController extends BaseController
 
         $data = $query->orderBy('identificador', 'asc')->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**

@@ -78,7 +78,7 @@ export class PaginaCarrito implements OnInit {
     }
 
     const response: any = await this.servicioSucursal.obtenerSucursalesEcommerce(null, parametros);
-    if (response.status) {
+    if (response.success) {
       this.listaSucursales = response.data;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');

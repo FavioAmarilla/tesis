@@ -50,7 +50,7 @@ export class PuntosEmisionComponent implements OnInit {
   async obtenerSucursales() {
     const response: any = await this.servicioSucursal.obtenerSucursal();
 
-    if (response.status) {
+    if (response.success) {
       this.listaSucursal = response.data;
     } else {
       this.servicioAlerta.dialogoExito(response.message, '');
@@ -72,7 +72,7 @@ export class PuntosEmisionComponent implements OnInit {
 
     const response: any = await this.servicioPuntoEmision.obtenerPuntoEmision(null, parametros);
 
-    if (response.status) {
+    if (response.success) {
       this.listaPuntosEmision = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
@@ -90,7 +90,7 @@ export class PuntosEmisionComponent implements OnInit {
     this.errors = [];
     const response: any = await this.servicioPuntoEmision.obtenerPuntoEmision(id);
 
-    if (response.status) {
+    if (response.success) {
       this.puntoEmision = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
@@ -107,7 +107,7 @@ export class PuntosEmisionComponent implements OnInit {
     const response: any = await this.servicioPuntoEmision.registrar(this.puntoEmision);
     console.log(response);
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -123,7 +123,7 @@ export class PuntosEmisionComponent implements OnInit {
     const response: any = await this.servicioPuntoEmision.actualizar(this.puntoEmision, this.puntoEmision.identificador);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');

@@ -33,4 +33,9 @@ class Ciudad extends Model
     public function parametros(){
         return $this->hasMany('App\EcParamCiudades');
     }
+
+    // obtener el area de cobertura del delivery
+    public function coordenadas(){
+        return $this->hasOne('App\CiudadCoord', 'id_ciudad');
+    }
 }

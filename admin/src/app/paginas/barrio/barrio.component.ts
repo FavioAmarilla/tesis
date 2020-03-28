@@ -52,7 +52,7 @@ export class BarrioComponent implements OnInit {
 
   async obtenerCiudades() {
     const response: any = await this.servicioCiudad.obtenerCiudad();
-    if (response.status) {
+    if (response.success) {
       this.listaCiudad = response.data;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
@@ -73,7 +73,7 @@ export class BarrioComponent implements OnInit {
 
     const response: any = await this.servicioBarrio.obtenerBarrio(null, parametros);
 
-    if (response.status) {
+    if (response.success) {
       this.listaBarrio = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
@@ -91,7 +91,7 @@ export class BarrioComponent implements OnInit {
     this.errors = [];
     const response: any = await this.servicioBarrio.obtenerBarrio(id);
 
-    if (response.status) {
+    if (response.success) {
       this.barrio = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
@@ -108,7 +108,7 @@ export class BarrioComponent implements OnInit {
     const response: any = await this.servicioBarrio.registrar(this.barrio);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -124,7 +124,7 @@ export class BarrioComponent implements OnInit {
     const response: any = await this.servicioBarrio.actualizar(this.barrio, this.barrio.identificador);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');

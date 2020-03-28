@@ -55,7 +55,7 @@ class CuponDescuentoController extends BaseController
 
         $data = $query->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -91,7 +91,7 @@ class CuponDescuentoController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $cupon = new CuponDescuento();
@@ -102,10 +102,10 @@ class CuponDescuentoController extends BaseController
         $cupon->fecha_hasta = $fecha_hasta;
 
         if ($cupon->save()) {
-            return $this->sendResponse(true, 'Cupon de Descuento registrado', $cupon);
-        }else{
-            return $this->sendResponse(false, 'Cupon de Descuento no registrado', null);
+            return $this->sendResponse(true, 'Cupon de Descuento registrado', $cupon, 201);
         }
+        
+        return $this->sendResponse(false, 'Cupon de Descuento no registrado', null, 400);
     }
 
     /**
@@ -119,10 +119,10 @@ class CuponDescuentoController extends BaseController
         $pais = Pais::find($id);
 
         if (is_object($pais)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $pais);
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Cupon de Descuento', null);
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $pais, 200);
         }
+        
+        return $this->sendResponse(false, 'No se encontro el Cupon de Descuento', null, 404);
     }
 
     /**
@@ -156,7 +156,7 @@ class CuponDescuentoController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $cupon = new CuponDescuento();
@@ -166,14 +166,15 @@ class CuponDescuentoController extends BaseController
             $cupon->codigo = $codigo;
             $cupon->fecha_desde = $fecha_desde;
             $cupon->fecha_hasta = $fecha_hasta;
+
             if ($pais->save()) {
-                return $this->sendResponse(true, 'Cupon de Descuento actualizado', $cupon);
-            }else{
-                return $this->sendResponse(false, 'Cupon de Descuento no actualizado', null);
+                return $this->sendResponse(true, 'Cupon de Descuento actualizado', $cupon, 200);
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Cupon de Descuento', null);
+            
+            return $this->sendResponse(false, 'Cupon de Descuento no actualizado', null, 400);
         }
+        
+        return $this->sendResponse(false, 'No se encontro el Cupon de Descuento', null, 404);
     }
 
     /**

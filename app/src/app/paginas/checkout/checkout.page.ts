@@ -88,7 +88,7 @@ export class CheckoutPage implements OnInit {
 
   async obtenerPaises() {
     const response: any = await this.servicioPais.obtenerPaises();
-    if (response.status) {
+    if (response.success) {
       this.listaPaises = response.data;
     } else {
       this.cargando = false;
@@ -106,7 +106,7 @@ export class CheckoutPage implements OnInit {
 
     const response: any = await this.servicioCiudad.obtenerCiudades(null, parametros);
     console.log(response);
-    if (response.status) {
+    if (response.success) {
       this.listaCiudades = response.data;
       this.mostrarCiudades = true
     } else {
@@ -123,7 +123,7 @@ export class CheckoutPage implements OnInit {
     };
 
     const response: any = await this.servicioBarrio.obtenerBarrios(null, parametros);
-    if (response.status) {
+    if (response.success) {
       this.listaBarrios = response.data;
       this.mostrarBarrios = true;
     } else {

@@ -60,7 +60,7 @@ class ProductoController extends BaseController
 
         $data = $query->orderBy('descripcion', 'asc')->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -102,7 +102,7 @@ class ProductoController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $producto = new Producto();
@@ -116,10 +116,10 @@ class ProductoController extends BaseController
         $producto->imagen = $imagen;
 
         if ($producto->save()) {
-            return $this->sendResponse(true, 'Producto registrado', $producto);
-        }else{
-            return $this->sendResponse(false, 'Producto no registrado', null);
+            return $this->sendResponse(true, 'Producto registrado', $producto, 201);
         }
+        
+        return $this->sendResponse(false, 'Producto no registrado', null, 400);
     }
 
     /**
@@ -133,10 +133,10 @@ class ProductoController extends BaseController
         $producto = Producto::find($id);
 
         if (is_object($producto)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $producto);
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Producto', null);
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $producto, 200);
         }
+        
+        return $this->sendResponse(false, 'No se encontro el Producto', null, 404);
     }
 
     /**
@@ -180,7 +180,7 @@ class ProductoController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
         
         $producto = Producto::find($id);
@@ -195,13 +195,13 @@ class ProductoController extends BaseController
             $producto->imagen = $imagen;
     
             if ($producto->save()) {
-                return $this->sendResponse(true, 'Producto actualizado', $producto);
-            }else{
-                return $this->sendResponse(false, 'Producto no actualizado', null);
+                return $this->sendResponse(true, 'Producto actualizado', $producto, 200);
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Producto', null);
+            
+            return $this->sendResponse(false, 'Producto no actualizado', null, 400);
         }
+
+        return $this->sendResponse(false, 'No se encontro el Producto', null, 404);
     }
 
     /**
@@ -224,18 +224,17 @@ class ProductoController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
-        }else{
-            if ($image) {
-                $image_name = time().$image->getClientOriginalName();
-                Storage::disk('productos')->put($image_name, \File::get($image));
-
-                return $this->sendResponse(true, 'Imagen subida', $image_name);
-            }else{
-                return $this->sendResponse(false, 'Error al subir imagen', null);
-            }    
+            return $this->sendError('Error de validacion', $validator->errors(), 400);
         }
-        return response()->json($data);
+
+        if ($image) {
+            $image_name = time().$image->getClientOriginalName();
+            Storage::disk('productos')->put($image_name, \File::get($image));
+
+            return $this->sendResponse(true, 'Imagen subida', $image_name, 200);
+        }
+        
+        return $this->sendResponse(false, 'Error al subir imagen', null, 400);
     }
 
     public function getImage($filename){
@@ -243,9 +242,9 @@ class ProductoController extends BaseController
         if ($isset) {
             $file = Storage::disk('productos')->get($filename);
             return new Response($file);
-        }else{
-            return $this->sendResponse(false, 'La imagen no existe', null);
         }
+        
+        return $this->sendResponse(false, 'La imagen no existe', null, 404);
     }
     
 }

@@ -35,7 +35,7 @@ class SlideController extends BaseController
 
         $data = $query->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -67,7 +67,7 @@ class SlideController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $slide = new Slide();
@@ -76,10 +76,10 @@ class SlideController extends BaseController
         $slide->imagen = $imagen;
 
         if ($slide->save()) {
-            return $this->sendResponse(true, 'Slide registrado', $slide);
-        }else{
-            return $this->sendResponse(false, 'Slide no registrado', null);
+            return $this->sendResponse(true, 'Slide registrado', $slide, 201);
         }
+        
+        return $this->sendResponse(false, 'Slide no registrado', null, 400);
     }
 
     /**
@@ -93,10 +93,10 @@ class SlideController extends BaseController
         $slide = Slide::find($id);
 
         if (is_object($slide)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $slide);
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Banner', null);
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $slide, 200);
         }
+        
+        return $this->sendResponse(false, 'No se encontro el Banner', null, 404);
     }
 
     /**
@@ -130,7 +130,7 @@ class SlideController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
         
 
@@ -141,13 +141,13 @@ class SlideController extends BaseController
             $slide->imagen = $imagen;
     
             if ($slide->save()) {
-                return $this->sendResponse(true, 'Slide actualizado', $slide);
-            }else{
-                return $this->sendResponse(false, 'Slide no actualizado', null);
+                return $this->sendResponse(true, 'Slide actualizado', $slide, 200);
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Slide', null);
+            
+            return $this->sendResponse(false, 'Slide no actualizado', null, 400);
         }
+        
+        return $this->sendResponse(false, 'No se encontro el Slide', null, 404);
     }
 
     /**
@@ -169,17 +169,17 @@ class SlideController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
-        }else{
-            if ($image) {
-                $image_name = time().$image->getClientOriginalName();
-                Storage::disk('slides')->put($image_name, \File::get($image));
-
-                return $this->sendResponse(true, 'Imagen subida', $image_name);
-            }else{
-                return $this->sendResponse(false, 'Error al subir imagen', null);
-            }    
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
+
+        if ($image) {
+            $image_name = time().$image->getClientOriginalName();
+            Storage::disk('slides')->put($image_name, \File::get($image));
+
+            return $this->sendResponse(true, 'Imagen subida', $image_name, 200);
+        }
+        
+        return $this->sendResponse(false, 'Error al subir imagen', null, 400);
     }
 
     public function getImage($filename){
@@ -187,8 +187,8 @@ class SlideController extends BaseController
         if ($isset) {
             $file = Storage::disk('slides')->get($filename);
             return new Response($file);
-        }else{
-            return $this->sendResponse(false, 'La imagen no existe', null);
         }
+        
+        return $this->sendResponse(false, 'La imagen no existe', null, 404);
     }
 }

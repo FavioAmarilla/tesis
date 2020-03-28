@@ -25,7 +25,7 @@ export class PaisService {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });

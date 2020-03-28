@@ -25,7 +25,7 @@ export class ServicioCiudad {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -40,7 +40,7 @@ export class ServicioCiudad {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -55,7 +55,7 @@ export class ServicioCiudad {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });

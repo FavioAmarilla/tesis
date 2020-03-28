@@ -60,7 +60,7 @@ export class PaginaInicio implements OnInit {
   async obtenerProductos() {
     const response: any = await this.servicioProducto.obtenerProducto();
 
-    if (response.status) {
+    if (response.success) {
       this.productos = response.data;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
@@ -71,7 +71,7 @@ export class PaginaInicio implements OnInit {
   async obtenerCarrusel() {
     const response: any = await this.servicioCarrusel.obtenerCarrusel();
 
-    if (response.status) {
+    if (response.success) {
       this.slides = response.data;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');

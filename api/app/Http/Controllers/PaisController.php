@@ -35,7 +35,7 @@ class PaisController extends BaseController
 
         $data = $query->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -63,17 +63,17 @@ class PaisController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $pais = new Pais();
         $pais->nombre = $nombre;
 
         if ($pais->save()) {
-            return $this->sendResponse(true, 'Pais registrado', $pais);
-        }else{
-            return $this->sendResponse(false, 'Pais no registrado', null);
+            return $this->sendResponse(true, 'Pais registrado', $pais, 201);
         }
+        
+        return $this->sendResponse(false, 'Pais no registrado', null, 400);
     }
 
     /**
@@ -88,9 +88,9 @@ class PaisController extends BaseController
 
         if (is_object($pais)) {
             return $this->sendResponse(true, 'Se listaron exitosamente los registros', $pais);
-        }else{
-            return $this->sendResponse(false, 'No se encontro la Pais', null);
         }
+
+        return $this->sendResponse(false, 'No se encontro la Pais', null);
     }
 
     /**
@@ -120,20 +120,20 @@ class PaisController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $pais = Pais::find($id);
         if ($pais) {
             $pais->nombre = $nombre;
             if ($pais->save()) {
-                return $this->sendResponse(true, 'Pais actualizado', $pais);
-            }else{
-                return $this->sendResponse(false, 'Pais no actualizado', null);
+                return $this->sendResponse(true, 'Pais actualizado', $pais, 200);
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro la Pais', null);
+            
+            return $this->sendResponse(false, 'Pais no actualizado', null, 400);
         }
+        
+        return $this->sendResponse(false, 'No se encontro la Pais', null, 404);
     }
 
     /**

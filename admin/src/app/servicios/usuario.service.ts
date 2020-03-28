@@ -29,18 +29,19 @@ export class ServicioUsuario {
       this.http.post(`${API}/user/signIn`, usuario, {headers})
       .subscribe(
         async (response: any) => {
-          if (response.status) {
+          if (response.success) {
             // se guarda el token en el Storage
             await this.guardarToken(response.data);
             // se manda el usuario mediante el emmiter
             this.loginEmitter.emit(this.usuario);
             // se retorna true
             resolve({success: true});
-          } else {
-            this.token = null;
-            localStorage.removeItem('user-admin-token');
-            resolve({success: false, error: response});
           }
+        },
+        (error) => {
+          this.token = null;
+          localStorage.removeItem('user-admin-token');
+          resolve({ success: false, error: error.error });
         }
       );
     });
@@ -55,7 +56,7 @@ export class ServicioUsuario {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -73,7 +74,7 @@ export class ServicioUsuario {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -88,7 +89,7 @@ export class ServicioUsuario {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -107,7 +108,7 @@ export class ServicioUsuario {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -144,7 +145,7 @@ export class ServicioUsuario {
       this.http.post(`${API}/user/checkToken`, data, {headers})
       .subscribe(
         (response: any) => {
-          if (response.status) {
+          if (response.success) {
             this.usuario = response.data;
             resolve(true);
           } else {

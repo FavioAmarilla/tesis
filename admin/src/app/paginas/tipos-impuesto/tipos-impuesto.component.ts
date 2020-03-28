@@ -55,10 +55,10 @@ export class TiposImpuestoComponent implements OnInit {
 
     const response: any = await this.impuestoService.obtenerImpuesto(null, parametros);
 
-    if (response.status) {
+    if (response.success) {
       this.listaImpuesto = response.data;
       this.porPagina = response.data.per_page;
-      this.total = response.data.total;;
+      this.total = response.data.total;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }
@@ -73,7 +73,7 @@ export class TiposImpuestoComponent implements OnInit {
     this.errores = [];
     const response: any = await this.impuestoService.obtenerImpuesto(id);
 
-    if (response.status) {
+    if (response.success) {
       this.tipoImpuesto = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
@@ -89,7 +89,7 @@ export class TiposImpuestoComponent implements OnInit {
     const response: any = await this.impuestoService.registrar(this.tipoImpuesto);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -105,7 +105,7 @@ export class TiposImpuestoComponent implements OnInit {
     const response: any = await this.impuestoService.actualizar(this.tipoImpuesto, this.tipoImpuesto.identificador);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');

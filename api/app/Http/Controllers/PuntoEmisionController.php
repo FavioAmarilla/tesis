@@ -45,7 +45,7 @@ class PuntoEmisionController extends BaseController
 
         $data = $query->orderBy('vr_tipo', 'asc')->orderBy('codigo', 'asc')->orderBy('nombre', 'asc')->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -79,7 +79,7 @@ class PuntoEmisionController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $emision = new PuntoEmision();
@@ -89,10 +89,10 @@ class PuntoEmisionController extends BaseController
         $emision->vr_tipo = $vr_tipo;
 
         if ($emision->save()) {
-            return $this->sendResponse(true, 'Punto de Emision registrado', $emision);
-        }else{
-            return $this->sendResponse(false, 'Punto de Emision no registrado', null);
+            return $this->sendResponse(true, 'Punto de Emision registrado', $emision, 201);
         }
+        
+        return $this->sendResponse(false, 'Punto de Emision no registrado', null);
     }
 
     /**
@@ -106,10 +106,10 @@ class PuntoEmisionController extends BaseController
         $emision = PuntoEmision::find($id);
 
         if (is_object($emision)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $emision);
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Punto de Emision', null);
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $emision, 200);
         }
+        
+        return $this->sendResponse(false, 'No se encontro el Punto de Emision', null, 404);
     }
 
     /**
@@ -145,7 +145,7 @@ class PuntoEmisionController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $emision = PuntoEmision::find($id);
@@ -156,13 +156,13 @@ class PuntoEmisionController extends BaseController
             $emision->vr_tipo = $vr_tipo;
 
             if ($emision->save()) {
-                return $this->sendResponse(true, 'Punto de Emision actualizado', $emision);
-            }else{
-                return $this->sendResponse(false, 'Punto de Emision no actualizado', null);
+                return $this->sendResponse(true, 'Punto de Emision actualizado', $emision, 200);
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Punto de Emision', null);
+            
+            return $this->sendResponse(false, 'Punto de Emision no actualizado', null, 400);
         }
+        
+        return $this->sendResponse(false, 'No se encontro el Punto de Emision', null, 404);
     }
 
     /**

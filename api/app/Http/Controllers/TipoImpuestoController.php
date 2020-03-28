@@ -35,7 +35,7 @@ class TipoImpuestoController extends BaseController
 
         $data = $query->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -65,7 +65,7 @@ class TipoImpuestoController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $impuesto = new TipoImpuesto();
@@ -73,10 +73,10 @@ class TipoImpuestoController extends BaseController
         $impuesto->valor = $valor;
 
         if ($impuesto->save()) {
-            return $this->sendResponse(true, 'Tipo de Impuesto registrado', $impuesto);
-        }else{
-            return $this->sendResponse(false, 'Tipo de Impuesto no registrado', null);
+            return $this->sendResponse(true, 'Tipo de Impuesto registrado', $impuesto, 201);
         }
+        
+        return $this->sendResponse(false, 'Tipo de Impuesto no registrado', null, 400);
     }
 
     /**
@@ -90,10 +90,10 @@ class TipoImpuestoController extends BaseController
         $impuesto = TipoImpuesto::find($id);
 
         if (is_object($impuesto)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $impuesto);
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Tipo de Impuesto', null);
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $impuesto, 200);
         }
+        
+        return $this->sendResponse(false, 'No se encontro el Tipo de Impuesto', null, 404);
     }
 
     /**
@@ -125,7 +125,7 @@ class TipoImpuestoController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $impuesto = TipoImpuesto::find($id);
@@ -134,13 +134,13 @@ class TipoImpuestoController extends BaseController
             $impuesto->valor = $valor;
 
             if ($impuesto->save()) {
-                return $this->sendResponse(true, 'Tipo de Impuesto actualizado', $impuesto);
-            }else{
-                return $this->sendResponse(false, 'Tipo de Impuesto no actualizado', null);
+                return $this->sendResponse(true, 'Tipo de Impuesto actualizado', $impuesto, 200);
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro la Pais', null);
+            
+            return $this->sendResponse(false, 'Tipo de Impuesto no actualizado', null, 400);
         }
+        
+        return $this->sendResponse(false, 'No se encontro la Pais', null, 404);
     }
 
     /**

@@ -41,7 +41,7 @@ class BarrioController extends BaseController
         
         $data = $query->orderBy('id_ciudad', 'asc')->orderBy('nombre', 'asc')->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -71,7 +71,7 @@ class BarrioController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $barrio = new Barrio();
@@ -79,10 +79,10 @@ class BarrioController extends BaseController
         $barrio->nombre = $nombre;
 
         if ($barrio->save()) {
-            return $this->sendResponse(true, 'Barrio registrado', $barrio);
-        }else{
-            return $this->sendResponse(false, 'Barrio no registrado', null);
+            return $this->sendResponse(true, 'Barrio registrado', $barrio, 201);
         }
+        
+        return $this->sendResponse(false, 'Barrio no registrado', null, 400);
     }
 
     /**
@@ -96,10 +96,10 @@ class BarrioController extends BaseController
         $barrio = Barrio::find($id);
 
         if (is_object($barrio)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $barrio);
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Barrio', null);
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $barrio, 200);
         }
+        
+        return $this->sendResponse(false, 'No se encontro el Barrio', null, 404);
     }
 
     /**
@@ -138,14 +138,15 @@ class BarrioController extends BaseController
         if ($barrio) {
             $barrio->id_ciudad = $id_ciudad;
             $barrio->nombre = $nombre;
+            
             if ($barrio->save()) {
-                return $this->sendResponse(true, 'Barrio actualizado', $barrio);
-            }else{
-                return $this->sendResponse(false, 'Barrio no actualizado', null);
+                return $this->sendResponse(true, 'Barrio actualizado', $barrio, 200);
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Barrio', null);
+            
+            return $this->sendResponse(false, 'Barrio no actualizado', null, 400);
         }
+
+        return $this->sendResponse(false, 'No se encontro el Barrio', null, 404);
     }
 
     /**

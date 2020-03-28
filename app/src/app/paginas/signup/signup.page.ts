@@ -39,7 +39,7 @@ export class SignupPage implements OnInit {
     const response: any = await this.servicioUsuario.registro(this.usuario);
 
     this.cargandoBoton = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
     } else {
       this.servicioAlerta.dialogoError(response.message, '');

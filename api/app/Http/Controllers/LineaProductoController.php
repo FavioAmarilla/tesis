@@ -30,7 +30,7 @@ class LineaProductoController extends BaseController
 
         $data = $query->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -58,17 +58,17 @@ class LineaProductoController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(true, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(true, 'Error de validacion', $validator->errors(), 400);
         }
 
         $linea = new LineaProducto();
         $linea->descripcion = $descripcion;
 
         if ($linea->save()) {
-            return $this->sendResponse(true, 'Linea de Producto registrada', $linea);
-        }else{
-            return $this->sendResponse(false, 'Linea de Producto no registrada', null);
+            return $this->sendResponse(true, 'Linea de Producto registrada', $linea, 201);
         }
+        
+        return $this->sendResponse(false, 'Linea de Producto no registrada', null, 400);
     }
 
     /**
@@ -82,10 +82,10 @@ class LineaProductoController extends BaseController
         $empresa = LineaProducto::find($id);
 
         if (is_object($empresa)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $empresa);
-        }else{
-            return $this->sendResponse(false, 'No se encontro la Linea de Producto', null);
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $empresa, 200);
         }
+        
+        return $this->sendResponse(false, 'No se encontro la Linea de Producto', null, 404);
     }
 
     /**
@@ -115,7 +115,7 @@ class LineaProductoController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors());
+            return $this->sendError('Error de validacion', $validator->errors(), 400);
         }
 
         $linea = LineaProducto::find($id);
@@ -123,13 +123,13 @@ class LineaProductoController extends BaseController
             $linea->descripcion = $descripcion;
 
             if ($linea->save()) {
-                return $this->sendResponse(true, 'Linea de Producto actualizada', $linea);
-            }else{
-                return $this->sendResponse(false, 'Linea de Producto no actualizada', null);
+                return $this->sendResponse(true, 'Linea de Producto actualizada', $linea, 200);
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro la Linea de Producto', null);
+            
+            return $this->sendResponse(false, 'Linea de Producto no actualizada', null, 400);
         }
+        
+        return $this->sendResponse(false, 'No se encontro la Linea de Producto', null, 404);
     }
 
     /**

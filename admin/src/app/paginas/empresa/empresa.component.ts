@@ -76,7 +76,7 @@ export class EmpresaComponent implements OnInit {
 
     const response: any = await this.servicioEmpresa.obtenerEmpresa(null, parametros);
 
-    if (response.status) {
+    if (response.success) {
       this.listaEmpresas = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
@@ -93,7 +93,7 @@ export class EmpresaComponent implements OnInit {
     this.errores = [];
     const response = <any>await this.servicioEmpresa.obtenerEmpresa(id);
 
-    if (response.status) {
+    if (response.success) {
       this.empresa = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
@@ -110,7 +110,7 @@ export class EmpresaComponent implements OnInit {
     const response = <any>await this.servicioEmpresa.registrar(this.empresa);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -126,7 +126,7 @@ export class EmpresaComponent implements OnInit {
     const response = <any>await this.servicioEmpresa.actualizar(this.empresa, this.empresa.identificador);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');

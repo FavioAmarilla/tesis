@@ -64,7 +64,7 @@ class SucursalController extends BaseController
 
         $data = $query->orderBy('id_ciudad', 'asc')->orderBy('nombre', 'asc')->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -106,7 +106,7 @@ class SucursalController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $sucursal = new Sucursal();
@@ -120,10 +120,10 @@ class SucursalController extends BaseController
         $sucursal->ecommerce = $ecommerce;
 
         if ($sucursal->save()) {
-            return $this->sendResponse(true, 'Sucursal registrada', $sucursal);
-        }else{
-            return $this->sendResponse(false, 'Sucursal no registrada', null);
+            return $this->sendResponse(true, 'Sucursal registrada', $sucursal, 201);
         }
+        
+        return $this->sendResponse(false, 'Sucursal no registrada', null, 400);
     }
 
     /**
@@ -137,10 +137,10 @@ class SucursalController extends BaseController
         $sucursal = Sucursal::find($id);
 
         if (is_object($sucursal)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $sucursal);
-        }else{
-            return $this->sendResponse(false, 'No se encontro la Sucursal', null);
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $sucursal, 200);
         }
+        
+        return $this->sendResponse(false, 'No se encontro la Sucursal', null, 404);
     }
 
     /**
@@ -184,7 +184,7 @@ class SucursalController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $sucursal = Sucursal::find($id);
@@ -198,13 +198,13 @@ class SucursalController extends BaseController
             $sucursal->direccion = $direccion;
             $sucursal->ecommerce = $ecommerce;
             if ($sucursal->save()) {
-                return $this->sendResponse(true, 'Sucursal actualizada', $sucursal);
-            }else{
-                return $this->sendResponse(false, 'Sucursal no actualizada', null);
+                return $this->sendResponse(true, 'Sucursal actualizada', $sucursal, 200);
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro la Sucursal', null);
+            
+            return $this->sendResponse(false, 'Sucursal no actualizada', null, 400);
         }
+        
+        return $this->sendResponse(false, 'No se encontro la Sucursal', null, 404);
     }
 
     /**

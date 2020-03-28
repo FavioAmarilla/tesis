@@ -25,7 +25,7 @@ export class ServicioCarrusel {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -40,7 +40,7 @@ export class ServicioCarrusel {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -55,7 +55,7 @@ export class ServicioCarrusel {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });
@@ -70,7 +70,7 @@ export class ServicioCarrusel {
           resolve(response);
         },
         error => {
-          resolve(error);
+          resolve(error.error);
         }
       );
     });

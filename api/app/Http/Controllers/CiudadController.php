@@ -8,6 +8,11 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Ciudad;
+use App\CiudadCoord;
+
+use Grimzy\LaravelMysqlSpatial\Types\Point;
+use Grimzy\LaravelMysqlSpatial\Types\Polygon;
+use Grimzy\LaravelMysqlSpatial\Types\LineString;
 
 class CiudadController extends BaseController
 {
@@ -18,7 +23,7 @@ class CiudadController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Ciudad::with(['pais']);
+        $query = Ciudad::with(['pais', 'coordenadas']);
 
         $identificador = $request->query('identificador');
         if ($identificador) {
@@ -46,7 +51,7 @@ class CiudadController extends BaseController
 
         $data = $query->orderBy('id_pais', 'asc')->orderBy('nombre', 'asc')->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -76,7 +81,7 @@ class CiudadController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $ciudad = new Ciudad();
@@ -84,10 +89,25 @@ class CiudadController extends BaseController
         $ciudad->nombre = $nombre;
 
         if ($ciudad->save()) {
-            return $this->sendResponse(true, 'Ciudad registrada', $ciudad);
-        }else{
-            return $this->sendResponse(false, 'Ciudad no registrada', null);
+            if (count($poligono) > 0) {
+                $coordenadas = [];
+                $ciudadCoord = new CiudadCoord();
+                
+                foreach ($poligono as $value) {
+                    array_push($coordenadas, new Point($value[1], $value[0]));
+                }
+                $ciudadCoord->poligono = new Polygon([new LineString($coordenadas)]);
+                $ciudadCoord->id_ciudad = $id;
+
+                if ($ciudadCoord->save()) return $this->sendResponse(true, 'Ciudad registrada', $ciudad, 201);
+                
+                return $this->sendResponse(false, 'Ha ocurrido un problema', $ciudad, 400);
+            }
+
+            return $this->sendResponse(true, 'Ciudad registrada', null, 201);
         }
+        
+        return $this->sendResponse(false, 'Ciudad no registrada', null, 400);
     }
 
     /**
@@ -98,13 +118,13 @@ class CiudadController extends BaseController
      */
     public function show($id)
     {
-        $ciudad = Ciudad::find($id);
+        $ciudad = Ciudad::with(['coordenadas'])->find($id);
 
         if (is_object($ciudad)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $ciudad);
-        }else{
-            return $this->sendResponse(false, 'No se encontro la Ciudad', null);
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $ciudad, 200);
         }
+        
+        return $this->sendResponse(false, 'No se encontro la Ciudad', null, 404);
     }
 
     /**
@@ -129,6 +149,7 @@ class CiudadController extends BaseController
     {
         $id_pais = $request->input("id_pais");
         $nombre = $request->input("nombre");
+        $poligono = $request->input('poligono');
 
         $validator = Validator::make($request->all(), [
             'id_pais'  => 'required',
@@ -136,21 +157,41 @@ class CiudadController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
-        $ciudad = Barrio::find($id);
+        $ciudad = Ciudad::find($id);
         if ($ciudad) {
             $ciudad->id_pais = $id_pais;
             $ciudad->nombre = $nombre;
+
             if ($ciudad->save()) {
-                return $this->sendResponse(true, 'Ciudad actualizada', $ciudad);
-            }else{
-                return $this->sendResponse(false, 'Ciudad no actualizada', null);
+                if (count($poligono) > 0) {
+                    $coordenadas = [];
+                    $ciudadCoord = CiudadCoord::where('id_ciudad', '=', $id)->first();
+                    if (!$ciudadCoord) $ciudadCoord = new CiudadCoord();
+
+                    foreach ($poligono as $value) {
+                        array_push($coordenadas, new Point($value[1], $value[0]));
+                    }
+                    $ciudadCoord->poligono = new Polygon([new LineString($coordenadas)]);
+                    $ciudadCoord->id_ciudad = $id;
+
+                    if ($ciudadCoord->save()) return $this->sendResponse(true, 'Ciudad actualizada', $ciudad, 200);
+                    
+                    return $this->sendResponse(false, 'Ha ocurrido un problema', $ciudad, 400);
+                } else {
+                    $ciudadCoord = CiudadCoord::where('id_ciudad', '=', $id)->first();
+                    if ($ciudadCoord) $ciudadCoord->delete();
+
+                    return $this->sendResponse(false, 'Ciudad no actualizada', null, 200);
+                }
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro la Ciudad', null);
+            
+            return $this->sendResponse(false, 'Ciudad no actualizada', null, 200);
         }
+        
+        return $this->sendResponse(false, 'No se encontro la Ciudad', null, 404);
     }
 
     /**

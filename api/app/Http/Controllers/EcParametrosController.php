@@ -41,7 +41,7 @@ class EcParametrosController extends BaseController
 
         $data = $query->orderBy('identificador', 'asc')->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
@@ -74,7 +74,7 @@ class EcParametrosController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         $parametro = new EcParametros();
@@ -84,7 +84,7 @@ class EcParametrosController extends BaseController
 
         //validar que los datos de ciudades habilitadas llegaron
         if (count($ciudades) <= 0) {
-            return $this->sendResponse(false, 'Debe agregar por lo menos una ciudad', null);
+            return $this->sendResponse(false, 'Debe agregar por lo menos una ciudad', null, 400);
         }
 
         if ($parametro->save()) {
@@ -94,15 +94,15 @@ class EcParametrosController extends BaseController
                 $paramCiudades->id_ciudad = $ciudades[$i];
                 $paramCiudades->activo = 'S';
                 if (!$paramCiudades->save()) {
-                    return $this->sendResponse(true, 'Ciudades de parametro registrados', $paramCiudades);
+                    return $this->sendResponse(true, 'Ciudades de parametro registrados', $paramCiudades, 201);
                     break;
                 }
             }
 
-            return $this->sendResponse(true, 'Parametros registrados', $parametro);
-        }else{
-            return $this->sendResponse(false, 'Parametros no registrados', null);
+            return $this->sendResponse(true, 'Parametros registrados', $parametro, 201);
         }
+        
+        return $this->sendResponse(false, 'Parametros no registrados', null, 400);
     }
 
     /**
@@ -116,10 +116,10 @@ class EcParametrosController extends BaseController
         $parametro = EcParametros::find($id);
 
         if (is_object($parametro)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $parametro);
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Parametro', null);
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $parametro, 200);
         }
+        
+        return $this->sendResponse(false, 'No se encontro el Parametro', null, 404);
     }
 
     /**
@@ -154,12 +154,12 @@ class EcParametrosController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendResponse(false, 'Error de validacion', $validator->errors());
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
          //validar que los datos de ciudades habilitadas llegaron
          if (count($ciudades) <= 0) {
-            return $this->sendResponse(false, 'Debe agregar por lo menos una ciudad', null);
+            return $this->sendResponse(false, 'Debe agregar por lo menos una ciudad', null, 400);
         }
 
         $parametro = EcParametros::find($id);
@@ -176,19 +176,19 @@ class EcParametrosController extends BaseController
                     $paramCiudades->id_ciudad = $ciudades[$i];
                     $paramCiudades->activo = 'S';
                     if (!$paramCiudades->save()) {
-                        return $this->sendResponse(true, 'Ciudades de parametro no actualizados', $paramCiudades);
+                        return $this->sendResponse(true, 'Ciudades de parametro no actualizados', $paramCiudades, 400);
                         break;
                     }
                 }
 
                 
-                return $this->sendResponse(true, 'Parametro actualizado', $parametro);
-            }else{
-                return $this->sendResponse(false, 'Parametro no actualizado', null);
+                return $this->sendResponse(true, 'Parametro actualizado', $parametro, 200);
             }
-        }else{
-            return $this->sendResponse(false, 'No se encontro el Parametro', null);
+            
+            return $this->sendResponse(false, 'Parametro no actualizado', null, 400);
         }
+        
+        return $this->sendResponse(false, 'No se encontro el Parametro', null, 404);
     }
 
     /**

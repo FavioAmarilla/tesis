@@ -55,7 +55,7 @@ export class PaisComponent implements OnInit {
     };
 
     const response: any = await this.servicioPais.obtenerPais(null, parametros);
-    if (response.status) {
+    if (response.success) {
       this.listaPaises = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
@@ -73,7 +73,7 @@ export class PaisComponent implements OnInit {
     this.errors = [];
     const response: any = await this.servicioPais.obtenerPais(id);
 
-    if (response.status) {
+    if (response.success) {
       this.pais = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
@@ -90,7 +90,7 @@ export class PaisComponent implements OnInit {
     const response: any = await this.servicioPais.registrar(this.pais);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -106,7 +106,7 @@ export class PaisComponent implements OnInit {
     const response: any = await this.servicioPais.actualizar(this.pais, this.pais.identificador);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');

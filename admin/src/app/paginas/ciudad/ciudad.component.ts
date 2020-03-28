@@ -41,8 +41,8 @@ export class CiudadComponent implements OnInit {
     this.form = flag
     this.accion = accion;
 
-    if (flag && accion == 'INS') {
-      this.ciudad = new Ciudad(null, null, null);
+    if (flag && accion === 'INS') {
+      this.ciudad = new Ciudad(null, null, null, []);
     }
     if (limpiarError) {
       this.errores = [];
@@ -52,7 +52,7 @@ export class CiudadComponent implements OnInit {
   async obtenerPaises() {
     const response = <any>await this.servicioPais.obtenerPais();
 
-    if (response.status) {
+    if (response.success) {
       this.listaPaises = response.data
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
@@ -74,7 +74,7 @@ export class CiudadComponent implements OnInit {
 
     const response: any = await this.servicioCiudad.obtenerCiudad(null, parametros);
 
-    if (response.status) {
+    if (response.success) {
       this.listaCiudades = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
@@ -86,13 +86,13 @@ export class CiudadComponent implements OnInit {
   }
 
   async obtenerCiudad(id) {
-    this.accion = "LST";
+    this.accion = 'LST';
     this.cargando = true;
 
     this.errores = [];
     const response = <any>await this.servicioCiudad.obtenerCiudad(id);
 
-    if (response.status) {
+    if (response.success) {
       this.ciudad = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
@@ -109,7 +109,7 @@ export class CiudadComponent implements OnInit {
     const response = <any>await this.servicioCiudad.registrar(this.ciudad);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -125,7 +125,7 @@ export class CiudadComponent implements OnInit {
     const response: any = await this.servicioCiudad.actualizar(this.ciudad, this.ciudad.identificador);
 
     this.cargando = false;
-    if (response.status) {
+    if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -134,5 +134,7 @@ export class CiudadComponent implements OnInit {
     }
   }
 
-
+  obtenerCoordenadas(coords) {
+    this.ciudad.poligono = coords;
+  }
 }
