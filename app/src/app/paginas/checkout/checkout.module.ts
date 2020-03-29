@@ -8,7 +8,7 @@ import { AgmCoreModule } from '@agm/core';
 
 import { CheckoutPage } from './checkout.page';
 import { ModuloComponentes } from '../../componentes/componentes.module';
-import { UbicacionPage } from '../modals/ubicacion/ubicacion.page';
+import { UbicacionPage } from '../../componentes/ubicacion/ubicacion.page';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 
 const routes: Routes = [

@@ -1,0 +1,17 @@
+<h5 class="mb-4">Filtros de Busqueda</h5>
+
+<form>
+  <div class="form-group">
+    <label>Rango de Precios</label>
+    <input type="number" class="form-control" placeholder="Precio Minimo"> <br>
+    <input type="number" class="form-control" placeholder="Precio Maximo"> <br>
+  </div>
+
+  <div class="form-group">
+    <label>Linea de Producto</label>
+    <select class="form-control">
+      <option value="0">--Seleccione--</option>
+      <option *ngFor="let linea of listaLineas" value="{{ linea.identificador }}">{{ linea.descripcion }}</option>
+    </select>
+  </div>
+</form>

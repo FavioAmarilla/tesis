@@ -74,11 +74,6 @@ hr {
   overflow: visible;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-}
-
 p {
   margin-top: 0;
   margin-bottom: 1rem;
@@ -319,38 +314,6 @@ template {
 
 [hidden] {
   display: none !important;
-}
-
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-  margin-bottom: 0.5rem;
-  font-family: inherit;
-  font-weight: 500;
-  line-height: 1.2;
-  color: inherit;
-}
-
-h1, .h1 {
-  font-size: 2.5rem;
-}
-
-h2, .h2 {
-  font-size: 2rem;
-}
-
-h3, .h3 {
-  font-size: 1.75rem;
-}
-
-h4, .h4 {
-  font-size: 1.5rem;
-}
-
-h5, .h5 {
-  font-size: 1.25rem;
-}
-
-h6, .h6 {
-  font-size: 1rem;
 }
 
 .lead {
@@ -9744,13 +9707,6 @@ a:hover, a:focus {
   color: #079A4A;
 }
 
-h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
-  line-height: 1.5;
-  font-weight: 400;
-  color: #000000;
-  font-family: "Poppins", Arial, sans-serif;
-}
-
 .text-primary {
   color: #079A4A !important;
 }
@@ -10566,12 +10522,6 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
   }
 }
 
-.wrap-about .heading-section-bold h2 {
-  font-size: 40px;
-  font-weight: 600;
-  color: #000000;
-}
-
 .deal-of-the-day h3 {
   font-size: 30px;
   font-family: "Lora", Georgia, serif;
@@ -10659,6 +10609,7 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
   -ms-transition: all 0.3s ease;
   transition: all 0.3s ease;
   border: 1px solid #f0f0f0;
+  border-radius: 2px;
 }
 
 @media (max-width: 991.98px) {
@@ -11511,14 +11462,6 @@ textarea.form-control {
   color: #079A4A;
 }
 
-.heading-section h2 {
-  position: relative;
-  font-size: 40px;
-  font-weight: 600;
-  color: #000000;
-  font-family: "Poppins", Arial, sans-serif;
-}
-
 @media (max-width: 767.98px) {
   .heading-section h2 {
     font-size: 28px;
@@ -11527,11 +11470,6 @@ textarea.form-control {
 
 .heading-section.heading-section-white .subheading {
   color: rgba(255, 255, 255, 0.9);
-}
-
-.heading-section.heading-section-white h2 {
-  font-size: 30px;
-  color: #fff;
 }
 
 .heading-section.heading-section-white h2:after, .heading-section.heading-section-white h2:before {
@@ -12534,4 +12472,32 @@ textarea.form-control {
 #overlay .spinner-border {
   width: 100px !important;
   height: 100px !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .shop-filters {
+    display: none;
+  }
+}
+
+.filter-toggle {
+  display: none;
+  position: relative;
+  z-index: 5;
+  width: 6%;
+  top: 186px;
+  left: 0;
+  font-size: 1.4em;
+  color: white;
+  background: #079a4a;
+  border-radius: 0 5px 5px 0;
+  padding: 5px 13px;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+  .filter-toggle {
+    display: block;
+    width: 12.5%;
+  }
 }

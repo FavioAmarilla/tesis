@@ -4,7 +4,7 @@ import { PaisService } from 'src/app/servicios/pais.service';
 import { CiudadService } from 'src/app/servicios/ciudad.service';
 import { BarrioService } from 'src/app/servicios/barrio.service';
 import { ModalController } from '@ionic/angular';
-import { UbicacionPage } from '../modals/ubicacion/ubicacion.page';
+import { UbicacionPage } from '../../componentes/ubicacion/ubicacion.page';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 import { CarritoService } from 'src/app/servicios/carrito.service';
 import { CuponDescuentoService } from 'src/app/servicios/cupon-descuento.service';

@@ -1,6 +1,16 @@
 .filtros {
-    padding-bottom: 36px;
-    margin-bottom: 15px;
-    background-color: white;
-    border-bottom: 2px solid #079A4A;
+  padding-bottom: 36px;
+  margin-bottom: 15px;
+  background-color: white;
+  border-bottom: 2px solid #079a4a;
+}
+
+.seccion-marcas {
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.seccion-marcas .heading-section h2 {
+    margin-top: 0px;
+    margin-bottom: 0px;
 }

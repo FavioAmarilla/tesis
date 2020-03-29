@@ -4,20 +4,29 @@ import { IonicModule } from '@ionic/angular';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { RouterModule } from '@angular/router';
+import { UbicacionPage } from './ubicacion/ubicacion.page';
+import { FiltrosComponent } from './filtros/filtros.component';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    UbicacionPage,
+    FiltrosComponent
   ],
   imports: [
     CommonModule,
-    IonicModule
+    IonicModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCY4IBDW6_CxesXRfvmuGM5sp5elGyd6vI'
+    }),
   ],
   exports: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    UbicacionPage,
+    FiltrosComponent
   ]
 })
 export class ModuloComponentes { }

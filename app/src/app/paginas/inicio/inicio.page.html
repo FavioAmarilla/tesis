@@ -1,5 +1,21 @@
 <app-header [cargando]="cargando"></app-header>
 
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filterModal">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-filtros></app-filtros>
+      </div>
+    </div>
+  </div>
+</div>
+
 <ion-content>
   <!-- slides -->
   <ion-slides *ngIf="slides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions">
@@ -30,44 +46,25 @@
   </ion-slides>
 
 
-  <!-- productos -->
+  <div class="filter-toggle" data-toggle="modal" data-target="#filterModal"><i class="icon-filter"></i></div>
+
   <section class="ftco-section">
     <div class="container-fluid">
+
+
+      <!-- productos -->
       <div class="row">
         <div class="col-md-12 heading-section text-center">
           <h2 class="mb-4">Nuestros productos</h2>
-          <p>La mejor calidad, al mejor precio</p>
-        </div>
-      </div>
-
-
-      <div class="row">
-        <!-- filtros -->
-        <div class="col-md-3 product">
-          <h5 class="mb-4">Filtros de Busqueda</h5>
-          <form>
-            <div class="form-group">
-              <label for="Precio">Precio</label>
-              <input type="number" class="form-control" placeholder="Precio Minimo">
-            </div>
-            <div class="form-group">
-              <input type="number" class="form-control" placeholder="Precio Maximo">
-            </div>
-            <hr class="filtros">
-            
-            <div class="form-group">
-              <label for="Linea">Linea de Productos</label>
-              <select class="form-control">
-                <option value="0">--Seleccione--</option>
-              </select>
-            </div>
-          </form>
         </div>
 
-        <!-- productos -->
+        <div class="col-md-3 product shop-filters">
+          <app-filtros></app-filtros>
+        </div>
+
         <div class="col-md-9">
           <div class="row">
-            <div class="col-md-4" *ngFor="let producto of productos">
+            <div class="col-md-6 col-lg-3" *ngFor="let producto of productos">
               <div class="product">
                 <div class="m-2">
                   <a [routerLink]="['/producto-simple', producto.identificador]" class="img-prod">
@@ -110,25 +107,26 @@
           </div>
         </div>
 
-
       </div>
 
-      <div class="row">
+      <br><br>
+
+
+      <!-- marcas -->
+      <div class="row seccion-marcas">
         <div class="col-md-12 heading-section text-center">
-          <h2 class="col-md-12 mb-4">Marcas Destacadas</h2>
+          <h2 class="col-md-12">Marcas Destacadas</h2>
         </div>
-      </div>
-
-      <!-- <div class="row">
-        <div class="col-sm-12 col-md-6 col-lg-2 justify-content-center" *ngFor="let producto of productos">
+        <div class="col-sm-12 col-md-6 col-lg-2 m-auto" *ngFor="let producto of productos">
           <div class="m-2">
             <a [routerLink]="['/producto-simple', producto.identificador]" class="img-prod">
-              <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" width="200" height="150">
-              <div class="overlay"></div>
+              <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="150" style="width: 100% !important;">
             </a>
           </div>
         </div>
-      </div> -->
+      </div>
+
+      <br><br>
 
     </div>
   </section>

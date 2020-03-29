@@ -12,8 +12,8 @@ const routes: Routes = [
   { path: 'contacto', loadChildren: () => import('./paginas/contacto/contacto.module').then( m => m.ModuloPaginaContacto)},
   { path: 'login', loadChildren: () => import('./paginas/login/login.module').then( m => m.LoginPageModule)},
   { path: 'signup', loadChildren: () => import('./paginas/signup/signup.module').then( m => m.SignupPageModule)},
-  { path: 'producto-simple/:id', loadChildren: () => import('./paginas/producto-simple/producto-simple.module').then( m => m.ModuloPaginaProductoSimple)},
-  // { path: 'single-product/:id', loadChildren: './pages/single-product/single-product.module#SingleProductPageModule' },
+  { path: 'producto-simple/:id', loadChildren: () => import('./paginas/producto-simple/producto-simple.module').then( m => m.ModuloPaginaProductoSimple)}
+
 ];
 
 @NgModule({

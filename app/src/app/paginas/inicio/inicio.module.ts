@@ -26,4 +26,4 @@ const routes: Routes = [
   ],
   declarations: [PaginaInicio]
 })
-export class ModuloPaginaInicio {}
+export class ModuloPaginaInicio { }
