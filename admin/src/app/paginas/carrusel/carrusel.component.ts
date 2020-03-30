@@ -154,9 +154,8 @@ export class CarruselComponent implements OnInit {
   }
 
   subirImagen(event) {
-    console.log(event.response);
     const data = JSON.parse(event.response);
-    this.slide.imagen = data;
+    this.slide.imagen = data.data;
   }
 
 }

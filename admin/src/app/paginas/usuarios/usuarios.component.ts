@@ -134,9 +134,8 @@ export class UsuariosComponent implements OnInit {
   }
 
   subirImagen(event) {
-    console.log(event.response);
     const data = JSON.parse(event.response);
-    this.usuario.imagen = data;
+    this.usuario.imagen = data.data;
   }
 
   async activarDesactivarUsuario(id, accion) {
