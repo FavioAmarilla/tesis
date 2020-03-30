@@ -110,6 +110,13 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="id_marca">Marca</label>
+                            <select name="id_marca" id="id_marca" class="form-control" [(ngModel)]="producto.id_marca">
+                                <option value="" disabled selected>--Seleccione--</option>
+                                <option *ngFor="let marca of listaMarcas" value="{{marca.identificador}}">{{marca.nombre}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <button type="button" id="generateBarcode" class="btn btn-success" (click)="generarCodigoBarras()">Generar código de barras</button>
                         </div>
                         <div class="form-group">

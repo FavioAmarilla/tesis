@@ -15,6 +15,7 @@ import { PerfilComponent } from '../../paginas/perfil/perfil.component';
 import { PaisComponent } from '../../paginas/pais/pais.component';
 import { CiudadComponent } from '../../paginas/ciudad/ciudad.component';
 import { BarrioComponent } from '../../paginas/barrio/barrio.component';
+import { MarcaComponent } from 'app/paginas/marca/marca.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -23,12 +24,13 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'empresas',         component: EmpresaComponent, canActivate: [UserGuard] },
     { path: 'productos',        component: ProductoComponent, canActivate: [UserGuard] },
     { path: 'usuarios',         component: UsuariosComponent, canActivate: [UserGuard] },
-    { path: 'perfil',          component: PerfilComponent, canActivate: [UserGuard] },
+    { path: 'perfil',           component: PerfilComponent, canActivate: [UserGuard] },
     { path: 'tipos-impuesto',   component: TiposImpuestoComponent, canActivate: [UserGuard] },
     { path: 'slides',           component: CarruselComponent, canActivate: [UserGuard] },
     { path: 'linea-producto',   component: LineaProductoComponent, canActivate: [UserGuard] },
     { path: 'punto-emision',    component: PuntosEmisionComponent, canActivate: [UserGuard] },
     { path: 'pais',             component: PaisComponent, canActivate: [UserGuard] },
     { path: 'ciudad',           component: CiudadComponent, canActivate: [UserGuard] },
-    { path: 'barrio',           component: BarrioComponent, canActivate: [UserGuard] }
+    { path: 'barrio',           component: BarrioComponent, canActivate: [UserGuard] },
+    { path: 'marca',            component: MarcaComponent, canActivate: [UserGuard] }
 ];

@@ -56,3 +56,4 @@ Route::resource('cuponDescuento', 'CuponDescuentoController');
 Route::resource('ecParametro', 'EcParametrosController');
 Route::resource('ecParamCiudad', 'EcParamCiudadesController');
 Route::resource('ecParamSucursal', 'EcParamSucursalController');
+Route::resource('marca', 'MarcaController');

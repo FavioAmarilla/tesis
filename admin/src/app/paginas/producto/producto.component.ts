@@ -8,8 +8,9 @@ import { Producto } from '../../modelos/producto';
 import { TipoImpuesto } from '../../modelos/tipo-impuesto';
 import * as JsBarcode from 'jsbarcode';
 import { v4 as uuid } from 'uuid';
-import swal from 'sweetalert2';
 import { ServicioAlertas } from 'app/servicios/alertas.service';
+import { MarcaService } from 'app/servicios/marca.service';
+import { Marca } from 'app/modelos/marca';
 
 const API = environment.api;
 
@@ -27,6 +28,7 @@ export class ProductoComponent implements OnInit {
   public listaProductos: Producto;
   public listaImpuestos: TipoImpuesto;
   public listaLineas: LineaProducto;
+  public listaMarcas: Marca;
   public errors = [];
   public cargando: boolean = false;
   public paginaActual = 1;
@@ -51,6 +53,7 @@ export class ProductoComponent implements OnInit {
     private servicioProducto: ServicioProducto,
     private servicioImpuesto: ServicioTipoImpuesto,
     private servicioLineaProducto: ServicioLineaProducto,
+    private servicioMarca: MarcaService,
     private servicioAlerta: ServicioAlertas
   ) {
     this.url = environment.api;
@@ -60,6 +63,7 @@ export class ProductoComponent implements OnInit {
     this.paginacion(this.paginaActual);
     this.obtenerImpuestos();
     this.obtenerLineasProducto();
+    this.obtenerMarcas();
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -67,7 +71,7 @@ export class ProductoComponent implements OnInit {
     this.accion = accion;
 
     if (flag && accion == 'INS') {
-      this.producto = new Producto(null, null, null, null, null, null, null, null, null);
+      this.producto = new Producto(null, null, null, null, null, null, null, null, null, null);
     }
     if (limpiarError) {
       this.errors = [];
@@ -90,6 +94,17 @@ export class ProductoComponent implements OnInit {
 
     if (response.success) {
       this.listaLineas = response.data;
+    } else {
+      this.servicioAlerta.dialogoError(response.message, '');
+      this.mostrarFormulario(false, 'LST');
+    }
+  }
+
+  async obtenerMarcas() {
+    const response: any = await this.servicioMarca.obtenerMarca();
+
+    if (response.success) {
+      this.listaMarcas = response.data;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
       this.mostrarFormulario(false, 'LST');
@@ -159,7 +174,7 @@ export class ProductoComponent implements OnInit {
 
     this.errors = [];
     const response: any = await this.servicioProducto.actualizar(this.producto, this.producto.identificador);
-
+console.log(response);
     this.cargando = false;
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
@@ -171,8 +186,9 @@ export class ProductoComponent implements OnInit {
   }
 
   subirImagen(event) {
+    console.log(event.response);
     const data = JSON.parse(event.response);
-    this.producto.imagen = data;
+    this.producto.imagen = data.data;
   }
 
   generarCodigoBarras() {

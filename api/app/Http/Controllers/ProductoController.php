@@ -18,7 +18,7 @@ class ProductoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Producto::with(['lineaProducto', 'tipoImpuesto']);
+        $query = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca']);
 
         $id_linea = $request->query('id_linea');
         if ($id_linea) {
@@ -28,6 +28,11 @@ class ProductoController extends BaseController
         $id_tipo_impuesto = $request->query('id_tipo_impuesto');
         if ($id_tipo_impuesto) {
             $query->where('id_tipo_impuesto', '=', $id_tipo_impuesto);
+        }
+
+        $id_marca = $request->query('id_marca');
+        if ($id_marca) {
+            $query->where('id_marca', '=', $id_marca);
         }
         
         $vr_unidad_medida = $request->query('vr_unidad_medida');
@@ -83,6 +88,7 @@ class ProductoController extends BaseController
     {
         $id_linea = $request->input("id_linea");
         $id_tipo_impuesto = $request->input("id_tipo_impuesto");
+        $id_marca = $request->input("id_marca");
         $vr_unidad_medida = $request->input("vr_unidad_medida");
         $descripcion = $request->input("descripcion");
         $codigo_barras = $request->input("codigo_barras");
@@ -93,12 +99,13 @@ class ProductoController extends BaseController
         $validator = Validator::make($request->all(), [
             'id_linea'          => 'required', 
             'id_tipo_impuesto'  => 'required', 
+            'id_marca'          => 'required', 
             'vr_unidad_medida'  => 'required',  
             'descripcion'       => 'required|unique:pr_productos',
             'codigo_barras'     => 'required|unique:pr_productos',
             'costo_unitario'    => 'required', 
             'precio_venta'      => 'required', 
-            'imagen'        => 'required'
+            'imagen'            => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -109,6 +116,7 @@ class ProductoController extends BaseController
         $producto->id_linea = $id_linea;
         $producto->id_tipo_impuesto = $id_tipo_impuesto;
         $producto->vr_unidad_medida = $vr_unidad_medida;
+        $producto->id_marca = $id_marca;
         $producto->descripcion = $descripcion;
         $producto->codigo_barras = $codigo_barras;
         $producto->costo_unitario = $costo_unitario;
@@ -161,6 +169,7 @@ class ProductoController extends BaseController
     {
         $id_linea = $request->input("id_linea");
         $id_tipo_impuesto = $request->input("id_tipo_impuesto");
+        $id_marca = $request->input("id_marca");
         $vr_unidad_medida = $request->input("vr_unidad_medida");
         $descripcion = $request->input("descripcion");
         $codigo_barras = $request->input("codigo_barras");
@@ -171,6 +180,7 @@ class ProductoController extends BaseController
         $validator = Validator::make($request->all(), [
             'id_linea'          => 'required', 
             'id_tipo_impuesto'  => 'required', 
+            'id_marca'  => 'required', 
             'vr_unidad_medida'  => 'required',  
             'descripcion'       => 'required',
             'codigo_barras'     => 'required',
@@ -187,6 +197,7 @@ class ProductoController extends BaseController
         if ($producto) {
             $producto->id_linea = $id_linea;
             $producto->id_tipo_impuesto = $id_tipo_impuesto;
+            $producto->id_marca = $id_marca;
             $producto->vr_unidad_medida = $vr_unidad_medida;
             $producto->descripcion = $descripcion;
             $producto->codigo_barras = $codigo_barras;

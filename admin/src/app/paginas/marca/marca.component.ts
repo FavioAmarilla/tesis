@@ -1,31 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { Ciudad } from '../../modelos/ciudad';
-import { ServicioCiudad } from '../../servicios/ciudad.service';
-import { ServicioPais } from '../../servicios/pais.service';
-import { Pais } from '../../modelos/pais';
+import { Marca } from '../../modelos/marca';
+import { MarcaService } from '../../servicios/marca.service';
 import { ServicioAlertas } from 'app/servicios/alertas.service';
 
 @Component({
-  selector: 'app-ciudad',
-  templateUrl: './ciudad.component.html',
-  styleUrls: ['./ciudad.component.scss']
+  selector: 'app-marca',
+  templateUrl: './marca.component.html',
+  styleUrls: ['./marca.component.scss']
 })
-export class CiudadComponent implements OnInit {
+export class MarcaComponent implements OnInit {
 
   public cargando: boolean = false;
   public form = false;
   public accion: string = '';
-  public ciudad: Ciudad;
-  public listaCiudades: Ciudad;
-  public listaPaises: Pais;
+  public marca: Marca;
+  public listaMarcas: Marca;
   public errores = [];
   public paginaActual = 1;
   public porPagina;
   public total;
 
   constructor(
-    private servicioCiudad: ServicioCiudad,
-    private servicioPais: ServicioPais,
+    private servicioMarca: MarcaService,
     private servicioAlerta: ServicioAlertas
   ) {
     this.cargando = false;
@@ -33,7 +29,6 @@ export class CiudadComponent implements OnInit {
 
   ngOnInit() {
     this.paginacion(this.paginaActual);
-    this.obtenerPaises();
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -41,27 +36,16 @@ export class CiudadComponent implements OnInit {
     this.accion = accion;
 
     if (flag && accion === 'INS') {
-      this.ciudad = new Ciudad(null, null, null, []);
+      this.marca = new Marca(null, null);
     }
     if (limpiarError) {
       this.errores = [];
     }
   }
 
-  async obtenerPaises() {
-    const response = <any>await this.servicioPais.obtenerPais();
-
-    if (response.success) {
-      this.listaPaises = response.data
-    } else {
-      this.servicioAlerta.dialogoError(response.message, '');
-      this.mostrarFormulario(false, 'LST');
-    }
-  }
-
   async paginacion(pagina?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
-    this.listaCiudades = null;
+    this.listaMarcas = null;
     this.accion = 'LST';
     this.cargando = true;
     this.errores = [];
@@ -71,10 +55,10 @@ export class CiudadComponent implements OnInit {
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioCiudad.obtenerCiudad(null, parametros);
+    const response: any = await this.servicioMarca.obtenerMarca(null, parametros);
 
     if (response.success) {
-      this.listaCiudades = response.data;
+      this.listaMarcas = response.data;
       this.porPagina = response.data.per_page;
       this.total = response.data.total;
     } else {
@@ -84,15 +68,15 @@ export class CiudadComponent implements OnInit {
     this.cargando = false;
   }
 
-  async obtenerCiudad(id) {
+  async obtenerMarca(id) {
     this.accion = 'LST';
     this.cargando = true;
 
     this.errores = [];
-    const response = <any>await this.servicioCiudad.obtenerCiudad(id);
+    const response = <any>await this.servicioMarca.obtenerMarca(id);
 
     if (response.success) {
-      this.ciudad = response.data;
+      this.marca = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
@@ -105,7 +89,7 @@ export class CiudadComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any>await this.servicioCiudad.registrar(this.ciudad);
+    const response = <any>await this.servicioMarca.registrar(this.marca);
 
     this.cargando = false;
     if (response.success) {
@@ -121,8 +105,8 @@ export class CiudadComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response: any = await this.servicioCiudad.actualizar(this.ciudad, this.ciudad.identificador);
-
+    const response: any = await this.servicioMarca.actualizar(this.marca, this.marca.identificador);
+    console.log(response);
     this.cargando = false;
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
@@ -133,7 +117,4 @@ export class CiudadComponent implements OnInit {
     }
   }
 
-  obtenerCoordenadas(coords) {
-    this.ciudad.poligono = coords;
-  }
 }
