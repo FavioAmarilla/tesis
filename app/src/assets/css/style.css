@@ -10195,7 +10195,7 @@ a:hover, a:focus {
   background-position: center center;
   height: 650px;
   position: relative;
-  z-index: 0;
+  z-index: 1;
 }
 
 @media (max-width: 1199.98px) {
@@ -10210,13 +10210,14 @@ a:hover, a:focus {
   bottom: 0;
   left: 0;
   right: 0;
-  background: #000000;
-  opacity: .2;
+  background: #1b1b1b;
+  opacity: .7;
+  z-index: 2;
 }
 
 .home-slider .slider-item .slider-text {
   height: 650px;
-  z-index: 0;
+  z-index: 3;
 }
 
 @media (max-width: 991.98px) {
@@ -10238,9 +10239,14 @@ a:hover, a:focus {
 .home-slider .slider-item .slider-text h1 {
   font-size: 8vw;
   color: #fff;
-  line-height: 1.3;
   font-weight: 400;
   font-family: "Amatic SC", cursive;
+}
+
+.home-slider .slider-item .slider-text h1 {
+  transform-origin: 50% 50% 0px;
+  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -0.002, 0, 0, 0, 1);
+  opacity: 1;
 }
 
 @media (max-width: 767.98px) {

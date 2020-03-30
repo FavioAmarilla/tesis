@@ -20,17 +20,16 @@
   <!-- slides -->
   <ion-slides *ngIf="slides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions">
     <ion-slide class="slider-item" style="background-image: url(assets/images/banner-super-home.jpg);">
-      <div class="overlay"></div>
       <div class="container">
         <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
           <div class="col-sm-12 text-center">
             <h1 class="mt-2">Bienvenido</h1>
             <h1 class="mt-2">Supermercado Ypacarai</h1>
             <h4 class="subheading mb-4">Tenemos lo que te gusta</h4>
-            <p><a href="#" class="btn btn-primary">View Details</a></p>
           </div>
         </div>
       </div>
+      <div class="overlay"></div>
     </ion-slide>
     <ion-slide *ngFor="let slide of slides" class="slider-item" [style]="slide.imagen | slideImage">
       <div class="overlay"></div>
@@ -120,7 +119,8 @@
         <div class="col-sm-12 col-md-6 col-lg-2 m-auto" *ngFor="let producto of productos">
           <div class="m-2">
             <a [routerLink]="['/producto-simple', producto.identificador]" class="img-prod">
-              <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="150" style="width: 100% !important;">
+              <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="150"
+                style="width: 100% !important;">
             </a>
           </div>
         </div>
