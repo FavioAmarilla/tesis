@@ -16,7 +16,7 @@ export class ServicioSucursal {
   async obtenerSucursal(id?, parametros?) {
     const url = (id) ? `${API}/sucursal/${id}` : `${API}/sucursal`;
 
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const params = new HttpParams({ fromObject: parametros });
 
     return new Promise(resolve => {
@@ -32,7 +32,7 @@ export class ServicioSucursal {
   }
 
   async registrar(sucursal) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
       this.http.post(`${API}/sucursal`, sucursal, { headers: headers }).subscribe(
@@ -47,7 +47,7 @@ export class ServicioSucursal {
   }
 
   async actualizar(sucursal, id) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
       this.http.put(`${API}/sucursal/${id}`, sucursal, { headers: headers }).subscribe(

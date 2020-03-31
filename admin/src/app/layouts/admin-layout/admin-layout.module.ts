@@ -28,6 +28,7 @@ import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.componen
 import { MarcaComponent } from '../../paginas/marca/marca.component';
 
 import { PaginacionComponent } from '../../shared/paginacion/paginacion.component';
+import { SucursalComponent } from 'app/paginas/sucursal/sucursal.component';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { PaginacionComponent } from '../../shared/paginacion/paginacion.componen
     BarrioComponent,
     PaginacionComponent,
     BreadcrumbComponent,
-    MarcaComponent
+    MarcaComponent,
+    SucursalComponent
   ]
 })
 

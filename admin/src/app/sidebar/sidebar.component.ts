@@ -10,6 +10,7 @@ export interface RouteInfo {
 export const ROUTES: RouteInfo[] = [
     { path: '/dashboard',       title: 'Dashboard',             icon: 'fas fa-tachometer-alt'},
     { path: '/empresas',        title: 'Empresa',               icon: 'fas fa-building'},
+    { path: '/sucursal',        title: 'Sucursales',            icon: 'fas fa-building'},
     { path: '/slides',          title: 'Banners',               icon: 'far fa-window-restore'},
     { path: '/punto-emision',   title: 'Puntos de emision',     icon: 'fas fa-list-ol'},
 
