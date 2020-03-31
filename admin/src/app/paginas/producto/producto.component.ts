@@ -11,6 +11,8 @@ import { v4 as uuid } from 'uuid';
 import { ServicioAlertas } from 'app/servicios/alertas.service';
 import { MarcaService } from 'app/servicios/marca.service';
 import { Marca } from 'app/modelos/marca';
+import { ServicioSucursal } from 'app/servicios/sucursal.service';
+import { Sucursal } from 'app/modelos/sucursal';
 
 const API = environment.api;
 
@@ -26,10 +28,10 @@ export class ProductoComponent implements OnInit {
   public accion: string = '';
   public producto: Producto;
   public listaProductos: Producto;
+  public listaSucursales: Sucursal;
   public listaImpuestos: TipoImpuesto;
   public listaLineas: LineaProducto;
   public listaMarcas: Marca;
-  public errors = [];
   public cargando: boolean = false;
   public paginaActual = 1;
   public porPagina;
@@ -51,6 +53,7 @@ export class ProductoComponent implements OnInit {
 
   constructor(
     private servicioProducto: ServicioProducto,
+    private servicioSucursal: ServicioSucursal,
     private servicioImpuesto: ServicioTipoImpuesto,
     private servicioLineaProducto: ServicioLineaProducto,
     private servicioMarca: MarcaService,
@@ -60,10 +63,11 @@ export class ProductoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.paginacion(this.paginaActual);
     this.obtenerImpuestos();
     this.obtenerLineasProducto();
     this.obtenerMarcas();
+    this.obtenerSucursales();
+    this.paginacion(this.paginaActual);
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -73,8 +77,16 @@ export class ProductoComponent implements OnInit {
     if (flag && accion == 'INS') {
       this.producto = new Producto(null, null, null, null, null, null, null, null, null, null);
     }
-    if (limpiarError) {
-      this.errors = [];
+  }
+
+  async obtenerSucursales() {
+    const response: any = await this.servicioSucursal.obtenerSucursal();
+
+    if (response.success) {
+      this.listaSucursales = response.data;
+    } else {
+      this.servicioAlerta.dialogoError(response.message, '');
+      this.mostrarFormulario(false, 'LST');
     }
   }
 
@@ -116,7 +128,6 @@ export class ProductoComponent implements OnInit {
     this.listaProductos = null;
     this.accion = 'LST';
     this.cargando = true;
-    this.errors = [];
 
     const parametros = {
       paginar: true,
@@ -139,10 +150,8 @@ export class ProductoComponent implements OnInit {
   async obtenerProducto(id) {
     this.accion = 'LST';
     this.cargando = true;
-
-    this.errors = [];
     const response: any = await this.servicioProducto.obtenerProducto(id);
-
+    
     if (response.success) {
       this.producto = response.data;
       this.mostrarFormulario(true, 'UPD');
@@ -155,8 +164,6 @@ export class ProductoComponent implements OnInit {
 
   async registrar() {
     this.cargando = true;
-
-    this.errors = [];
     const response: any = await this.servicioProducto.registrar(this.producto);
 
     this.cargando = false;
@@ -171,10 +178,8 @@ export class ProductoComponent implements OnInit {
 
   async actualizar() {
     this.cargando = true;
-
-    this.errors = [];
     const response: any = await this.servicioProducto.actualizar(this.producto, this.producto.identificador);
-console.log(response);
+
     this.cargando = false;
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');

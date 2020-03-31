@@ -35,7 +35,7 @@
               <div class="form-group">
                 <select name="pais" class="form-control text-left px-3" placeholder="Pais" [(ngModel)]="datosEnvio.pais"
                   (change)="datosEnvioSelect($event.target.value, 'pais')">
-                  <option value="0">--Seleccione--</option>
+                  <option value="0">-- SELECCIONE--</option>
                   <option *ngFor="let pais of listaPaises" value="{{ pais.identificador }}"> {{ pais.nombre }}</option>
                 </select>
               </div>
@@ -46,7 +46,7 @@
                 <div *ngIf="mostrarCiudades">
                   <select name="ciudad" class="form-control text-left px-3" placeholder="Ciudad"
                     [(ngModel)]="datosEnvio.ciudad" (change)="datosEnvioSelect($event.target.value, 'ciudad')">
-                    <option value="0">--Seleccione--</option>
+                    <option value="0">-- SELECCIONE--</option>
                     <option *ngFor="let ciudad of listaCiudades" value="{{ ciudad.identificador }}"> {{ ciudad.nombre }}
                     </option>
                   </select>
@@ -60,7 +60,7 @@
                 <div *ngIf="mostrarBarrios">
                   <select name="barrio" class="form-control text-left px-3" placeholder="Barrio"
                     [(ngModel)]="datosEnvio.barrio" (change)="datosEnvioSelect($event.target.value, 'barrio')">
-                    <option value="0">--Seleccione--</option>
+                    <option value="0">-- SELECCIONE--</option>
                     <option *ngFor="let barrio of listaBarrios" value="{{ barrio.identificador }}"> {{ barrio.nombre }}
                     </option>
                   </select>

@@ -25,8 +25,14 @@ class Producto extends Model
     public function tipoImpuesto(){
         return $this->belongsTo('App\TipoImpuesto', 'id_tipo_impuesto');
     }
+
     //obtener tipo marca
     public function marca(){
         return $this->belongsTo('App\Marca', 'id_marca');
+    }
+    
+    //obtener stock
+    public function stock(){
+        return $this->hasOne('App\Stock', 'id_producto');
     }
 }
