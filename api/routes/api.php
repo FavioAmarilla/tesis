@@ -49,7 +49,12 @@ Route::group(['prefix' => 'empresa'], function () {
 
 Route::resource('puntoEmision', 'PuntoEmisionController');
 Route::resource('pais', 'PaisController');
+
 Route::resource('ciudad', 'CiudadController');
+Route::group(['prefix' => 'ciudad'], function () {
+    Route::post('/{id}/verificarZona', ['as' => 'ciudad.verificarZona', 'uses' => 'CiudadController@verificarZona']);
+});
+
 Route::resource('barrio', 'BarrioController');
 Route::resource('sucursal', 'SucursalController');
 Route::resource('cuponDescuento', 'CuponDescuentoController');

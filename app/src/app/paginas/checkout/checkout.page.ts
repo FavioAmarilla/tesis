@@ -9,6 +9,7 @@ import { AlertaService } from 'src/app/servicios/alerta.service';
 import { CarritoService } from 'src/app/servicios/carrito.service';
 import { CuponDescuentoService } from 'src/app/servicios/cupon-descuento.service';
 import { EcParametrosService } from 'src/app/servicios/ec-parametros.service';
+import { ServicioUbicacion } from 'src/app/servicios/ubicacion.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -35,6 +36,8 @@ export class CheckoutPage implements OnInit {
   public datosEnvio: any;
   public totales: any;
 
+  public coordenadas;
+
   constructor(
     private servicioPais: PaisService,
     private servicioCiudad: CiudadService,
@@ -43,6 +46,7 @@ export class CheckoutPage implements OnInit {
     private servicioCarrito: CarritoService,
     private servicioCupon: CuponDescuentoService,
     private servicioEcParametros: EcParametrosService,
+    private servicioUbicacion: ServicioUbicacion,
     private modalCtrl: ModalController,
     private router: Router
 
@@ -53,11 +57,6 @@ export class CheckoutPage implements OnInit {
   }
 
   async ngOnInit() {
-    const tsthis = this;
-    setTimeout(() => {
-      tsthis.cargando = false;
-    }, 2000);
-
     await this.obtenerParametrosEcommerce();
     await this.obtenerTotales();
 
@@ -65,6 +64,8 @@ export class CheckoutPage implements OnInit {
       this.servicioAlerta.dialogoError('El monto de compra debe ser mayor a: ' + this.parametros.monto_minimo, '');
       this.router.navigate(['/carrito']);
     }
+
+    this.cargando = false;
   }
 
   async inicializarTotales() {
@@ -73,7 +74,7 @@ export class CheckoutPage implements OnInit {
       delivery: 10000,
       descuento: 0,
       total: 0
-    }
+    };
   }
 
   async inicializarCuponDescuento() {
@@ -85,7 +86,7 @@ export class CheckoutPage implements OnInit {
       fecha_desde: '',
       fecha_hasta: '',
       usado: ''
-    }
+    };
   }
 
   async obtenerTotales() {
@@ -114,16 +115,27 @@ export class CheckoutPage implements OnInit {
   }
 
   async abrirModal() {
+    const coords = this.coordenadas;
+
     const modal = await this.modalCtrl.create({
-      component: UbicacionPage
+      component: UbicacionPage,
+      componentProps: {
+        coordenadas: coords
+      }
     });
 
-    modal.onWillDismiss().then(data => {
-      console.log('MODAL DATA', data);
-    });
+    await modal.present();
 
-    return await modal.present();
+    const { data } = await modal.onWillDismiss();
+    const { coordenadas } = data;
+    this.datosEnvio.ubicacion = (coordenadas.marcador) ? `${coordenadas.marcador.lat},${coordenadas.marcador.lng}` : '';
+
+    this.servicioUbicacion.validarUbicacion(this.datosEnvio.ciudad, coordenadas.marcador);
   }
+
+  // validarUbicacion(ciudad, coordenadas) {
+  //   this.u
+  // }
 
   async inicializarDatosEnvio() {
     this.datosEnvio = {
@@ -141,13 +153,16 @@ export class CheckoutPage implements OnInit {
       this.mostrarCiudades = true;
       this.obtenerParamCiudades(this.parametros.identificador);
     }
+
     if (select === 'ciudad') {
       this.cargando = true;
-      this.mostrarBarrios = false
+      this.mostrarBarrios = false;
 
       this.datosEnvio.ciudad = value;
+      this.asignarCoordenadas(value);
       this.obtenerBarrios(value);
     }
+
     if (select === 'barrio') {
       this.datosEnvio.barrio = value;
     }
@@ -173,7 +188,7 @@ export class CheckoutPage implements OnInit {
 
   async obtenerCupones() {
     this.submitCuponDescuento = true;
-    let codigo = this.cuponDescuento.codigo;
+    const codigo = this.cuponDescuento.codigo;
 
     const parametros = {
       codigo
@@ -196,7 +211,7 @@ export class CheckoutPage implements OnInit {
   async obtenerParametrosEcommerce() {
     const response: any = await this.servicioEcParametros.obtenerParametros();
 
-    if (response.status) {
+    if (response.success) {
       this.parametros = response.data;
       this.listaPaises.push(response.data.pais);
     } else {
@@ -206,6 +221,7 @@ export class CheckoutPage implements OnInit {
   }
 
   async obtenerParamCiudades(id_ec_parametro) {
+    this.listaCiudades = [];
     const parametros = {
       id_ec_parametro,
       activo: 'S'
@@ -223,6 +239,13 @@ export class CheckoutPage implements OnInit {
     }
 
     this.cargando = false;
+  }
+
+  asignarCoordenadas(ciudadId) {
+    const ciudad = this.listaCiudades.find(element => element.identificador == ciudadId);
+    if (ciudad) {
+      this.coordenadas = ciudad.coordenadas;
+    }
   }
 
 }

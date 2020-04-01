@@ -8,7 +8,6 @@ import { AgmCoreModule } from '@agm/core';
 
 import { CheckoutPage } from './checkout.page';
 import { ModuloComponentes } from '../../componentes/componentes.module';
-import { UbicacionPage } from '../../componentes/ubicacion/ubicacion.page';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 
 const routes: Routes = [
@@ -28,7 +27,6 @@ const routes: Routes = [
     AgmCoreModule,
     PipesModule
   ],
-  declarations: [CheckoutPage, UbicacionPage],
-  entryComponents: [UbicacionPage]
+  declarations: [CheckoutPage]
 })
 export class CheckoutPageModule { }

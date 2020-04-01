@@ -41,7 +41,7 @@ export class CiudadComponent implements OnInit {
     this.accion = accion;
 
     if (flag && accion === 'INS') {
-      this.ciudad = new Ciudad(null, null, null, []);
+      this.ciudad = new Ciudad(null, null, null, [], null);
     }
     if (limpiarError) {
       this.errores = [];
@@ -49,7 +49,7 @@ export class CiudadComponent implements OnInit {
   }
 
   async obtenerPaises() {
-    const response = <any>await this.servicioPais.obtenerPais();
+    const response: any = await this.servicioPais.obtenerPais();
 
     if (response.success) {
       this.listaPaises = response.data
@@ -89,7 +89,7 @@ export class CiudadComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any>await this.servicioCiudad.obtenerCiudad(id);
+    const response: any = await this.servicioCiudad.obtenerCiudad(id);
 
     if (response.success) {
       this.ciudad = response.data;
@@ -105,7 +105,7 @@ export class CiudadComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any>await this.servicioCiudad.registrar(this.ciudad);
+    const response: any = await this.servicioCiudad.registrar(this.ciudad);
 
     this.cargando = false;
     if (response.success) {
@@ -134,6 +134,7 @@ export class CiudadComponent implements OnInit {
   }
 
   obtenerCoordenadas(coords) {
-    this.ciudad.poligono = coords;
+    this.ciudad.marcador = coords.marcador;
+    this.ciudad.poligono = coords.poligono;
   }
 }

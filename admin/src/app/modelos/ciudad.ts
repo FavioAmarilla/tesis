@@ -3,6 +3,7 @@ export class Ciudad {
         public identificador: number,
         public id_pais: number,
         public nombre: string,
-        public poligono?: any[]
+        public poligono?: any[],
+        public marcador?: any
     ) {}
 }

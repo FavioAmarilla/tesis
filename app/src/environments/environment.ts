@@ -8,7 +8,14 @@ export const environment = {
   api: 'https://www.ecommercesy.com/api/',
   productImageUrl: 'https://www.ecommercesy.com/api/producto/getImage/',
   slideImageUrl: 'https://www.ecommercesy.com/api/slide/getImage/',
-  lineaProdImageUrl: 'https://www.ecommercesy.com/api/lineaProducto/getImage/'
+  lineaProdImageUrl: 'https://www.ecommercesy.com/api/lineaProducto/getImage/',
+  mapbox: {
+    apiKey: 'pk.eyJ1IjoibWF0aWFzYmFlejI1IiwiYSI6ImNrODd0aW1tODAwMWEzbGtmb2t0amNnMzYifQ.TGRXCPLfAzvmp0-cEpeiDA',
+    defaultCoords: {
+      lat: '-25.4036867',
+      lng: '-57.2865209'
+    }
+  }
 };
 
 /*

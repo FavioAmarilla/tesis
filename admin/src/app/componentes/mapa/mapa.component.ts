@@ -7,7 +7,12 @@ import { ServicioAlertas } from 'app/servicios/alertas.service';
 
 let mapa,
   opciones: any,
-  coordenadas: any = [],
+  marcador: any,
+  coordenadas: any = {
+    marcador: {},
+    poligono: []
+  },
+  agregarMarcador: any,
   seleccionFinalizada,
   servicioAlerta: ServicioAlertas;
 
@@ -18,6 +23,7 @@ let mapa,
 })
 export class MapaComponent implements OnInit {
 
+  @Input() poligono;
   @Input() coordenadas;
   @Output() seleccionFinalizada = new EventEmitter<any>();
 
@@ -28,20 +34,32 @@ export class MapaComponent implements OnInit {
   }
 
   ngOnInit() {
+    const defaultCoords = [Number(environment.mapbox.defaultCoords.lng), Number(environment.mapbox.defaultCoords.lat)];
+
+    agregarMarcador = this.agregarMarcador;
     seleccionFinalizada = this.seleccionFinalizada;
-    coordenadas = (this.coordenadas) ? this.coordenadas.poligono.coordinates : [];
+
+    const aux = this.coordenadas;
+    coordenadas.marcador = (aux && aux.marcador) ? aux.marcador.coordinates : defaultCoords;
+    coordenadas.poligono = (aux && aux.poligono) ? aux.poligono.coordinates[0] : [];
+
     // mapboxgl.accessToken = environment.mapbox.apiKey;
     Object.assign(mapboxgl, {
       accessToken: environment.mapbox.apiKey
     });
+
     mapa = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [Number(environment.mapbox.defaultCoords.lng), Number(environment.mapbox.defaultCoords.lat)],
+      center: coordenadas.marcador,
       zoom: 15
     });
 
     this.opcionesEventos();
+
+    if (coordenadas.marcador) {
+      this.agregarMarcador(coordenadas.marcador);
+    }
   }
 
   opcionesEventos() {
@@ -57,14 +75,15 @@ export class MapaComponent implements OnInit {
 
     mapa.on('load', this.dibujarPoligono);
 
+    mapa.on('click', this.obtenerCoodenadas);
+
     mapa.on('draw.create', this.actualizarArea);
     mapa.on('draw.delete', this.actualizarArea);
     mapa.on('draw.update', this.actualizarArea);
   }
 
   dibujarPoligono() {
-    console.log('coordenadas: ', coordenadas);
-    if (coordenadas.length) {
+    if (coordenadas.poligono.length) {
       opciones.set({
         type: 'FeatureCollection',
         features: [{
@@ -72,48 +91,48 @@ export class MapaComponent implements OnInit {
           properties: {},
           geometry: {
             type: 'Polygon',
-            coordinates: coordenadas
+            coordinates: [coordenadas.poligono]
           }
         }]
       });
-
-      // mapa.addSource('maine', {
-      //   'type': 'geojson',
-      //   'data': {
-      //     'type': 'Feature',
-      //     'geometry': {
-      //       'type': 'Polygon',
-      //       'coordinates': coordenadas
-      //     }
-      //   }
-      // });
-
-      // mapa.addLayer({
-      //   'id': 'maine',
-      //   'type': 'fill',
-      //   'source': 'maine',
-      //   'layout': {},
-      //   'paint': {
-      //     'fill-color': '#079A4A',
-      //     'fill-opacity': 0.2
-      //   }
-      // });
     }
   }
 
+  obtenerCoodenadas(e) {
+    agregarMarcador(e.lngLat);
+  }
+
+  agregarMarcador(lngLat) {
+    if (marcador) { marcador.remove(); }
+
+    marcador = new mapboxgl.Marker()
+      .setLngLat(lngLat)
+      .addTo(mapa);
+
+    coordenadas.marcador = marcador.getLngLat();
+    seleccionFinalizada.emit(coordenadas);
+  }
+
   actualizarArea(e) {
-    if (e.type === 'draw.create') {
-      const data = opciones.getAll();
-      if (coordenadas.length == 0) {
-        coordenadas = data.features[0].geometry.coordinates[0];
-      } else {
-        const index = data.features.length - 1;
-        opciones.delete(data.features[index].id);
-        servicioAlerta.dialogoError('Acción no permitida', 'Ya tienes una selección en curso');
-      }
-    } else if (e.type === 'draw.delete') {
-      coordenadas = [];
+    const data = opciones.getAll();
+    switch (e.type) {
+      case 'draw.create':
+        if (coordenadas.poligono.length === 0) {
+          coordenadas.poligono = data.features[0].geometry.coordinates[0];
+        } else {
+          const index = data.features.length - 1;
+          opciones.delete(data.features[index].id);
+          servicioAlerta.dialogoError('Acción no permitida', 'Ya tienes una selección en curso');
+        }
+        break;
+      case 'draw.update':
+        coordenadas.poligono = data.features[0].geometry.coordinates[0];
+        break;
+      default:
+        coordenadas.poligono = [];
+        break;
     }
+
     seleccionFinalizada.emit(coordenadas);
   }
 

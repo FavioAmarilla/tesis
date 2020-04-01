@@ -18,7 +18,7 @@ class EcParamCiudadesController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = EcParamCiudades::with(['parametro', 'ciudad']);
+        $query = EcParamCiudades::with(['parametro', 'ciudad', 'ciudad.coordenadas']);
 
         $id_ec_parametro = $request->query('id_ec_parametro');
         if ($id_ec_parametro) {

@@ -4,16 +4,16 @@ import { IonicModule } from '@ionic/angular';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { UbicacionPage } from './ubicacion/ubicacion.page';
 import { FiltrosComponent } from './filtros/filtros.component';
+import { UbicacionPage } from './ubicacion/ubicacion.page';
 import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
+    FiltrosComponent,
     UbicacionPage,
-    FiltrosComponent
   ],
   imports: [
     CommonModule,
@@ -25,8 +25,9 @@ import { AgmCoreModule } from '@agm/core';
   exports: [
     HeaderComponent,
     FooterComponent,
+    FiltrosComponent,
     UbicacionPage,
-    FiltrosComponent
-  ]
+  ],
+  entryComponents: [UbicacionPage]
 })
 export class ModuloComponentes { }

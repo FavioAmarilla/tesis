@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 /**
+ * @property \Grimzy\LaravelMysqlSpatial\Types\Point $marcador
  * @property \Grimzy\LaravelMysqlSpatial\Types\Polygon $poligono
  */
 
@@ -21,6 +22,6 @@ class CiudadCoord extends Model
     ];
 
     protected $spatialFields = [
-        'poligono'
+        'marcador', 'poligono'
     ];
 }
