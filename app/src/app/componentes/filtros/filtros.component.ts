@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { LineasProductoService } from "../../servicios/linea-producto.service";
+import { LineasProductoService } from '../../servicios/linea-producto.service';
 import { LineaProducto, Marca, Sucursal } from 'src/app/interfaces/interfaces';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 import { MarcaService } from 'src/app/servicios/marca.service';
