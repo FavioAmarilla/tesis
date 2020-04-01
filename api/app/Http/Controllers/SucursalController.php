@@ -17,7 +17,7 @@ class SucursalController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Sucursal::with(['empresa']);
+        $query = Sucursal::with(['empresa', 'pais', 'ciudad']);
 
         $id_empresa = $request->query('id_empresa');
         if ($id_empresa) {
@@ -59,6 +59,11 @@ class SucursalController extends BaseController
             $query->where('ecommerce', 'LIKE', '%'.$ecommerce.'%');
         }
 
+        $central = $request->query('central');
+        if ($central) {
+            $query->where('central', 'LIKE', '%'.$central.'%');
+        }
+
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
 
@@ -93,8 +98,9 @@ class SucursalController extends BaseController
         $id_ciudad = $request->input("id_ciudad");
         $direccion = $request->input("direccion");
         $ecommerce = $request->input("ecommerce");
+        $central = $request->input("central");
 
-        $validator = Validator::make($input, [
+        $validator = Validator::make($request->all(), [
             'id_empresa'  => 'required',
             'codigo'      => 'required', 
             'nombre'      => 'required', 
@@ -103,10 +109,15 @@ class SucursalController extends BaseController
             'id_ciudad'   => 'required',
             'direccion'   => 'required',
             'ecommerce'   => 'required',
+            'central'     => 'required',
         ]);
 
         if ($validator->fails()) {
             return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
+        }
+
+        if ($central == 'S') {
+            Sucursal::where('central', '=', 'S')->update(['central' => 'N']);
         }
 
         $sucursal = new Sucursal();
@@ -118,6 +129,7 @@ class SucursalController extends BaseController
         $sucursal->id_ciudad = $id_ciudad;
         $sucursal->direccion = $direccion;
         $sucursal->ecommerce = $ecommerce;
+        $sucursal->central = $central;
 
         if ($sucursal->save()) {
             return $this->sendResponse(true, 'Sucursal registrada', $sucursal, 201);
@@ -171,8 +183,9 @@ class SucursalController extends BaseController
         $id_ciudad = $request->input("id_ciudad");
         $direccion = $request->input("direccion");
         $ecommerce = $request->input("ecommerce");
+        $central = $request->input("central");
 
-        $validator = Validator::make($input, [
+        $validator = Validator::make($request->all(), [
             'id_empresa'  => 'required',
             'codigo'      => 'required', 
             'nombre'      => 'required', 
@@ -181,14 +194,19 @@ class SucursalController extends BaseController
             'id_ciudad'   => 'required',
             'direccion'   => 'required',
             'ecommerce'   => 'required',
+            'central'   => 'required',
         ]);
 
         if ($validator->fails()) {
             return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
+        if ($central == 'S') {
+            Sucursal::where('central', '=', 'S')->update(['central' => 'N']);
+        }
+
         $sucursal = Sucursal::find($id);
-        if ($barrio) {
+        if ($sucursal) {
             $sucursal->id_empresa = $id_empresa;
             $sucursal->codigo = $codigo;
             $sucursal->nombre = $nombre;
@@ -197,6 +215,7 @@ class SucursalController extends BaseController
             $sucursal->id_ciudad = $id_ciudad;
             $sucursal->direccion = $direccion;
             $sucursal->ecommerce = $ecommerce;
+            $sucursal->central = $central;
             if ($sucursal->save()) {
                 return $this->sendResponse(true, 'Sucursal actualizada', $sucursal, 200);
             }

@@ -22,7 +22,6 @@ export class ServicioEmpresa {
     return new Promise(resolve => {
       this.http.get(url, {params}).subscribe(
         (response: any) => {
-          console.log('empresa:', response);
           resolve(response);
         },
         error => {

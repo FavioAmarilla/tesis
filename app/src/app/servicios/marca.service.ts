@@ -7,14 +7,14 @@ const API = environment.api;
 @Injectable({
   providedIn: 'root'
 })
-export class SucursalService {
+export class MarcaService {
 
   constructor(
     private http: HttpClient
   ) { }
 
-  async obtenerSucursal(id?, parametros?) {
-    const url = (id) ? `sucursal/${id}` : `sucursal`;
+  async obtenerMarca(id?, parametros?) {
+    const url = (id) ? `marca/${id}` : `marca`;
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     const params = new HttpParams({ fromObject: parametros });

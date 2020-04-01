@@ -11,7 +11,8 @@ class Sucursal extends Model
     protected $perPage = 10;
     
     protected $fillable = [
-        'identificador', 'id_empresa', 'codigo', 'nombre', 'telefono', 'id_pais', 'id_ciudad', 'direccion', 'ecommerce'
+        'identificador', 'id_empresa', 'codigo', 'nombre', 'telefono', 
+        'id_pais', 'id_ciudad', 'direccion', 'ecommerce', 'central'
     ];
 
     //obtener todos los puntos de emision de una sucursal

@@ -8,6 +8,8 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Producto;
+use App\Sucursal;
+use App\Stock;
 
 class ProductoController extends BaseController
 {
@@ -18,7 +20,14 @@ class ProductoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca']);
+        $id_sucursal = $request->query('id_sucursal');
+        $query = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca', 
+        'stock'=> function($q) use ($id_sucursal) {
+            if ($id_sucursal) {
+                $q->where('pr_stock.id_sucursal', '=', $id_sucursal);
+                $q->where('pr_stock.stock', '>', 0);
+            }
+        }]);
 
         $id_linea = $request->query('id_linea');
         if ($id_linea) {
@@ -64,8 +73,13 @@ class ProductoController extends BaseController
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
 
         $data = $query->orderBy('descripcion', 'asc')->$listar();
-        
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
+
+        $resultados = [];
+        foreach ($data as $element) {
+            if ($element->stock) array_push($resultados, $element);
+        }
+
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $resultados, 200);
     }
 
     /**
@@ -124,6 +138,20 @@ class ProductoController extends BaseController
         $producto->imagen = $imagen;
 
         if ($producto->save()) {
+
+            $sucursales = Sucursal::all();
+            if ($sucursales) {
+                foreach ($sucursales as $value) {
+                    $stock = new  Stock();
+                    $stock->id_sucursal = $value->identificador;
+                    $stock->id_producto = $producto->identificador;
+        
+                    if (!$stock->save()) {
+                        return $this->sendResponse(false, 'Stock no registrado', null, 400);
+                    }
+                }
+            }
+
             return $this->sendResponse(true, 'Producto registrado', $producto, 201);
         }
         
@@ -186,7 +214,7 @@ class ProductoController extends BaseController
             'codigo_barras'     => 'required',
             'costo_unitario'    => 'required', 
             'precio_venta'      => 'required', 
-            'imagen'       => 'required'
+            'imagen'            => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -206,6 +234,22 @@ class ProductoController extends BaseController
             $producto->imagen = $imagen;
     
             if ($producto->save()) {
+
+                $sucursales = Sucursal::all();
+                foreach ($sucursales as $value) {
+                    $stock = Stock::where('id_producto', $id)->where('id_sucursal', $value->identificador)->first();
+                    if (!$stock) {
+                        $stock = new Stock();
+                        $stock->id_sucursal = $value->identificador;
+                        $stock->id_producto = $producto->identificador;
+                        if (!$stock->save()) {
+                            return $this->sendResponse(false, 'Stock no registrado', null, 400);
+                        }
+                    }
+                }
+
+                
+
                 return $this->sendResponse(true, 'Producto actualizado', $producto, 200);
             }
             

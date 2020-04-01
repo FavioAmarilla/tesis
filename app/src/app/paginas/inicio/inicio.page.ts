@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { ProductoService } from '../../servicios/producto.service';
 import { Producto, Banner, LineaProducto } from '../../interfaces/interfaces';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { CarritoService } from 'src/app/servicios/carrito.service';
 import { IonSlides } from '@ionic/angular';
 import { GeneralService } from 'src/app/servicios/general.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
+import { FiltrosComponent } from 'src/app/componentes/filtros/filtros.component';
 
 @Component({
   selector: 'app-inicio',
@@ -20,8 +21,8 @@ export class PaginaInicio implements OnInit {
   public API: string;
   public cargando = true;
 
-  public productos: Producto;
-  public slides: Banner;
+  public listaProductos: Producto;
+  public listaSlides: Banner;
   public lineasProducto: LineaProducto;
 
   public slideImgUrl: string;
@@ -45,40 +46,43 @@ export class PaginaInicio implements OnInit {
   ) {
     this.API = environment.api;
     this.slideImgUrl = this.API + 'producto/getImage/';
-
-    this.obtenerProductos();
-    this.obtenerCarrusel();
   }
 
   ngOnInit() {
+    this.obtenerCarrusel();
   }
 
   redireccionar(url) {
     this.router.navigate([url]);
   }
 
-  async obtenerProductos() {
-    const response: any = await this.servicioProducto.obtenerProducto();
+  async obtenerProductos(parametros?) {
+    console.log(parametros)
+    this.cargando = true;
+    const response: any = await this.servicioProducto.obtenerProducto(null, parametros);
 
     if (response.success) {
-      this.productos = response.data;
+      this.listaProductos = response.data;
+      if (response.data.length <= 0) {
+        this.listaProductos = null;
+      }
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
       this.cargando = false;
+      this.listaProductos = null;
+      this.servicioAlerta.dialogoError(response.message, '');
     }
+    this.cargando = false;
   }
 
   async obtenerCarrusel() {
     const response: any = await this.servicioCarrusel.obtenerCarrusel();
 
     if (response.success) {
-      this.slides = response.data;
+      this.listaSlides = response.data;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
       this.cargando = false;
+      this.servicioAlerta.dialogoError(response.message, '');
     }
-
-    this.cargando = false;
   }
 
   async agregarAlCarrito(producto: any) {

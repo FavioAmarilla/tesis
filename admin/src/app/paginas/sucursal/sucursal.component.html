@@ -1,0 +1,196 @@
+<app-breadcrumb pagina="Sucursal"></app-breadcrumb>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card" *ngIf="!form">
+            <div class="card-header">
+                <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)"> Agregar
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <th>
+                                Empresa
+                            </th>
+                            <th>
+                                Codigo
+                            </th>
+                            <th>
+                                Nombre
+                            </th>
+                            <th>
+                                Telefono
+                            </th>
+                            <th>
+                                Pais
+                            </th>
+                            <th>
+                                Ciudad
+                            </th>
+                            <th>
+                                Direccion
+                            </th>
+                            <th>
+                                Ecommerce
+                            </th>
+                            <th>
+                                Central
+                            </th>
+                            <th class="text-right">
+                                Opciones
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let row of listaSucursales | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
+                                <td>
+                                    {{ row.empresa.nombre }}
+                                </td>
+                                <td>
+                                    {{ row.codigo }}
+                                </td>
+                                <td>
+                                    {{ row.nombre }}
+                                </td>
+                                <td>
+                                    {{ row.telefono }}
+                                </td>
+                                <td>
+                                    {{ row.pais.nombre }}
+                                </td>
+                                <td>
+                                    {{ row.ciudad.nombre }}
+                                </td>
+                                <td>
+                                    {{ row.direccion }}
+                                </td>
+                                <td>
+                                    {{ row.ecommerce }}
+                                </td>
+                                <td>
+                                    {{ row.central }}
+                                </td>
+                                <td class="text-right">
+                                    <button class="btn btn-sm btn-warning"
+                                        (click)="obtenerSucursal(row.identificador)"><i
+                                            class="fas fa-edit"></i></button> &nbsp;
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="!cargando && !form && accion == 'LST'">
+                        <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="pais" [porPagina]="porPagina"
+                            [total]="total"></app-paginacion>
+                    </div>
+                    <div class="row justify-content-center align-items-center col-md-12">
+                        <span *ngIf="cargando && !form && accion == 'LST'"
+                            class="spinner-border spinner-border-lg spinner-table" role="status"
+                            aria-hidden="true"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="form">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <form>
+
+                        <div class="form-group">
+                            <label for="">Empresa</label>
+                            <select name="id_empresa" class="form-control" [(ngModel)]="sucursal.id_empresa">
+                                <option>-- SELECCIONAR --</option>
+                                <option *ngFor="let empresa of listaEmpresas" value="{{empresa.identificador}}"
+                                    [selected]="empresa.identificador == sucursal.id_empresa">{{empresa.nombre}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Codigo">Codigo</label>
+                            <input type="text" class="form-control" placeholder="Codigo" name="codigo"
+                                [(ngModel)]="sucursal.codigo">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Nombre">Nombre</label>
+                            <input type="text" class="form-control" placeholder="Nombre" name="nombre"
+                                [(ngModel)]="sucursal.nombre">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Telefono">Telefono</label>
+                            <input type="text" class="form-control" placeholder="Telefono" name="telefono"
+                                [(ngModel)]="sucursal.telefono">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">Pais</label>
+                            <select name="id_pais" class="form-control" [(ngModel)]="sucursal.id_pais"
+                                (change)="obtenerCiudades($event.target.value)">
+                                <option>-- SELECCIONAR --</option>
+                                <option *ngFor="let pais of listaPaises" value="{{pais.identificador}}"
+                                    [selected]="pais.identificador == sucursal.id_pais">{{pais.nombre}}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">Ciudad</label>
+                            <select name="id_ciudad" class="form-control" [(ngModel)]="sucursal.id_ciudad">
+                                <option>-- SELECCIONAR --</option>
+                                <option *ngFor="let ciudad of listaCiudades" value="{{ciudad.identificador}}"
+                                    [selected]="ciudad.identificador == sucursal.id_ciudad">{{ciudad.nombre}}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Direccion">Direccion</label>
+                            <input type="text" class="form-control" placeholder="Direccion" name="direccion"
+                                [(ngModel)]="sucursal.direccion">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Ecommerce">Ecommerce</label>
+                            <select name="ecommerce" class="form-control" [(ngModel)]="sucursal.ecommerce">
+                                <option selected>-- SELECCIONAR --</option>
+                                <option value="S" [selected]="sucursal.ecommerce == 'S'">SI</option>
+                                <option value="N" [selected]="sucursal.ecommerce == 'N'">NO</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Central">Central</label>
+                            <select name="central" class="form-control" [(ngModel)]="sucursal.central">
+                                <option selected>-- SELECCIONAR --</option>
+                                <option value="S" [selected]="sucursal.central == 'S'">SI</option>
+                                <option value="N" [selected]="sucursal.central == 'N'">NO</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'">
+                                <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm"
+                                    role="status" aria-hidden="true"></span>
+                                Guardar
+                            </button>
+                            <button type="button" class="btn btn-primary" (click)="actualizar()"
+                                *ngIf="accion == 'UPD'">
+                                <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm"
+                                    role="status" aria-hidden="true"></span>
+                                Actualizar
+                            </button>
+                            <button type="button" class="btn btn-danger" (click)="mostrarFormulario(false, 'LST')">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

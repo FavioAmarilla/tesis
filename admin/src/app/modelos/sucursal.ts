@@ -9,5 +9,6 @@ export class Sucursal {
         public id_ciudad: number,
         public direccion: string,
         public ecommerce: string,
+        public central: string
     ) {}
 }

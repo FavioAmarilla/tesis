@@ -101,7 +101,7 @@ export class PaginaCarrito implements OnInit {
       ecommerce: 'S'
     }
 
-    const response: any = await this.servicioSucursal.obtenerSucursalesEcommerce(null, parametros);
+    const response: any = await this.servicioSucursal.obtenerSucursal(null, parametros);
     if (response.success) {
       this.listaSucursales = response.data;
     } else {

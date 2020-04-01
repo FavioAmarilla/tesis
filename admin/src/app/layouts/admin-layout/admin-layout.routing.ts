@@ -16,12 +16,14 @@ import { PaisComponent } from '../../paginas/pais/pais.component';
 import { CiudadComponent } from '../../paginas/ciudad/ciudad.component';
 import { BarrioComponent } from '../../paginas/barrio/barrio.component';
 import { MarcaComponent } from 'app/paginas/marca/marca.component';
+import { SucursalComponent } from 'app/paginas/sucursal/sucursal.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
     { path: 'login',            component: LoginComponent },
     { path: 'dashboard',        component: DashboardComponent, canActivate: [UserGuard] },
     { path: 'empresas',         component: EmpresaComponent, canActivate: [UserGuard] },
+    { path: 'sucursal',        component: SucursalComponent, canActivate: [UserGuard] },
     { path: 'productos',        component: ProductoComponent, canActivate: [UserGuard] },
     { path: 'usuarios',         component: UsuariosComponent, canActivate: [UserGuard] },
     { path: 'perfil',           component: PerfilComponent, canActivate: [UserGuard] },
