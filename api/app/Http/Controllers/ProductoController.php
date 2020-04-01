@@ -20,7 +20,14 @@ class ProductoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca', 'stock']);
+        $id_sucursal = $request->query('id_sucursal');
+        $query = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca', 
+        'stock'=> function($q) use ($id_sucursal) {
+            if ($id_sucursal) {
+                $q->where('pr_stock.id_sucursal', '=', $id_sucursal);
+                $q->where('pr_stock.stock', '>', 0);
+            }
+        }]);
 
         $id_linea = $request->query('id_linea');
         if ($id_linea) {
@@ -66,8 +73,13 @@ class ProductoController extends BaseController
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
 
         $data = $query->orderBy('descripcion', 'asc')->$listar();
-        
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
+
+        $resultados = [];
+        foreach ($data as $element) {
+            if ($element->stock) array_push($resultados, $element);
+        }
+
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $resultados, 200);
     }
 
     /**

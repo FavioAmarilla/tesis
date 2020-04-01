@@ -80,5 +80,10 @@ export interface EcParamCiudad {
     identificador?: number
     id_ec_parametro?: number
     id_ciudad?: number
-    activo?: number
+    activo?: string
+}
+
+export interface Marca {
+    identificador?: number
+    nombre?: string
 }

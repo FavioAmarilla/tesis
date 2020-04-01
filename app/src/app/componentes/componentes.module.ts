@@ -7,6 +7,7 @@ import { FooterComponent } from './footer/footer.component';
 import { UbicacionPage } from './ubicacion/ubicacion.page';
 import { FiltrosComponent } from './filtros/filtros.component';
 import { AgmCoreModule } from '@agm/core';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { AgmCoreModule } from '@agm/core';
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCY4IBDW6_CxesXRfvmuGM5sp5elGyd6vI'
     }),
+    FormsModule
   ],
   exports: [
     HeaderComponent,

@@ -1,6 +1,7 @@
 <app-header [cargando]="cargando"></app-header>
 
-<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModal" aria-hidden="true">
+<div class="filterModal modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModal"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -10,7 +11,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-filtros></app-filtros>
+        <app-filtros (filtrosEmitter)="obtenerProductos($event)"></app-filtros>
       </div>
     </div>
   </div>
@@ -18,7 +19,7 @@
 
 <ion-content>
   <!-- slides -->
-  <ion-slides *ngIf="slides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions">
+  <ion-slides *ngIf="listaSlides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions">
     <ion-slide class="slider-item" style="background-image: url(assets/images/banner-super-home.jpg);">
       <div class="container">
         <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
@@ -31,7 +32,7 @@
       </div>
       <div class="overlay"></div>
     </ion-slide>
-    <ion-slide *ngFor="let slide of slides" class="slider-item" [style]="slide.imagen | slideImage">
+    <ion-slide *ngFor="let slide of listaSlides" class="slider-item" [style]="slide.imagen | slideImage">
       <div class="overlay"></div>
       <div class="container">
         <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
@@ -44,7 +45,6 @@
     </ion-slide>
   </ion-slides>
 
-
   <div class="filter-toggle" data-toggle="modal" data-target="#filterModal"><i class="icon-filter"></i></div>
 
   <section class="ftco-section">
@@ -54,16 +54,18 @@
       <!-- productos -->
       <div class="row">
         <div class="col-md-12 heading-section text-center">
+          <br><br>
           <h2 class="mb-4">Nuestros productos</h2>
+          <hr class="border-top ml-5 mr-5">
         </div>
 
         <div class="col-md-3 product shop-filters">
-          <app-filtros></app-filtros>
+          <app-filtros (filtrosEmitter)="obtenerProductos($event)"></app-filtros>
         </div>
 
         <div class="col-md-9">
-          <div class="row">
-            <div class="col-md-6 col-lg-3" *ngFor="let producto of productos">
+          <div class="row" *ngIf="listaProductos != null">
+            <div class="col-md-6 col-lg-3" *ngFor="let producto of listaProductos">
               <div class="product">
                 <div class="m-2">
                   <a [routerLink]="['/producto-simple', producto.identificador]" class="img-prod">
@@ -104,6 +106,12 @@
               </div>
             </div>
           </div>
+
+          <div class="row text-center" *ngIf="listaProductos == null && !cargando">
+            <div class="col-md-12">
+              <h1 class="text-primary">No se encontraron productos</h1>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -112,11 +120,11 @@
 
 
       <!-- marcas -->
-      <div class="row seccion-marcas">
+      <!-- <div class="row seccion-marcas">
         <div class="col-md-12 heading-section text-center">
           <h2 class="col-md-12">Marcas Destacadas</h2>
         </div>
-        <div class="col-sm-12 col-md-6 col-lg-2 m-auto" *ngFor="let producto of productos">
+        <div class="col-sm-12 col-md-6 col-lg-2 m-auto" *ngFor="let producto of listaProductos">
           <div class="m-2">
             <a [routerLink]="['/producto-simple', producto.identificador]" class="img-prod">
               <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="150"
@@ -124,7 +132,7 @@
             </a>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <br><br>
 
