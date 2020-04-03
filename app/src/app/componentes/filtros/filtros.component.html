@@ -6,7 +6,7 @@
     <label>Sucursal</label>
     <select class="form-control" name="sucursal" [(ngModel)]="filtros.id_sucursal" (change)="enviarFiltros()">
       <option *ngFor="let sucursal of listaSucursales" [value]="sucursal.identificador"
-        [selected]="(sucursal.central == 'S') ? true : false">{{ sucursal.nombre }}</option>
+        [selected]="seleccionarSucursal(sucursal)">{{ sucursal.nombre }}</option>
     </select>
   </div>
 

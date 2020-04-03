@@ -58,6 +58,15 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
+  seleccionarSucursal(sucursal) {
+    if (sucursal.central == 'S') {
+      this.filtros.id_sucursal = sucursal.identificador;
+      return true;
+    }
+
+    return false;
+  }
+
   async obtenerLineasProducto() {
     const response: any = await this.servicioLineaProd.obtenerLinea();
 
