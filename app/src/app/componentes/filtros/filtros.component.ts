@@ -58,13 +58,9 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
-  seleccionarSucursal(sucursal) {
-    if (sucursal.central == 'S') {
-      this.filtros.id_sucursal = sucursal.identificador;
-      return true;
-    }
-
-    return false;
+  async seleccionarSucursal(value) {
+    this.filtros.id_sucursal = await value;
+    await this.enviarFiltros();
   }
 
   async obtenerLineasProducto() {
@@ -77,6 +73,11 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
+  async seleccionarLinea(value) {
+    this.filtros.id_linea = await value;
+    await this.enviarFiltros();
+  }
+
   async obtenerMarcas() {
     const response: any = await this.servicioMarca.obtenerMarca();
     if (response.success) {
@@ -84,6 +85,11 @@ export class FiltrosComponent implements OnInit {
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }
+  }
+
+  async seleccionarMarca(value) {
+    this.filtros.id_marca = await value;
+    await this.enviarFiltros();
   }
 
   async enviarFiltros() {
