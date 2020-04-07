@@ -57,8 +57,6 @@ export class PaginaInicio implements OnInit {
   }
 
   async obtenerProductos(parametros?) {
-    console.log(parametros)
-    this.cargando = true;
     const response: any = await this.servicioProducto.obtenerProducto(null, parametros);
 
     if (response.success) {
