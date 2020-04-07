@@ -17,9 +17,66 @@ class PedidoController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Pedido::with(['items']);
+
+        $identificador = $request->query('identificador');
+        if ($identificador) {
+            $query->where('identificador', '=', $identificador);
+        }
+
+        $id_usuario = $request->query('id_usuario');
+        if ($id_usuario) {
+            $query->where('id_usuario', '=', $id_usuario);
+        }
+        
+        $id_sucursal = $request->query('id_sucursal');
+        if ($id_sucursal) {
+            $query->where('id_sucursal', '=', $id_sucursal);
+        }
+        
+        $fecha = $request->query('fecha');
+        if ($fecha) {
+            $query->where('fecha', '=', $fecha);
+        }
+        
+        $id_usuario = $request->query('id_usuario');
+        if ($id_usuario) {
+            $query->where('id_usuario', '=', $id_usuario);
+        }
+        
+        $id_pais = $request->query('id_pais');
+        if ($id_pais) {
+            $query->where('id_pais', '=', $id_pais);
+        }
+        
+        $id_ciudad = $request->query('id_ciudad');
+        if ($id_ciudad) {
+            $query->where('id_ciudad', '=', $id_ciudad);
+        }
+        
+        $id_barrio = $request->query('id_barrio');
+        if ($id_barrio) {
+            $query->where('id_barrio', '=', $id_barrio);
+        }
+
+        $direccion = $request->query('direccion');
+        if ($direccion) {
+            $query->where('direccion', 'LIKE', '%'.$direccion.'%');
+        }
+
+        $estado = $request->query('estado');
+        if ($estado) {
+            $query->where('estado', '=', $estado);
+        }
+
+        $paginar = $request->query('paginar');
+        $listar = (boolval($paginar)) ? 'paginate' : 'get';
+
+        $data = $query->orderBy('fecha', 'asc')->$listar();
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
