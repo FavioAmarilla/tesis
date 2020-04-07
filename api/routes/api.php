@@ -62,3 +62,4 @@ Route::resource('ecParametro', 'EcParametrosController');
 Route::resource('ecParamCiudad', 'EcParamCiudadesController');
 Route::resource('ecParamSucursal', 'EcParamSucursalController');
 Route::resource('marca', 'MarcaController');
+Route::resource('pedido', 'PedidoController');
