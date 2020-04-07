@@ -52,7 +52,7 @@ export class MapaComponent implements OnInit {
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
       center: coordenadas.marcador,
-      zoom: 15
+      zoom: 13
     });
 
     this.opcionesEventos();
