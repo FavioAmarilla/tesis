@@ -1,0 +1,50 @@
+<app-header [cargando]="cargando"></app-header>
+
+<ion-content>
+
+  <section class="ftco-section ftco-cart" style="padding-top: 20px;">
+
+    <div class="container">
+      <div class="row text-center">
+        <h1>Listado de Pedidos</h1>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-12 mt-4">
+          <div class="cart-list">
+
+            <table class="table">
+              <thead class="thead-primary">
+                <tr class="text-center">
+                  <th>Fecha</th>
+                  <th>Sucursal</th>
+                  <th>Direccion</th>
+                  <th>Costo Envio</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="listaCarrito">
+                <tr class="text-center" *ngFor="let pedido of listaPedido">
+                  <td class="product-name">{{ pedido.fecha }}</td>
+                  <td class="product-name">{{ pedido.sucursal.nombre }}</td>
+                  <td class="product-name">{{ pedido.direccion }}</td>
+                  <td class="product-name">{{ pedido.costo_envio | numberFormat}} Gs.}}</td>
+                  <td class="product-name">{{ pedido.total | numberFormat}} Gs.</td>
+                  <td class="product-name">{{ pedido.estado }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <app-footer [cargando]="cargando"></app-footer>
+
+</ion-content>
