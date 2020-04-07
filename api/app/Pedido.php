@@ -23,6 +23,7 @@ class Pedido extends Model
         'latitud',
         'longitud',
         'costo_envio',
+        'total',
         'observacion',
         'estado'	
     ];

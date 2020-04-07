@@ -31,24 +31,6 @@ export class PedidoService {
     });
   }
 
-  async obtenerItems(id?, parametros?) {
-    const url = (id) ? `ecParamCiudad/${id}` : `ecParamCiudad`;
-
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    const params = new HttpParams({ fromObject: parametros });
-
-    return new Promise(resolve => {
-      this.http.get(`${API}${url}`, { headers, params }).subscribe(
-        (response: any) => {
-          resolve(response);
-        },
-        error => {
-          resolve(error);
-        }
-      );
-    });
-  }
-
   async registrar(pedido) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
