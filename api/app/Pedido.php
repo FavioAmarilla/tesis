@@ -27,8 +27,27 @@ class Pedido extends Model
         'estado'	
     ];
 
-    //obtener items de pedido
     public function items(){
-        return $this->hasMany('App\PedidoItems');
+        return $this->hasOne('App\PedidoItems', 'id_pedido');
+    }
+
+    public function sucursal(){
+        return $this->hasOne('App\Sucursal', 'id_sucursal');
+    }
+
+    public function cupon(){
+        return $this->hasOne('App\CuponDescuento', 'id_cupon_descuento');
+    }
+
+    public function pais(){
+        return $this->hasOne('App\Pais', 'id_pais');
+    }
+
+    public function ciudad(){
+        return $this->hasOne('App\Ciudad', 'id_ciudad');
+    }
+
+    public function barrio(){
+        return $this->hasOne('App\Barrio', 'id_barrio');
     }
 }
