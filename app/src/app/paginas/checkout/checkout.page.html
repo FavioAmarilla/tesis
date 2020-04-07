@@ -13,16 +13,23 @@
               <input type="text" class="form-control text-left px-3" placeholder="Código promocional"
                 [(ngModel)]="cuponDescuento.codigo" (focusout)="obtenerCupones()">
             </div>
-            <div class="form-group" *ngIf="this.cuponDescuento.length > 0">
+            <div class="form-group" *ngIf="cuponDescuento.length > 0">
               <p class="d-flex">
                 <span>{{ cuponDescuento.descripcion }}</span>
                 <span style="text-align: right;">{{ cuponDescuento.porcentaje | numberFormat }} %</span>
               </p>
             </div>
-            <div class="form-group" *ngIf="this.cuponDescuento.length == 0 && submitCuponDescuento">
+            <div class="form-group" *ngIf="cuponDescuento.length == 0 && submitCuponDescuento">
               <p class="text-danger">
                 No existe el cupon de descuento
               </p>
+            </div>
+          </div>
+
+          <div class="cart-total mb-3">
+            <h3>Observacion</h3>
+            <div class="form-group">
+              <textarea [(ngModel)]="datosEnvio.observacion" class="form-control text-left px-3" cols="30" rows="5"></textarea>
             </div>
           </div>
         </div>
@@ -33,7 +40,7 @@
             <p>Ingrese su destino para el envio</p>
             <form action="#" class="info">
               <div class="form-group">
-                <select name="pais" class="form-control text-left px-3" placeholder="Pais" [(ngModel)]="datosEnvio.pais"
+                <select name="pais" class="form-control text-left px-3" placeholder="Pais"
                   (change)="datosEnvioSelect($event.target.value, 'pais')">
                   <option value="0">-- SELECCIONE--</option>
                   <option *ngFor="let pais of listaPaises" value="{{ pais.identificador }}"> {{ pais.nombre }}</option>
@@ -45,7 +52,7 @@
                 </div>
                 <div *ngIf="mostrarCiudades">
                   <select name="ciudad" class="form-control text-left px-3" placeholder="Ciudad"
-                    [(ngModel)]="datosEnvio.ciudad" (change)="datosEnvioSelect($event.target.value, 'ciudad')">
+                    (change)="datosEnvioSelect($event.target.value, 'ciudad')">
                     <option value="0">-- SELECCIONE--</option>
                     <option *ngFor="let ciudad of listaCiudades" value="{{ ciudad.identificador }}"> {{ ciudad.nombre }}
                     </option>
@@ -59,7 +66,7 @@
                 </div>
                 <div *ngIf="mostrarBarrios">
                   <select name="barrio" class="form-control text-left px-3" placeholder="Barrio"
-                    [(ngModel)]="datosEnvio.barrio" (change)="datosEnvioSelect($event.target.value, 'barrio')">
+                    (change)="datosEnvioSelect($event.target.value, 'barrio')">
                     <option value="0">-- SELECCIONE--</option>
                     <option *ngFor="let barrio of listaBarrios" value="{{ barrio.identificador }}"> {{ barrio.nombre }}
                     </option>
@@ -67,14 +74,17 @@
                 </div>
               </div>
               <div class="form-group">
-                <input type="text" name="direccion" class="form-control text-left px-3" placeholder="Direccion" [(ngModel)]="datosEnvio.direccion">
+                <input type="text" name="direccion" class="form-control text-left px-3" placeholder="Direccion"
+                  [(ngModel)]="datosEnvio.direccion">
               </div>
               <div class="form-group">
                 <div class="input-group mb-3">
-                  <div class="input-group-prepend btn-ubicacion" data-toggle="modal" data-target="#modalUbicacion" (click)="abrirModal()">
+                  <div class="input-group-prepend btn-ubicacion" data-toggle="modal" data-target="#modalUbicacion"
+                    (click)="abrirModal()">
                     <span class=" input-group-text"> <span class="icon-map-marker"></span> </span>
                   </div>
-                  <input type="text" name="ubicacion" class="form-control" placeholder="Ubicación" aria-label="Ubicación" aria-describedby="basic-addon1" [(ngModel)]="datosEnvio.ubicacion" readonly>
+                  <input type="text" name="ubicacion" class="form-control" placeholder="Ubicación"
+                    aria-label="Ubicación" aria-describedby="basic-addon1" [(ngModel)]="datosEnvio.ubicacion" readonly>
                 </div>
               </div>
             </form>
@@ -104,6 +114,18 @@
           </div>
         </div>
 
+      </div>
+
+      <div class="row mt-4">
+        <div class="col">
+          <span class="float-right">
+            <p (click)="registrarPedido()">
+              <a class="btn btn-primary py-3 px-4">
+                Confirmar
+              </a>
+            </p>
+          </span>
+        </div>
       </div>
     </div>
   </section>

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Pais, Ciudad, Barrio, CuponDescuento, EcParametro, EcParamCiudad } from 'src/app/interfaces/interfaces';
-import { PaisService } from 'src/app/servicios/pais.service';
-import { CiudadService } from 'src/app/servicios/ciudad.service';
+import { Barrio, CuponDescuento, EcParametro, EcParamCiudad } from 'src/app/interfaces/interfaces';
 import { BarrioService } from 'src/app/servicios/barrio.service';
 import { ModalController } from '@ionic/angular';
 import { UbicacionPage } from '../../componentes/ubicacion/ubicacion.page';
@@ -11,6 +9,8 @@ import { CuponDescuentoService } from 'src/app/servicios/cupon-descuento.service
 import { EcParametrosService } from 'src/app/servicios/ec-parametros.service';
 import { ServicioUbicacion } from 'src/app/servicios/ubicacion.service';
 import { Router } from '@angular/router';
+import { PedidoService } from 'src/app/servicios/pedido.service';
+import { UsuarioService } from 'src/app/servicios/usuario.service';
 
 @Component({
   selector: 'app-checkout',
@@ -24,6 +24,8 @@ export class CheckoutPage implements OnInit {
   public listaPaises = [];
   public listaCiudades = [];
   public listaBarrios: Barrio;
+  public carrito: any;
+  public usuario: any;
 
   public parametros: EcParametro
   public paramCiudades: EcParamCiudad
@@ -39,8 +41,8 @@ export class CheckoutPage implements OnInit {
   public coordenadas;
 
   constructor(
-    private servicioPais: PaisService,
-    private servicioCiudad: CiudadService,
+    private serivioPedido: PedidoService,
+    private servicioUsuario: UsuarioService,
     private servicioBarrio: BarrioService,
     private servicioAlerta: AlertaService,
     private servicioCarrito: CarritoService,
@@ -92,10 +94,10 @@ export class CheckoutPage implements OnInit {
   async obtenerTotales() {
     this.inicializarTotales();
 
-    let carrito = await this.servicioCarrito.obtenerCarrito();
+    this.carrito = await this.servicioCarrito.obtenerCarrito();
 
     //obtener sub total
-    await carrito.forEach(element => {
+    await this.carrito.forEach(element => {
       this.totales.subtotal += element.precio_venta * element.cantidad;
     });
 
@@ -115,6 +117,10 @@ export class CheckoutPage implements OnInit {
   }
 
   async abrirModal() {
+    if (!this.datosEnvio.ciudad || this.datosEnvio.ciudad <= 0) {
+      this.servicioAlerta.dialogoError('Debe selecciona una ciudad', '');
+      return;
+    }
     const coords = this.coordenadas;
 
     const modal = await this.modalCtrl.create({
@@ -131,11 +137,8 @@ export class CheckoutPage implements OnInit {
     this.datosEnvio.ubicacion = (coordenadas.marcador) ? `${coordenadas.marcador.lat},${coordenadas.marcador.lng}` : '';
 
     this.servicioUbicacion.validarUbicacion(this.datosEnvio.ciudad, coordenadas.marcador);
-  }
 
-  // validarUbicacion(ciudad, coordenadas) {
-  //   this.u
-  // }
+  }
 
   async inicializarDatosEnvio() {
     this.datosEnvio = {
@@ -143,21 +146,20 @@ export class CheckoutPage implements OnInit {
       ciudad: 0,
       barrio: 0,
       direccion: '',
-      ubicacion: ''
+      ubicacion: '',
+      observacion: ''
     };
   }
 
   datosEnvioSelect(value, select) {
     if (select === 'pais') {
       this.cargando = true;
-      this.mostrarCiudades = true;
+      this.datosEnvio.pais = value;
       this.obtenerParamCiudades(this.parametros.identificador);
     }
 
     if (select === 'ciudad') {
       this.cargando = true;
-      this.mostrarBarrios = false;
-
       this.datosEnvio.ciudad = value;
       this.asignarCoordenadas(value);
       this.obtenerBarrios(value);
@@ -233,6 +235,7 @@ export class CheckoutPage implements OnInit {
       response.data.forEach(element => {
         this.listaCiudades.push(element.ciudad);
       });
+      this.mostrarCiudades = true;
     } else {
       this.cargando = false;
       this.servicioAlerta.dialogoError(response.message, '');
@@ -241,11 +244,63 @@ export class CheckoutPage implements OnInit {
     this.cargando = false;
   }
 
-  asignarCoordenadas(ciudadId) {
+  async asignarCoordenadas(ciudadId) {
     const ciudad = this.listaCiudades.find(element => element.identificador == ciudadId);
     if (ciudad) {
       this.coordenadas = ciudad.coordenadas;
     }
   }
+
+  async obtenerUsuario() {
+    const response: any = await this.servicioUsuario.obtenerUsuario();
+    console.log(response);
+    if (response.length > 0) {
+      this.usuario = response;
+    } else {
+      this.servicioAlerta.dialogoError('Debe estar Logueado para confirmar la operacion', '');
+      this.router.navigate(['/login']);
+    }
+
+    return response.length > 0;
+  }
+
+  async registrarPedido() {
+    let pedido: any = {};
+    if (await this.obtenerUsuario() == false) {
+      return;
+    }
+
+    let sucursal: any = await this.servicioCarrito.getStorage('sucursal');
+    let date = new Date();
+    let fecha = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+    let ubicacion = this.datosEnvio.ubicacion.split(',');
+
+    pedido.id_cupon_descuento = this.cuponDescuento.identificador;
+    pedido.id_usuario = this.usuario.sub;
+    pedido.id_sucursal = sucursal;
+    pedido.fecha = fecha;
+    pedido.id_pais = this.datosEnvio.pais;
+    pedido.id_ciudad = this.datosEnvio.ciudad;
+    pedido.id_barrio = this.datosEnvio.barrio;
+    pedido.id_direccion = this.datosEnvio.direccion;
+    pedido.latitud = ubicacion[0];
+    pedido.longitud = ubicacion[1];
+    pedido.costo_envio = this.parametros.costo_delivery;
+    pedido.observacion = this.datosEnvio.observacion;
+    pedido.estado = "PENDIENTE"
+    pedido.productos = [];
+    this.carrito.forEach(element => {
+      pedido.productos.push(element);
+    });
+
+    const response: any = await this.serivioPedido.registrar(pedido);
+    console.log(response);
+    if (response.success) {
+      this.servicioAlerta.dialogoExito(response.message, '');
+    } else {
+      this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
+
 
 }

@@ -4,6 +4,7 @@ import { LineaProducto, Marca, Sucursal } from 'src/app/interfaces/interfaces';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 import { MarcaService } from 'src/app/servicios/marca.service';
 import { SucursalService } from 'src/app/servicios/sucursal.service';
+import { CarritoService } from 'src/app/servicios/carrito.service';
 
 @Component({
   selector: 'app-filtros',
@@ -20,6 +21,7 @@ export class FiltrosComponent implements OnInit {
   @Output() public filtrosEmitter = new EventEmitter();
 
   constructor(
+    private carritoService: CarritoService,
     private servicioSucursal: SucursalService,
     private servicioLineaProd: LineasProductoService,
     private servicioMarca: MarcaService,
@@ -29,7 +31,7 @@ export class FiltrosComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.obtenersucursales();
+    await this.obtenerSucursales();
     await this.obtenerLineasProducto();
     await this.obtenerMarcas();
     await this.enviarFiltros();
@@ -45,7 +47,7 @@ export class FiltrosComponent implements OnInit {
     };
   }
 
-  async obtenersucursales() {
+  async obtenerSucursales() {
     let parametros = {
       ecommerce: 'S'
     };
@@ -60,6 +62,7 @@ export class FiltrosComponent implements OnInit {
 
   async seleccionarSucursal(value) {
     this.filtros.id_sucursal = await value;
+    await this.carritoService.setStorage('sucursal', value);
     await this.enviarFiltros();
   }
 

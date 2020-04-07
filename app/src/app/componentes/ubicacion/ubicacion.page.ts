@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import * as MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as mapboxgl from 'mapbox-gl';
 import * as turf from '@turf/turf';
+import { AlertaService } from 'src/app/servicios/alerta.service';
 
 var mapa: any, marker, coordenadas;
 
@@ -23,7 +24,8 @@ export class UbicacionPage implements OnInit {
   @Input() coordenadas;
 
   constructor(
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private servicioAlerta: AlertaService
   ) { }
 
   ngOnInit() {
@@ -43,11 +45,10 @@ export class UbicacionPage implements OnInit {
       container: this.map.nativeElement,
       style: 'mapbox://styles/mapbox/streets-v11',
       center,
-      zoom: 15
+      zoom: 13
     });
 
     mapa.on('click', this.agregarMarcador);
-
     mapa.on('load', this.dibujarAreaCobertura);
   }
 
@@ -66,13 +67,15 @@ export class UbicacionPage implements OnInit {
           .addTo(mapa);
 
         coordenadas.marcador = marker.getLngLat();
-      } else { coordenadas.marcador = null; }
+      } else { 
+        this.servicioAlerta.dialogoError('La ubicacion no se encuentra dentro del area de cobertura','')
+        coordenadas.marcador = null; 
+      }
 
     } else { coordenadas.marcador = null; }
   }
 
   dibujarAreaCobertura(e) {
-    console.log('coordenadas: ', coordenadas);
     if (coordenadas && coordenadas.poligono.length) {
       mapa.addSource('maine', {
         type: 'geojson',
@@ -102,16 +105,6 @@ export class UbicacionPage implements OnInit {
     this.modalCtrl.dismiss({
       coordenadas
     });
-  }
-
-  // agm - agrega el marcador
-  async obtenerMarker(position: any) {
-    // const lat = position.coords.lat;
-    // const lng = position.coords.lng;
-
-    // this.marker = [{ latitude: lat, longitude: lng }];
-    // this.latitud = lat;
-    // this.longitud = lng;
   }
 
   asignarCoordenadas() {

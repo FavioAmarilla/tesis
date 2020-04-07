@@ -6,6 +6,7 @@ import { SucursalService } from 'src/app/servicios/sucursal.service';
 import { Router } from '@angular/router';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 import { EcParametrosService } from 'src/app/servicios/ec-parametros.service';
+import { UsuarioService } from 'src/app/servicios/usuario.service';
 
 @Component({
   selector: 'app-carrito',
@@ -24,6 +25,7 @@ export class PaginaCarrito implements OnInit {
   constructor(
     private router: Router,
     private servicioCarrito: CarritoService,
+    private servicioUsuario: UsuarioService,
     private servicioSucursal: SucursalService,
     private alertaCtrl: AlertController,
     private servicioAlerta: AlertaService,
@@ -122,11 +124,20 @@ export class PaginaCarrito implements OnInit {
   }
 
   async checkout() {
+    //validar que usuario este logueado
+    const usuario: any = await this.servicioUsuario.obtenerUsuario();
+    if (usuario.length <= 0) {
+      this.servicioAlerta.dialogoError('Debe estar Logueado para confirmar la operacion', '');
+      return;
+    }
+
+    //validar monto minimo de compra
     if (this.totales.subtotal < this.parametros.monto_minimo) {
       this.servicioAlerta.dialogoError('El monto de compra debe ser mayor a: ' + this.parametros.monto_minimo, '');
-    }else{
-      this.redireccionar('/checkout');
+      return;
     }
+
+    this.redireccionar('/checkout');
   }
 
 

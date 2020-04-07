@@ -10,8 +10,13 @@ export class CarritoService {
     private storage: Storage
   ) { }
 
-  private set(key, data) {
+  async setStorage(key, data) {
     this.storage.set(key, data);
+  }
+
+  async getStorage(key) {
+    const data = await this.storage.get(key) || [];
+    return data;
   }
 
   // ---------------------------------------------
@@ -35,13 +40,13 @@ export class CarritoService {
   agregarAlCarrito(producto) {
     return new Promise(async resolve => {
       const productos = await this.obtenerCarrito() || [];
-      const existe = productos.find(elemento => elemento.identificador == producto.identificador );
+      const existe = productos.find(elemento => elemento.identificador == producto.identificador);
       if (existe) {
         existe.cantidad += producto.cantidad;
       } else {
         productos.push(producto);
       }
-      this.set('carrito', productos);
+      this.setStorage('carrito', productos);
       resolve(true);
     });
   }
@@ -54,12 +59,12 @@ export class CarritoService {
   eliminarDelCarrito(producto) {
     return new Promise(async resolve => {
       const productos = await this.obtenerCarrito() || [];
-      const existe = productos.find(elemento => elemento.identificador == producto.identificador );
+      const existe = productos.find(elemento => elemento.identificador == producto.identificador);
       if (existe) {
         const index = this.obtenerPosicion(productos, producto);
         if (index != -1) {
           productos.splice(index, 1);
-          this.set('carrito', productos);
+          this.setStorage('carrito', productos);
           return resolve(true);
         }
       }
@@ -79,13 +84,13 @@ export class CarritoService {
   agregarAFavoritos(producto) {
     return new Promise(async resolve => {
       const productos = await this.obtenerFavoritos() || [];
-      const existe = productos.find(elemento => elemento.identificador == producto.identificador );
+      const existe = productos.find(elemento => elemento.identificador == producto.identificador);
       if (existe) {
         existe.cantidad += producto.cantidad;
       } else {
         productos.push(producto);
       }
-      this.set('favorito', productos);
+      this.setStorage('favorito', productos);
       resolve(true);
     });
   }
@@ -98,7 +103,7 @@ export class CarritoService {
         const index = await this.obtenerPosicion(favoritos, producto);
         if (index != -1) {
           favoritos.splice(index, 1);
-          this.set('favorito', favoritos);
+          this.setStorage('favorito', favoritos);
           resolve(true);
         }
       }

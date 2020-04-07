@@ -14,14 +14,11 @@ export class ServicioUbicacion {
   ) { }
 
   validarUbicacion(ciudad, coordenadas) {
-    console.log('coors: ', coordenadas);
-
     const url = `${API}ciudad/${ciudad}/verificarZona`;
     return new Promise(resolve => {
       this.http.post(url, {coordenadas}, {})
       .subscribe(
         (response: any) => {
-          console.log('response: ', response);
           return resolve(response.success);
         },
         (error: any) => {
