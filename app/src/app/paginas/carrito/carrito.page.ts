@@ -123,7 +123,7 @@ export class PaginaCarrito implements OnInit {
     }
   }
 
-  async checkout() {
+  async pedido() {
     //validar que usuario este logueado
     const usuario: any = await this.servicioUsuario.obtenerUsuario();
     if (usuario.length <= 0) {
@@ -137,7 +137,7 @@ export class PaginaCarrito implements OnInit {
       return;
     }
 
-    this.redireccionar('/checkout');
+    this.redireccionar('/pedido');
   }
 
 

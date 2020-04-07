@@ -13,11 +13,11 @@ import { PedidoService } from 'src/app/servicios/pedido.service';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
 
 @Component({
-  selector: 'app-checkout',
-  templateUrl: './checkout.page.html',
-  styleUrls: ['./checkout.page.scss'],
+  selector: 'app-pedido',
+  templateUrl: './pedido.page.html',
+  styleUrls: ['./pedido.page.scss'],
 })
-export class CheckoutPage implements OnInit {
+export class PedidoPage implements OnInit {
 
   public cargando = true;
 

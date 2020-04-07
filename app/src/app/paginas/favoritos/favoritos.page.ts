@@ -5,11 +5,11 @@ import { Producto } from '../../interfaces/interfaces';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 
 @Component({
-  selector: 'app-lista-deseos',
-  templateUrl: './lista-deseos.page.html',
-  styleUrls: ['./lista-deseos.page.scss'],
+  selector: 'app-favoritos',
+  templateUrl: './favoritos.page.html',
+  styleUrls: ['./favoritos.page.scss'],
 })
-export class PaginaListaDeseos implements OnInit {
+export class FavoritosPage implements OnInit {
 
   public cargando = true;
   public productos: Producto;

@@ -4,15 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
+import { AgmCoreModule } from '@agm/core';
 
-import { PaginaListaDeseos } from './lista-deseos.page';
+import { PedidoPage } from './pedido.page';
 import { ModuloComponentes } from '../../componentes/componentes.module';
-import { PipesModule } from '../../pipes/pipes.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 const routes: Routes = [
   {
     path: '',
-    component: PaginaListaDeseos
+    component: PedidoPage
   }
 ];
 
@@ -23,8 +24,9 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ModuloComponentes,
+    AgmCoreModule,
     PipesModule
   ],
-  declarations: [PaginaListaDeseos]
+  declarations: [PedidoPage]
 })
-export class ModuloPaginaListaDeseos {}
+export class PedidoPageModule { }
