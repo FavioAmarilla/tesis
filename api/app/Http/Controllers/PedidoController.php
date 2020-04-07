@@ -19,7 +19,7 @@ class PedidoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Pedido::with(['items']);
+        $query = Pedido::with(['items', 'sucursal', 'cupon', 'pais', 'ciudad', 'barrio']);
 
         $identificador = $request->query('identificador');
         if ($identificador) {
@@ -152,7 +152,8 @@ class PedidoController extends BaseController
         }
 
         if ($pedido->save()) {
-            
+            $total = 0;
+
             for ($i=0; $i <= count($productos) - 1 ; $i++) {
                 $producto = json_decode($productos[$i]);
 
@@ -162,10 +163,19 @@ class PedidoController extends BaseController
                 $item->precio_venta = $productos->precio_venta;
                 $item->cantidad = $productos->cantidad;
                 $item->activo = 'S';
+                $total += ($productos->precio_venta * $productos->cantidad);
+
                 if (!$item->save()) {
                     return $this->sendResponse(true, 'Producto de pedido no registrados', $item, 400);
                     break;
                 }
+            }
+
+            //actualizar total
+            $totalPedido = Pedido::find($pedido->identificador);
+            $totalPedido->total = $total;
+            if ($totalPedido->save()) {
+                return $this->sendResponse(true, 'Total de pedido no actualizado', $item, 400);
             }
 
             return $this->sendResponse(true, 'Pedido registrado', $pedido, 201);
@@ -269,6 +279,7 @@ class PedidoController extends BaseController
 
             if ($parametro->save()) {
                 $paramCiudades = PedidoItems::where('id_pedido', $id)->delete();
+                $total = 0;
                 for ($i=0; $i <= count($productos) - 1 ; $i++) {
                     $producto = json_decode($productos[$i]);
     
@@ -278,10 +289,18 @@ class PedidoController extends BaseController
                     $item->precio_venta = $productos->precio_venta;
                     $item->cantidad = $productos->cantidad;
                     $item->activo = 'S';
+                    $total += ($productos->precio_venta * $productos->cantidad);
                     if (!$item->save()) {
                         return $this->sendResponse(true, 'Producto de pedido no registrados', $item, 400);
                         break;
                     }
+                }
+
+                //actualizar total
+                $totalPedido = Pedido::find($pedido->identificador);
+                $totalPedido->total = $total;
+                if (!$totalPedido->save()) {
+                    return $this->sendResponse(true, 'Total de pedido no actualizado', $item, 400);
                 }
                 
                 return $this->sendResponse(true, 'Pedido actualizado', $pedido, 200);
