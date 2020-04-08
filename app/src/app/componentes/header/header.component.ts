@@ -52,7 +52,6 @@ export class HeaderComponent implements OnInit, OnChanges {
     this.servicioCarrito.obtenerCantidad('carrito');
     this.servicioCarrito.carrito.subscribe(
       (response: any) => {
-        console.log(response);
         this.carrito = response;
       },
       (error: any) => {

@@ -20,7 +20,7 @@ export class PaginaCarrito implements OnInit {
   public listaSucursales: Sucursal;
 
   public parametros: EcParametro;
-  public totales: any;
+  public total: any = 0;
 
   constructor(
     private router: Router,
@@ -30,9 +30,7 @@ export class PaginaCarrito implements OnInit {
     private alertaCtrl: AlertController,
     private servicioAlerta: AlertaService,
     private servicioEcParametros: EcParametrosService
-  ) {
-    this.inicializarTotales();
-  }
+  ) { }
 
   async ngOnInit() {
     await this.obtenerParametrosEcommerce();
@@ -44,22 +42,14 @@ export class PaginaCarrito implements OnInit {
     this.router.navigate([url]);
   }
 
-  async inicializarTotales() {
-    this.totales = {
-      subtotal: 0,
-      delivery: 10000,
-      descuento: 0,
-      total: 0
-    }
-  }
-
   async obtenerCarrito() {
     let carrito = await this.servicioCarrito.obtenerCarrito();
     this.listaCarrito = carrito;
 
-    //obtener sub total
+    //obtener total
+    this.total = 0;
     await carrito.forEach(element => {
-      this.totales.subtotal += element.precio_venta * element.cantidad;
+      this.total += element.precio_venta * element.cantidad;
     });
 
     this.cargando = false;
@@ -132,7 +122,7 @@ export class PaginaCarrito implements OnInit {
     }
 
     //validar monto minimo de compra
-    if (this.totales.subtotal < this.parametros.monto_minimo) {
+    if (this.total < this.parametros.monto_minimo) {
       this.servicioAlerta.dialogoError('El monto de compra debe ser mayor a: ' + this.parametros.monto_minimo, '');
       return;
     }
