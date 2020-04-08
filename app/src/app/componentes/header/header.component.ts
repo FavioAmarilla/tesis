@@ -14,34 +14,25 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private servicioUsuario: UsuarioService
+    private UsuarioService: UsuarioService
   ) {
   }
 
   async ngOnInit() {
-    this.obtenerUsuario();
-
-    this.servicioUsuario.loginEmitter
-      .subscribe(response => {
-        this.usuario = response;
-      });
-
-    this.servicioUsuario.logoutEmitter
-      .subscribe(event => {
-        this.obtenerUsuario();
-      });
+    this.UsuarioService.emitter
+      .subscribe(
+        response => {
+          this.usuario = response;
+        }
+      );
   }
 
   redireccionar(url) {
     this.router.navigate([url]);
   }
 
-  async obtenerUsuario() {
-    this.usuario = await this.servicioUsuario.obtenerUsuario();
-  }
-
   cerrarSession() {
-    this.servicioUsuario.cerrarSession();
+    this.UsuarioService.cerrarSession();
     this.usuario = null;
   }
 
