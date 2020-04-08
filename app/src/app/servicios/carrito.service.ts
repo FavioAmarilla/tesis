@@ -1,10 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { EventEmitter } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarritoService {
+
+  @Output() carrito = new EventEmitter();
+  @Output() favorito = new EventEmitter();
 
   constructor(
     private storage: Storage
@@ -24,8 +28,14 @@ export class CarritoService {
   // ---------------------------------------------
 
   async obtenerCantidad(key) {
-    const productos = await this.storage.get(key) || [];
-    return productos.length;
+    const data = await this.storage.get(key) || [];
+    if (data.length > 0) {
+      if (key == 'carrito') this.carrito.emit(data.length);
+      if (key == 'favorito') this.favorito.emit(data.length);
+    } else {
+      if (key == 'carrito') this.carrito.emit(0);
+      if (key == 'favorito') this.favorito.emit(0);
+    }
   }
 
   // ---------
@@ -47,6 +57,7 @@ export class CarritoService {
         productos.push(producto);
       }
       this.setStorage('carrito', productos);
+      this.obtenerCantidad('carrito');
       resolve(true);
     });
   }
@@ -65,6 +76,7 @@ export class CarritoService {
         if (index != -1) {
           productos.splice(index, 1);
           this.setStorage('carrito', productos);
+          this.obtenerCantidad('carrito');
           return resolve(true);
         }
       }
@@ -91,6 +103,7 @@ export class CarritoService {
         productos.push(producto);
       }
       this.setStorage('favorito', productos);
+      this.obtenerCantidad('favorito');
       resolve(true);
     });
   }
@@ -104,6 +117,7 @@ export class CarritoService {
         if (index != -1) {
           favoritos.splice(index, 1);
           this.setStorage('favorito', favoritos);
+          this.obtenerCantidad('favorito');
           resolve(true);
         }
       }

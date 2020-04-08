@@ -22,7 +22,7 @@
         <li class="nav-item"><a class="nav-link" (click)="redireccionar('/acerca-de')">Acerca de</a></li>
         <li class="nav-item"><a class="nav-link" (click)="redireccionar('/contacto')">Contacto</a></li>
         <li class="nav-item"><a (click)="redireccionar('/carrito')" class="nav-link"><span
-              class="icon-shopping_cart"></span>[0]</a></li>
+              class="icon-shopping_cart"></span>[{{ carrito }}]</a></li>
         <li class="nav-item" *ngIf="!usuario"><a class="nav-link" (click)="redireccionar('/login')">Login</a></li>
         <li class="nav-item" *ngIf="!usuario"><a class="nav-link" (click)="redireccionar('/signup')">Registrate</a></li>
 
