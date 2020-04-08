@@ -13,22 +13,48 @@ const API = environment.api;
 })
 export class UsuarioService {
 
-  token: string = null;
-  private user: Usuario = null;
+  @Output() loginEmitter = new EventEmitter();
+  @Output() logoutEmitter = new EventEmitter();
 
-  @Output() emitter = new EventEmitter();
+  token: string = null;
+  private usuario: Usuario = null;
 
   constructor(
     private http: HttpClient,
-    private storage: Storage,
-    private router: Router
+    private router: Router,
+    private storage: Storage
   ) { }
 
-  async registro(usuario: Usuario) {
+  iniciarSession(usuario: any) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}user`, usuario, { headers: headers }).subscribe(
+      this.http.post(`${API}user/signIn`, usuario, { headers })
+        .subscribe(
+          async (response: any) => {
+            if (response.success) {
+              // se guarda el token en el Storage
+              await this.guardarToken(response.data);
+              // se manda el usuario mediante el emmiter
+              this.loginEmitter.emit(this.usuario);
+              // se retorna true
+              resolve({ success: true });
+            }
+          },
+          (error) => {
+            this.token = null;
+            localStorage.removeItem('user-admin-token');
+            resolve({ success: false, error: error.error });
+          }
+        );
+    });
+  }
+
+  async registrar(user) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return new Promise(resolve => {
+      this.http.post(`${API}user`, user, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -39,46 +65,77 @@ export class UsuarioService {
     });
   }
 
-  async iniciarSession(usuario: any) {
+  async obtenerUsuarios(id?, parametros?) {
+    const url = (id) ? `${API}user/${id}` : `${API}user`;
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams({ fromObject: parametros });
+
+    return new Promise(resolve => {
+      this.http.get(url, { headers, params }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error.error);
+        }
+      );
+    });
+  }
+
+  async actualizar(user, id) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}user/signIn`, usuario, { headers })
-        .subscribe(
-          async (response: any) => {
-            if (response.success) {
-              // se guarda el token en el Storage
-              await this.guardarToken(response.data);
-              this.emitter.emit(this.user);
-              resolve({ success: true });
-            } else {
-              this.token = null;
-              this.storage.remove('token');
-              resolve({ success: false, error: response });
-            }
-          }
-        );
+      this.http.put(`${API}user/${id}`, user, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error.error);
+        }
+      );
+    });
+  }
+
+  activarDesactivarUsuario(id, accion) {
+    const estado = (accion === 'activar') ? 1 : 0;
+    const json = JSON.stringify({ estado });
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const params = new HttpParams().append('json', json);
+
+    return new Promise(resolve => {
+      this.http.delete(`${API}user/${id}`, { headers: headers, params: params }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error.error);
+        }
+      );
     });
   }
 
   async obtenerUsuario() {
-    if (!this.user) { this.validarToken(); }
-    return { ...this.user };
+    if (!this.usuario) { this.validarToken(); }
+    return await (this.usuario) ? { ...this.usuario } : null;
   }
 
   async cargarToken() {
-    this.token = await this.storage.get('token') || null;
+    this.token = await this.storage.get('user-admin-token') || null;
   }
 
   async guardarToken(token: string) {
     this.token = token;
-    await this.storage.set('token', token);
+    await this.storage.set('user-admin-token', token);
     await this.validarToken();
   }
 
   async validarToken(): Promise<boolean> {
     await this.cargarToken();
-    if (!this.token) {
+    if (this.token == null) {
+      this.router.navigate(['/login']);
       return Promise.resolve(false);
     }
 
@@ -87,12 +144,12 @@ export class UsuarioService {
     };
 
     return new Promise<boolean>(resolve => {
-      const headers = new HttpHeaders().set('Content-Type', 'application/json')
+      const headers = new HttpHeaders().set('Content-Type', 'application/json');
       this.http.post(`${API}user/checkToken`, data, { headers })
         .subscribe(
           (response: any) => {
             if (response.success) {
-              this.user = response.data;
+              this.usuario = response.data;
               resolve(true);
             } else {
               resolve(false);
@@ -102,9 +159,11 @@ export class UsuarioService {
     });
   }
 
-  async cerrarSession() {
+  cerrarSession() {
     this.token = null;
-    this.storage.remove('token');
+    this.usuario = null;
+    this.storage.remove('user-admin-token');
+    this.logoutEmitter.emit(true);
     this.router.navigate(['/inicio']);
   }
 }
