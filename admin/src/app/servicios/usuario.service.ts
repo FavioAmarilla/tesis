@@ -136,8 +136,8 @@ export class ServicioUsuario {
       return Promise.resolve(false);
     }
 
-    let data = {
-        'Authorization': this.token
+    const data = {
+      Authorization: this.token
     };
 
     return new Promise<boolean>(resolve => {

@@ -1,5 +1,5 @@
 import { UsuarioService } from '../../servicios/usuario.service';
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CarritoService } from 'src/app/servicios/carrito.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit, OnChanges {
 
   constructor(
     private router: Router,
-    private UsuarioService: UsuarioService,
+    private servicioUsuario: UsuarioService,
     private servicioCarrito: CarritoService,
     private servicioAlerta: AlertaService
   ) {
@@ -25,13 +25,15 @@ export class HeaderComponent implements OnInit, OnChanges {
   }
 
   async ngOnInit() {
-    this.UsuarioService.emitter
-      .subscribe(
-        response => {
-          this.usuario = response;
-        }
-      );
-      
+    this.usuario = await this.servicioUsuario.obtenerUsuario();
+
+    this.servicioUsuario.emitter
+    .subscribe(
+      response => {
+        this.usuario = response;
+      }
+    );
+
     this.obtenerCantidadCarrito();
   }
 
@@ -44,7 +46,7 @@ export class HeaderComponent implements OnInit, OnChanges {
   }
 
   cerrarSession() {
-    this.UsuarioService.cerrarSession();
+    this.servicioUsuario.cerrarSession();
     this.usuario = null;
   }
 
@@ -57,7 +59,7 @@ export class HeaderComponent implements OnInit, OnChanges {
       (error: any) => {
         this.servicioAlerta.dialogoError(error, '');
       }
-    )
+    );
   }
 
 

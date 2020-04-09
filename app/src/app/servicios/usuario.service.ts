@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
 
 import { environment } from '../../environments/environment';
 import { Usuario } from '../interfaces/interfaces';
-import { Router } from '@angular/router';
 
 const API = environment.api;
 
@@ -13,8 +13,8 @@ const API = environment.api;
 })
 export class UsuarioService {
 
-  token: string = null;
-  private user: Usuario = null;
+  private token: string = null;
+  private usuario: Usuario = null;
 
   @Output() emitter = new EventEmitter();
 
@@ -28,7 +28,8 @@ export class UsuarioService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}user`, usuario, { headers: headers }).subscribe(
+      this.http.post(`${API}user`, usuario, { headers })
+      .subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -44,26 +45,26 @@ export class UsuarioService {
 
     return new Promise(resolve => {
       this.http.post(`${API}user/signIn`, usuario, { headers })
-        .subscribe(
-          async (response: any) => {
-            if (response.success) {
-              // se guarda el token en el Storage
-              await this.guardarToken(response.data);
-              this.emitter.emit(this.user);
-              resolve({ success: true });
-            } else {
-              this.token = null;
-              this.storage.remove('token');
-              resolve({ success: false, error: response });
-            }
+      .subscribe(
+        async (response: any) => {
+          if (response.success) {
+            // se guarda el token en el Storage
+            await this.guardarToken(response.data);
+            this.emitter.emit(this.usuario);
+            resolve({ success: true });
+          } else {
+            this.token = null;
+            this.storage.remove('token');
+            resolve({ success: false, error: response });
           }
-        );
+        }
+      );
     });
   }
 
   async obtenerUsuario() {
-    if (!this.user) { this.validarToken(); }
-    return { ...this.user };
+    if (!this.usuario) { await this.validarToken(); }
+    return await (this.usuario) ? { ...this.usuario } : null;
   }
 
   async cargarToken() {
@@ -82,8 +83,8 @@ export class UsuarioService {
       return Promise.resolve(false);
     }
 
-    let data = {
-      'Authorization': this.token
+    const data = {
+      Authorization: this.token
     };
 
     return new Promise<boolean>(resolve => {
@@ -92,7 +93,7 @@ export class UsuarioService {
         .subscribe(
           (response: any) => {
             if (response.success) {
-              this.user = response.data;
+              this.usuario = response.data;
               resolve(true);
             } else {
               resolve(false);
