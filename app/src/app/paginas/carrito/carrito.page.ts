@@ -43,10 +43,10 @@ export class PaginaCarrito implements OnInit {
   }
 
   async obtenerCarrito() {
-    let carrito = await this.servicioCarrito.obtenerCarrito();
+    const carrito = await this.servicioCarrito.obtenerCarrito();
     this.listaCarrito = carrito;
 
-    //obtener total
+    // obtener total
     this.total = 0;
     await carrito.forEach(element => {
       this.total += element.precio_venta * element.cantidad;
@@ -57,7 +57,7 @@ export class PaginaCarrito implements OnInit {
 
   async confirmarParaEliminarDelCarrito(product) {
     const alerta = await this.alertaCtrl.create({
-      message: 'Deseas eliminar el producto',
+      message: '¿Deseas eliminar el producto?',
       buttons: [
         {
           text: 'Cancelar',
@@ -79,19 +79,17 @@ export class PaginaCarrito implements OnInit {
 
   async eliminarDelCarrito(product) {
     const eliminado = await this.servicioCarrito.eliminarDelCarrito(product);
-    if (eliminado) {
-      this.servicioAlerta.dialogoExito('El producto ha sido eliminado al carrito', '');
-      this.obtenerCarrito();
-    } else {
+    if (!eliminado) {
       this.servicioAlerta.dialogoError('El producto no ha sido eliminado del carrito', '');
     }
+    this.obtenerCarrito();
   }
 
   async obtenerSucursalesEcommerce() {
     this.cargando = true;
-    let parametros = {
+    const parametros = {
       ecommerce: 'S'
-    }
+    };
 
     const response: any = await this.servicioSucursal.obtenerSucursal(null, parametros);
     if (response.success) {
@@ -114,14 +112,14 @@ export class PaginaCarrito implements OnInit {
   }
 
   async pedido() {
-    //validar que usuario este logueado
+    // validar que usuario este logueado
     const usuario: any = await this.servicioUsuario.obtenerUsuario();
     if (usuario.length <= 0) {
       this.servicioAlerta.dialogoError('Debe estar Logueado para confirmar la operacion', '');
       return;
     }
 
-    //validar monto minimo de compra
+    // validar monto minimo de compra
     if (this.total < this.parametros.monto_minimo) {
       this.servicioAlerta.dialogoError('El monto de compra debe ser mayor a: ' + this.parametros.monto_minimo, '');
       return;
