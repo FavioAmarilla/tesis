@@ -31,6 +31,7 @@ export class PaginaInicio implements OnInit {
     initialSlide: 0,
     slidesPerView: 1,
     speed: 800,
+    loop: true,
     autoplay: {
       delay: 3000
     }

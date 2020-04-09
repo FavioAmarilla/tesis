@@ -21,6 +21,7 @@
   <!-- slides -->
   <ion-slides *ngIf="listaSlides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions">
     <ion-slide class="slider-item" style="background-image: url(assets/images/banner-super-home.jpg);">
+      <div class="overlay"></div>
       <div class="container">
         <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
           <div class="col-sm-12 text-center">
@@ -30,7 +31,6 @@
           </div>
         </div>
       </div>
-      <div class="overlay"></div>
     </ion-slide>
     <ion-slide *ngFor="let slide of listaSlides" class="slider-item" [style]="slide.imagen | slideImage">
       <div class="overlay"></div>
