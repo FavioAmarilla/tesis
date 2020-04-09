@@ -273,7 +273,7 @@ export class PedidoPage implements OnInit {
     }
 
     const sucursal: any = await this.servicioCarrito.getStorage('sucursal');
-    const fecha = moment().format('DD/MM/YYYY');
+    const fecha = moment().format('YYYY-MM-DD');
     const ubicacion = this.datosEnvio.ubicacion.split(',');
 
     pedido.id_cupon_descuento = this.cuponDescuento.identificador;
@@ -283,7 +283,7 @@ export class PedidoPage implements OnInit {
     pedido.id_pais = this.datosEnvio.pais;
     pedido.id_ciudad = this.datosEnvio.ciudad;
     pedido.id_barrio = this.datosEnvio.barrio;
-    pedido.id_direccion = this.datosEnvio.direccion;
+    pedido.direccion = this.datosEnvio.direccion;
     pedido.latitud = ubicacion[0];
     pedido.longitud = ubicacion[1];
     pedido.costo_envio = this.parametros.costo_delivery;

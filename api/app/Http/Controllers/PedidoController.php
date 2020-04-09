@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Pedido;
 use App\PedidoItems;
+use App\CuponDescuento;
 
 class PedidoController extends BaseController
 {
@@ -131,6 +132,20 @@ class PedidoController extends BaseController
             return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
+        $total = 0;
+        foreach ($productos as $producto) {
+            $total += $producto['precio_venta'] * $producto['cantidad'];
+        }
+        $total += $costo_envio;
+
+        if ($id_cupon_descuento) {
+            $descuento = CuponDescuento::where('identificador', '=', $id_cupon_descuento);
+            if ($descuento) {
+                $aux = $total * $descuento->porc_desc / 100;
+                $total -= $aux;
+            }
+        }
+
         $pedido = new Pedido();
         $pedido->id_cupon_descuento = $id_cupon_descuento;
         $pedido->id_usuario = $id_usuario;
@@ -145,6 +160,7 @@ class PedidoController extends BaseController
         $pedido->costo_envio = $costo_envio;
         $pedido->observacion = $observacion;
         $pedido->estado = $estado;
+        $pedido->total = $total;
 
         //validar que llegaron productos
         if (count($productos) <= 0) {
@@ -154,16 +170,15 @@ class PedidoController extends BaseController
         if ($pedido->save()) {
             $total = 0;
 
-            for ($i=0; $i <= count($productos) - 1 ; $i++) {
-                $producto = json_decode($productos[$i]);
+            foreach ($productos as $producto) {
 
                 $item = new PedidoItems();
                 $item->id_pedido = $pedido->identificador;
-                $item->id_producto = $productos->id_producto;
-                $item->precio_venta = $productos->precio_venta;
-                $item->cantidad = $productos->cantidad;
+                $item->id_producto = $producto['identificador'];
+                $item->precio_venta = $producto['precio_venta'];
+                $item->cantidad = $producto['cantidad'];
                 $item->activo = 'S';
-                $total += ($productos->precio_venta * $productos->cantidad);
+                $total += ($producto['precio_venta'] * $producto['cantidad']);
 
                 if (!$item->save()) {
                     return $this->sendResponse(true, 'Producto de pedido no registrados', $item, 400);
@@ -174,7 +189,7 @@ class PedidoController extends BaseController
             //actualizar total
             $totalPedido = Pedido::find($pedido->identificador);
             $totalPedido->total = $total;
-            if ($totalPedido->save()) {
+            if (!$totalPedido->save()) {
                 return $this->sendResponse(true, 'Total de pedido no actualizado', $item, 400);
             }
 
@@ -255,9 +270,9 @@ class PedidoController extends BaseController
             return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
-       //validar que llegaron productos
-       if (count($productos) <= 0) {
-        return $this->sendResponse(false, 'Debe agregar por lo menos un producto', 400);
+        // validar que llegaron productos
+        if (count($productos) <= 0) {
+            return $this->sendResponse(false, 'Debe agregar por lo menos un producto', 400);
         }
 
         $pedido = Pedido::find($id);
@@ -280,16 +295,15 @@ class PedidoController extends BaseController
             if ($parametro->save()) {
                 $paramCiudades = PedidoItems::where('id_pedido', $id)->delete();
                 $total = 0;
-                for ($i=0; $i <= count($productos) - 1 ; $i++) {
-                    $producto = json_decode($productos[$i]);
+                foreach ($productos as $producto) {
     
                     $item = new PedidoItems();
                     $item->id_pedido = $pedido->identificador;
-                    $item->id_producto = $productos->id_producto;
-                    $item->precio_venta = $productos->precio_venta;
-                    $item->cantidad = $productos->cantidad;
+                    $item->id_producto = $producto['identificador'];
+                    $item->precio_venta = $producto['precio_venta'];
+                    $item->cantidad = $producto['cantidad'];
                     $item->activo = 'S';
-                    $total += ($productos->precio_venta * $productos->cantidad);
+                    $total += ($producto['precio_venta'] * $producto['cantidad']);
                     if (!$item->save()) {
                         return $this->sendResponse(true, 'Producto de pedido no registrados', $item, 400);
                         break;
