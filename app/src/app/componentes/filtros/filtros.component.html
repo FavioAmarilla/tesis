@@ -4,17 +4,15 @@
 
   <div class="form-group">
     <label>Sucursal</label>
-    <select class="form-control" name="sucursal" (change)="seleccionarSucursal($event.target.value)">
+    <select class="form-control" name="sucursal" [(ngModel)]="filtros.id_sucursal" (change)="seleccionarSucursal($event.target.value)">
       <option *ngFor="let sucursal of listaSucursales" [value]="sucursal.identificador">{{ sucursal.nombre }}</option>
     </select>
   </div>
 
   <div class="form-group">
     <label>Rango de Precios</label>
-    <input type="number" class="form-control" placeholder="Precio Minimo" name="precio_minimo"
-      [(ngModel)]="filtros.precio_minimo" (focusout)="enviarFiltros()"> <br>
-    <input type="number" class="form-control" placeholder="Precio Maximo" name="precio_maximo"
-      [(ngModel)]="filtros.precio_maximo" (focusout)="enviarFiltros()">
+    <input type="number" class="form-control" placeholder="Precio Minimo" name="precio_minimo" [(ngModel)]="filtros.precio_minimo" (focusout)="enviarFiltros()"> <br>
+    <input type="number" class="form-control" placeholder="Precio Maximo" name="precio_maximo" [(ngModel)]="filtros.precio_maximo" (focusout)="enviarFiltros()">
   </div>
 
   <div class="form-group">

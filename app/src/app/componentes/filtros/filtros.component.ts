@@ -48,20 +48,25 @@ export class FiltrosComponent implements OnInit {
   }
 
   async obtenerSucursales() {
-    let parametros = {
+    const parametros = {
       ecommerce: 'S'
     };
     const response: any = await this.servicioSucursal.obtenerSucursal(null, parametros);
 
     if (response.success) {
       this.listaSucursales = response.data;
+      const central = response.data.find(sucursal => sucursal.central == 'S');
+      if (central) {
+        this.filtros.id_sucursal = central.identificador;
+        await this.carritoService.setStorage('sucursal', central.identificador);
+      }
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }
   }
 
   async seleccionarSucursal(value) {
-    this.filtros.id_sucursal = await value;
+    this.filtros.id_sucursal = value;
     await this.carritoService.setStorage('sucursal', value);
     await this.enviarFiltros();
   }
@@ -77,7 +82,7 @@ export class FiltrosComponent implements OnInit {
   }
 
   async seleccionarLinea(value) {
-    this.filtros.id_linea = await value;
+    this.filtros.id_linea = value;
     await this.enviarFiltros();
   }
 
@@ -91,7 +96,7 @@ export class FiltrosComponent implements OnInit {
   }
 
   async seleccionarMarca(value) {
-    this.filtros.id_marca = await value;
+    this.filtros.id_marca = value;
     await this.enviarFiltros();
   }
 
