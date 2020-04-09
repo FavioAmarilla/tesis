@@ -14,7 +14,8 @@ export class AlertaService {
       text: mensaje,
       icon: 'success',
       confirmButtonColor: '#6bd098',
-      confirmButtonText: 'Aceptar'
+      confirmButtonText: 'Aceptar',
+      heightAuto: false
     });
   }
 
@@ -24,7 +25,8 @@ export class AlertaService {
       text: mensaje,
       icon: 'info',
       confirmButtonColor: '#6bd098',
-      confirmButtonText: 'Aceptar'
+      confirmButtonText: 'Aceptar',
+      heightAuto: false
     });
   }
 
@@ -34,7 +36,8 @@ export class AlertaService {
       text: mensaje,
       icon: 'error',
       confirmButtonColor: '#6bd098',
-      confirmButtonText: 'Aceptar'
+      confirmButtonText: 'Aceptar',
+      heightAuto: false
     });
   }
 }
