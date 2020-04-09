@@ -35,7 +35,7 @@ export class PedidoService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/pedido`, pedido, { headers: headers }).subscribe(
+      this.http.post(`${API}pedido`, pedido, { headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -50,7 +50,7 @@ export class PedidoService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/pedido/${id}`, pedido, { headers: headers }).subscribe(
+      this.http.put(`${API}/pedido/${id}`, pedido, { headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

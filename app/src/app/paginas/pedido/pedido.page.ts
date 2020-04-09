@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 import { PedidoService } from 'src/app/servicios/pedido.service';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
 
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-pedido',
   templateUrl: './pedido.page.html',
@@ -96,21 +98,21 @@ export class PedidoPage implements OnInit {
 
     this.carrito = await this.servicioCarrito.obtenerCarrito();
 
-    //obtener sub total
+    // obtener sub total
     await this.carrito.forEach(element => {
       this.totales.subtotal += element.precio_venta * element.cantidad;
     });
 
-    //obtener costo delivery
+    // obtener costo delivery
     this.totales.delivery = this.parametros.costo_delivery;
 
-    //obtener descuento por cupones
+    // obtener descuento por cupones
     if (this.cuponDescuento.identificador > 0) {
       let descuentoSubtotal = (this.cuponDescuento.porc_descuento * 100) / this.totales.subtotal;
       this.totales.descuento = descuentoSubtotal;
     }
 
-    //obtener total
+    // obtener total
     this.totales.total = (this.totales.subtotal + this.totales.delivery) - this.totales.descuento;
 
     this.cargando = false;
@@ -254,14 +256,14 @@ export class PedidoPage implements OnInit {
   async obtenerUsuario() {
     const response: any = await this.servicioUsuario.obtenerUsuario();
     console.log(response);
-    if (response.length > 0) {
+    if (response) {
       this.usuario = response;
     } else {
       this.servicioAlerta.dialogoError('Debe estar Logueado para confirmar la operacion', '');
       this.router.navigate(['/login']);
     }
 
-    return response.length > 0;
+    return (response) ? true : false;
   }
 
   async registrarPedido() {
@@ -270,10 +272,9 @@ export class PedidoPage implements OnInit {
       return;
     }
 
-    let sucursal: any = await this.servicioCarrito.getStorage('sucursal');
-    let date = new Date();
-    let fecha = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-    let ubicacion = this.datosEnvio.ubicacion.split(',');
+    const sucursal: any = await this.servicioCarrito.getStorage('sucursal');
+    const fecha = moment().format('DD/MM/YYYY');
+    const ubicacion = this.datosEnvio.ubicacion.split(',');
 
     pedido.id_cupon_descuento = this.cuponDescuento.identificador;
     pedido.id_usuario = this.usuario.sub;
@@ -287,7 +288,7 @@ export class PedidoPage implements OnInit {
     pedido.longitud = ubicacion[1];
     pedido.costo_envio = this.parametros.costo_delivery;
     pedido.observacion = this.datosEnvio.observacion;
-    pedido.estado = "PENDIENTE"
+    pedido.estado = 'PENDIENTE';
     pedido.productos = [];
     this.carrito.forEach(element => {
       pedido.productos.push(element);
