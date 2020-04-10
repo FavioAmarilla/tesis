@@ -163,10 +163,27 @@ class ProductoController extends BaseController
     /**
      * Display the specified resource.
      *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $producto = Producto::find($id);
+
+        if (is_object($producto)) {
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $producto, 200);
+        }
+        
+        return $this->sendResponse(false, 'No se encontro el Producto', null, 404);
+    }
+
+    /**
+     * Display the specified resource.
+     *
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function show($slug)
+    public function showBySlug($slug)
     {
         $producto = Producto::where('slug', '=', $slug)->first();
 

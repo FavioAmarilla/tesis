@@ -14,7 +14,7 @@ export class ProductoService {
   ) { }
 
   async obtenerProducto(slug?, parametros?) {
-    const url = (slug) ? `producto/${slug}` : `producto`;
+    const url = (slug) ? `producto/slug/${slug}` : `producto`;
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     const params = new HttpParams({ fromObject: parametros });
