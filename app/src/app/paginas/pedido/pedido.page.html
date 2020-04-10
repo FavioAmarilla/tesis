@@ -3,131 +3,162 @@
 <ion-content>
 
   <section class="ftco-section">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-4 cart-wrap">
-          <div class="cart-total mb-3">
-            <h3>Cupon de descuento</h3>
-            <div class="form-group">
-              <p>Ingrese su código de cupón si tiene uno</p>
-              <input type="text" class="form-control text-left px-3" placeholder="Código promocional"
-                [(ngModel)]="cuponDescuento.codigo" (focusout)="obtenerCupones()">
-            </div>
-            <div class="form-group" *ngIf="cuponDescuento.length > 0">
-              <p class="d-flex">
-                <span>{{ cuponDescuento.descripcion }}</span>
-                <span style="text-align: right;">{{ cuponDescuento.porcentaje | numberFormat }} %</span>
-              </p>
-            </div>
-            <div class="form-group" *ngIf="cuponDescuento.length == 0 && submitCuponDescuento">
-              <p class="text-danger">
-                No existe el cupon de descuento
-              </p>
-            </div>
+
+    <div class="row">
+      <div class="col-md-12 ">
+        <nav>
+          <div class="nav nav-tabs nav-fill" role="tablist">
+            <a class="nav-item nav-link text-primary active" id="nav-home-tab" data-toggle="tab" href="#nav-envio"
+              role="tab" aria-controls="nav-home" aria-selected="true">Datos de Envio</a>
+            <a class="nav-item nav-link text-primary" id="nav-profile-tab" data-toggle="tab" href="#nav-pago" role="tab"
+              aria-controls="nav-profile" aria-selected="false">Formas de Pago</a>
           </div>
+        </nav>
 
-          <div class="cart-total mb-3">
-            <h3>Observacion</h3>
-            <div class="form-group">
-              <textarea [(ngModel)]="datosEnvio.observacion" class="form-control text-left px-3" cols="30" rows="5"></textarea>
-            </div>
-          </div>
-        </div>
+        <div class="tab-content py-3 px-3 px-sm-0">
 
-        <div class="col-lg-4 cart-wrap">
-          <div class="cart-total mb-3">
-            <h3>Datos de Envío</h3>
-            <p>Ingrese su destino para el envio</p>
-            <form action="#" class="info">
-              <div class="form-group">
-                <select name="pais" class="form-control text-left px-3" placeholder="Pais"
-                  (change)="datosEnvioSelect($event.target.value, 'pais')">
-                  <option value="0">-- SELECCIONE--</option>
-                  <option *ngFor="let pais of listaPaises" value="{{ pais.identificador }}"> {{ pais.nombre }}</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <div *ngIf="!mostrarCiudades">
-                  <input type="text" class="form-control" placeholder="Ciudad" disabled>
-                </div>
-                <div *ngIf="mostrarCiudades">
-                  <select name="ciudad" class="form-control text-left px-3" placeholder="Ciudad"
-                    (change)="datosEnvioSelect($event.target.value, 'ciudad')">
-                    <option value="0">-- SELECCIONE--</option>
-                    <option *ngFor="let ciudad of listaCiudades" value="{{ ciudad.identificador }}"> {{ ciudad.nombre }}
-                    </option>
-                  </select>
-                </div>
-
-              </div>
-              <div class="form-group">
-                <div *ngIf="!mostrarBarrios">
-                  <input type="text" class="form-control" placeholder="Barrio" disabled>
-                </div>
-                <div *ngIf="mostrarBarrios">
-                  <select name="barrio" class="form-control text-left px-3" placeholder="Barrio"
-                    (change)="datosEnvioSelect($event.target.value, 'barrio')">
-                    <option value="0">-- SELECCIONE--</option>
-                    <option *ngFor="let barrio of listaBarrios" value="{{ barrio.identificador }}"> {{ barrio.nombre }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <input type="text" name="direccion" class="form-control text-left px-3" placeholder="Direccion"
-                  [(ngModel)]="datosEnvio.direccion">
-              </div>
-              <div class="form-group">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend btn-ubicacion" data-toggle="modal" data-target="#modalUbicacion"
-                    (click)="abrirModal()">
-                    <span class=" input-group-text"> <span class="icon-map-marker"></span> </span>
+          <div class="tab-pane fade show active" id="nav-envio" role="tabpanel" aria-labelledby="nav-envio-tab">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-lg-4 cart-wrap">
+                  <div class="cart-total mb-3">
+                    <h3>Cupon de descuento</h3>
+                    <div class="form-group">
+                      <p>Ingrese su código de cupón si tiene uno</p>
+                      <input type="text" class="form-control text-left px-3" placeholder="Código promocional"
+                        [(ngModel)]="cuponDescuento.codigo" (focusout)="obtenerCupones()">
+                    </div>
+                    <div class="form-group" *ngIf="cuponDescuento.length > 0">
+                      <p class="d-flex">
+                        <span>{{ cuponDescuento.descripcion }}</span>
+                        <span style="text-align: right;">{{ cuponDescuento.porcentaje | numberFormat }} %</span>
+                      </p>
+                    </div>
+                    <div class="form-group" *ngIf="cuponDescuento.length == 0 && submitCuponDescuento">
+                      <p class="text-danger">
+                        No existe el cupon de descuento
+                      </p>
+                    </div>
                   </div>
-                  <input type="text" name="ubicacion" class="form-control" placeholder="Ubicación"
-                    aria-label="Ubicación" aria-describedby="basic-addon1" [(ngModel)]="datosEnvio.ubicacion" readonly>
+
+                  <div class="cart-total mb-3">
+                    <h3>Observacion</h3>
+                    <div class="form-group">
+                      <textarea [(ngModel)]="datosEnvio.observacion" class="form-control text-left px-3" cols="30"
+                        rows="5"></textarea>
+                    </div>
+                  </div>
                 </div>
+
+                <div class="col-lg-4 cart-wrap">
+                  <div class="cart-total mb-3">
+                    <h3>Datos de Envío</h3>
+                    <p>Ingrese su destino para el envio</p>
+                    <form action="#" class="info">
+                      <div class="form-group">
+                        <select name="pais" class="form-control text-left px-3" placeholder="Pais"
+                          (change)="datosEnvioSelect($event.target.value, 'pais')">
+                          <option value="0">-- SELECCIONE--</option>
+                          <option *ngFor="let pais of listaPaises" value="{{ pais.identificador }}"> {{ pais.nombre }}
+                          </option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <div *ngIf="!mostrarCiudades">
+                          <input type="text" class="form-control" placeholder="Ciudad" disabled>
+                        </div>
+                        <div *ngIf="mostrarCiudades">
+                          <select name="ciudad" class="form-control text-left px-3" placeholder="Ciudad"
+                            (change)="datosEnvioSelect($event.target.value, 'ciudad')">
+                            <option value="0">-- SELECCIONE--</option>
+                            <option *ngFor="let ciudad of listaCiudades" value="{{ ciudad.identificador }}">
+                              {{ ciudad.nombre }}
+                            </option>
+                          </select>
+                        </div>
+
+                      </div>
+                      <div class="form-group">
+                        <div *ngIf="!mostrarBarrios">
+                          <input type="text" class="form-control" placeholder="Barrio" disabled>
+                        </div>
+                        <div *ngIf="mostrarBarrios">
+                          <select name="barrio" class="form-control text-left px-3" placeholder="Barrio"
+                            (change)="datosEnvioSelect($event.target.value, 'barrio')">
+                            <option value="0">-- SELECCIONE--</option>
+                            <option *ngFor="let barrio of listaBarrios" value="{{ barrio.identificador }}">
+                              {{ barrio.nombre }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <input type="text" name="direccion" class="form-control text-left px-3" placeholder="Direccion"
+                          [(ngModel)]="datosEnvio.direccion">
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend btn-ubicacion" data-toggle="modal"
+                            data-target="#modalUbicacion" (click)="abrirModal()">
+                            <span class=" input-group-text"> <span class="icon-map-marker"></span> </span>
+                          </div>
+                          <input type="text" name="ubicacion" class="form-control" placeholder="Ubicación"
+                            aria-label="Ubicación" aria-describedby="basic-addon1" [(ngModel)]="datosEnvio.ubicacion"
+                            readonly>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div class="col-lg-4 cart-wrap">
+                  <div class="cart-total mb-3">
+                    <h3>Totales de carrito</h3>
+                    <p class="d-flex">
+                      <span>Sub Total</span>
+                      <span style="text-align: right;">{{ totales.subtotal | numberFormat }} Gs.</span>
+                    </p>
+                    <p class="d-flex">
+                      <span>Delivery</span>
+                      <span style="text-align: right;">{{ totales.delivery | numberFormat }} Gs.</span>
+                    </p>
+                    <p class="d-flex">
+                      <span>Descuento</span>
+                      <span style="text-align: right;">{{ totales.descuento | numberFormat }} Gs.</span>
+                    </p>
+                    <hr style="border-top: 1px solid rgba(0,0,0,.05)">
+                    <p class="d-flex total-price">
+                      <span><b>Total</b></span>
+                      <span style="text-align: right;"><b>{{ totales.total | numberFormat }} Gs.</b></span>
+                    </p>
+                  </div>
+                </div>
+
               </div>
-            </form>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="nav-pago" role="tabpanel" aria-labelledby="nav-pago-tab">
+
           </div>
         </div>
 
-        <div class="col-lg-4 cart-wrap">
-          <div class="cart-total mb-3">
-            <h3>Totales de carrito</h3>
-            <p class="d-flex">
-              <span>Sub Total</span>
-              <span style="text-align: right;">{{ totales.subtotal | numberFormat }} Gs.</span>
-            </p>
-            <p class="d-flex">
-              <span>Delivery</span>
-              <span style="text-align: right;">{{ totales.delivery | numberFormat }} Gs.</span>
-            </p>
-            <p class="d-flex">
-              <span>Descuento</span>
-              <span style="text-align: right;">{{ totales.descuento | numberFormat }} Gs.</span>
-            </p>
-            <hr style="border-top: 1px solid rgba(0,0,0,.05)">
-            <p class="d-flex total-price">
-              <span><b>Total</b></span>
-              <span style="text-align: right;"><b>{{ totales.total | numberFormat }} Gs.</b></span>
-            </p>
+        <div class="row mt-4">
+          <div class="col">
+            <span class="float-right">
+              <p (click)="registrarPedido()">
+                <a class="btn btn-primary py-3 px-4">
+                  Confirmar
+                </a>
+              </p>
+            </span>
           </div>
         </div>
 
-      </div>
-
-      <div class="row mt-4">
-        <div class="col">
-          <span class="float-right">
-            <p (click)="registrarPedido()">
-              <a class="btn btn-primary py-3 px-4">
-                Confirmar
-              </a>
-            </p>
-          </span>
-        </div>
       </div>
     </div>
+
+
   </section>
 
   <app-footer [cargando]="cargando"></app-footer>

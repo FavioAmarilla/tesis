@@ -6,3 +6,36 @@
   background-color: #ada9a9;
   color: white;
 }
+
+// estilos para tabs
+
+nav > .nav.nav-tabs {
+  border: none;
+  color: #fff;
+  border-radius: 0;
+}
+nav > div a.nav-item.nav-link,
+nav > div a.nav-item.nav-link.active {
+  border: none;
+  padding: 18px 25px;
+  color: #fff;
+  border-radius: 0;
+}
+
+.tab-content {
+  background: #fdfdfd;
+  line-height: 25px;
+  border: 1px solid #ddd;
+  border-top: 5px solid #079a4a;
+  border-bottom: 5px solid #079a4a;
+  padding: 30px 25px;
+}
+
+nav > div a.nav-item.nav-link:hover,
+nav > div a.nav-item.nav-link:focus {
+  border: none;
+  background: #079a4a;
+  color: #fff !important;
+  border-radius: 0;
+  transition: background 0.2s linear;
+}
