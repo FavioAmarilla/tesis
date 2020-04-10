@@ -87,10 +87,10 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        $user = User::find($id);
+        $usuario = User::find($id);
 
-        if (is_object($user)) {
-            return $this->sendResponse(true, 'Listado obtenido exitosamente', $user, 200);
+        if (is_object($usuario)) {
+            return $this->sendResponse(true, 'Listado obtenido exitosamente', $usuario, 200);
         }
         
         return $this->sendResponse(false,'El usuario no existe', null, 404);
@@ -137,7 +137,10 @@ class UserController extends BaseController {
             $usuario->imagen = $imagen;
     
             if ($usuario->save()) {
-                return $this->sendResponse(true, 'Usuario actualizado', $usuario, 200);
+                $jwtAuth = new \JwtAuth();
+                $data = $jwtAuth->signIn($email, $clave_acceso);
+                $respuesta = ['token' => $data->original['data'], 'usuario' => $usuario];
+                return $this->sendResponse(true, 'Usuario actualizado', $respuesta, 200);
             }
 
             return $this->sendResponse(false, 'Usuario no actualizado', null, 400);
@@ -155,15 +158,15 @@ class UserController extends BaseController {
     public function destroy($id, Request $request) {
         $estado = $request->input("estado");
 
-        $user = User::find($id);
-        if ($user) {
-            $user->estado = $estado;
+        $usuario = User::find($id);
+        if ($usuario) {
+            $usuario->estado = $estado;
             
-            if ($user->update()) {
-                return $this->sendResponse(true, 'Usuario actualizado', $user, 200);
+            if ($usuario->update()) {
+                return $this->sendResponse(true, 'Usuario actualizado', $usuario, 200);
             }
             
-            return $this->sendResponse(false, 'Usuario no actualizado', $user, 400);
+            return $this->sendResponse(false, 'Usuario no actualizado', $usuario, 400);
         }
         
         return $this->sendResponse(true, 'No se encontro el usuario', $usuario, 404);
@@ -198,13 +201,13 @@ class UserController extends BaseController {
     public function checkToken(Request $request) {
         $token = $request->get('Authorization');
         $jwt = new \JwtAuth();
-        $user = $jwt->checkToken($token);
+        $usuario = $jwt->checkToken($token);
 
-        if ($user) {
-            return $this->sendResponse(true, 'Login exitoso', $user, 200);
+        if ($usuario) {
+            return $this->sendResponse(true, 'Login exitoso', $usuario, 200);
         }
         
-        return $this->sendResponse(false, 'El usuario no existe', $user, 404);
+        return $this->sendResponse(false, 'El usuario no existe', $usuario, 404);
 
     }
 
@@ -237,5 +240,16 @@ class UserController extends BaseController {
         }
         
         return $this->sendResponse(false, 'La imagen no existe', null, 404);
+    }
+
+    public function validarEmail(Request $request) {
+        $id = $request->input('id');
+        $email = $request->input('email');
+
+        $usuario = User::where([['email', '=', $email], ['identificador', '!=', $id]])->first();
+
+        if ($usuario) return $this->sendResponse(false, 'Ya existe otro usuario con este email', null, 400);
+
+        return $this->sendResponse(true, 'Email disponible', null, 200);
     }
 }

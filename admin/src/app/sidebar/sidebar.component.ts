@@ -22,7 +22,7 @@ export const ROUTES: RouteInfo[] = [
     { path: '/pais',            title: 'Paises',                icon: 'fas fa-globe'},
     { path: '/ciudad',          title: 'Ciudades',              icon: 'fas fa-city'},
     { path: '/barrio',          title: 'Barrio',                icon: 'fas fa-map-marker-alt'},
-    
+
     { path: '/usuarios',        title: 'Usuarios',              icon: 'fas fa-user-friends'}
 ];
 
@@ -50,13 +50,13 @@ export class SidebarComponent implements OnInit {
         this.servicioUsuario.loginEmitter
         .subscribe(response => {
             this.usuario = response;
-            console.log('loginEmitter: ',this.usuario);
+            // console.log('loginEmitter: ', this.usuario);
         });
 
         this.servicioUsuario.logoutEmitter
         .subscribe(event => {
             this.obtenerUsuario();
-            console.log('logoutEmitter: ',this.usuario);
+            // console.log('logoutEmitter: ', this.usuario);
         });
     }
 
