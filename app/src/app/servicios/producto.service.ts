@@ -13,8 +13,8 @@ export class ProductoService {
     private http: HttpClient
   ) { }
 
-  async obtenerProducto(id?, parametros?) {
-    const url = (id) ? `producto/${id}` : `producto`;
+  async obtenerProducto(slug?, parametros?) {
+    const url = (slug) ? `producto/${slug}` : `producto`;
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     const params = new HttpParams({ fromObject: parametros });

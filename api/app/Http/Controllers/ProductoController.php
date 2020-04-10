@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Validator;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Producto;
@@ -132,6 +133,7 @@ class ProductoController extends BaseController
         $producto->vr_unidad_medida = $vr_unidad_medida;
         $producto->id_marca = $id_marca;
         $producto->descripcion = $descripcion;
+        $producto->slug = Str::slug($descripcion, '-');
         $producto->codigo_barras = $codigo_barras;
         $producto->costo_unitario = $costo_unitario;
         $producto->precio_venta = $precio_venta;
@@ -161,12 +163,12 @@ class ProductoController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $producto = Producto::find($id);
+        $producto = Producto::where('slug', '=', $slug)->first();
 
         if (is_object($producto)) {
             return $this->sendResponse(true, 'Se listaron exitosamente los registros', $producto, 200);
@@ -228,6 +230,7 @@ class ProductoController extends BaseController
             $producto->id_marca = $id_marca;
             $producto->vr_unidad_medida = $vr_unidad_medida;
             $producto->descripcion = $descripcion;
+            $producto->slug = Str::slug($descripcion, '-');
             $producto->codigo_barras = $codigo_barras;
             $producto->costo_unitario = $costo_unitario;
             $producto->precio_venta = $precio_venta;

@@ -13,7 +13,7 @@ import { AlertaService } from 'src/app/servicios/alerta.service';
 })
 export class PaginaProducto implements OnInit {
 
-  public id: number;
+  public slug: string;
   public cargando = true;
   public producto: Producto;
 
@@ -31,17 +31,17 @@ export class PaginaProducto implements OnInit {
   ) {
     this.route.params.subscribe(
       params => {
-        this.id = + params['id'];
-        this.obtenerProducto(this.id);
+        this.slug = params['slug'];
+        this.obtenerProducto(this.slug);
       }
     );
   }
 
   ngOnInit() { }
 
-  async obtenerProducto(id) {
+  async obtenerProducto(slug) {
     this.cargando = true;
-    const response: any = await this.servicioProducto.obtenerProducto(id);
+    const response: any = await this.servicioProducto.obtenerProducto(slug);
 
     if (response.success) {
       this.cargando = false;
