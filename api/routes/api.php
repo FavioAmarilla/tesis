@@ -21,6 +21,7 @@ Route::resource('user', 'UserController');
 Route::group(['prefix' => 'user'], function () {
     Route::post('signIn', ['as' => 'user.signIn', 'uses' => 'UserController@signIn']);
     Route::post('checkToken', ['as' => 'user.checkToken', 'uses' => 'UserController@checkToken']);
+    Route::post('validarEmail', ['as' => 'user.validarEmail', 'uses' => 'UserController@validarEmail']);
     Route::post('upload', ['as' => 'user.upload', 'uses' => 'UserController@upload']);
     Route::get('getImage/{filename}', ['as' => 'user.getImage', 'uses' => 'UserController@getImage']);
 });

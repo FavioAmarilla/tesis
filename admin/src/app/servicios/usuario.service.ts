@@ -156,6 +156,22 @@ export class ServicioUsuario {
     });
   }
 
+  validarEmail(id, email) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return new Promise<boolean>(resolve => {
+      this.http.post(`${API}/user/validarEmail`, {id, email}, { headers })
+      .subscribe(
+        (response: any) => {
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+  }
+
   cerrarSession() {
     this.token = null;
     this.usuario = null;

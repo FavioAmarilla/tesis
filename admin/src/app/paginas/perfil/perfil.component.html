@@ -1,57 +1,72 @@
+<app-breadcrumb pagina="Perfil"></app-breadcrumb>
+
 <div class="row">
-        <div class="col-md-4">
-          <div class="card card-user">
-            <div class="image">
-            </div>
-            <div class="card-body">
-              <div class="author">
-                <a href="#">
-                  <img class="avatar border-gray" src="assets/img/mike.jpg" alt="...">
-                </a>
-                <br>
-                <input type="file" class="form-control">
-                <br>
-                <br>
-                <br>
+  <div class="col-md-4">
+    <div class="card card-user">
+      <div class="image text-center mt-4">
+        <img *ngIf="angForm.value.imagen" src="{{url + '/user/getImage/' + angForm.value.imagen}}" width="100" height="100">
+        <img *ngIf="!angForm.value.imagen" src="https://via.placeholder.com/150" width="100" height="100">
+      </div>
+      <div class="card-body text-center">
+        <angular-file-uploader [config]="fileUploaderConfig" [resetUpload]=resetVar (ApiResponse)="subirImagen($event)"></angular-file-uploader>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div class="card card-user">
+      <div class="card-header">
+        <h5 class="card-title">Datos personales</h5>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="angForm" (ngSubmit)="actualizarPerfil()">
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group" [ngClass]="{'error': angForm.controls['nombre_completo'].invalid && (angForm.controls['nombre_completo'].dirty || angForm.controls['nombre_completo'].touched)}">
+                <label>Nombre completo</label>
+                <input formControlName="nombre_completo" type="text" class="form-control" placeholder="Nombre completo">
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-8">
-          <div class="card card-user">
-            <div class="card-header">
-              <h5 class="card-title">Datos personales</h5>
-            </div>
-            <div class="card-body">
-              <form>
-
-                <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label>Nombre completo</label>
-                        <input type="text" class="form-control" placeholder="Nombre completo">
-                      </div>
-                    </div>
-                  </div>
-
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label>Email</label>
-                      <input type="text" class="form-control" placeholder="Email">
-                    </div>
-                  </div>
-                </div>
-               
-                <div class="row">
-                  <div class="update ml-auto mr-auto">
-                    <button type="submit" class="btn btn-primary btn-round">Aceptar</button>
-                  </div>
-                </div>
-              </form>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group" [ngClass]="{'error': angForm.controls['email'].invalid && (angForm.controls['email'].dirty || angForm.controls['email'].touched)}">
+                <label>Email</label>
+                <input formControlName="email" type="email" class="form-control" placeholder="Email">
+              </div>
             </div>
           </div>
-        </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group" [ngClass]="{'error': angForm.controls['clave_acceso'].invalid && (angForm.controls['clave_acceso'].dirty || angForm.controls['clave_acceso'].touched)}">
+                <label>Contraseña</label>
+                <input formControlName="clave_acceso" type="password" class="form-control" placeholder="Contraseña">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group" [ngClass]="{'error': angForm.controls['confirmar_clave_acceso'].invalid && (angForm.controls['confirmar_clave_acceso'].dirty || angForm.controls['confirmar_clave_acceso'].touched)}">
+                <label>Repetir contraseña</label>
+                <input formControlName="confirmar_clave_acceso" type="password" class="form-control" placeholder="Repetir contraseña">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="update ml-auto mr-auto">
+              <button type="submit" class="btn btn-primary btn-round" [disabled]="angForm.pristine || angForm.invalid">
+                <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Aceptar
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
-      
+    </div>
+  </div>
+</div>

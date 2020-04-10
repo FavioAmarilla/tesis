@@ -54,7 +54,6 @@ export class NavbarComponent implements OnInit {
     this.servicioUsuario.loginEmitter
     .subscribe(response => {
       this.usuario = response;
-      console.log(this.usuario);
     });
 
     this.servicioUsuario.logoutEmitter
