@@ -16,7 +16,8 @@ export class UsuarioService {
   private token: string = null;
   private usuario: Usuario = null;
 
-  @Output() emitter = new EventEmitter();
+  @Output() loginEmitter = new EventEmitter();
+  @Output() logoutEmitter = new EventEmitter();
 
   constructor(
     private http: HttpClient,
@@ -50,7 +51,7 @@ export class UsuarioService {
           if (response.success) {
             // se guarda el token en el Storage
             await this.guardarToken(response.data);
-            this.emitter.emit(this.usuario);
+            this.loginEmitter.emit(this.usuario);
             resolve({ success: true });
           } else {
             this.token = null;
@@ -105,7 +106,9 @@ export class UsuarioService {
 
   async cerrarSession() {
     this.token = null;
+    this.usuario = null;
     this.storage.remove('token');
+    this.logoutEmitter.emit(true);
     this.router.navigate(['/inicio']);
   }
 }

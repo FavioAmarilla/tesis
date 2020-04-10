@@ -25,14 +25,18 @@ export class HeaderComponent implements OnInit, OnChanges {
   }
 
   async ngOnInit() {
-    this.usuario = await this.servicioUsuario.obtenerUsuario();
+    await this.obtenerUsuario();
+    this.servicioUsuario.loginEmitter
+      .subscribe(
+        response => {
+          this.usuario = response;
+        }
+      );
 
-    this.servicioUsuario.emitter
-    .subscribe(
-      response => {
-        this.usuario = response;
-      }
-    );
+    this.servicioUsuario.logoutEmitter
+      .subscribe(event => {
+        this.obtenerUsuario();
+      });
 
     this.obtenerCantidadCarrito();
   }
@@ -43,6 +47,10 @@ export class HeaderComponent implements OnInit, OnChanges {
 
   redireccionar(url) {
     this.router.navigate([url]);
+  }
+
+  async obtenerUsuario() {
+    this.usuario = await this.servicioUsuario.obtenerUsuario();
   }
 
   cerrarSession() {

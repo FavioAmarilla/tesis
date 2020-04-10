@@ -41,9 +41,11 @@ export class LoginPage implements OnInit {
     if (response.success) {
       this.router.navigate(['/inicio']);
     } else {
+      this.cargandoBoton = false;
       this.servicioAlerta.dialogoError('Usuario y/o Contraseña no validos', '');
     }
     
+    this.cargandoBoton = false;
   }
 
 }
