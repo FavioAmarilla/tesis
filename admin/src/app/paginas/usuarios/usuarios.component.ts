@@ -25,6 +25,7 @@ export class UsuariosComponent implements OnInit {
   public porPagina;
   public total;
 
+  public resetVar = false;
   public fileUploaderConfig = {
     multiple: false,
     formatsAllowed: '.jpg,.png,.jpeg,.gif',

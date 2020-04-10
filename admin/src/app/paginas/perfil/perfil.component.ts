@@ -17,6 +17,7 @@ export class PerfilComponent implements OnInit {
   cargando = false;
 
   public url;
+  public resetVar = false;
   public fileUploaderConfig = {
     multiple: false,
     formatsAllowed: '.jpg,.png,.jpeg,.gif',
