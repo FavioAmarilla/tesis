@@ -5,10 +5,10 @@
 export const environment = {
   production: false,
   // api: 'http://localhost:8000/api/',
-  api: 'https://www.ecommercesy.com/api/',
-  productImageUrl: 'https://www.ecommercesy.com/api/producto/getImage/',
-  slideImageUrl: 'https://www.ecommercesy.com/api/slide/getImage/',
-  lineaProdImageUrl: 'https://www.ecommercesy.com/api/lineaProducto/getImage/',
+  api: 'http://api.ecommercesy.com/api/',
+  productImageUrl: 'http://api.ecommercesy.com/api/producto/getImage/',
+  slideImageUrl: 'http://api.ecommercesy.com/api/slide/getImage/',
+  lineaProdImageUrl: 'http://api.ecommercesy.com/api/lineaProducto/getImage/',
   mapbox: {
     apiKey: 'pk.eyJ1IjoibWF0aWFzYmFlejI1IiwiYSI6ImNrODd0aW1tODAwMWEzbGtmb2t0amNnMzYifQ.TGRXCPLfAzvmp0-cEpeiDA',
     defaultCoords: {
