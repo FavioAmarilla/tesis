@@ -78,8 +78,8 @@ export class EmpresaComponent implements OnInit {
 
     if (response.success) {
       this.listaEmpresas = response.data;
-      this.porPagina = response.data.per_page;
-      this.total = response.data.total;
+      this.porPagina = response.per_page;
+      this.total = response.total;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }

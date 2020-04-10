@@ -80,7 +80,9 @@ class ProductoController extends BaseController
             if ($element->stock) array_push($resultados, $element);
         }
 
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $resultados, 200);
+        $data->data = $resultados;
+
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**

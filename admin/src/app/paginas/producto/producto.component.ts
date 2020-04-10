@@ -138,8 +138,8 @@ export class ProductoComponent implements OnInit {
 
     if (response.success) {
       this.listaProductos = response.data;
-      this.porPagina = response.data.per_page;
-      this.total = response.data.total;
+      this.porPagina = response.per_page;
+      this.total = response.total;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }

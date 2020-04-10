@@ -75,8 +75,8 @@ export class CiudadComponent implements OnInit {
 
     if (response.success) {
       this.listaCiudades = response.data;
-      this.porPagina = response.data.per_page;
-      this.total = response.data.total;
+      this.porPagina = response.per_page;
+      this.total = response.total;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }

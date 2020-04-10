@@ -57,8 +57,8 @@ export class PaisComponent implements OnInit {
     const response: any = await this.servicioPais.obtenerPais(null, parametros);
     if (response.success) {
       this.listaPaises = response.data;
-      this.porPagina = response.data.per_page;
-      this.total = response.data.total;
+      this.porPagina = response.per_page;
+      this.total = response.total;
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }
