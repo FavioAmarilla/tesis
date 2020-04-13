@@ -44,6 +44,7 @@
               "src/assets/css/flaticon.css",
               "src/assets/css/icomoon.css",
               "src/assets/css/style.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.css",
               {
                 "input": "src/theme/variables.scss"
               },
@@ -65,7 +66,8 @@
               "src/assets/js/jquery.animateNumber.min.js",
               "src/assets/js/bootstrap-datepicker.js",
               "src/assets/js/scrollax.min.js",
-              "src/assets/js/main.js"
+              "src/assets/js/main.js",
+              "node_modules/@fortawesome/fontawesome-free/js/all.js"
             ]
           },
           "configurations": {

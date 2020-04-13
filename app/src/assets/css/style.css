@@ -5731,8 +5731,6 @@ a.close.disabled {
   outline: 0;
 }
 
-
-
 .modal-header {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -10753,6 +10751,12 @@ a:hover, a:focus {
   -ms-border-radius: 50%;
   border-radius: 50%;
   cursor: pointer;
+}
+
+.product .text .bottom-area a:hover {
+  background-color: #fff;
+  color: #079A4A;
+  border: 1px solid #079A4A;
 }
 
 .product .text .bottom-area .m-auto {

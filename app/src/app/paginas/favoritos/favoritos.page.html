@@ -2,7 +2,7 @@
 
 <ion-content>
 
-  <div class="hero-wrap hero-bread" style="background-image: url('assets/images/bg_1.jpg');">
+  <!-- <div class="hero-wrap hero-bread" style="background-image: url('assets/images/bg_1.jpg');">
     <div class="container">
       <div class="row no-gutters slider-text align-items-center justify-content-center">
         <div class="col-md-9 text-center">
@@ -11,8 +11,8 @@
         </div>
       </div>
     </div>
-  </div>
-  
+  </div> -->
+
   <section class="ftco-section ftco-cart">
     <div class="container">
       <div class="row">
@@ -22,40 +22,36 @@
               <thead class="thead-primary">
                 <tr class="text-center">
                   <th>&nbsp;</th>
-                  <th>Lista de Productos</th>
-                  <th>&nbsp;</th>
+                  <th>Producto</th>
+                  <th>Descripcion</th>
                   <th>Precio</th>
-                  <th>Cantidad</th>
-                  <th>Total</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody *ngIf="productos">
                 <tr class="text-center" *ngFor="let producto of productos">
-                  <td class="product-remove">
-                    <a (click)="confirmRemoveFromFavorites(producto)"><span class="ion-ios-close"></span></a>
-                  </td>
-  
+
                   <td class="image-prod">
-                    <img *ngIf="producto" class="img" [src]="producto.archivo_img | productImage | urlSanitizer">
+                    <img *ngIf="producto" class="img" [src]="producto.imagen | productImage | urlSanitizer">
                   </td>
-  
-                  <td class="product-name">
-                    <h3>{{ producto.descripcion }}</h3>
+
+                  <td> {{ producto.descripcion }} </td>
+
+                  <td>Gs. {{ producto.precio_venta }}</td>
+
+                  <td>Gs. {{ producto.precio_venta * producto.cantidad }}</td>
+
+                  <td>
+                    <a (click)="confirmEliminarDeFavoritos(producto)" class="btn btn-primary eliminar"><i
+                        class="fa fa-times" aria-hidden="true"></i></a> &nbsp;
+                    <a (click)="agregarAlCarrito(producto)" class="btn btn-primary"><span><i
+                          class="ion-ios-cart"></i></span></a>
                   </td>
-  
-                  <td class="price">Gs. {{ producto.precio_venta }}</td>
-  
-                  <td class="quantity">
-                    <div class="input-group mb-3">
-                      <input type="text" name="quantity" class="quantity form-control input-number" value="{{ producto.cantidad }}" min="1" max="100">
-                    </div>
-                  </td>
-  
-                  <td class="total">Gs. {{ producto.precio_venta * producto.cantidad }}</td>
                 </tr><!-- END TR-->
 
               </tbody>
             </table>
+            
           </div>
         </div>
       </div>
