@@ -34,37 +34,20 @@ export class FavoritosPage implements OnInit {
   }
 
   async confirmEliminarDeFavoritos(producto) {
-    const alerta = await this.alertaCtrl.create({
-      message: 'Deseas eliminar el producto de tu lista de deseos ?',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          handler: (blah) => {
-            this.servicioAlerta.dialogoError('El producto no ha sido eliminado ', '');
-          }
-        }, {
-          text: 'Aceptar',
-          handler: () => {
-            this.eliminarDeFavoritos(producto);
-          }
-        }
-      ]
-    });
+    const preConfirm = { servicio: 'carritoService', callback: 'eliminarDeFavoritos', data: producto };
+    const titulo = '¿Estas seguro?';
+    const mensaje = 'El producto se eliminara de sus favoritos';
+    const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, preConfirm);
 
-    await alerta.present();
-  }
+    console.log(response);
 
-
-  async eliminarDeFavoritos(producto) {
-    const eliminado = await this.servicioCarrito.eliminarDeFavoritos(producto);
-    if (eliminado) {
-      this.servicioAlerta.dialogoExito('El producto ha sido eliminado de tu lista de deseos', '');
-      this.obtenerFavoritos();
-    } else {
-      this.servicioAlerta.dialogoError('No se pudo eliminar el producto de tu lista de deseos', '');
+    if (!response) {
+      this.servicioAlerta.dialogoError(response.message, '');
     }
+    this.obtenerFavoritos();
+
   }
+
 
   async agregarAlCarrito(producto: any) {
     producto.cantidad = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida, 'medida');

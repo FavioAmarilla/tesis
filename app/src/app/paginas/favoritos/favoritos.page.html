@@ -21,15 +21,22 @@
             <table class="table">
               <thead class="thead-primary">
                 <tr class="text-center">
+                  <th>Acciones</th>
                   <th>&nbsp;</th>
                   <th>Producto</th>
                   <th>Descripcion</th>
                   <th>Precio</th>
-                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody *ngIf="productos">
                 <tr class="text-center" *ngFor="let producto of productos">
+
+                  <td>
+                    <a (click)="confirmEliminarDeFavoritos(producto)" class="btn btn-primary eliminar"><i
+                        class="fa fa-times" aria-hidden="true"></i></a> &nbsp;
+                    <a (click)="agregarAlCarrito(producto)" class="btn btn-primary"><span><i
+                          class="ion-ios-cart"></i></span></a>
+                  </td>
 
                   <td class="image-prod">
                     <img *ngIf="producto" class="img" [src]="producto.imagen | productImage | urlSanitizer">
@@ -40,13 +47,6 @@
                   <td>Gs. {{ producto.precio_venta }}</td>
 
                   <td>Gs. {{ producto.precio_venta * producto.cantidad }}</td>
-
-                  <td>
-                    <a (click)="confirmEliminarDeFavoritos(producto)" class="btn btn-primary eliminar"><i
-                        class="fa fa-times" aria-hidden="true"></i></a> &nbsp;
-                    <a (click)="agregarAlCarrito(producto)" class="btn btn-primary"><span><i
-                          class="ion-ios-cart"></i></span></a>
-                  </td>
                 </tr><!-- END TR-->
 
               </tbody>

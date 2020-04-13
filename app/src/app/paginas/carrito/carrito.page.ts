@@ -56,31 +56,15 @@ export class PaginaCarrito implements OnInit {
   }
 
   async confirmarParaEliminarDelCarrito(product) {
-    const alerta = await this.alertaCtrl.create({
-      message: '¿Deseas eliminar el producto?',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          handler: (blah) => {
-            this.servicioAlerta.dialogoError('Producto no eliminado', '');
-          }
-        }, {
-          text: 'Aceptar',
-          handler: () => {
-            this.eliminarDelCarrito(product);
-          }
-        }
-      ]
-    });
+    const preConfirm = { servicio: 'carritoService', callback: 'eliminarDelCarrito', data: product };
+    const titulo = '¿Estas seguro?';
+    const mensaje = 'El producto se eliminara del carrito';
+    const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, preConfirm);
 
-    await alerta.present();
-  }
+    console.log(response);
 
-  async eliminarDelCarrito(product) {
-    const eliminado = await this.servicioCarrito.eliminarDelCarrito(product);
-    if (!eliminado) {
-      this.servicioAlerta.dialogoError('El producto no ha sido eliminado del carrito', '');
+    if (!response) {
+      this.servicioAlerta.dialogoError(response.message, '');
     }
     this.obtenerCarrito();
   }
