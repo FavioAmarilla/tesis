@@ -67,6 +67,11 @@ class PedidoController extends BaseController
             $query->where('direccion', 'LIKE', '%'.$direccion.'%');
         }
 
+        $tipo_envio = $request->query('tipo_envio');
+        if ($tipo_envio) {
+            $query->where('tipo_envio', '=', $tipo_envio);
+        }
+
         $estado = $request->query('estado');
         if ($estado) {
             $query->where('estado', '=', $estado);
@@ -75,7 +80,7 @@ class PedidoController extends BaseController
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
 
-        $data = $query->orderBy('fecha', 'asc')->$listar();
+        $data = $query->orderBy('created_at', 'desc')->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
@@ -110,6 +115,7 @@ class PedidoController extends BaseController
         $longitud = $request->input("longitud");
         $costo_envio = $request->input("costo_envio");
         $observacion = $request->input("observacion");
+        $tipo_envio = $request->input("tipo_envio");
         $estado = $request->input("estado");
         $productos = $request->input("productos");
         
@@ -117,14 +123,8 @@ class PedidoController extends BaseController
             'id_usuario'  => 'required',
             'id_sucursal'  => 'required',
             'fecha'  => 'required',
-            'id_pais'  => 'required',
-            'id_ciudad'  => 'required',
-            'id_barrio'  => 'required',
-            'direccion'  => 'required',
-            'latitud'  => 'required',
-            'longitud'  => 'required',
             'costo_envio'  => 'required',
-            'observacion'  => 'required',
+            'tipo_envio'  => 'required',
             'estado'  => 'required'
         ]);
 
@@ -159,6 +159,7 @@ class PedidoController extends BaseController
         $pedido->longitud = $longitud;
         $pedido->costo_envio = $costo_envio;
         $pedido->observacion = $observacion;
+        $pedido->tipo_envio = $tipo_envio;
         $pedido->estado = $estado;
         $pedido->total = $total;
 
@@ -248,6 +249,7 @@ class PedidoController extends BaseController
         $longitud = $request->input("longitud");
         $costo_envio = $request->input("costo_envio");
         $observacion = $request->input("observacion");
+        $tipo_envio = $request->input("tipo_envio");
         $estado = $request->input("estado");
         $productos = $request->input("productos");
 
@@ -255,14 +257,8 @@ class PedidoController extends BaseController
             'id_usuario'  => 'required',
             'id_sucursal'  => 'required',
             'fecha'  => 'required',
-            'id_pais'  => 'required',
-            'id_ciudad'  => 'required',
-            'id_barrio'  => 'required',
-            'direccion'  => 'required',
-            'latitud'  => 'required',
-            'longitud'  => 'required',
             'costo_envio'  => 'required',
-            'observacion'  => 'required',
+            'tipo_envio'  => 'required',
             'estado'  => 'required'
         ]);
 
@@ -289,6 +285,7 @@ class PedidoController extends BaseController
             $pedido->longitud = $longitud;
             $pedido->costo_envio = $costo_envio;
             $pedido->observacion = $observacion;
+            $pedido->tipo_envio = $tipo_envio;
             $pedido->estado = $estado;
     
 

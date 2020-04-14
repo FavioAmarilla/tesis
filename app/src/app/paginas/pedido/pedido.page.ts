@@ -11,13 +11,27 @@ import { ServicioUbicacion } from 'src/app/servicios/ubicacion.service';
 import { Router } from '@angular/router';
 import { PedidoService } from 'src/app/servicios/pedido.service';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
-
+import { trigger, style, animate, transition, state } from '@angular/animations';
 import * as moment from 'moment';
 
 @Component({
   selector: 'app-pedido',
+  animations: [
+    trigger(
+      'enterAnimation', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)', opacity: 0 }),
+        animate('500ms', style({ transform: 'translateY(0)', opacity: 1 }))
+      ]),
+      transition(':leave', [
+        style({ transform: 'translateY(0)', opacity: 1 }),
+        animate('500ms', style({ transform: 'translateY(100%)', opacity: 0 }))
+      ])
+    ]
+    )
+  ],
   templateUrl: './pedido.page.html',
-  styleUrls: ['./pedido.page.scss'],
+  styleUrls: ['./pedido.page.scss']
 })
 export class PedidoPage implements OnInit {
 
@@ -144,6 +158,7 @@ export class PedidoPage implements OnInit {
 
   async inicializarDatosEnvio() {
     this.datosEnvio = {
+      tipo_envio: '',
       pais: 0,
       ciudad: 0,
       barrio: 0,
@@ -154,6 +169,9 @@ export class PedidoPage implements OnInit {
   }
 
   datosEnvioSelect(value, select) {
+    if (select === 'tipo_envio') {
+      this.datosEnvio.tipo_envio = value;
+    }
     if (select === 'pais') {
       this.cargando = true;
       this.datosEnvio.pais = value;
@@ -288,6 +306,7 @@ export class PedidoPage implements OnInit {
     pedido.longitud = ubicacion[1];
     pedido.costo_envio = this.parametros.costo_delivery;
     pedido.observacion = this.datosEnvio.observacion;
+    pedido.tipo_envio = this.datosEnvio.tipo_envio;
     pedido.estado = 'PENDIENTE';
     pedido.productos = [];
     this.carrito.forEach(element => {
@@ -295,9 +314,11 @@ export class PedidoPage implements OnInit {
     });
 
     const response: any = await this.serivioPedido.registrar(pedido);
-    console.log(response);
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioCarrito.removeStorage('carrito');
+      this.servicioCarrito.obtenerCantidad('carrito');
+      this.router.navigate(['/pedido-lista']);
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }

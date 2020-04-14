@@ -25,30 +25,31 @@ class Pedido extends Model
         'costo_envio',
         'total',
         'observacion',
+        'tipo_envio',
         'estado'	
     ];
 
     public function items(){
-        return $this->hasOne('App\PedidoItems', 'id_pedido');
+        return $this->hasOne('App\PedidoItems', 'identificador', 'id_pedido');
     }
 
     public function sucursal(){
-        return $this->hasOne('App\Sucursal', 'id_sucursal');
+        return $this->hasOne('App\Sucursal', 'identificador', 'id_sucursal');
     }
 
     public function cupon(){
-        return $this->hasOne('App\CuponDescuento', 'id_cupon_descuento');
+        return $this->hasOne('App\CuponDescuento', 'identificador', 'id_cupon_descuento');
     }
 
     public function pais(){
-        return $this->hasOne('App\Pais', 'id_pais');
+        return $this->hasOne('App\Pais', 'identificador', 'id_pais');
     }
 
     public function ciudad(){
-        return $this->hasOne('App\Ciudad', 'id_ciudad');
+        return $this->hasOne('App\Ciudad', 'identificador', 'id_ciudad');
     }
 
     public function barrio(){
-        return $this->hasOne('App\Barrio', 'id_barrio');
+        return $this->hasOne('App\Barrio', 'identificador', 'id_barrio');
     }
 }

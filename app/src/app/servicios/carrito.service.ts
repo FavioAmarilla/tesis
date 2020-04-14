@@ -23,9 +23,9 @@ export class CarritoService {
     return data;
   }
 
-  // ---------------------------------------------
-  // OBTENER CANTIDAD DE ITEMS DEL CARRITO Y FAVORITOS
-  // ---------------------------------------------
+  async removeStorage(key) {
+    this.storage.remove(key);
+  }
 
   async obtenerCantidad(key) {
     const data = await this.storage.get(key) || [];

@@ -24,7 +24,6 @@
                   <div class="cart-total mb-3">
                     <h3>Cupon de descuento</h3>
                     <div class="form-group">
-                      <p>Ingrese su código de cupón si tiene uno</p>
                       <input type="text" class="form-control text-left px-3" placeholder="Código promocional"
                         [(ngModel)]="cuponDescuento.codigo" (focusout)="obtenerCupones()">
                     </div>
@@ -52,59 +51,71 @@
 
                 <div class="col-lg-4 cart-wrap">
                   <div class="cart-total mb-3">
-                    <h3>Datos de Envío</h3>
-                    <p>Ingrese su destino para el envio</p>
+                    <h3>Tipo de envío</h3>
                     <form action="#" class="info">
                       <div class="form-group">
-                        <select name="pais" class="form-control text-left px-3" placeholder="Pais"
-                          (change)="datosEnvioSelect($event.target.value, 'pais')">
+                        <select name="tipo_envio" class="form-control text-left px-3" placeholder="Tipo de Envio"
+                          (change)="datosEnvioSelect($event.target.value, 'tipo_envio')">
                           <option value="0">-- SELECCIONE--</option>
-                          <option *ngFor="let pais of listaPaises" value="{{ pais.identificador }}"> {{ pais.nombre }}
-                          </option>
+                          <option value="DE"> DELIVERY </option>
+                          <option value="RT"> RETIRO EN TIENDA </option>
                         </select>
                       </div>
-                      <div class="form-group">
-                        <div *ngIf="!mostrarCiudades">
-                          <input type="text" class="form-control" placeholder="Ciudad" disabled>
-                        </div>
-                        <div *ngIf="mostrarCiudades">
-                          <select name="ciudad" class="form-control text-left px-3" placeholder="Ciudad"
-                            (change)="datosEnvioSelect($event.target.value, 'ciudad')">
-                            <option value="0">-- SELECCIONE--</option>
-                            <option *ngFor="let ciudad of listaCiudades" value="{{ ciudad.identificador }}">
-                              {{ ciudad.nombre }}
-                            </option>
-                          </select>
-                        </div>
 
-                      </div>
-                      <div class="form-group">
-                        <div *ngIf="!mostrarBarrios">
-                          <input type="text" class="form-control" placeholder="Barrio" disabled>
-                        </div>
-                        <div *ngIf="mostrarBarrios">
-                          <select name="barrio" class="form-control text-left px-3" placeholder="Barrio"
-                            (change)="datosEnvioSelect($event.target.value, 'barrio')">
+                      <div *ngIf="datosEnvio.tipo_envio == 'DE'" [@enterAnimation]>
+                        <h3>Ingrese su destino para el envio</h3>
+
+                        <div class="form-group">
+                          <select name="pais" class="form-control text-left px-3" placeholder="Pais"
+                            (change)="datosEnvioSelect($event.target.value, 'pais')">
                             <option value="0">-- SELECCIONE--</option>
-                            <option *ngFor="let barrio of listaBarrios" value="{{ barrio.identificador }}">
-                              {{ barrio.nombre }}
+                            <option *ngFor="let pais of listaPaises" value="{{ pais.identificador }}"> {{ pais.nombre }}
                             </option>
                           </select>
                         </div>
-                      </div>
-                      <div class="form-group">
-                        <input type="text" name="direccion" class="form-control text-left px-3" placeholder="Direccion"
-                          [(ngModel)]="datosEnvio.direccion">
-                      </div>
-                      <div class="form-group">
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend btn-ubicacion" data-toggle="modal"
-                            data-target="#modalUbicacion" (click)="abrirModal()">
-                            <span class=" input-group-text"> <span class="icon-map-marker"></span> </span>
+                        <div class="form-group">
+                          <div *ngIf="!mostrarCiudades">
+                            <input type="text" class="form-control" placeholder="Ciudad" disabled>
                           </div>
-                          <input type="text" name="ubicacion" class="form-control" placeholder="Ubicación"
-                            aria-label="Ubicación" aria-describedby="basic-addon1" [(ngModel)]="datosEnvio.ubicacion"
-                            readonly>
+                          <div *ngIf="mostrarCiudades">
+                            <select name="ciudad" class="form-control text-left px-3" placeholder="Ciudad"
+                              (change)="datosEnvioSelect($event.target.value, 'ciudad')">
+                              <option value="0">-- SELECCIONE--</option>
+                              <option *ngFor="let ciudad of listaCiudades" value="{{ ciudad.identificador }}">
+                                {{ ciudad.nombre }}
+                              </option>
+                            </select>
+                          </div>
+
+                        </div>
+                        <div class="form-group">
+                          <div *ngIf="!mostrarBarrios">
+                            <input type="text" class="form-control" placeholder="Barrio" disabled>
+                          </div>
+                          <div *ngIf="mostrarBarrios">
+                            <select name="barrio" class="form-control text-left px-3" placeholder="Barrio"
+                              (change)="datosEnvioSelect($event.target.value, 'barrio')">
+                              <option value="0">-- SELECCIONE--</option>
+                              <option *ngFor="let barrio of listaBarrios" value="{{ barrio.identificador }}">
+                                {{ barrio.nombre }}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <input type="text" name="direccion" class="form-control text-left px-3"
+                            placeholder="Direccion" [(ngModel)]="datosEnvio.direccion">
+                        </div>
+                        <div class="form-group">
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend btn-ubicacion" data-toggle="modal"
+                              data-target="#modalUbicacion" (click)="abrirModal()">
+                              <span class=" input-group-text"> <span class="icon-map-marker"></span> </span>
+                            </div>
+                            <input type="text" name="ubicacion" class="form-control" placeholder="Ubicación"
+                              aria-label="Ubicación" aria-describedby="basic-addon1" [(ngModel)]="datosEnvio.ubicacion"
+                              readonly>
+                          </div>
                         </div>
                       </div>
                     </form>
