@@ -30,7 +30,7 @@ class Pedido extends Model
     ];
 
     public function items(){
-        return $this->hasOne('App\PedidoItems', 'identificador', 'id_pedido');
+        return $this->hasOne('App\PedidoItems', 'id_pedido', 'identificador');
     }
 
     public function sucursal(){

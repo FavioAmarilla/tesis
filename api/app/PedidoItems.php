@@ -14,6 +14,15 @@ class PedidoItems extends Model
         'id_pedido',
         'id_producto',
         'cantidad',
-        'precio_venta'	
+        'precio_venta',
+        'activo'
     ];
+
+    public function producto(){
+        return $this->hasOne('App\Producto', 'identificador', 'id_producto');
+    }
+
+    public function pedido(){
+        return $this->hasOne('App\Pedido', 'identificador', 'id_pedido');
+    }
 }

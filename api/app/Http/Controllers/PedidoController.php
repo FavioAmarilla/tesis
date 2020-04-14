@@ -20,7 +20,7 @@ class PedidoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Pedido::with(['items', 'sucursal', 'cupon', 'pais', 'ciudad', 'barrio']);
+        $query = Pedido::with(['items.producto', 'sucursal', 'cupon', 'pais', 'ciudad', 'barrio']);
 
         $identificador = $request->query('identificador');
         if ($identificador) {
