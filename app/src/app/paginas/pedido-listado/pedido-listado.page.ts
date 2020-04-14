@@ -12,7 +12,8 @@ import { Router } from '@angular/router';
 export class PedidoListadoPage implements OnInit {
 
   public cargando = true;
-  public listaPedido: any = {};
+  public listaPedido: any;
+  public listaItems: any;
 
   constructor(
     private servicioPedido: PedidoService,
@@ -30,8 +31,8 @@ export class PedidoListadoPage implements OnInit {
     let parametros = {
       id_usuario: usuario.sub
     }
-    const response: any = await this.servicioPedido.obtenerPedido(null, parametros);
 
+    const response: any = await this.servicioPedido.obtenerPedido(null, parametros);
     if (response.success) {
       this.listaPedido = response.data;
     } else {
@@ -43,5 +44,14 @@ export class PedidoListadoPage implements OnInit {
     this.cargando = false;
   }
 
+  async obtenerItems(id_pedido) {
+    this.listaItems = {};
+    
+    await this.listaPedido.forEach(element => {
+      if (element.identificador == id_pedido) {
+        this.listaItems.push(element);
+      }
+    });
+  }
 
 }

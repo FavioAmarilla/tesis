@@ -5,33 +5,78 @@
   <section class="ftco-section ftco-cart" style="padding-top: 20px;">
 
     <div class="container">
-      <div class="row text-center">
-        <h1>Listado de Pedidos</h1>
+
+      <div class="estados">
+        <div class="estados-item"><i class="text-warning icon ion-ios-time">&nbsp;PENDIENTE</i></div>
+        <div class="estados-item"><i class="text-info icon ion-ios-send">&nbsp; EN CAMINO</i></div>
+        <div class="estados-item"><i class="text-success icon ion-md-checkmark-circle">&nbsp; ENTREGADO</i></div>
       </div>
 
-      <div class="row mt-4">
-        <div class="col-md-12 mt-4">
+      <br>
+      <div class="row">
+        <div class="col-md-12">
           <div class="cart-list">
-
             <table class="table">
               <thead class="thead-primary">
                 <tr class="text-center">
+                  <!-- <th>Productos</th> -->
                   <th>Fecha</th>
                   <th>Sucursal</th>
-                  <th>Direccion</th>
-                  <th>Costo Envio</th>
                   <th>Total</th>
+                  <th>Tipo de Envio</th>
                   <th>Estado</th>
                 </tr>
               </thead>
-              <tbody *ngIf="listaCarrito">
+              <tbody>
+                <!-- <tr>
+                  <td>
+                    <div class="form-group">
+                      <input class="form-control" type="date">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-group">
+                      <select class="form-control" name="" id="">
+                        <option value="">--SELECCIONE--</option>
+                      </select>
+                    </div>
+                  </td>
+                  <td></td>
+                  <td>
+                    <div class="form-group">
+                      <select class="form-control" name="" id="">
+                        <option value="">--SELECCIONE--</option>
+                      </select>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-group">
+                      <select class="form-control" name="" id="">
+                        <option value="">--SELECCIONE--</option>
+                      </select>
+                    </div>
+                  </td>
+                </tr> -->
                 <tr class="text-center" *ngFor="let pedido of listaPedido">
-                  <td class="product-name">{{ pedido.fecha }}</td>
-                  <td class="product-name">{{ pedido.sucursal.nombre }}</td>
-                  <td class="product-name">{{ pedido.direccion }}</td>
-                  <td class="product-name">{{ pedido.costo_envio | numberFormat}} Gs.}}</td>
-                  <td class="product-name">{{ pedido.total | numberFormat}} Gs.</td>
-                  <td class="product-name">{{ pedido.estado }}</td>
+                  <!-- <td>
+                    <a (click)="obtenerItems(pedido.identificador)" class="btn btn-primary" data-toggle="modal"
+                      data-target="#modalProductos"><i class="fa fa-list" aria-hidden="true"></i></a>
+                  </td> -->
+                  <td>{{ pedido.created_at | date: "dd/MM/yyyy hh:mm:ss" }}</td>
+                  <td>{{ pedido.sucursal.nombre }}</td>
+                  <td>{{ pedido.total | numberFormat }} Gs.</td>
+                  <td>
+                    <div *ngIf="pedido.tipo_envio == 'DE'">DELIVERY</div>
+                    <div *ngIf="pedido.tipo_envio == 'RT'">RETIRO EN TIENDA</div>
+                  </td>
+                  <td>
+                    <i title="{{ pedido.estado }}" class="text-warning  icon ion-ios-time"
+                      *ngIf="pedido.estado == 'PENDIENTE'"></i>
+                    <i title="{{ pedido.estado }}" class="text-info icon ion-ios-send"
+                      *ngIf="pedido.estado == 'EN CAMINO'"></i>
+                    <i title="{{ pedido.estado }}" class="text-success icon ion-md-checkmark-circle"
+                      *ngIf="pedido.estado == 'ENTREGADO'"></i>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -43,7 +88,27 @@
 
   </section>
 
+  <div class="modal fade" id="modalProductos" tabindex="-1" role="dialog" aria-labelledby="modalProductosLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalProductosLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
 
+          <!-- listado de productos -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <app-footer [cargando]="cargando"></app-footer>
 
