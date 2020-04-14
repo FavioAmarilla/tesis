@@ -65,3 +65,6 @@ Route::resource('ecParamCiudad', 'EcParamCiudadesController');
 Route::resource('ecParamSucursal', 'EcParamSucursalController');
 Route::resource('marca', 'MarcaController');
 Route::resource('pedido', 'PedidoController');
+Route::group(['prefix' => 'pedidoItems'], function () {
+    Route::get('/', ['as' => 'pedido.items', 'uses' => 'PedidoController@items']);
+});

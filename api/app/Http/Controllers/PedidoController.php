@@ -20,7 +20,7 @@ class PedidoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Pedido::with(['items.producto', 'sucursal', 'cupon', 'pais', 'ciudad', 'barrio']);
+        $query = Pedido::with(['sucursal', 'cupon', 'pais', 'ciudad', 'barrio']);
 
         $identificador = $request->query('identificador');
         if ($identificador) {
@@ -208,7 +208,7 @@ class PedidoController extends BaseController
      */
     public function show($id)
     {
-        $pedido = Pedido::find($id)->load('items');
+        $pedido = Pedido::find($id);
 
         if (is_object($pedido)) {
             return $this->sendResponse(true, 'Se listaron exitosamente los registros', $pedido, 200);
@@ -332,5 +332,42 @@ class PedidoController extends BaseController
     public function destroy($id)
     {
         //
+    }
+
+    public function items(Request $request)
+    {        
+        $query = PedidoItems::with(['producto']);
+
+        $identificador = $request->query('identificador');
+        if ($identificador) {
+            $query->where('identificador', '=', $identificador);
+        }
+
+        $id_pedido = $request->query('id_pedido');
+        if ($id_pedido) {
+            $query->where('id_pedido', '=', $id_pedido);
+        }
+        
+        $id_producto = $request->query('id_producto');
+        if ($id_producto) {
+            $query->where('id_producto', '=', $id_producto);
+        }
+        
+        $cantidad = $request->query('cantidad');
+        if ($cantidad) {
+            $query->where('cantidad', '=', $cantidad);
+        }
+        
+        $precio_venta = $request->query('precio_venta');
+        if ($precio_venta) {
+            $query->where('precio_venta', '=', $precio_venta);
+        }
+       
+        $paginar = $request->query('paginar');
+        $listar = (boolval($paginar)) ? 'paginate' : 'get';
+
+        $data = $query->orderBy('created_at', 'desc')->$listar();
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 }

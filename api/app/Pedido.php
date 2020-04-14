@@ -29,10 +29,6 @@ class Pedido extends Model
         'estado'	
     ];
 
-    public function items(){
-        return $this->hasMany('App\PedidoItems', 'id_pedido', 'identificador');
-    }
-
     public function sucursal(){
         return $this->hasOne('App\Sucursal', 'identificador', 'id_sucursal');
     }
