@@ -74,8 +74,22 @@
           </button>
         </div>
         <div class="modal-body">
-
-          <!-- listado de productos -->
+          <table class="table">
+            <thead>
+              <td>Producto</td>
+              <td>Cantidad</td>
+              <td>Precio Venta</td>
+              <td>Total</td>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of listaItems">
+                <td>{{ item.producto.nombre }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>{{ item.precio_venta | numberFormat }} Gs.</td>
+                <td>{{ item.precio_venta * item.cantidad | numberFormat }} Gs.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
