@@ -23,8 +23,9 @@
               <tbody *ngIf="listaCarrito">
                 <tr class="text-center" *ngFor="let producto of listaCarrito">
                   <td>
-                    <a (click)="confirmarParaEliminarDelCarrito(producto)" class="btn btn-primary eliminar"><i
-                      class="fa fa-times" aria-hidden="true"></i></a> 
+                    <a (click)="confirmarParaEliminarDelCarrito(producto)" class="btn btn-primary eliminar">
+                      <ion-icon name="close"></ion-icon>
+                    </a>
                   </td>
 
                   <td class="image-prod">
@@ -49,13 +50,17 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td > <h5>Total</h5></td>
-                  <td ></td>
-                  <td ></td>
-                  <td ></td>
-                  <td ></td>
+                  <td>
+                    <h5>Total</h5>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
 
-                  <td class="total text-rigth"><h5>{{total | numberFormat}} Gs.</h5> </td>
+                  <td class="total text-rigth">
+                    <h5>{{total | numberFormat}} Gs.</h5>
+                  </td>
                 </tr>
               </tfoot>
             </table>
@@ -68,7 +73,8 @@
         <div class="col">
           <span class="float-right">
             <p (click)="(listaCarrito && listaCarrito.length) ? pedido() : return;">
-              <a class="btn btn-primary py-3 px-4" [ngClass]="{'disabled': !listaCarrito || listaCarrito.length == 0}">Pagar</a>
+              <a class="btn btn-primary py-3 px-4"
+                [ngClass]="{'disabled': !listaCarrito || listaCarrito.length == 0}">Pagar</a>
             </p>
           </span>
         </div>

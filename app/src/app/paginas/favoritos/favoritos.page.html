@@ -32,10 +32,13 @@
                 <tr class="text-center" *ngFor="let producto of productos">
 
                   <td>
-                    <a (click)="confirmEliminarDeFavoritos(producto)" class="btn btn-primary eliminar"><i
-                        class="fa fa-times" aria-hidden="true"></i></a> &nbsp;
-                    <a (click)="agregarAlCarrito(producto)" class="btn btn-primary"><span><i
-                          class="ion-ios-cart"></i></span></a>
+                    <a (click)="confirmEliminarDeFavoritos(producto)" class="btn btn-primary eliminar">
+                      <ion-icon name="close"></ion-icon>
+                    </a>
+                    &nbsp;
+                    <a (click)="agregarAlCarrito(producto)" class="btn btn-primary">
+                      <ion-icon name="cart"></ion-icon>
+                    </a>
                   </td>
 
                   <td class="image-prod">
@@ -51,7 +54,7 @@
 
               </tbody>
             </table>
-            
+
           </div>
         </div>
       </div>
