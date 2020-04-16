@@ -19,10 +19,9 @@
         <div class="col-md-12">
           <div class="cart-list">
             <table class="table">
-              <thead class="thead-primary">
+              <thead>
                 <tr class="text-center">
                   <th>Acciones</th>
-                  <th>&nbsp;</th>
                   <th>Producto</th>
                   <th>Descripcion</th>
                   <th>Precio</th>
@@ -31,18 +30,15 @@
               <tbody *ngIf="productos">
                 <tr class="text-center" *ngFor="let producto of productos">
 
-                  <td>
-                    <a (click)="confirmEliminarDeFavoritos(producto)" class="btn btn-primary eliminar">
+                  <td class="d-flex">
+                    <a (click)="confirmEliminarDeFavoritos(producto)"
+                      class="btn btn-primary d-flex justify-content-center align-items-center text-center">
                       <ion-icon name="close"></ion-icon>
                     </a>
-                    &nbsp;
-                    <a (click)="agregarAlCarrito(producto)" class="btn btn-primary">
+                    <a (click)="agregarAlCarrito(producto)"
+                      class="btn btn-primary d-flex justify-content-center align-items-center text-center">
                       <ion-icon name="cart"></ion-icon>
                     </a>
-                  </td>
-
-                  <td class="image-prod">
-                    <img *ngIf="producto" class="img" [src]="producto.imagen | productImage | urlSanitizer">
                   </td>
 
                   <td> {{ producto.descripcion }} </td>
