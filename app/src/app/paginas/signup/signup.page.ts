@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../interfaces/interfaces';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -10,28 +11,27 @@ import { AlertaService } from 'src/app/servicios/alerta.service';
 })
 export class SignupPage implements OnInit {
 
-  public cargando = true;
   public cargandoBoton = false;
 
   public usuario: Usuario = {
-    identificador: 0,
-    nombre_completo: '',
-    email: '',
-    clave_acceso: ''
+    sub: null,
+    identificador: null,
+    nombre_completo: null,
+    email: null,
+    clave_acceso: null,
+    telefono: null,
+    celular: null,
+    fecha_nacimiento: null,
   };
+  public repita_clave = '';
 
   constructor(
     private UsuarioService: UsuarioService,
-    private servicioAlerta: AlertaService
-  ) {
-    this.cargando = false;
-  }
+    private servicioAlerta: AlertaService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    const tsthis = this;
-    setTimeout(() => {
-      tsthis.cargando = false;
-    }, 2000);
   }
 
   async registro() {
@@ -41,6 +41,7 @@ export class SignupPage implements OnInit {
     this.cargandoBoton = false;
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
+      this.router.navigate(['/inicio']);
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }

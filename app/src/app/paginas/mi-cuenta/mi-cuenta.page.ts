@@ -65,21 +65,6 @@ export class MiCuentaPage implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-    if (this.password.clave_actual == '') {
-      this.cargandoBoton = await false;
-      this.servicioAlerta.dialogoError('Ingrese clave actual', '');
-      return;
-    }
-    if (this.password.clave_nueva == '') {
-      this.cargandoBoton = await false;
-      this.servicioAlerta.dialogoError('Ingrese clave nueva', '');
-      return;
-    }
-    if (this.password.repita == '') {
-      this.cargandoBoton = await false;
-      this.servicioAlerta.dialogoError('Repita clave nueva', '');
-      return;
-    }
     if (this.password.clave_nueva != this.password.repita) {
       this.cargandoBoton = await false;
       this.servicioAlerta.dialogoError('Las contraseñas no coinciden', '');
