@@ -98,7 +98,7 @@ export class PaginaCarrito implements OnInit {
   async pedido() {
     // validar que usuario este logueado
     const usuario: any = await this.servicioUsuario.obtenerUsuario();
-    if (usuario.length <= 0) {
+    if (!usuario) {
       this.servicioAlerta.dialogoError('Debe estar Logueado para confirmar la operacion', '');
       return;
     }
