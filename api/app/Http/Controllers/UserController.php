@@ -252,4 +252,41 @@ class UserController extends BaseController {
 
         return $this->sendResponse(true, 'Email disponible', null, 200);
     }
+
+    public function cambiarPassword(Request $request) {
+        $id = $request->input("id");
+        $email = hash('sha256', $request->input("email"));
+        $clave_actual = hash('sha256', $request->input("clave_actual"));
+        $clave_nueva = hash('sha256', $request->input("clave_nueva"));
+
+        $validator = Validator::make($request->all(), [
+            'id'  => 'required',
+            'email'  => 'required',
+            'clave_actual'  => 'required',
+            'clave_nueva'  => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
+        }
+
+        $usuario = User::find($id);
+        if ($usuario) {
+            if ($usuario->clave_acceso != $clave_actual) {
+                return $this->sendResponse(false, 'Contraseña actual incorrecta', null, 400);
+            }
+
+            $usuario->clave_acceso = $clave_nueva;    
+            if ($usuario->save()) {
+                $jwtAuth = new \JwtAuth();
+                $data = $jwtAuth->signIn($email, $clave_nueva);
+                $respuesta = ['token' => $data->original['data'], 'usuario' => $usuario];
+                return $this->sendResponse(true, 'Contraseña actualizada', $respuesta, 200);
+            }
+
+            return $this->sendResponse(false, 'Contraseña no actualizada', null, 400);
+        }
+        
+        return $this->sendResponse(false, 'No se encontro el Usuario', null, 404);
+    }
 }
