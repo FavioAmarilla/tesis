@@ -3,88 +3,63 @@
 <ion-content>
 
   <section class="ftco-section ftco-cart" style="padding-top: 20px;">
-
     <div class="container">
 
       <div class="estados">
-        <div class="estados-item"><i class="text-warning icon ion-ios-time">&nbsp;PENDIENTE</i></div>
-        <div class="estados-item"><i class="text-info icon ion-ios-send">&nbsp; EN CAMINO</i></div>
-        <div class="estados-item"><i class="text-success icon ion-md-checkmark-circle">&nbsp; ENTREGADO</i></div>
-      </div>
-
-      <br>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="cart-list">
-            <table class="table">
-              <thead class="thead-primary">
-                <tr class="text-center">
-                  <!-- <th>Productos</th> -->
-                  <th>Fecha</th>
-                  <th>Sucursal</th>
-                  <th>Total</th>
-                  <th>Tipo de Envio</th>
-                  <th>Estado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- <tr>
-                  <td>
-                    <div class="form-group">
-                      <input class="form-control" type="date">
-                    </div>
-                  </td>
-                  <td>
-                    <div class="form-group">
-                      <select class="form-control" name="" id="">
-                        <option value="">--SELECCIONE--</option>
-                      </select>
-                    </div>
-                  </td>
-                  <td></td>
-                  <td>
-                    <div class="form-group">
-                      <select class="form-control" name="" id="">
-                        <option value="">--SELECCIONE--</option>
-                      </select>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="form-group">
-                      <select class="form-control" name="" id="">
-                        <option value="">--SELECCIONE--</option>
-                      </select>
-                    </div>
-                  </td>
-                </tr> -->
-                <tr class="text-center" *ngFor="let pedido of listaPedido">
-                  <!-- <td>
-                    <a (click)="obtenerItems(pedido.identificador)" class="btn btn-primary" data-toggle="modal"
-                      data-target="#modalProductos"><i class="fa fa-list" aria-hidden="true"></i></a>
-                  </td> -->
-                  <td>{{ pedido.created_at | date: "dd/MM/yyyy hh:mm:ss" }}</td>
-                  <td>{{ pedido.sucursal.nombre }}</td>
-                  <td>{{ pedido.total | numberFormat }} Gs.</td>
-                  <td>
-                    <div *ngIf="pedido.tipo_envio == 'DE'">DELIVERY</div>
-                    <div *ngIf="pedido.tipo_envio == 'RT'">RETIRO EN TIENDA</div>
-                  </td>
-                  <td>
-                    <i title="{{ pedido.estado }}" class="text-warning  icon ion-ios-time"
-                      *ngIf="pedido.estado == 'PENDIENTE'"></i>
-                    <i title="{{ pedido.estado }}" class="text-info icon ion-ios-send"
-                      *ngIf="pedido.estado == 'EN CAMINO'"></i>
-                    <i title="{{ pedido.estado }}" class="text-success icon ion-md-checkmark-circle"
-                      *ngIf="pedido.estado == 'ENTREGADO'"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div class="estados-item text-center text-warning">
+          <ion-icon name="clock"></ion-icon>
+          <p>PENDINTE</p>
+        </div>
+        <div class="estados-item text-center text-info">
+          <ion-icon name="md-car"></ion-icon>
+          <p>EN CAMINO</p>
+        </div>
+        <div class="estados-item text-center text-success">
+          <ion-icon name="md-checkbox"></ion-icon>
+          <p>ENTREGADO</p>
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table">
+            <thead>
+              <tr class="text-center">
+                <th>Productos</th>
+                <th>Fecha</th>
+                <th>Sucursal</th>
+                <th>Total</th>
+                <th>Tipo de Envio</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center" *ngFor="let pedido of listaPedido">
+                <td>
+                  <a (click)="obtenerItems(pedido.identificador)" data-toggle="modal" data-target="#modalProductos"
+                    class="btn btn-primary d-flex justify-content-center align-items-center text-center">
+                    <ion-icon name="menu"></ion-icon>
+                  </a>
+                </td>
+                <td>{{ pedido.created_at | date: "dd/MM/yyyy hh:mm:ss" }}</td>
+                <td>{{ pedido.sucursal.nombre }}</td>
+                <td>{{ pedido.total | numberFormat }} Gs.</td>
+                <td>
+                  <div *ngIf="pedido.tipo_envio == 'DE'">DELIVERY</div>
+                  <div *ngIf="pedido.tipo_envio == 'RT'">RETIRO EN TIENDA</div>
+                </td>
+                <td>
+                  <ion-icon class="text-warning" *ngIf="pedido.estado == 'PENDIENTE'" name="clock"></ion-icon>
+                  <ion-icon class="text-info" *ngIf="pedido.estado == 'EN CAMINO'" name="md-car"></ion-icon>
+                  <ion-icon class="text-success" *ngIf="pedido.estado == 'ENTREGADO'" name="md-checkbox"></ion-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
+
 
   </section>
 
@@ -99,8 +74,22 @@
           </button>
         </div>
         <div class="modal-body">
-
-          <!-- listado de productos -->
+          <table class="table">
+            <thead>
+              <td>Producto</td>
+              <td>Cantidad</td>
+              <td>Precio Venta</td>
+              <td>Total</td>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of listaItems">
+                <td>{{ item.producto.nombre }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>{{ item.precio_venta | numberFormat }} Gs.</td>
+                <td>{{ item.precio_venta * item.cantidad | numberFormat }} Gs.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

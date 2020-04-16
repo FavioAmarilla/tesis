@@ -45,7 +45,7 @@
     </ion-slide>
   </ion-slides>
 
-  <div class="filter-toggle" data-toggle="modal" data-target="#filterModal"><i class="icon-filter"></i></div>
+  <div class="filter-toggle" data-toggle="modal" data-target="#filterModal"><ion-icon name="funnel"></ion-icon></div>
 
   <section class="ftco-section">
     <div class="container-fluid">
@@ -69,7 +69,8 @@
               <div class="product">
                 <div class="m-2">
                   <a [routerLink]="['/producto', producto.slug]" class="img-prod">
-                    <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="253" style="width: 100%;">
+                    <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="253"
+                      style="width: 100%;">
                     <div class="overlay"></div>
                   </a>
                   <hr class="mt-2 mb-0 ml-2 mr-2 border-top">
@@ -84,14 +85,17 @@
                     </div>
                     <div class="bottom-area d-flex px-3">
                       <div class="m-auto d-flex">
-                        <a [routerLink]="['/producto', producto.slug]" class="btn-producto d-flex justify-content-center align-items-center text-center">
-                          <span><i class="ion-ios-menu"></i></span>
+                        <a [routerLink]="['/producto', producto.slug]"
+                          class="d-flex justify-content-center align-items-center text-center">
+                          <ion-icon name="menu"></ion-icon>
                         </a>
-                        <a (click)="agregarAlCarrito(producto)" class="btn-producto d-flex justify-content-center align-items-center text-center ml-1 bg-primary">
-                          <span><i class="ion-ios-cart"></i></span>
+                        <a (click)="agregarAlCarrito(producto)"
+                          class="d-flex justify-content-center align-items-center text-center ml-1">
+                          <ion-icon name="cart"></ion-icon>
                         </a>
-                        <a (click)="agregarAFavoritos(producto)" class="btn-producto d-flex justify-content-center align-items-center text-center ml-1">
-                          <span><i class="ion-ios-heart"></i></span>
+                        <a (click)="agregarAFavoritos(producto)"
+                          class="d-flex justify-content-center align-items-center text-center ml-1">
+                          <ion-icon name="heart"></ion-icon>
                         </a>
                       </div>
                     </div>

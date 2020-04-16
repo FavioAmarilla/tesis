@@ -45,13 +45,20 @@ export class PedidoListadoPage implements OnInit {
   }
 
   async obtenerItems(id_pedido) {
-    this.listaItems = {};
-    
-    await this.listaPedido.forEach(element => {
-      if (element.identificador == id_pedido) {
-        this.listaItems.push(element);
-      }
-    });
+    this.cargando = true;
+
+    let parametros = {
+      id_pedido
+    };
+    const response: any = await this.servicioPedido.obtenerItems(parametros);
+    if (response.success) {
+      this.listaItems = response.data;
+    } else {
+      this.cargando = false;
+      this.servicioAlerta.dialogoError(response.message, '');
+    }
+
+    this.cargando = false;
   }
 
 }

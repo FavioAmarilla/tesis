@@ -61,8 +61,6 @@ export class PaginaCarrito implements OnInit {
     const mensaje = 'El producto se eliminara del carrito';
     const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, preConfirm);
 
-    console.log(response);
-
     if (!response) {
       this.servicioAlerta.dialogoError(response.message, '');
     }
