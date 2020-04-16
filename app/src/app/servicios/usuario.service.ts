@@ -30,14 +30,30 @@ export class UsuarioService {
 
     return new Promise(resolve => {
       this.http.post(`${API}user`, usuario, { headers })
-      .subscribe(
-        (response: any) => {
-          resolve(response);
-        },
-        error => {
-          resolve(error.error);
-        }
-      );
+        .subscribe(
+          (response: any) => {
+            resolve(response);
+          },
+          error => {
+            resolve(error.error);
+          }
+        );
+    });
+  }
+
+  async actualizar(usuario: Usuario, id: any) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return new Promise(resolve => {
+      this.http.put(`${API}user/${id}`, usuario, { headers })
+        .subscribe(
+          (response: any) => {
+            resolve(response);
+          },
+          error => {
+            resolve(error.error);
+          }
+        );
     });
   }
 
@@ -46,20 +62,20 @@ export class UsuarioService {
 
     return new Promise(resolve => {
       this.http.post(`${API}user/signIn`, usuario, { headers })
-      .subscribe(
-        async (response: any) => {
-          if (response.success) {
-            // se guarda el token en el Storage
-            await this.guardarToken(response.data);
-            this.loginEmitter.emit(this.usuario);
-            resolve({ success: true });
-          } else {
-            this.token = null;
-            this.storage.remove('token');
-            resolve({ success: false, error: response });
+        .subscribe(
+          async (response: any) => {
+            if (response.success) {
+              // se guarda el token en el Storage
+              await this.guardarToken(response.data);
+              this.loginEmitter.emit(this.usuario);
+              resolve({ success: true });
+            } else {
+              this.token = null;
+              this.storage.remove('token');
+              resolve({ success: false, error: response });
+            }
           }
-        }
-      );
+        );
     });
   }
 
@@ -110,5 +126,21 @@ export class UsuarioService {
     this.storage.remove('token');
     this.logoutEmitter.emit(true);
     this.router.navigate(['/inicio']);
+  }
+
+  async cambiarPassword(usuario: any) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return new Promise(resolve => {
+      this.http.post(`${API}user/cambiarPassword`, usuario, { headers })
+        .subscribe(
+          (response: any) => {
+            resolve(response);
+          },
+          error => {
+            resolve(error.error);
+          }
+        );
+    });
   }
 }

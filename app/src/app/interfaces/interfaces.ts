@@ -1,8 +1,12 @@
 export interface Usuario {
+    sub?: number;
     identificador?: number;
     nombre_completo?: string;
     email?: string;
     clave_acceso?: string;
+    telefono?: string;
+    celular?: string;
+    fecha_nacimiento?: string;
 }
 
 export interface Producto {

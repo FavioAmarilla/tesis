@@ -14,8 +14,7 @@ const routes: Routes = [
   { path: 'producto/:slug', loadChildren: () => import('./paginas/producto/producto.module').then(m => m.ModuloPaginaProducto) },
   { path: 'pedido', loadChildren: () => import('./paginas/pedido/pedido.module').then(m => m.PedidoPageModule) },
   { path: 'pedido-lista', loadChildren: () => import('./paginas/pedido-listado/pedido-listado.module').then(m => m.PedidoListadoPageModule) },
-
-
+  { path: 'mi-cuenta', loadChildren: () => import('./paginas/mi-cuenta/mi-cuenta.module').then(m => m.MiCuentaPageModule) }
 
 ];
 

@@ -28,6 +28,22 @@ class UserController extends BaseController {
             $query->where('email', 'LIKE', '%'.$email.'%');
         }
 
+        $fecha_nacimiento = $request->query('fecha_nacimiento');
+        if ($fecha_nacimiento) {
+            $query->where('fecha_nacimiento', '=', $fecha_nacimiento);
+        }
+
+        $telefono = $request->query('telefono');
+        if ($telefono) {
+            $query->where('telefono', '=', $telefono);
+        }
+
+        $celular = $request->query('celular');
+        if ($celular) {
+            $query->where('celular', '=', $celular);
+        }
+
+
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
 
@@ -56,9 +72,14 @@ class UserController extends BaseController {
         $email = $request->input("email");
         $clave_acceso = hash('sha256', $request->input("clave_acceso"));
         $imagen = $request->input('imagen');
+        $fecha_nacimiento = $request->input('fecha_nacimiento');
+        $telefono = $request->input('telefono');
+        $celular = $request->input('celular');
 
         $validator = Validator::make($request->all(), [
             'nombre_completo'  => 'required',
+            'fecha_nacimiento'  => 'required',
+            'celular'  => 'required',
             'email'  => 'required',
             'clave_acceso'  => 'required',
         ]);
@@ -69,6 +90,9 @@ class UserController extends BaseController {
 
         $usuario = new User();
         $usuario->nombre_completo = $nombre_completo;
+        $usuario->fecha_nacimiento = $fecha_nacimiento;
+        $usuario->telefono = $telefono;
+        $usuario->celular = $celular;
         $usuario->email = $email;
         $usuario->clave_acceso = $clave_acceso;
         $usuario->imagen = $imagen;
@@ -116,13 +140,16 @@ class UserController extends BaseController {
     public function update(Request $request, $id) {
         $nombre_completo = $request->input("nombre_completo");
         $email = $request->input("email");
-        $clave_acceso = hash('sha256', $request->input("clave_acceso"));
         $imagen = $request->input('imagen');
+        $fecha_nacimiento = $request->input('fecha_nacimiento');
+        $telefono = $request->input('telefono');
+        $celular = $request->input('celular');
 
         $validator = Validator::make($request->all(), [
             'nombre_completo'  => 'required',
-            'email'  => 'required',
-            'clave_acceso'  => 'required',
+            'fecha_nacimiento'  => 'required',
+            'celular'  => 'required',
+            'email'  => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -133,12 +160,14 @@ class UserController extends BaseController {
         if ($usuario) {
             $usuario->nombre_completo = $nombre_completo;
             $usuario->email = $email;
-            $usuario->clave_acceso = $clave_acceso;
             $usuario->imagen = $imagen;
+            $usuario->fecha_nacimiento = $fecha_nacimiento;
+            $usuario->telefono = $telefono;
+            $usuario->celular = $celular;
     
             if ($usuario->save()) {
                 $jwtAuth = new \JwtAuth();
-                $data = $jwtAuth->signIn($email, $clave_acceso);
+                $data = $jwtAuth->signIn($email, $usuario->clave_acceso);
                 $respuesta = ['token' => $data->original['data'], 'usuario' => $usuario];
                 return $this->sendResponse(true, 'Usuario actualizado', $respuesta, 200);
             }
