@@ -52,6 +52,7 @@ export class PedidoPage implements OnInit {
   public cuponDescuento: CuponDescuento;
   public submitCuponDescuento = false;
   public datosEnvio: any;
+  public datosPago: any;
   public totales: any;
 
   public coordenadas;
@@ -71,6 +72,7 @@ export class PedidoPage implements OnInit {
   ) {
     this.inicializarTotales();
     this.inicializarCuponDescuento();
+    this.inicializarDatosPago();
     this.inicializarDatosEnvio();
   }
 
@@ -104,6 +106,12 @@ export class PedidoPage implements OnInit {
       fecha_desde: '',
       fecha_hasta: '',
       usado: ''
+    };
+  }
+
+  async inicializarDatosPago() {
+    this.datosPago = {
+      tipo: ''
     };
   }
 
@@ -322,6 +330,10 @@ export class PedidoPage implements OnInit {
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }
+  }
+
+  async checkTipoPago(value) {
+    this.datosPago.tipo = value;
   }
 
 

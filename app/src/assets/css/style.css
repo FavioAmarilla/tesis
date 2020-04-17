@@ -56,6 +56,7 @@ hr {
   border-color: var(--green);
   box-shadow: 0 0 0 0.2rem rgba(3, 179, 91, 0.295);
 }
+
 .text-primary {
   color: var(--green) !important;
 }
@@ -779,4 +780,65 @@ table tbody tr td.image-prod .img {
     display: block;
     width: 12.5%;
   }
+}
+
+/* estilos para tabs principal */
+
+.tab-principal ul.nav {
+  background-color: #079a4a;
+}
+
+.tab-principal .nav-link {
+  color: white !important;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.tab-principal .nav-tabs {
+  border-bottom: 0px;
+}
+
+.tab-principal a.nav-link.active {
+  color: #079a4a !important;
+  color: black !important;
+}
+
+.tab-principal .tab-content {
+  border: 1px solid #079a4a;
+  border-top: 0px;
+  border-radius: 0px 0px 2px 2px;
+  padding: 20px;
+}
+
+/* estilos para tabs vertical */
+.tab-vertical ul.nav {
+  background-color: #079a4a;
+  padding-bottom: 10px;
+}
+
+.tab-vertical .nav-link {
+  color: white !important;
+}
+
+.tab-vertical .nav-tabs {
+  border-bottom: 0px;
+}
+
+.tab-vertical a.nav-link.active {
+  background-color: white !important;
+  color: black !important;
+  border-radius: 3px 0px 0px 3px;
+}
+
+.tab-vertical .tab-content {
+  border: 1px solid #079a4a;
+  border-top: 0px;
+  border-radius: 0px 0px 2px 2px;
+  padding: 20px;
+}
+
+.tab-vertical .tab-container {
+  border: 1px solid #079a4a;
+  border-left: 0px;
+  border-radius: 0px 3px 3px 0px;
 }
