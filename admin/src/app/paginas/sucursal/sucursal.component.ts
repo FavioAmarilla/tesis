@@ -45,6 +45,7 @@ export class SucursalComponent implements OnInit {
   ngOnInit() {
     this.paginacion(this.paginaActual);
     this.obtenerEmpresas();
+    this.obtenerPaises();
   }
 
   async mostrarFormulario(flag, accion) {
@@ -53,6 +54,7 @@ export class SucursalComponent implements OnInit {
 
     if (flag && accion === 'INS') {
       this.sucursal = new Sucursal(null, null, null, null, null, null, null, null, null, null);
+      console.log(this.sucursal.id_empresa);
     }
   }
 
@@ -80,7 +82,6 @@ export class SucursalComponent implements OnInit {
   }
 
   async obtenerCiudades(id_pais) {
-    this.cargando = true;
     let parametros = {
       id_pais
     };
@@ -129,7 +130,7 @@ export class SucursalComponent implements OnInit {
     if (response.success) {
       this.sucursal = response.data;
       await this.obtenerPaises();
-      await  this.obtenerCiudades(this.sucursal.id_pais);
+      await this.obtenerCiudades(this.sucursal.id_pais);
       this.mostrarFormulario(true, 'UPD');
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
@@ -157,7 +158,6 @@ export class SucursalComponent implements OnInit {
     this.cargando = true;
     const response: any = await this.servicioSucursal.actualizar(this.sucursal, this.sucursal.identificador);
 
-    console.log(response);
     this.cargando = false;
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
@@ -167,6 +167,5 @@ export class SucursalComponent implements OnInit {
       this.servicioAlerta.dialogoError(response.message, '');
     }
   }
-
 
 }

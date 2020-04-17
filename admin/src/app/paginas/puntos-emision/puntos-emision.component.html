@@ -1,110 +1,132 @@
 <app-breadcrumb pagina="Puntos de emisión"></app-breadcrumb>
 
 <div class="row">
-    <div class="col-md-12">
-      
-      <div class="card" *ngIf="!form">
-        <div class="card-header">
-          <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table">
-              <thead class=" text-primary">
-                <th>
-                  Sucursal
-                </th>
-                <th>
-                  Nombre
-                </th>
-                <th class="text-right">
-                  Codigo
-                </th>
-                <th class="text-right">
-                  Tipo
-                </th>
-                <th class="text-right">
-                  Opciones
-                </th>
-              </thead>
-              <tbody>
-                <tr *ngFor="let puntoEmision of listaPuntosEmision | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
-                  <td>
-                    {{ puntoEmision.sucursal.nombre }}
-                  </td>
-                  <td>
-                    {{ puntoEmision.nombre }}
-                  </td>
-                  <td>
-                    {{ puntoEmision.codigo }}
-                  </td>
-                  <td class="text-right">
-                      <p *ngIf="puntoEmision.vr_tipo == 'ON'">ONLINE</p>
-                      <p *ngIf="puntoEmision.vr_tipo == 'PI'">PRE IMPRESO</p>
-                      <p *ngIf="puntoEmision.vr_tipo == 'AI'">AUTO   IMPRESO</p>
-                  </td>
-                  <td class="text-right">
-                    <button class="btn btn-sm btn-warning" (click)="obtenerPuntoEmision(puntoEmision.identificador)"><i class="fas fa-edit"></i></button> &nbsp;
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div *ngIf="!cargando && !form && accion == 'LST'">
-              <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="barrio" [porPagina]="porPagina" [total]="total"></app-paginacion>
-            </div>
-            <div class="row justify-content-center align-items-center col-md-12">
-              <span *ngIf="cargando && !form && accion == 'LST'" class="spinner-border spinner-border-lg spinner-table" role="status" aria-hidden="true"></span>
-            </div>
+  <div class="col-md-12">
+
+    <div class="card" *ngIf="!form">
+      <div class="card-header">
+        <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead class=" text-primary">
+              <th>
+                Sucursal
+              </th>
+              <th>
+                Nombre
+              </th>
+              <th class="text-right">
+                Codigo
+              </th>
+              <th class="text-right">
+                Tipo
+              </th>
+              <th class="text-right">
+                Opciones
+              </th>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let puntoEmision of listaPuntosEmision | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
+                <td>
+                  {{ puntoEmision.sucursal.nombre }}
+                </td>
+                <td>
+                  {{ puntoEmision.nombre }}
+                </td>
+                <td>
+                  {{ puntoEmision.codigo }}
+                </td>
+                <td class="text-right">
+                  <p *ngIf="puntoEmision.vr_tipo == 'ON'">ONLINE</p>
+                  <p *ngIf="puntoEmision.vr_tipo == 'PI'">PRE IMPRESO</p>
+                  <p *ngIf="puntoEmision.vr_tipo == 'AI'">AUTO IMPRESO</p>
+                </td>
+                <td class="text-right">
+                  <button class="btn btn-sm btn-warning" (click)="obtenerPuntoEmision(puntoEmision.identificador)"><i
+                      class="fas fa-edit"></i></button> &nbsp;
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div *ngIf="!cargando && !form && accion == 'LST'">
+            <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="barrio" [porPagina]="porPagina"
+              [total]="total"></app-paginacion>
+          </div>
+          <div class="row justify-content-center align-items-center col-md-12">
+            <span *ngIf="cargando && !form && accion == 'LST'" class="spinner-border spinner-border-lg spinner-table"
+              role="status" aria-hidden="true"></span>
           </div>
         </div>
       </div>
-
-      <div class="card" *ngIf="form">
-        <div class="card-body">
-          <div class="table-responsive">
-            <form>
-              <div class="form-group">
-                <label for="id_sucursal">Sucursal</label>
-                <select name="id_sucursal" class="form-control" [(ngModel)]="puntoEmision.id_sucursal">
-                    <option value="" disabled selected>--Seleccionar--</option>
-                    <option *ngFor="let sucursal of listaSucursal" value="{{sucursal.identificador}}">{{sucursal.nombre}}</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="Nombre">Nombre</label>
-                <input type="text" class="form-control" placeholder="Nombre" name="nombre" [(ngModel)]="puntoEmision.nombre">
-              </div>
-              <div class="form-group">
-                <label for="Codigo">Codigo</label>
-                <input type="text" class="form-control" placeholder="Codigo" name="codigo" [(ngModel)]="puntoEmision.codigo">
-              </div>
-              <div class="form-group">
-                <label for="Tipo">Tipo</label>
-                <select class="form-control" name="vr_tipo" [(ngModel)]="puntoEmision.vr_tipo">
-                  <option value="" disabled selected>--Seleccionar--</option>
-                  <option value="ON">ONLINE</option>
-                  <option value="PI">PRE IMPRESO</option>
-                  <option value="AI">AUTO IMPRESO</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'">
-                    <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Guardar
-                </button>
-                <button type="button" class="btn btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'">
-                    <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Actualizar
-                </button>
-                <button type="button" class="btn btn-danger" (click)="mostrarFormulario(false, 'LST')">
-                  Cancelar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <div class="card" *ngIf="form">
+      <div class="card-body">
+        <div class="table-responsive">
+          <form #formulario="ngForm">
+            <div class="form-group">
+              <label for="id_sucursal">Sucursal</label>
+              <select name="id_sucursal" class="form-control" [(ngModel)]="puntoEmision.id_sucursal" required
+                #id_sucursal="ngModel">
+                <option value="null">-- SELECCIONAR --</option>
+                <option *ngFor="let sucursal of listaSucursal" value="{{sucursal.identificador}}">{{sucursal.nombre}}
+                </option>
+              </select>
+              <span class="invalid-feedback d-block"
+                *ngIf="!id_sucursal.valid && id_sucursal.touched || puntoEmision.id_sucursal == null">Este
+                campo es obligatorio</span>
+            </div>
+            <div class="form-group">
+              <label for="Nombre">Nombre</label>
+              <input type="text" class="form-control" placeholder="Nombre" name="nombre"
+                [(ngModel)]="puntoEmision.nombre" required #nombre="ngModel">
+              <span class="invalid-feedback d-block" *ngIf="!nombre.valid && nombre.touched">Este
+                campo es obligatorio</span>
+            </div>
+            <div class="form-group">
+              <label for="Codigo">Codigo</label>
+              <input type="text" class="form-control" placeholder="Codigo" name="codigo"
+                [(ngModel)]="puntoEmision.codigo" required #codigo="ngModel">
+              <span class="invalid-feedback d-block" *ngIf="!codigo.valid && codigo.touched">Este
+                campo es obligatorio</span>
+            </div>
+            <div class="form-group">
+              <label for="Tipo">Tipo</label>
+              <select class="form-control" name="vr_tipo" [(ngModel)]="puntoEmision.vr_tipo" required
+                #vr_tipo="ngModel">
+                <option value="null">-- SELECCIONAR --</option>
+                <option value="ON">ONLINE</option>
+                <option value="PI">PRE IMPRESO</option>
+                <option value="AI">AUTO IMPRESO</option>
+              </select>
+              <span class="invalid-feedback d-block"
+                *ngIf="!vr_tipo.valid && vr_tipo.touched || puntoEmision.vr_tipo == null">Este
+                campo es obligatorio</span>
+            </div>
+            <div class="form-group">
+              <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'"
+                [disabled]="formulario.invalid">
+                <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm" role="status"
+                  aria-hidden="true"></span>
+                Guardar
+              </button>
+              <button type="button" class="btn btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'"
+                [disabled]="formulario.invalid">
+                <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm" role="status"
+                  aria-hidden="true"></span>
+                Actualizar
+              </button>
+              <button type="button" class="btn btn-danger" (click)="mostrarFormulario(false, 'LST')">
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
-  

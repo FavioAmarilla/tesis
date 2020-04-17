@@ -48,21 +48,23 @@
         <div class="card" *ngIf="form">
             <div class="card-body">
                 <div class="table-responsive">
-                    <form>
-                        
+                    <form #formulario="ngForm">
                         <div class="form-group">
                             <label for="Nombre">Nombre</label>
                             <input type="text" class="form-control" placeholder="Nombre" name="nombre"
-                                [(ngModel)]="marca.nombre">
+                                [(ngModel)]="marca.nombre" required #nombre="ngModel">
+                            <span class="invalid-feedback d-block" *ngIf="!nombre.valid && nombre.touched">Este campo es
+                                obligatorio</span>
                         </div>
                         <div class="form-group">
-                            <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'">
+                            <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'"
+                                [disabled]="formulario.invalid">
                                 <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm"
                                     role="status" aria-hidden="true"></span>
                                 Guardar
                             </button>
-                            <button type="button" class="btn btn-primary" (click)="actualizar()"
-                                *ngIf="accion == 'UPD'">
+                            <button type="button" class="btn btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'"
+                                [disabled]="formulario.invalid">
                                 <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm"
                                     role="status" aria-hidden="true"></span>
                                 Actualizar

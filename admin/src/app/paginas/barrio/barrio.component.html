@@ -1,4 +1,3 @@
-
 <app-breadcrumb pagina="Barrios"></app-breadcrumb>
 
 <div class="row">
@@ -54,27 +53,36 @@
     <div class="card" *ngIf="form">
       <div class="card-body">
         <div class="table-responsive">
-          <form>
+          <form #formulario="ngForm">
 
             <div class="form-group">
               <label for="">Pais</label>
-              <select name="id_ciudad" class="form-control" [(ngModel)]="barrio.id_ciudad">
-                <option>-- SELECCIONAR --</option>
+              <select name="id_ciudad" class="form-control" [(ngModel)]="barrio.id_ciudad" required
+                #id_ciudad="ngModel">
+                <option value="null">-- SELECCIONAR --</option>
                 <option *ngFor="let ciudad of listaCiudad" value="{{ciudad.identificador}}"
                   [selected]="ciudad.identificador == barrio.id_ciudad">{{ciudad.nombre}}</option>
               </select>
+              <span class="invalid-feedback d-block"
+                *ngIf="!id_ciudad.valid && id_ciudad.touched || barrio.id_ciudad == null">Este
+                campo es obligatorio</span>
             </div>
             <div class="form-group">
               <label for="Nombre">Nombre</label>
-              <input type="text" class="form-control" placeholder="Nombre" name="nombre" [(ngModel)]="barrio.nombre">
+              <input type="text" class="form-control" placeholder="Nombre" name="nombre" [(ngModel)]="barrio.nombre"
+                required #nombre="ngModel">
+              <span class="invalid-feedback d-block" *ngIf="!nombre.valid && nombre.touched">Este
+                campo es obligatorio</span>
             </div>
             <div class="form-group">
-              <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'">
+              <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'"
+                [disabled]="formulario.invalid">
                 <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm" role="status"
                   aria-hidden="true"></span>
                 Guardar
               </button>
-              <button type="button" class="btn btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'">
+              <button type="button" class="btn btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'"
+                [disabled]="formulario.invalid">
                 <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm" role="status"
                   aria-hidden="true"></span>
                 Actualizar
