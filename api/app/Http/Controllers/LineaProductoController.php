@@ -24,6 +24,11 @@ class LineaProductoController extends BaseController
         if ($descripcion) {
             $query->where('descripcion', 'LIKE', '%'.$descripcion.'%');
         }
+        
+        $slug = $request->query('slug');
+        if ($slug) {
+            $query->where('slug', '=', $slug);
+        }
 
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';

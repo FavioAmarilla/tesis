@@ -11,6 +11,7 @@ use App\Http\Controllers\BaseController as BaseController;
 use App\Producto;
 use App\Sucursal;
 use App\Stock;
+use App\LineaProducto;
 
 class ProductoController extends BaseController
 {
@@ -68,6 +69,11 @@ class ProductoController extends BaseController
         $precio_venta = $request->query('precio_venta');
         if ($precio_venta) {
             $query->where('precio_venta', '=', $precio_venta);
+        }
+        
+        $slug = $request->query('slug');
+        if ($slug) {
+            $query->where('slug', '=', $slug);
         }
 
         $paginar = $request->query('paginar');
