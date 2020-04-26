@@ -48,8 +48,18 @@ body {
   background-color: #fff;
 }
 
+.border {
+  border-radius: 2px !important;
+}
+
 hr {
-  background: rgba(255, 255, 255, 0.1);
+  border-top: 1px solid #dee2e6 !important;
+}
+
+.h1, .h2, .h3, .h4, .h5 {
+  font-family: 'Lato', Arial, Helvetica, sans-serif !important;
+  font-weight: 400 !important;
+  color: #343333 !important;
 }
 
 .form-control:focus {
@@ -207,9 +217,6 @@ hr {
   -moz-border-radius: 30px;
   -ms-border-radius: 30px;
   border-radius: 30px;
-  -webkit-box-shadow: 0px 24px 36px -11px rgba(0, 0, 0, 0.09);
-  -moz-box-shadow: 0px 24px 36px -11px rgba(0, 0, 0, 0.09);
-  box-shadow: 0px 24px 36px -11px rgba(0, 0, 0, 0.09);
 }
 
 .btn:hover, .btn:active, .btn:focus {
@@ -277,22 +284,6 @@ hr {
   position: relative;
   display: block;
   overflow: hidden;
-}
-
-.product .img-prod .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  content: '';
-  opacity: 0;
-  background: var(--green);
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  -webkit-transition: all 0.3s ease;
-  -ms-transition: all 0.3s ease;
-  transition: all 0.3s ease;
 }
 
 .product .img-prod span.status {
@@ -430,14 +421,18 @@ hr {
   margin: 0 auto;
 }
 
-.product-details h3 {
-  font-size: 30px;
-  font-weight: 400;
+.product-details {
+  padding: 20px !important;
 }
 
-.product-details .price span {
+.product-details .price {
   font-size: 30px;
-  color: #000000;
+  color: var(--green);
+}
+
+.product-details .price .gs {
+  font-size: 20px;
+  color: var(--green);
 }
 
 .product-details button i {
@@ -458,7 +453,6 @@ hr {
   height: 40px !important;
   text-align: center;
   border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  color: var(--green);
   padding: 10px 20px;
   background: transparent !important;
   -webkit-border-radius: 0;
@@ -466,75 +460,6 @@ hr {
   -ms-border-radius: 0;
   border-radius: 0;
   font-size: 14px;
-}
-
-.product-details button:hover, .product-details button:focus, .product-details .form-control:hover, .product-details .form-control:focus {
-  text-decoration: none;
-  outline: none;
-}
-
-.product-details .form-group {
-  position: relative;
-}
-
-.product-details .form-group .form-control {
-  padding-right: 40px;
-  color: #000000;
-  background: transparent !important;
-}
-
-.product-details .form-group .form-control::-webkit-input-placeholder {
-  /* Chrome/Opera/Safari */
-  color: #4d4d4d;
-}
-
-.product-details .form-group .form-control::-moz-placeholder {
-  /* Firefox 19+ */
-  color: #4d4d4d;
-}
-
-.product-details .form-group .form-control:-ms-input-placeholder {
-  /* IE 10+ */
-  color: #4d4d4d;
-}
-
-.product-details .form-group .form-control:-moz-placeholder {
-  /* Firefox 18- */
-  color: #4d4d4d;
-}
-
-.product-details .form-group .icon {
-  position: absolute;
-  top: 50%;
-  right: 20px;
-  font-size: 14px;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  color: #000000;
-}
-
-.product-details .form-group .icon span {
-  color: #000000;
-}
-
-@media (max-width: 767.98px) {
-  .product-details .form-group .icon {
-    right: 10px;
-  }
-}
-
-.product-details .form-group .select-wrap {
-  position: relative;
-}
-
-.product-details .form-group .select-wrap select {
-  font-size: 13px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  text-transform: uppercase;
-  letter-spacing: 2px;
 }
 
 .ftco-cart button i {
@@ -811,6 +736,7 @@ table tbody tr td.image-prod .img {
 }
 
 /* estilos para tabs vertical */
+
 .tab-vertical ul.nav {
   background-color: #079a4a;
   padding-bottom: 10px;
