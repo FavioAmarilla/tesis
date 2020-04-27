@@ -28,6 +28,8 @@ export class PaginaInicio implements OnInit {
   public idLineaProducto: any = 0;
   public lineasProducto: LineaProducto;
 
+  public buscarProductoDescripcion: string = '';
+
   public slideImgUrl: string;
   @ViewChild(IonSlides, { static: true }) slider: IonSlides;
   public slideOptions = {
@@ -91,6 +93,9 @@ export class PaginaInicio implements OnInit {
     let parametros = {
       id_linea: value
     }
+    if (value <= 0) {
+      delete parametros.id_linea;
+    }
     this.idLineaProducto = await value;
     await this.obtenerProductos(parametros);
   }
@@ -124,6 +129,20 @@ export class PaginaInicio implements OnInit {
     await this.servicioCarrito.setStorage('sucursal', value);
     await this.obtenerProductos(parametros);
   }
+
+
+
+  async buscarProductoPorDescripcion() {
+    if (this.buscarProductoDescripcion != '' && this.buscarProductoDescripcion != null) {
+      this.cargando = true;
+
+      let parametros = {
+        descripcion: this.buscarProductoDescripcion
+      }
+      await this.obtenerProductos(parametros);
+    }
+  }
+
 
   async obtenerProductos(parametros?) {
     const response: any = await this.servicioProducto.obtenerProducto(null, parametros);

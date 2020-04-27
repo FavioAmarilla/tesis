@@ -1,27 +1,37 @@
 <app-header [cargando]="cargando"></app-header>
 
-<ng-template #content let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title" id="filterModal">Lineas de Producto</h5>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+<div class="modal fade" id="modalLineas" tabindex="-1" role="dialog" aria-labelledby="modalLineasLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filterModal">Lineas de Producto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center"
+            (click)="seleccionarLineaProducto(0)"
+            [ngClass]="{'active': idLineaProducto == null || idLineaProducto == 0 }">
+            TODOS
+            <span class="">
+              <ion-icon name="ios-arrow-forward"></ion-icon>
+            </span></li>
+          <li class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let linea of listaLineas" (click)="seleccionarLineaProducto(linea.identificador)"
+            [ngClass]="{'active': linea.id == idLineaProducto }">
+            {{ linea.descripcion }}
+            <span class="">
+              <ion-icon name="ios-arrow-forward"></ion-icon>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
-  <div class="modal-body">
-    <ul class="list-group">
-      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let linea of listaLineas"
-        (click)="seleccionarLineaProducto(linea.identificador)" [ngClass]="{'active': linea.id == idLineaProducto }">
-        {{ linea.descripcion }}
-        <span class="">
-          <ion-icon name="ios-arrow-forward"></ion-icon>
-        </span>
-      </li>
-    </ul>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
-  </div>
-</ng-template>
+</div>
 
 <ion-content>
   <!-- slides -->
@@ -51,38 +61,25 @@
     </ion-slide>
   </ion-slides>
 
-  <div class="filter-toggle" (click)="open(content)">
+  <button type="button" class="filter-toggle btn btn-primary" data-toggle="modal" data-target="#modalLineas">
     <ion-icon name="funnel"></ion-icon>
-  </div>
+  </button>
 
   <section class="ftco-section">
     <div class="container-fluid">
-
-
       <!-- productos -->
       <div class="row">
 
-        <!-- <div class="col-md-12 heading-section text-center">
-          <br><br>
-          <h3 class="mb-4 h3">Nuestros productos</h3>
-          <hr class="border-top ml-5 mr-5">
-        </div> -->
-
-        <div class="col-md-3 offset-md-9">
-          <div class="form-group">
-            <label>Sucursal</label>
-            <select class="form-control" name="sucursal" (change)="seleccionarSucursal($event.target.value)">
-              <option *ngFor="let sucursal of listaSucursales" [value]="sucursal.identificador">{{ sucursal.nombre }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <hr class="border-top">
-
-        <div class="col-md-3 product shop-filters">
+        <div class="col-md-3 product shop-filters text-center">
           <h5 class="mb-4 h5">Lineas de Producto</h5>
 
           <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+              (click)="seleccionarLineaProducto(0)"
+              [ngClass]="{'active': idLineaProducto == null || idLineaProducto == 0 }">TODOS
+              <span class="">
+                <ion-icon name="ios-arrow-forward"></ion-icon>
+              </span></li>
             <li class="list-group-item d-flex justify-content-between align-items-center"
               *ngFor="let linea of listaLineas" (click)="seleccionarLineaProducto(linea.identificador)"
               [ngClass]="{'active': linea.identificador == idLineaProducto }">
@@ -95,6 +92,32 @@
         </div>
 
         <div class="col-md-9">
+
+          <div class="row">
+            <div class="col-md-9">
+              <div class="form-group input-group">
+                <input type="text" class="form-control" placeholder="Buscá tu producto..."
+                  aria-label="Buscá tu producto..." aria-describedby="basic-addon2"
+                  [(ngModel)]="buscarProductoDescripcion" (keyup.enter)="buscarProductoPorDescripcion()">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2" (click)="buscarProductoPorDescripcion()">
+                    <ion-icon name="md-search"></ion-icon>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <select class="form-control" name="sucursal" (change)="seleccionarSucursal($event.target.value)">
+                  <option *ngFor="let sucursal of listaSucursales" [value]="sucursal.identificador">
+                    {{ sucursal.nombre }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <hr class="border-top">
+          </div>
+
           <div class="row" *ngIf="listaProductos != null">
             <div class="col-md-6 col-lg-3" *ngFor="let producto of listaProductos">
               <div class="product">
