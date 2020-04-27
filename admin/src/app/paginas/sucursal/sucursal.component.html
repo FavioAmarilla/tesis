@@ -5,7 +5,7 @@
 
         <div class="card" *ngIf="!form">
             <div class="card-header">
-                <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)"> Agregar
+                <button class="btn btn-round btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)"> Agregar
                 </button>
             </div>
             <div class="card-body">
@@ -74,7 +74,7 @@
                                     {{ row.central }}
                                 </td>
                                 <td class="text-right">
-                                    <button class="btn btn-sm btn-warning"
+                                    <button class="btn btn-round btn-sm btn-warning"
                                         (click)="obtenerSucursal(row.identificador)"><i
                                             class="fas fa-edit"></i></button> &nbsp;
                                 </td>
@@ -97,93 +97,122 @@
         <div class="card" *ngIf="form">
             <div class="card-body">
                 <div class="table-responsive">
-                    <form>
+                    <form #formulario="ngForm">
 
                         <div class="form-group">
                             <label for="">Empresa</label>
-                            <select name="id_empresa" class="form-control" [(ngModel)]="sucursal.id_empresa">
-                                <option>-- SELECCIONAR --</option>
+                            <select name="id_empresa" class="form-control" [(ngModel)]="sucursal.id_empresa" required
+                                #id_empresa="ngModel">
+                                <option value="null">-- SELECCIONAR --</option>
                                 <option *ngFor="let empresa of listaEmpresas" value="{{empresa.identificador}}"
                                     [selected]="empresa.identificador == sucursal.id_empresa">{{empresa.nombre}}
                                 </option>
                             </select>
+                            <span class="invalid-feedback d-block"
+                                *ngIf="!id_empresa.valid && id_empresa.touched || sucursal.id_empresa == null">Este
+                                campo es obligatorio</span>
                         </div>
 
                         <div class="form-group">
                             <label for="Codigo">Codigo</label>
-                            <input type="text" class="form-control" placeholder="Codigo" name="codigo"
-                                [(ngModel)]="sucursal.codigo">
+                            <input type="text" class="form-control" name="codigo" [(ngModel)]="sucursal.codigo" required
+                                #codigo="ngModel">
+                            <span class="invalid-feedback d-block" *ngIf="!codigo.valid && codigo.touched">Este campo es
+                                obligatorio</span>
                         </div>
 
                         <div class="form-group">
                             <label for="Nombre">Nombre</label>
-                            <input type="text" class="form-control" placeholder="Nombre" name="nombre"
-                                [(ngModel)]="sucursal.nombre">
+                            <input type="text" class="form-control" name="nombre" [(ngModel)]="sucursal.nombre" required
+                                #nombre="ngModel">
+                            <span class="invalid-feedback d-block" *ngIf="!nombre.valid && nombre.touched">Este campo es
+                                obligatorio</span>
                         </div>
 
                         <div class="form-group">
                             <label for="Telefono">Telefono</label>
-                            <input type="text" class="form-control" placeholder="Telefono" name="telefono"
-                                [(ngModel)]="sucursal.telefono">
+                            <input type="text" class="form-control" name="telefono" [(ngModel)]="sucursal.telefono"
+                                required #telefono="ngModel">
+                            <span class="invalid-feedback d-block" *ngIf="!telefono.valid && telefono.touched">Este
+                                campo es obligatorio</span>
                         </div>
 
                         <div class="form-group">
                             <label for="">Pais</label>
-                            <select name="id_pais" class="form-control" [(ngModel)]="sucursal.id_pais"
-                                (change)="obtenerCiudades($event.target.value)">
-                                <option>-- SELECCIONAR --</option>
+                            <select name="id_pais" class="form-control" [(ngModel)]="sucursal.id_pais" required
+                                #id_pais="ngModel">
+                                <option value="null">-- SELECCIONAR --</option>
                                 <option *ngFor="let pais of listaPaises" value="{{pais.identificador}}"
                                     [selected]="pais.identificador == sucursal.id_pais">{{pais.nombre}}</option>
                             </select>
+                            <span class="invalid-feedback d-block"
+                                *ngIf="!id_pais.valid && id_pais.touched || sucursal.id_pais == null">Este
+                                campo es obligatorio</span>
                         </div>
 
                         <div class="form-group">
                             <label for="">Ciudad</label>
-                            <select name="id_ciudad" class="form-control" [(ngModel)]="sucursal.id_ciudad">
-                                <option>-- SELECCIONAR --</option>
+                            <select name="id_ciudad" class="form-control" [(ngModel)]="sucursal.id_ciudad" required
+                                #id_ciudad="ngModel">
+                                <option value="null">-- SELECCIONAR --</option>
                                 <option *ngFor="let ciudad of listaCiudades" value="{{ciudad.identificador}}"
                                     [selected]="ciudad.identificador == sucursal.id_ciudad">{{ciudad.nombre}}</option>
                             </select>
+                            <span class="invalid-feedback d-block"
+                                *ngIf="!id_ciudad.valid && id_ciudad.touched || sucursal.id_ciudad == null">Este
+                                campo es obligatorio</span>
                         </div>
+
 
                         <div class="form-group">
                             <label for="Direccion">Direccion</label>
-                            <input type="text" class="form-control" placeholder="Direccion" name="direccion"
-                                [(ngModel)]="sucursal.direccion">
+                            <input type="text" class="form-control" name="direccion" [(ngModel)]="sucursal.direccion"
+                                required #direccion="ngModel">
+                            <span class="invalid-feedback d-block" *ngIf="!direccion.valid && direccion.touched">Este
+                                campo es obligatorio</span>
                         </div>
 
                         <div class="form-group">
                             <label for="Ecommerce">Ecommerce</label>
-                            <select name="ecommerce" class="form-control" [(ngModel)]="sucursal.ecommerce">
-                                <option selected>-- SELECCIONAR --</option>
+                            <select name="ecommerce" class="form-control" [(ngModel)]="sucursal.ecommerce" required
+                                #ecommerce="ngModel">
+                                <option value="null">-- SELECCIONAR --</option>
                                 <option value="S" [selected]="sucursal.ecommerce == 'S'">SI</option>
                                 <option value="N" [selected]="sucursal.ecommerce == 'N'">NO</option>
                             </select>
+                            <span class="invalid-feedback d-block"
+                                *ngIf="!ecommerce.valid && ecommerce.touched || sucursal.ecommerce == null">Este
+                                campo es obligatorio</span>
                         </div>
 
                         <div class="form-group">
                             <label for="Central">Central</label>
-                            <select name="central" class="form-control" [(ngModel)]="sucursal.central">
-                                <option selected>-- SELECCIONAR --</option>
+                            <select name="central" class="form-control" [(ngModel)]="sucursal.central" required
+                                #central="ngModel">
+                                <option value="null">-- SELECCIONAR --</option>
                                 <option value="S" [selected]="sucursal.central == 'S'">SI</option>
                                 <option value="N" [selected]="sucursal.central == 'N'">NO</option>
                             </select>
+                            <span class="invalid-feedback d-block"
+                                *ngIf="!central.valid && central.touched || sucursal.central == null">Este
+                                campo es obligatorio</span>
                         </div>
 
 
                         <div class="form-group">
-                            <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'">
+                            <button type="button" class="btn btn-round btn-primary" (click)="registrar()" *ngIf="accion == 'INS'"
+                                [disabled]="formulario.invalid">
                                 <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm"
                                     role="status" aria-hidden="true"></span>
                                 Guardar
                             </button>
-                            <button type="button" class="btn btn-primary" (click)="actualizar()"
-                                *ngIf="accion == 'UPD'">
+                            <button type="button" class="btn btn-round btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'"
+                                [disabled]="formulario.invalid">
                                 <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm"
                                     role="status" aria-hidden="true"></span>
                                 Actualizar
                             </button>
-                            <button type="button" class="btn btn-danger" (click)="mostrarFormulario(false, 'LST')">
+                            <button type="button" class="btn btn-round btn-danger" (click)="mostrarFormulario(false, 'LST')">
                                 Cancelar
                             </button>
                         </div>

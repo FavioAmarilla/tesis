@@ -1,32 +1,78 @@
 <ion-content>
   <app-header [cargando]="cargando"></app-header>
-
   <br>
 
-  <div class="wrapper fadeInDown">
-    <form class="form-signup">
-      <img src="assets/images/icon.png" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal" style="margin-top: 0px !important;">Registrese</h1>
-      <div class="form-group">
-        <input type="text" class="form-control" name="nombre_completo" placeholder="Nombre completo"
-          [(ngModel)]="usuario.nombre_completo">
+  <div class="container">
+    <h5 class="h5">Resgistrarse</h5>
+    <hr class="border-top mt-0">
+
+    <form class="col-md-12">
+      <div class="row">
+        <div class="col-md-6">
+          <h5 class="h5">
+            <ion-icon name="person"></ion-icon> &nbsp; Datos Personales
+          </h5>
+          <hr class="border-top mt-0">
+          <div class="form-group">
+            <label for="Nombre completo">Nombre completo</label>
+            <input type="text" class="form-control" name="nombre_completo" [(ngModel)]="usuario.nombre_completo">
+          </div>
+          <div class="form-group">
+            <label for="Email">Email</label>
+            <input type="email" class="form-control" name="email" [(ngModel)]="usuario.email">
+          </div>
+          <div class="form-group">
+            <label for="Fecha de nacimiento">Fecha de nacimiento</label>
+            <input type="date" class="form-control" name="fecha_nacimiento" [(ngModel)]="usuario.fecha_nacimiento">
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <h5 class="h5">
+            <ion-icon name="call"></ion-icon> &nbsp; Informacion de Contacto
+          </h5>
+          <hr class="border-top mt-0">
+          <div class="form-group">
+            <label for="Telefono">Telefono</label>
+            <input type="text" class="form-control" name="telefono" [(ngModel)]="usuario.telefono">
+          </div>
+          <div class="form-group">
+            <label for="Celular">Celular</label>
+            <input type="text" class="form-control" name="celular" [(ngModel)]="usuario.celular">
+          </div>
+          <hr>
+        </div>
       </div>
-      <div class="form-group">
-        <input type="email" class="form-control " name="email" placeholder="E-mail" [(ngModel)]="usuario.email">
-      </div>
-      <div class="form-group">
-        <input type="password" class="form-control" name="clave_acceso" placeholder="Password"
-          [(ngModel)]="usuario.clave_acceso">
+
+      <div class="row">
+        <div class="col-md-6">
+          <h5 class="h5">
+            <ion-icon name="key"></ion-icon>&nbsp; Su Contraseña
+          </h5>
+          <hr class="border-top mt-0">
+          <div class="form-group">
+            <label for="Contraseña actual">Contraseña</label>
+            <input type="password" class="form-control" name="clave_nueva" [(ngModel)]="usuario.clave_acceso">
+          </div>
+          <div class="form-group">
+            <label for="Contraseña actual">Repita contraseña</label>
+            <input type="password" class="form-control" name="repita" [(ngModel)]="repita_clave">
+          </div>
+        </div>
+        <br>
       </div>
 
 
-      <p (click)="registro()">
-        <a class="btn btn-primary py-3 px-4">
+      <div class="form-group">
+        <a class="btn btn-primary py-2 px-4" (click)="registro()">
           <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status"
             aria-hidden="true"></span>
           Registrarse
         </a>
-      </p>
+        <br>
+      </div>
+
+
     </form>
 
   </div>

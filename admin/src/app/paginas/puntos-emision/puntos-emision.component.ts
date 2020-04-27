@@ -49,7 +49,7 @@ export class PuntosEmisionComponent implements OnInit {
 
   async obtenerSucursales() {
     const response: any = await this.servicioSucursal.obtenerSucursal();
-
+    
     if (response.success) {
       this.listaSucursal = response.data;
     } else {

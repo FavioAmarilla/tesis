@@ -5,7 +5,7 @@
 
         <div class="card" *ngIf="!form">
             <div class="card-header">
-                <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)"
+                <button class="btn btn-round btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)"
                     style="margin: 0px;">Agregar</button>
             </div>
             <div class="card-body">
@@ -38,7 +38,7 @@
                                     {{ row.numero_documento }}
                                 </td>
                                 <td class="text-right">
-                                    <button class="btn btn-sm btn-warning"
+                                    <button class="btn btn-round btn-sm btn-warning"
                                         (click)="obtenerEmpresa(row.identificador)"><i class="fas fa-edit"></i></button>
                                     &nbsp;
                                 </td>
@@ -61,13 +61,15 @@
         <div class="card" *ngIf="form">
             <div class="card-body">
                 <div class="table-responsive">
-                    <form>
+                    <form #formulario="ngForm">
                         <div class="form-group">
                             <label for="image">Imagen</label>
 
                             <div *ngIf="empresa && empresa.imagen">
-                                <img *ngIf="!empresa.imagen" src="{{url + '/empresa/getImage/' + empresa.imagen}}" width="100" height="100">
-                                <img *ngIf="!empresa.imagen" src="https://via.placeholder.com/150" width="100" height="100">     
+                                <img *ngIf="!empresa.imagen" src="{{url + '/empresa/getImage/' + empresa.imagen}}"
+                                    width="100" height="100">
+                                <img *ngIf="!empresa.imagen" src="https://via.placeholder.com/150" width="100"
+                                    height="100">
                             </div>
 
                             <angular-file-uploader [config]="fileUploaderConfig" [resetUpload]=resetVar
@@ -76,32 +78,40 @@
                         </div>
                         <div class="form-group">
                             <label for="codigo">Codigo</label>
-                            <input type="text" class="form-control" placeholder="Codigo" name="codigo"
-                                [(ngModel)]="empresa.codigo">
+                            <input type="text" class="form-control" name="codigo" [(ngModel)]="empresa.codigo" required
+                                #codigo="ngModel">
+                            <span class="invalid-feedback d-block" *ngIf="!codigo.valid && codigo.touched">Este campo es
+                                obligatorio</span>
                         </div>
                         <div class="form-group">
                             <label for="nombre">Nombre</label>
-                            <input type="text" class="form-control" placeholder="Nombre" name="nombre"
-                                [(ngModel)]="empresa.nombre">
+                            <input type="text" class="form-control" name="nombre" [(ngModel)]="empresa.nombre" required
+                                #nombre="ngModel">
+                            <span class="invalid-feedback d-block" *ngIf="!nombre.valid && nombre.touched">Este campo es
+                                obligatorio</span>
                         </div>
                         <div class="form-group">
                             <label for="numero_documento">Número Documento</label>
-                            <input type="text" class="form-control" placeholder="Número Documento"
-                                name="numero_documento" [(ngModel)]="empresa.numero_documento">
+                            <input type="text" class="form-control" name="numero_documento" required
+                                [(ngModel)]="empresa.numero_documento" #numero_documento="ngModel">
+                            <span class="invalid-feedback d-block"
+                                *ngIf="!numero_documento.valid && numero_documento.touched">Este campo es
+                                obligatorio</span>
                         </div>
                         <div class="form-group">
-                            <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'">
+                            <button type="button" class="btn btn-round btn-primary" (click)="registrar()" *ngIf="accion == 'INS'"
+                                [disabled]="formulario.invalid">
                                 <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm"
                                     role="status" aria-hidden="true"></span>
                                 Guardar
                             </button>
-                            <button type="button" class="btn btn-primary" (click)="actualizar()"
-                                *ngIf="accion == 'UPD'">
+                            <button type="button" class="btn btn-round btn-primary" (click)="actualizar()"
+                                [disabled]="formulario.invalid" *ngIf="accion == 'UPD'">
                                 <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm"
                                     role="status" aria-hidden="true"></span>
                                 Actualizar
                             </button>
-                            <button type="button" class="btn btn-danger" (click)="mostrarFormulario(false, 'LST')">
+                            <button type="button" class="btn btn-round btn-danger" (click)="mostrarFormulario(false, 'LST')">
                                 Cancelar
                             </button>
                         </div>

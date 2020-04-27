@@ -4,11 +4,13 @@
   <div class="col-md-4">
     <div class="card card-user">
       <div class="image text-center mt-4">
-        <img *ngIf="angForm.value.imagen" src="{{url + '/user/getImage/' + angForm.value.imagen}}" width="100" height="100">
+        <img *ngIf="angForm.value.imagen" src="{{url + '/user/getImage/' + angForm.value.imagen}}" width="100"
+          height="100">
         <img *ngIf="!angForm.value.imagen" src="https://via.placeholder.com/150" width="100" height="100">
       </div>
       <div class="card-body text-center">
-        <angular-file-uploader [config]="fileUploaderConfig" [resetUpload]="resetVar" (ApiResponse)="subirImagen($event)"></angular-file-uploader>
+        <angular-file-uploader [config]="fileUploaderConfig" [resetUpload]="resetVar"
+          (ApiResponse)="subirImagen($event)"></angular-file-uploader>
       </div>
     </div>
   </div>
@@ -23,43 +25,56 @@
 
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group" [ngClass]="{'error': angForm.controls['nombre_completo'].invalid && (angForm.controls['nombre_completo'].dirty || angForm.controls['nombre_completo'].touched)}">
+              <div class="form-group">
                 <label>Nombre completo</label>
                 <input formControlName="nombre_completo" type="text" class="form-control" placeholder="Nombre completo">
+                <span class="invalid-feedback d-block"
+                  *ngIf="angForm.controls['nombre_completo'].invalid && angForm.controls['nombre_completo'].touched">Este
+                  campo es obligatorio</span>
               </div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group" [ngClass]="{'error': angForm.controls['email'].invalid && (angForm.controls['email'].dirty || angForm.controls['email'].touched)}">
+              <div class="form-group">
                 <label>Email</label>
                 <input formControlName="email" type="email" class="form-control" placeholder="Email">
+                <span class="invalid-feedback d-block"
+                  *ngIf="angForm.controls['email'].invalid && angForm.controls['email'].touched">Este
+                  campo es obligatorio</span>
               </div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group" [ngClass]="{'error': angForm.controls['clave_acceso'].invalid && (angForm.controls['clave_acceso'].dirty || angForm.controls['clave_acceso'].touched)}">
+              <div class="form-group">
                 <label>Contraseña</label>
                 <input formControlName="clave_acceso" type="password" class="form-control" placeholder="Contraseña">
+                <span class="invalid-feedback d-block"
+                  *ngIf="angForm.controls['clave_acceso'].invalid && angForm.controls['clave_acceso'].touched">Este
+                  campo es obligatorio</span>
               </div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12">
-              <div class="form-group" [ngClass]="{'error': angForm.controls['confirmar_clave_acceso'].invalid && (angForm.controls['confirmar_clave_acceso'].dirty || angForm.controls['confirmar_clave_acceso'].touched)}">
+              <div class="form-group">
                 <label>Repetir contraseña</label>
-                <input formControlName="confirmar_clave_acceso" type="password" class="form-control" placeholder="Repetir contraseña">
+                <input formControlName="confirmar_clave_acceso" type="password" class="form-control"
+                  placeholder="Repetir contraseña">
+                <span class="invalid-feedback d-block"
+                  *ngIf="angForm.controls['confirmar_clave_acceso'].invalid && angForm.controls['confirmar_clave_acceso'].touched">Este
+                  campo es obligatorio</span>
               </div>
             </div>
           </div>
 
           <div class="row">
             <div class="update ml-auto mr-auto">
-              <button type="submit" class="btn btn-primary btn-round" [disabled]="angForm.pristine || angForm.invalid">
+              <button type="submit" class="btn btn-round btn-primary btn-round" [disabled]="angForm.pristine || angForm.invalid">
                 <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Aceptar
               </button>

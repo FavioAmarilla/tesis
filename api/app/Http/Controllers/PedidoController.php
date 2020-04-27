@@ -66,6 +66,16 @@ class PedidoController extends BaseController
         if ($direccion) {
             $query->where('direccion', 'LIKE', '%'.$direccion.'%');
         }
+        
+        $persona = $request->query('persona');
+        if ($persona) {
+            $query->where('persona', '=', $persona);
+        }
+
+        $nro_documento = $request->query('nro_documento');
+        if ($nro_documento) {
+            $query->where('nro_documento', 'LIKE', '%'.$nro_documento.'%');
+        }
 
         $tipo_envio = $request->query('tipo_envio');
         if ($tipo_envio) {
@@ -113,6 +123,8 @@ class PedidoController extends BaseController
         $direccion = $request->input("direccion");
         $latitud = $request->input("latitud");
         $longitud = $request->input("longitud");
+        $persona = $request->input("persona");
+        $nro_documento = $request->input("nro_documento");
         $costo_envio = $request->input("costo_envio");
         $observacion = $request->input("observacion");
         $tipo_envio = $request->input("tipo_envio");
@@ -159,6 +171,8 @@ class PedidoController extends BaseController
         $pedido->longitud = $longitud;
         $pedido->costo_envio = $costo_envio;
         $pedido->observacion = $observacion;
+        $pedido->persona = $persona;
+        $pedido->nro_documento = $nro_documento;
         $pedido->tipo_envio = $tipo_envio;
         $pedido->estado = $estado;
         $pedido->total = $total;
@@ -249,6 +263,8 @@ class PedidoController extends BaseController
         $longitud = $request->input("longitud");
         $costo_envio = $request->input("costo_envio");
         $observacion = $request->input("observacion");
+        $persona = $request->input("persona");
+        $nro_documento = $request->input("nro_documento");
         $tipo_envio = $request->input("tipo_envio");
         $estado = $request->input("estado");
         $productos = $request->input("productos");
@@ -285,6 +301,8 @@ class PedidoController extends BaseController
             $pedido->longitud = $longitud;
             $pedido->costo_envio = $costo_envio;
             $pedido->observacion = $observacion;
+            $pedido->persona = $persona;
+            $pedido->nro_documento = $nro_documento;
             $pedido->tipo_envio = $tipo_envio;
             $pedido->estado = $estado;
     

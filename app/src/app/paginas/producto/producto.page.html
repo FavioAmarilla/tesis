@@ -1,51 +1,70 @@
 <app-header [cargando]="cargando"></app-header>
 
 <ion-content>
-  
+  <nav aria-label="breadcrumb" *ngIf="producto">
+    <ol class="breadcrumb">
+      <div class="container d-flex">
+        <li class="breadcrumb-item"><a [routerLink]="['/inicio']">INICIO</a></li>
+        <li class="breadcrumb-item"><a
+            [routerLink]="['/producto/linea',  producto.linea_producto.slug]">{{ producto.linea_producto.descripcion }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{ producto.descripcion }} </li>
+      </div>
+    </ol>
+  </nav>
+
   <section class="ftco-section" *ngIf="producto">
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 mb-5">
-          <a href="#" class="image-popup">
-            <img *ngIf="producto" class="img-fluid" [src]="producto.imagen | productImage | urlSanitizer">    
-          </a>
-        </div>
-        <div class="col-lg-6 product-details pl-md-5">
-          <h3>{{ producto.descripcion }}</h3>
-          <p class="price"><span>{{ producto.precio_venta | numberFormat}} Gs.</span></p>
-          
-          <div class="row mt-4">
-            <div class="w-100"></div>
-            <div class="input-group col-md-6 d-flex mb-3">
-              <span class="input-group-btn mr-2">
-                <button type="button" class="quantity-left-minus btn" data-type="minus" (click)="asignarCantidad('DI')">
-                  <i class="ion-ios-remove"></i>
-                </button>
-              </span>
-              <input type="text" name="cantidad" class="form-control input-number" min="1" max="100" [(ngModel)]="cantidad">
-              <span class="input-group-btn ml-2">
-                <button type="button" class="quantity-right-plus btn" data-type="plus" (click)="asignarCantidad('AU')">
-                  <i class="ion-ios-add"></i>
-                </button>
-              </span>
-            </div>
-            <div class="w-100"></div>
+
+        <div class="col-md-6">
+          <div class="panel panel-default product-image border">
+            <img *ngIf="producto" class="img-fluid" [src]="producto.imagen | productImage | urlSanitizer">
           </div>
-          <p><a [routerLink]="null" class="btn btn-primary py-3 px-5" (click)="agregarAlCarrito()">Añadir al Carrito</a></p>
+        </div>
+
+        <div class="col-md-6">
+          <div class="panel panel-default product-details border">
+            <h5 class="h5">{{ producto.descripcion }}</h5>
+            <span class="price"> {{ producto.precio_venta | numberFormat}} <span class="gs">Gs</span> </span>
+            <hr>
+
+            <div class="row mt-4">
+              <div class="w-100"></div>
+              <div class="form-group input-group col-md-6 d-flex mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad('DI')">
+                    <ion-icon name="remove"></ion-icon>
+                  </span>
+                </div>
+                <input type="text" name="cantidad" class="form-control" min="1" max="100" [(ngModel)]="cantidad"
+                  disabled>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad('AU')">
+                    <ion-icon name="add"></ion-icon>
+                  </span>
+                </div>
+              </div>
+              <div class="w-100"></div>
+            </div>
+            <p><a [routerLink]="null" class="btn btn-primary py-2 px-3" (click)="agregarAlCarrito()">Añadir al
+                Carrito</a></p>
+          </div>
         </div>
       </div>
     </div>
   </section>
-  <section class="ftco-section" *ngIf="!producto">
-    <h1>Producto no definido</h1>
+
+  <section class="ftco-section" *ngIf="!producto && !cargando">
+    <h1>No se encontro el Producto</h1>
   </section>
-  
+
   <section class="ftco-section">
+    <hr>
     <div class="container">
       <div class="row justify-content-center mb-3 pb-3">
         <div class="col-md-12 heading-section text-center">
-          <span class="subheading">Productos</span>
-          <h2 class="mb-4">Productos Relacionados</h2>
+          <h5 class="mb-4 h5">Productos Relacionados</h5>
         </div>
       </div>
     </div>
@@ -53,7 +72,8 @@
       <div class="row">
         <div class="col-md-6 col-lg-3">
           <div class="product">
-            <a href="#" class="img-prod"><img class="img-fluid" src="assets/images/product-1.jpg" alt="Colorlib Template">
+            <a href="#" class="img-prod"><img class="img-fluid" src="assets/images/product-1.jpg"
+                alt="Colorlib Template">
               <span class="status">30%</span>
               <div class="overlay"></div>
             </a>
@@ -82,7 +102,8 @@
         </div>
         <div class="col-md-6 col-lg-3">
           <div class="product">
-            <a href="#" class="img-prod"><img class="img-fluid" src="assets/images/product-2.jpg" alt="Colorlib Template">
+            <a href="#" class="img-prod"><img class="img-fluid" src="assets/images/product-2.jpg"
+                alt="Colorlib Template">
               <div class="overlay"></div>
             </a>
             <div class="text py-3 pb-4 px-3 text-center">
@@ -110,7 +131,8 @@
         </div>
         <div class="col-md-6 col-lg-3">
           <div class="product">
-            <a href="#" class="img-prod"><img class="img-fluid" src="assets/images/product-3.jpg" alt="Colorlib Template">
+            <a href="#" class="img-prod"><img class="img-fluid" src="assets/images/product-3.jpg"
+                alt="Colorlib Template">
               <div class="overlay"></div>
             </a>
             <div class="text py-3 pb-4 px-3 text-center">
@@ -138,7 +160,8 @@
         </div>
         <div class="col-md-6 col-lg-3">
           <div class="product">
-            <a href="#" class="img-prod"><img class="img-fluid" src="assets/images/product-4.jpg" alt="Colorlib Template">
+            <a href="#" class="img-prod"><img class="img-fluid" src="assets/images/product-4.jpg"
+                alt="Colorlib Template">
               <div class="overlay"></div>
             </a>
             <div class="text py-3 pb-4 px-3 text-center">

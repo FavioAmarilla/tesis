@@ -11,6 +11,26 @@
 }
 
 .seccion-marcas .heading-section h2 {
-    margin-top: 0px;
-    margin-bottom: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.list-group-item {
+  cursor: pointer !important;
+  border: 0px;
+  border-radius: 0px;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+.list-group-item:focus,
+.list-group-item:hover {
+  background-color: #079a4a !important;
+  border-color: #079a4a !important;
+  color: white !important;
+}
+
+.list-group-item.active {
+  background-color: #079a4a !important;
+  border-color: #079a4a !important;
 }

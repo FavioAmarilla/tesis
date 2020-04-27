@@ -1,17 +1,33 @@
 <app-header [cargando]="cargando"></app-header>
 
-<div class="filterModal modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModal"
+<div class="modal fade" id="modalLineas" tabindex="-1" role="dialog" aria-labelledby="modalLineasLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="filterModal">Modal title</h5>
+        <h5 class="modal-title" id="filterModal">Lineas de Producto</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <app-filtros (filtrosEmitter)="obtenerProductos($event)"></app-filtros>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center"
+            (click)="seleccionarLineaProducto(0)"
+            [ngClass]="{'active': idLineaProducto == null || idLineaProducto == 0 }">
+            TODOS
+            <span class="">
+              <ion-icon name="ios-arrow-forward"></ion-icon>
+            </span></li>
+          <li class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let linea of listaLineas" (click)="seleccionarLineaProducto(linea.identificador)"
+            [ngClass]="{'active': linea.id == idLineaProducto }">
+            {{ linea.descripcion }}
+            <span class="">
+              <ion-icon name="ios-arrow-forward"></ion-icon>
+            </span>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -45,37 +61,75 @@
     </ion-slide>
   </ion-slides>
 
-  <div class="filter-toggle" data-toggle="modal" data-target="#filterModal"><ion-icon name="funnel"></ion-icon></div>
+  <button type="button" class="filter-toggle btn btn-primary" data-toggle="modal" data-target="#modalLineas">
+    <ion-icon name="funnel"></ion-icon>
+  </button>
 
   <section class="ftco-section">
     <div class="container-fluid">
-
-
       <!-- productos -->
       <div class="row">
-        <div class="col-md-12 heading-section text-center">
-          <br><br>
-          <h2 class="mb-4">Nuestros productos</h2>
-          <hr class="border-top ml-5 mr-5">
-        </div>
 
-        <div class="col-md-3 product shop-filters">
-          <app-filtros (filtrosEmitter)="obtenerProductos($event)"></app-filtros>
+        <div class="col-md-3 product shop-filters text-center">
+          <h5 class="mb-4 h5">Lineas de Producto</h5>
+
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+              (click)="seleccionarLineaProducto(0)"
+              [ngClass]="{'active': idLineaProducto == null || idLineaProducto == 0 }">TODOS
+              <span class="">
+                <ion-icon name="ios-arrow-forward"></ion-icon>
+              </span></li>
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let linea of listaLineas" (click)="seleccionarLineaProducto(linea.identificador)"
+              [ngClass]="{'active': linea.identificador == idLineaProducto }">
+              {{ linea.descripcion }}
+              <span class="">
+                <ion-icon name="ios-arrow-forward"></ion-icon>
+              </span>
+            </li>
+          </ul>
         </div>
 
         <div class="col-md-9">
+
+          <div class="row">
+            <div class="col-md-9">
+              <div class="form-group input-group">
+                <input type="text" class="form-control" placeholder="Buscá tu producto..."
+                  aria-label="Buscá tu producto..." aria-describedby="basic-addon2"
+                  [(ngModel)]="buscarProductoDescripcion" (keyup.enter)="buscarProductoPorDescripcion()">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2" (click)="buscarProductoPorDescripcion()">
+                    <ion-icon name="md-search"></ion-icon>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <select class="form-control" name="sucursal" (change)="seleccionarSucursal($event.target.value)">
+                  <option *ngFor="let sucursal of listaSucursales" [value]="sucursal.identificador">
+                    {{ sucursal.nombre }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <hr class="border-top">
+          </div>
+
           <div class="row" *ngIf="listaProductos != null">
             <div class="col-md-6 col-lg-3" *ngFor="let producto of listaProductos">
               <div class="product">
                 <div class="m-2">
                   <a [routerLink]="['/producto', producto.slug]" class="img-prod">
-                    <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="253"
+                    <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="230"
                       style="width: 100%;">
                     <div class="overlay"></div>
                   </a>
                   <hr class="mt-2 mb-0 ml-2 mr-2 border-top">
-                  <div class="text py-3 px-3 text-center">
-                    <h3><a [routerLink]="['/producto', producto.slug]">{{ producto.descripcion | truncateText:20 }}</a>
+                  <div class="text py-1 px-1 text-center">
+                    <h3><a [routerLink]="['/producto', producto.slug]">{{ producto.descripcion | truncateText:22 }}</a>
                     </h3>
                     <div class="d-flex">
                       <div class="pricing">
@@ -83,7 +137,7 @@
                         </p>
                       </div>
                     </div>
-                    <div class="bottom-area d-flex px-3">
+                    <div class="bottom-area d-flex px-1">
                       <div class="m-auto d-flex">
                         <a [routerLink]="['/producto', producto.slug]"
                           class="d-flex justify-content-center align-items-center text-center">

@@ -1,5 +1,3 @@
-
-
 <ion-content>
   <app-header [cargando]="cargando"></app-header>
 
@@ -8,7 +6,8 @@
   <div class="wrapper fadeInDown">
     <form class="form-signin">
       <img src="assets/images/icon.png" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal" style="margin-top: 0px !important;">Ingrese sus Credenciales</h1>
+      <h5 class="h5 mb-3 font-weight-normal" style="margin-top: 0px !important;">Ingrese sus Credenciales</h5>
+      <br><br>
       <div class="form-group">
         <input type="email" class="form-control" name="email" placeholder="Email" [(ngModel)]="usuario.email">
       </div>
@@ -18,7 +17,7 @@
       </div>
 
       <p (click)="iniciarSession()">
-        <a class="btn btn-primary py-3 px-4">
+        <a class="btn btn-primary py-2 px-4">
           <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status"
             aria-hidden="true"></span>
           Acceder
@@ -26,7 +25,7 @@
       </p>
     </form>
   </div>
-
+  <br>
   <app-footer [cargando]="cargando"></app-footer>
 
 </ion-content>

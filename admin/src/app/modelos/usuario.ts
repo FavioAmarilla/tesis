@@ -5,6 +5,9 @@ export class Usuario {
         public email: string,
         public clave_acceso: string,
         public imagen: string,
+        public fecha_nacimiento: string,
+        public telefono: string,
+        public celular: string,
         public estado?: number
     ) {}
 }

@@ -30,7 +30,7 @@ export class UsuariosComponent implements OnInit {
     multiple: false,
     formatsAllowed: '.jpg,.png,.jpeg,.gif',
     maxSize: '50',
-    uploadAPI:  {
+    uploadAPI: {
       url: `${API}/user/upload`
     },
     theme: 'attachPin',
@@ -56,7 +56,7 @@ export class UsuariosComponent implements OnInit {
     this.accion = accion;
 
     if (flag && accion == 'INS') {
-      this.usuario = new Usuario(null, null, null, null, null);
+      this.usuario = new Usuario(null, null, null, null, null, null, null, null);
     }
     if (limpiarError) {
       this.errores = [];
@@ -140,7 +140,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   async activarDesactivarUsuario(id, accion) {
-    const preConfirm = {servicio: 'servicioUsuario', callback: 'activarDesactivarUsuario', data: id};
+    const preConfirm = { servicio: 'servicioUsuario', callback: 'activarDesactivarUsuario', data: id };
     const titulo = '¿Estas seguro?';
     const mensaje = 'No podras utilizar este usuario tras realizar esta acción';
     const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);

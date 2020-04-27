@@ -29,6 +29,9 @@ class JwtAuth extends BaseController
                 'sub'               => $user->identificador,
                 'email'             => $user->email,
                 'nombre_completo'   => $user->nombre_completo,
+                'fecha_nacimiento'  => $user->fecha_nacimiento,
+                'telefono'          => $user->telefono,
+                'celular'           => $user->celular,
                 'imagen'            => $user->imagen,
                 'iat'               =>  time(),
                 'exp'               =>  time() + (7 * 24 * 60 * 60)
