@@ -8,13 +8,13 @@ import { FiltrosComponent } from './filtros/filtros.component';
 import { UbicacionPage } from './ubicacion/ubicacion.page';
 import { AgmCoreModule } from '@agm/core';
 import { FormsModule } from '@angular/forms';
+import { UbicacionPageModule } from './ubicacion/ubicacion.module';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
     FiltrosComponent,
-    UbicacionPage,
   ],
   imports: [
     CommonModule,
@@ -22,13 +22,13 @@ import { FormsModule } from '@angular/forms';
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCY4IBDW6_CxesXRfvmuGM5sp5elGyd6vI'
     }),
-    FormsModule
+    FormsModule,
+    UbicacionPageModule
   ],
   exports: [
     HeaderComponent,
     FooterComponent,
     FiltrosComponent,
-    UbicacionPage,
   ],
   entryComponents: [UbicacionPage]
 })

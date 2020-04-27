@@ -16,7 +16,7 @@ import { UsuarioService } from 'src/app/servicios/usuario.service';
 export class PaginaCarrito implements OnInit {
 
   public cargando = true;
-  public listaCarrito: Producto;
+  public listaCarrito: Producto[] = [];
   public listaSucursales: Sucursal;
 
   public parametros: EcParametro;

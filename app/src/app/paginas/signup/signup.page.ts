@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class SignupPage implements OnInit {
 
+  public cargando = false;
   public cargandoBoton = false;
 
   public usuario: Usuario = {

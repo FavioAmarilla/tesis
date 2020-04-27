@@ -67,9 +67,8 @@
       <div class="row mt-4">
         <div class="col">
           <span class="float-right">
-            <p (click)="(listaCarrito && listaCarrito.length) ? pedido() : return;">
-              <a class="btn btn-primary py-2 px-4"
-                [ngClass]="{'disabled': !listaCarrito || listaCarrito.length == 0}">Pagar</a>
+            <p (click)="(listaCarrito && listaCarrito.length) ? pedido() : false;">
+              <a class="btn btn-primary py-2 px-4" [ngClass]="{'disabled': !listaCarrito || listaCarrito.length == 0}">Pagar</a>
             </p>
           </span>
         </div>

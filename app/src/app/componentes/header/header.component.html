@@ -1,10 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container">
-    <a class="navbar-brand" (click)="redireccionar('/')"> <img src="assets/images/logo-super.png" width="150"
-        height="45"></a>
+    <a class="navbar-brand" (click)="redireccionar('/')"> <img src="assets/images/logo-super.png" width="150" height="45"></a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -22,8 +20,7 @@
         </li>
         <li class="nav-item"><a class="nav-link" (click)="redireccionar('/acerca-de')">Acerca de</a></li>
         <li class="nav-item"><a class="nav-link" (click)="redireccionar('/contacto')">Contacto</a></li>
-        <li class="nav-item"><a (click)="redireccionar('/carrito')" class="nav-link"><span
-              class="icon-shopping_cart"></span>[{{ carrito }}]</a></li>
+        <li class="nav-item"><a (click)="redireccionar('/carrito')" class="nav-link"><span class="icon-shopping_cart"></span>[{{ carrito }}]</a></li>
         <li class="nav-item" *ngIf="!usuario"><a class="nav-link" (click)="redireccionar('/login')">Login</a></li>
         <li class="nav-item" *ngIf="!usuario"><a class="nav-link" (click)="redireccionar('/signup')">Registrate</a></li>
 
@@ -43,7 +40,7 @@
 
 
 <div *ngIf="cargando" id="overlay">
-  <div class="text-center" >
-    <img class="img-loader" src="assets/images/loading.svg" width="130" height="130">
+  <div class="text-center">
+    <img class="img-loader" src="assets/images/loading.svg" width="130" height="130" style="margin-top: 30vh;">
   </div>
 </div>

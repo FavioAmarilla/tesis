@@ -8,7 +8,7 @@ const IMAGE_API = environment.productImageUrl;
 })
 export class ProductImagePipe implements PipeTransform {
 
-  transform(url: any, args: any): any {
+  transform(url: any, args?: any): any {
     if (!url || url == '') return 'https://via.placeholder.com/150';
 
     url = `${IMAGE_API}${url}`;

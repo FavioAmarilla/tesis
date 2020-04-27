@@ -12,6 +12,7 @@ import { UbicacionPage } from './ubicacion.page';
     FormsModule,
     IonicModule
   ],
-  declarations: [UbicacionPage]
+  declarations: [UbicacionPage],
+  exports: [UbicacionPage]
 })
 export class UbicacionPageModule {}

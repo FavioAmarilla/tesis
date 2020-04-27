@@ -1,7 +1,6 @@
 <app-header [cargando]="cargando"></app-header>
 
-<div class="modal fade" id="modalLineas" tabindex="-1" role="dialog" aria-labelledby="modalLineasLabel"
-  aria-hidden="true">
+<div class="modal fade" id="modalLineas" tabindex="-1" role="dialog" aria-labelledby="modalLineasLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -12,16 +11,12 @@
       </div>
       <div class="modal-body">
         <ul class="list-group">
-          <li class="list-group-item d-flex justify-content-between align-items-center"
-            (click)="seleccionarLineaProducto(0)"
-            [ngClass]="{'active': idLineaProducto == null || idLineaProducto == 0 }">
+          <li class="list-group-item d-flex justify-content-between align-items-center" (click)="seleccionarLineaProducto(0)" [ngClass]="{'active': idLineaProducto == null || idLineaProducto == 0 }">
             TODOS
             <span class="">
               <ion-icon name="ios-arrow-forward"></ion-icon>
             </span></li>
-          <li class="list-group-item d-flex justify-content-between align-items-center"
-            *ngFor="let linea of listaLineas" (click)="seleccionarLineaProducto(linea.identificador)"
-            [ngClass]="{'active': linea.id == idLineaProducto }">
+          <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let linea of listaLineas" (click)="seleccionarLineaProducto(linea.identificador)" [ngClass]="{'active': linea.id == idLineaProducto }">
             {{ linea.descripcion }}
             <span class="">
               <ion-icon name="ios-arrow-forward"></ion-icon>
@@ -74,15 +69,11 @@
           <h5 class="mb-4 h5">Lineas de Producto</h5>
 
           <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center"
-              (click)="seleccionarLineaProducto(0)"
-              [ngClass]="{'active': idLineaProducto == null || idLineaProducto == 0 }">TODOS
+            <li class="list-group-item d-flex justify-content-between align-items-center" (click)="seleccionarLineaProducto(0)" [ngClass]="{'active': idLineaProducto == null || idLineaProducto == 0 }">TODOS
               <span class="">
                 <ion-icon name="ios-arrow-forward"></ion-icon>
               </span></li>
-            <li class="list-group-item d-flex justify-content-between align-items-center"
-              *ngFor="let linea of listaLineas" (click)="seleccionarLineaProducto(linea.identificador)"
-              [ngClass]="{'active': linea.identificador == idLineaProducto }">
+            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let linea of listaLineas" (click)="seleccionarLineaProducto(linea.identificador)" [ngClass]="{'active': linea.identificador == idLineaProducto }">
               {{ linea.descripcion }}
               <span class="">
                 <ion-icon name="ios-arrow-forward"></ion-icon>
@@ -96,9 +87,7 @@
           <div class="row">
             <div class="col-md-9">
               <div class="form-group input-group">
-                <input type="text" class="form-control" placeholder="Buscá tu producto..."
-                  aria-label="Buscá tu producto..." aria-describedby="basic-addon2"
-                  [(ngModel)]="buscarProductoDescripcion" (keyup.enter)="buscarProductoPorDescripcion()">
+                <input type="text" class="form-control" placeholder="Buscá tu producto..." aria-label="Buscá tu producto..." aria-describedby="basic-addon2" [(ngModel)]="buscarProductoDescripcion" (keyup.enter)="buscarProductoPorDescripcion()">
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2" (click)="buscarProductoPorDescripcion()">
                     <ion-icon name="md-search"></ion-icon>
@@ -123,8 +112,7 @@
               <div class="product">
                 <div class="m-2">
                   <a [routerLink]="['/producto', producto.slug]" class="img-prod">
-                    <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="230"
-                      style="width: 100%;">
+                    <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="230" style="width: 100%;">
                     <div class="overlay"></div>
                   </a>
                   <hr class="mt-2 mb-0 ml-2 mr-2 border-top">
@@ -143,12 +131,10 @@
                           class="d-flex justify-content-center align-items-center text-center">
                           <ion-icon name="menu"></ion-icon>
                         </a>
-                        <a (click)="agregarAlCarrito(producto)"
-                          class="d-flex justify-content-center align-items-center text-center ml-1">
+                        <a (click)="agregarAlCarrito(producto)" class="d-flex justify-content-center align-items-center text-center ml-1">
                           <ion-icon name="cart"></ion-icon>
                         </a>
-                        <a (click)="agregarAFavoritos(producto)"
-                          class="d-flex justify-content-center align-items-center text-center ml-1">
+                        <a (click)="agregarAFavoritos(producto)" class="d-flex justify-content-center align-items-center text-center ml-1">
                           <ion-icon name="heart"></ion-icon>
                         </a>
                       </div>

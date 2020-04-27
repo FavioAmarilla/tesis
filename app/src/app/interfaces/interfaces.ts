@@ -7,6 +7,9 @@ export interface Usuario {
     telefono?: string;
     celular?: string;
     fecha_nacimiento?: string;
+    clave_actual?: string;
+    clave_nueva?: string;
+    repita?: string;
 }
 
 export interface Producto {
@@ -35,59 +38,61 @@ export interface LineaProducto {
 }
 
 export interface Sucursal {
-    identificador?: number
-    id_empresa?: number
-    codigo?: string
-    nombre?: string
-    telefono?: string
-    id_pais?: number
-    id_ciudad?: number
-    direccion?: string
-    ecommerce?: string
+    identificador?: number;
+    id_empresa?: number;
+    codigo?: string;
+    nombre?: string;
+    telefono?: string;
+    id_pais?: number;
+    id_ciudad?: number;
+    direccion?: string;
+    ecommerce?: string;
 }
 
 export interface Pais {
-    identificador?: number
-    nombre?: string
+    identificador?: number;
+    nombre?: string;
 }
 
 export interface Ciudad {
-    identificador?: number
-    id_pais?: number
-    nombre?: string
+    identificador?: number;
+    id_pais?: number;
+    nombre?: string;
 }
 
 export interface Barrio {
-    identificador?: number
-    id_ciudad?: number
-    nombre?: string
+    identificador?: number;
+    id_ciudad?: number;
+    nombre?: string;
 }
 
 export interface CuponDescuento {
-    identificador?: number
-    descripcion?: number
-    codigo?: string
-    porc_descuento?: number
-    fecha_desde?: string
-    fecha_hasta?: string
-    usado?: string
+    identificador?: number;
+    descripcion?: number;
+    codigo?: string;
+    porc_descuento?: number;
+    fecha_desde?: string;
+    fecha_hasta?: string;
+    usado?: string;
+    porcentaje?: number;
+    length?: number;
 }
 
 export interface EcParametro {
-    identificador?: number
-    monto_minimo?: number
-    costo_delivery?: number
-    id_pais?: number
+    identificador?: number;
+    monto_minimo?: number;
+    costo_delivery?: number;
+    id_pais?: number;
 }
 
 export interface EcParamCiudad {
-    identificador?: number
-    id_ec_parametro?: number
-    id_ciudad?: number
-    activo?: string
+    identificador?: number;
+    id_ec_parametro?: number;
+    id_ciudad?: number;
+    activo?: string;
 }
 
 export interface Marca {
-    identificador?: number
-    nombre?: string
+    identificador?: number;
+    nombre?: string;
 }
