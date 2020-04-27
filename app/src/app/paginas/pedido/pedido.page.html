@@ -133,16 +133,14 @@
                     </div>
 
                     <!-- retirar en tienda -->
-
-
                     <div *ngIf="datosEnvio.tipo_envio == 'RT'" [@enterAnimation]>
                       <h3>Persona encargada a retirar</h3>
 
                       <div class="form-group">
-                        <input type="text" class="form-control" name="rt_persona" placeholder="Nombre">
+                        <input type="text" class="form-control" name="persona" placeholder="Nombre" [(ngModel)]="datosEnvio.persona">
                       </div>
                       <div class="form-group">
-                        <input type="text" class="form-control" name="rt_documento" placeholder="Numero de C.I.">
+                        <input type="text" class="form-control" name="nro_documento" placeholder="Nombre"  placeholder="Numero de C.I." [(ngModel)]="datosEnvio.nro_documento">
                       </div>
                       <div class="form-group text-info">
                         <span>Para poder retirar su pedido debe presentar C.I</span>
