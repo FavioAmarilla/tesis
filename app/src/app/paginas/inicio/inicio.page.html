@@ -1,21 +1,27 @@
 <app-header [cargando]="cargando"></app-header>
 
-<div class="filterModal modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModal"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="filterModal">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <app-filtros (filtrosEmitter)="obtenerProductos($event)"></app-filtros>
-      </div>
-    </div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="filterModal">Lineas de Producto</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-</div>
+  <div class="modal-body">
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let linea of listaLineas"
+        (click)="seleccionarLineaProducto(linea.identificador)" [ngClass]="{'active': linea.id == idLineaProducto }">
+        {{ linea.descripcion }}
+        <span class="">
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </span>
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
 
 <ion-content>
   <!-- slides -->
@@ -45,7 +51,9 @@
     </ion-slide>
   </ion-slides>
 
-  <div class="filter-toggle" data-toggle="modal" data-target="#filterModal"><ion-icon name="funnel"></ion-icon></div>
+  <div class="filter-toggle" (click)="open(content)">
+    <ion-icon name="funnel"></ion-icon>
+  </div>
 
   <section class="ftco-section">
     <div class="container-fluid">
@@ -53,14 +61,37 @@
 
       <!-- productos -->
       <div class="row">
-        <div class="col-md-12 heading-section text-center">
+
+        <!-- <div class="col-md-12 heading-section text-center">
           <br><br>
-          <h2 class="mb-4">Nuestros productos</h2>
+          <h3 class="mb-4 h3">Nuestros productos</h3>
           <hr class="border-top ml-5 mr-5">
+        </div> -->
+
+        <div class="col-md-3 offset-md-9">
+          <div class="form-group">
+            <label>Sucursal</label>
+            <select class="form-control" name="sucursal" (change)="seleccionarSucursal($event.target.value)">
+              <option *ngFor="let sucursal of listaSucursales" [value]="sucursal.identificador">{{ sucursal.nombre }}
+              </option>
+            </select>
+          </div>
         </div>
+        <hr class="border-top">
 
         <div class="col-md-3 product shop-filters">
-          <app-filtros (filtrosEmitter)="obtenerProductos($event)"></app-filtros>
+          <h5 class="mb-4 h5">Lineas de Producto</h5>
+
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let linea of listaLineas" (click)="seleccionarLineaProducto(linea.identificador)"
+              [ngClass]="{'active': linea.identificador == idLineaProducto }">
+              {{ linea.descripcion }}
+              <span class="">
+                <ion-icon name="ios-arrow-forward"></ion-icon>
+              </span>
+            </li>
+          </ul>
         </div>
 
         <div class="col-md-9">
@@ -69,13 +100,13 @@
               <div class="product">
                 <div class="m-2">
                   <a [routerLink]="['/producto', producto.slug]" class="img-prod">
-                    <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="253"
+                    <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="230"
                       style="width: 100%;">
                     <div class="overlay"></div>
                   </a>
                   <hr class="mt-2 mb-0 ml-2 mr-2 border-top">
-                  <div class="text py-3 px-3 text-center">
-                    <h3><a [routerLink]="['/producto', producto.slug]">{{ producto.descripcion | truncateText:20 }}</a>
+                  <div class="text py-1 px-1 text-center">
+                    <h3><a [routerLink]="['/producto', producto.slug]">{{ producto.descripcion | truncateText:22 }}</a>
                     </h3>
                     <div class="d-flex">
                       <div class="pricing">
@@ -83,7 +114,7 @@
                         </p>
                       </div>
                     </div>
-                    <div class="bottom-area d-flex px-3">
+                    <div class="bottom-area d-flex px-1">
                       <div class="m-auto d-flex">
                         <a [routerLink]="['/producto', producto.slug]"
                           class="d-flex justify-content-center align-items-center text-center">

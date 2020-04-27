@@ -1,4 +1,4 @@
-<h5 class="mb-4">Filtros de Busqueda</h5>
+<h5 class="mb-4 h5">Filtros de Busqueda</h5>
 
 <form>
 
@@ -8,12 +8,14 @@
       <option *ngFor="let sucursal of listaSucursales" [value]="sucursal.identificador">{{ sucursal.nombre }}</option>
     </select>
   </div>
+  <br>
 
   <div class="form-group">
     <label>Rango de Precios</label>
     <input type="number" class="form-control" placeholder="Precio Minimo" name="precio_minimo" [(ngModel)]="filtros.precio_minimo" (focusout)="enviarFiltros()"> <br>
     <input type="number" class="form-control" placeholder="Precio Maximo" name="precio_maximo" [(ngModel)]="filtros.precio_maximo" (focusout)="enviarFiltros()">
   </div>
+  <br>
 
   <div class="form-group">
     <label>Linea de Producto</label>

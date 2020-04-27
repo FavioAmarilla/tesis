@@ -117,15 +117,17 @@
                       </div>
                       <div class="form-group">
                         <div class="input-group mb-3">
-                          <div class="input-group-prepend btn-ubicacion" data-toggle="modal"
-                            data-target="#modalUbicacion" (click)="abrirModal()">
-                            <span class=" input-group-text">
-                              <ion-icon name="bookmark"></ion-icon>
-                            </span>
+                          <div class="input-group-prepend">
+                            <div class="input-group-prepend btn-ubicacion" data-toggle="modal"
+                              data-target="#modalUbicacion" (click)="abrirModal()">
+                              <span class=" input-group-text">
+                                <ion-icon name="bookmark"></ion-icon>
+                              </span>
+                            </div>
                           </div>
+
                           <input type="text" name="ubicacion" class="form-control" placeholder="Ubicación"
-                            aria-label="Ubicación" aria-describedby="basic-addon1" [(ngModel)]="datosEnvio.ubicacion"
-                            readonly>
+                            [(ngModel)]="datosEnvio.ubicacion" disabled>
                         </div>
                       </div>
                     </div>
