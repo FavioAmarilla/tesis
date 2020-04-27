@@ -10,6 +10,7 @@
   --teal: #20c958;
   --cyan: #17a2b8;
   --white: #fff;
+  --black: #000000;
   --gray: #6c757d;
   --gray-dark: #343a40;
   --primary: #007bff;
@@ -151,7 +152,7 @@ hr {
 }
 
 .home-slider .slider-item .slider-text .subheading {
-  color: #000000;
+  color: var(--black);
   font-weight: 300;
   font-size: 12px;
   letter-spacing: 4px;
@@ -162,7 +163,7 @@ hr {
 
 .home-slider .slider-item .slider-text h1 {
   font-size: 8vw;
-  color: #fff;
+  color: var(--white);
   font-weight: 400;
   font-family: "Amatic SC", cursive;
 }
@@ -191,26 +192,6 @@ hr {
   }
 }
 
-.bg-light {
-  background: #f7f6f2 !important;
-}
-
-.bg-color-1 {
-  background: #e4b2d6;
-}
-
-.bg-color-2 {
-  background: #dcc698;
-}
-
-.bg-color-3 {
-  background: #a2d1e1;
-}
-
-.bg-color-4 {
-  background: #dcd691;
-}
-
 .btn {
   cursor: pointer;
   -webkit-border-radius: 30px;
@@ -226,7 +207,7 @@ hr {
 .btn.btn-primary {
   background-color: var(--green) !important;
   border: 1px solid var(--green) !important;
-  color: #fff !important;
+  color: var(--white) !important;
 }
 
 .btn.btn-primary:focus, .btn.btn-primary:hover {
@@ -252,7 +233,7 @@ hr {
 
 .product-category li a.active {
   background: var(--green);
-  color: #fff;
+  color: var(--white);
 }
 
 .ftco-product .owl-stage-outer {
@@ -291,7 +272,7 @@ hr {
   top: 0;
   left: 0;
   padding: 2px 10px;
-  color: #fff;
+  color: var(--white);
   font-weight: 300;
   background: var(--green);
   font-size: 12px;
@@ -326,7 +307,7 @@ hr {
 .product .icon {
   width: 60px;
   height: 60px;
-  background: #fff;
+  background: var(--white);
   opacity: 0;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
@@ -340,7 +321,7 @@ hr {
 }
 
 .product .icon span {
-  color: #000000;
+  color: var(--black);
 }
 
 .product:hover .icon {
@@ -352,7 +333,7 @@ hr {
 }
 
 .product .text {
-  background: #fff;
+  background: var(--white);
   position: relative;
   width: 100%;
 }
@@ -366,7 +347,7 @@ hr {
 }
 
 .product .text h3 a {
-  color: #000000;
+  color: var(--black);
 }
 
 .product .text p.price {
@@ -398,7 +379,7 @@ hr {
 }
 
 .product .text .bottom-area a {
-  color: #fff;
+  color: var(--white);
   width: 100%;
   background: var(--green);
   width: 40px;
@@ -412,7 +393,7 @@ hr {
 }
 
 .product .text .bottom-area a:hover {
-  background-color: #fff;
+  background-color: var(--white);
   color: var(--green);
   border: 1px solid var(--green);
 }
@@ -436,7 +417,7 @@ hr {
 }
 
 .product-details button i {
-  color: #000000;
+  color: var(--black);
 }
 
 .product-details .quantity-left-minus {
@@ -480,7 +461,7 @@ hr {
   height: 54px !important;
   text-align: center;
   bordeR: 1px solid rgba(0, 0, 0, 0.05) !important;
-  color: #000000 !important;
+  color: var(--black) !important;
   padding: 0;
   font-size: 14px;
 }
@@ -527,7 +508,7 @@ hr {
 
 .ftco-cart .info label {
   font-size: 13px;
-  color: #000000;
+  color: var(--black);
 }
 
 .cart-list {
@@ -570,7 +551,7 @@ table tbody tr td.product-remove a:focus, table tbody tr td.product-remove a:hov
 }
 
 table tbody tr td.product-remove a:hover span {
-  color: #fff;
+  color: var(--white);
 }
 
 table tbody tr td.image-prod .img {
@@ -607,7 +588,7 @@ table tbody tr td.image-prod .img {
 }
 
 .cart-total p.total-price span:last-child {
-  color: #000000;
+  color: var(--black);
   font-weight: 600;
 }
 
@@ -647,7 +628,7 @@ table tbody tr td.image-prod .img {
 }
 
 .ftco-footer .ftco-footer-widget ul li a {
-  color: #000000;
+  color: var(--black);
   cursor: pointer;
 }
 
@@ -767,4 +748,27 @@ table tbody tr td.image-prod .img {
   border: 1px solid #079a4a;
   border-left: 0px;
   border-radius: 0px 3px 3px 0px;
+}
+
+/* BOTONES DENTROL DE INPUT */
+
+.input-group-prepend, .input-group-append {
+  cursor: pointer;
+  background-color: #f3f3f3 !important;
+}
+
+.input-group-prepend:hover .input-group-text {
+  background-color: var(--green) !important;
+  border-color: var(--green) !important;
+  color: white !important;
+}
+
+.input-group-append:hover .input-group-text {
+  background-color: var(--green) !important;
+  border-color: var(--green) !important;
+  color: white !important;
+}
+
+.form-control:disabled, .form-control[readonly] {
+  background-color: var(--white) !important;
 }

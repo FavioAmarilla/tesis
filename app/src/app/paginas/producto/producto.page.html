@@ -5,7 +5,9 @@
     <ol class="breadcrumb">
       <div class="container d-flex">
         <li class="breadcrumb-item"><a [routerLink]="['/inicio']">INICIO</a></li>
-        <li class="breadcrumb-item"><a [routerLink]="['/producto/linea',  producto.linea_producto.slug]">{{ producto.linea_producto.descripcion }}</a></li>
+        <li class="breadcrumb-item"><a
+            [routerLink]="['/producto/linea',  producto.linea_producto.slug]">{{ producto.linea_producto.descripcion }}</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">{{ producto.descripcion }} </li>
       </div>
     </ol>
@@ -29,20 +31,18 @@
 
             <div class="row mt-4">
               <div class="w-100"></div>
-              <div class="input-group col-md-6 d-flex mb-3">
+              <div class="form-group input-group col-md-6 d-flex mb-3">
                 <div class="input-group-prepend">
-                  <button type="button" class="btn btn-cantidad" (click)="asignarCantidad('DI')">
+                  <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad('DI')">
                     <ion-icon name="remove"></ion-icon>
-                  </button>
+                  </span>
                 </div>
-
                 <input type="text" name="cantidad" class="form-control" min="1" max="100" [(ngModel)]="cantidad"
                   disabled>
-
-                <div class="input-group-prepend">
-                  <button type="button" class="btn-cantidad btn" (click)="asignarCantidad('AU')">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad('AU')">
                     <ion-icon name="add"></ion-icon>
-                  </button>
+                  </span>
                 </div>
               </div>
               <div class="w-100"></div>
