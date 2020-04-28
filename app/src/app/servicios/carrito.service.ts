@@ -47,12 +47,13 @@ export class CarritoService {
     return productos;
   }
 
-  agregarAlCarrito(producto) {
+  agregarAlCarrito(producto, accion = 'add') {
     return new Promise(async resolve => {
       const productos = await this.obtenerCarrito() || [];
       const existe = productos.find(elemento => elemento.identificador == producto.identificador);
       if (existe) {
-        existe.cantidad += producto.cantidad;
+        if (accion == 'add') existe.cantidad += producto.cantidad;
+        else existe.cantidad = producto.cantidad;
       } else {
         productos.push(producto);
       }

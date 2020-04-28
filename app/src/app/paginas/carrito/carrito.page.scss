@@ -1,0 +1,42 @@
+.cart-list {
+    overflow-x: inherit;
+}
+
+.product-picture img {
+    width: auto;
+    height: 100px;
+}
+
+.quantity input {
+    padding: inherit;
+}
+
+ion-title {
+    padding: 0;
+}
+
+.border-top {
+    border-top: 1px solid #efefef;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #efefef;
+}
+
+@media screen and (max-width: 767px) {
+    .remove-product {
+        position: absolute;
+        top: -112px;
+        right: -20px;
+        padding: 0.2em;
+        background-color: transparent !important;
+        color: #06803D !important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .remove-product {
+        top: -140px;
+        right: -30px;
+    }
+}

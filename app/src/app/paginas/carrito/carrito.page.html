@@ -2,84 +2,89 @@
 
 <ion-content>
 
-  <section class="ftco-section ftco-cart" style="padding-top: 20px;">
-    <div class="container">
-
-      <div class="row">
-        <div class="col-md-12 mt-4">
-          <div class="cart-list">
-
-            <table class="table">
-              <thead>
-                <tr class="text-center">
-                  <th>&nbsp;</th>
-                  <th>Nombre Prod.</th>
-                  <th>Precio</th>
-                  <th>Cantidad</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody *ngIf="listaCarrito">
-                <tr class="text-center" *ngFor="let producto of listaCarrito">
-                  <td>
-                    <a (click)="confirmarParaEliminarDelCarrito(producto)"
-                      class="btn btn-primary d-flex justify-content-center align-items-center text-center">
-                      <ion-icon name="close"></ion-icon>
+  <ion-grid class="container">
+    <ion-row>
+      <ion-col size="12" class="border-bottom">
+        <ion-title color="primary">Carrito</ion-title>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="listaCarrito && listaCarrito.length">
+      <ion-col size="12">
+        <div class="cart-list">
+          <ion-row *ngFor="let producto of listaCarrito">
+            <ion-col size-lg="2" size-md="2" size-sm="4" size-xs="4" class="picture-col">
+              <div class="product-picture text-center">
+                <a [routerLink]="['/producto', producto.slug]" class="miniCart_prod_title">
+                  <img [src]="producto.imagen | productImage | urlSanitizer" alt="Product picture">
+                </a>
+                <div class="oferta"></div>
+              </div>
+            </ion-col>
+            <ion-col size-lg="10" size-md="10" size-sm="8" size-xs="8" class="desc-col">
+              <ion-row>
+                <ion-col size-lg="5" size-md="5" size-sm="9" size-xs="10" class="cart-item">
+                  <div class="productdata">
+                    <a class="miniCart_prod_title" [routerLink]="['/producto', producto.slug]" title="Ver detalles">
+                      {{ producto.descripcion }}
                     </a>
-                  </td>
-
-                  <td>
-                    {{ producto.descripcion }}
-                  </td>
-
-                  <td>{{ producto.precio_venta | numberFormat}} Gs.</td>
-
-                  <td>
-                    <div class="input-group mb-3">
-                      <input type="text" name="quantity" class="quantity form-control input-number"
-                        value="{{ producto.cantidad }}" min="1" max="100">
+                    <div class="codigo">
+                      Código: 116909
                     </div>
-                  </td>
-
-                  <td class="total">{{producto.precio_venta * producto.cantidad | numberFormat}} Gs. </td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td>
-                    <h5>Total</h5>
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-
-                  <td class="total text-rigth">
-                    <h5>{{total | numberFormat}} Gs.</h5>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+                  </div>
+                </ion-col>
+            
+                <ion-col size-lg="3" size-md="3" size-sm="9" size-xs="9" class="cart-item quantity">
+                  <div class="form-group input-group d-flex">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad('DI', producto)">
+                        <ion-icon name="remove"></ion-icon>
+                      </span>
+                    </div>
+                    <input type="text" name="cantidad" class="form-control text-center" min="1" max="100" [(ngModel)]="producto.cantidad" disabled>
+                    <div class="input-group-append">
+                      <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad('AU', producto)">
+                        <ion-icon name="add"></ion-icon>
+                      </span>
+                    </div>
+                  </div>
+                </ion-col>
+                <ion-col size-lg="3" size-md="2" size-sm="9" size-xs="9" class="cart-item price">
+                  <div class="ion-text-sm-left ion-text-md-center">
+                    <!-- <p style="margin-bottom: 0;">Total:</p> -->
+                    <span class="gs">Gs. </span>
+                    <span class="productPrice"> {{producto.precio_venta * producto.cantidad | numberFormat}}</span>
+                  </div>
+                </ion-col>
+                <ion-col size="1">
+                  <a (click)="confirmarParaEliminarDelCarrito(producto)" class="btn btn-primary d-flex justify-content-center remove-product">
+                    <ion-icon name="close"></ion-icon>
+                  </a>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+          <ion-row class="border-top">
+            <ion-col size="12" class="text-right">
+              <h5>Total Gs.: {{ total | numberFormat }} </h5>
+            </ion-col>
+          </ion-row>
+          <div class="clear"></div>
         </div>
-      </div>
+      </ion-col>
+    </ion-row>
 
 
-      <div class="row mt-4">
-        <div class="col">
-          <span class="float-right">
-            <p (click)="(listaCarrito && listaCarrito.length) ? pedido() : false;">
-              <a class="btn btn-primary py-2 px-4" [ngClass]="{'disabled': !listaCarrito || listaCarrito.length == 0}">Pagar</a>
-            </p>
-          </span>
-        </div>
-      </div>
+    <ion-row>
+      <ion-col size="12">
+        <span class="float-right">
+          <p (click)="(listaCarrito && listaCarrito.length) ? pedido() : false;">
+            <a class="btn btn-primary py-2 px-4" [ngClass]="{'disabled': !listaCarrito || listaCarrito.length == 0}">Pagar</a>
+          </p>
+        </span>
+      </ion-col>
+    </ion-row>
 
-
-    </div>
-
-  </section>
-
-
+  </ion-grid>
 
   <app-footer></app-footer>
 

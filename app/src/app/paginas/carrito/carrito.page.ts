@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 import { EcParametrosService } from 'src/app/servicios/ec-parametros.service';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
+import { GeneralService } from 'src/app/servicios/general.service';
 
 @Component({
   selector: 'app-carrito',
@@ -21,6 +22,9 @@ export class PaginaCarrito implements OnInit {
 
   public parametros: EcParametro;
   public total: any = 0;
+  public cantidad: number = 1;
+  public minimo = 1;
+  public valor = 1;
 
   constructor(
     private router: Router,
@@ -29,13 +33,16 @@ export class PaginaCarrito implements OnInit {
     private servicioSucursal: SucursalService,
     private alertaCtrl: AlertController,
     private servicioAlerta: AlertaService,
-    private servicioEcParametros: EcParametrosService
+    private servicioEcParametros: EcParametrosService,
+    private servicioGeneral: GeneralService
   ) { }
 
-  async ngOnInit() {
+  async ngOnInit() { }
+
+  async ionViewWillEnter() {
     await this.obtenerParametrosEcommerce();
     await this.obtenerSucursalesEcommerce();
-    await this.obtenerCarrito();
+    await this.obtenerCarrito();  
   }
 
   redireccionar(url) {
@@ -44,15 +51,20 @@ export class PaginaCarrito implements OnInit {
 
   async obtenerCarrito() {
     const carrito = await this.servicioCarrito.obtenerCarrito();
+    if (!carrito.length) this.router.navigate(['/']);
     this.listaCarrito = carrito;
 
-    // obtener total
-    this.total = 0;
-    await carrito.forEach(element => {
-      this.total += element.precio_venta * element.cantidad;
-    });
+    this.actualizarTotal();
 
     this.cargando = false;
+  }
+
+  actualizarTotal() {
+    // obtener total
+    this.total = 0;
+    this.listaCarrito.forEach(element => {
+      this.total += element.precio_venta * element.cantidad;
+    });
   }
 
   async confirmarParaEliminarDelCarrito(product) {
@@ -110,5 +122,16 @@ export class PaginaCarrito implements OnInit {
     this.redireccionar('/pedido');
   }
 
+  asignarCantidad(accion, producto) {
+    this.valor = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida);
+    if (accion == 'DI') {
+      producto.cantidad = (producto.cantidad > this.minimo) ? producto.cantidad - this.valor : this.minimo;
+    }
+    if (accion == 'AU') {
+      producto.cantidad += this.valor;
+    }
 
+    this.servicioCarrito.agregarAlCarrito(producto, 'upd');
+    this.actualizarTotal();
+  }
 }

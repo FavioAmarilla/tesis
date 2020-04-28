@@ -5,9 +5,7 @@
     <ol class="breadcrumb">
       <div class="container d-flex">
         <li class="breadcrumb-item"><a [routerLink]="['/inicio']">INICIO</a></li>
-        <li class="breadcrumb-item"><a
-            [routerLink]="['/producto/linea',  producto.linea_producto.slug]">{{ producto.linea_producto.descripcion }}</a>
-        </li>
+        <li class="breadcrumb-item"><a [routerLink]="['/producto/linea',  producto.linea_producto.slug]">{{ producto.linea_producto.descripcion }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ producto.descripcion }} </li>
       </div>
     </ol>
@@ -37,8 +35,7 @@
                     <ion-icon name="remove"></ion-icon>
                   </span>
                 </div>
-                <input type="text" name="cantidad" class="form-control" min="1" max="100" [(ngModel)]="cantidad"
-                  disabled>
+                <input type="text" name="cantidad" class="form-control" min="1" max="100" [(ngModel)]="cantidad" disabled>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad('AU')">
                     <ion-icon name="add"></ion-icon>
