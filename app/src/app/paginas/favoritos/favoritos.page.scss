@@ -1,0 +1,36 @@
+.cart-list {
+    overflow-x: inherit;
+}
+
+.product-picture img {
+    width: auto;
+    height: 100px;
+}
+
+.actions a {
+    line-height: 0;
+    width: 30%;
+}
+
+@media screen and (max-width: 767px) {
+    .remove-product {
+        position: absolute;
+        top: -90px;
+        right: 0px;
+        padding: 0.2em;
+        background-color: transparent !important;
+        color: #06803D !important;
+        width: initial !important;
+    }
+
+    .add-to-cart {
+        width: 60% !important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .remove-product {
+        top: -100px;
+        right: 0px;
+    }
+}

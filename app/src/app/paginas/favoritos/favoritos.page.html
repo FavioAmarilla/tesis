@@ -2,60 +2,59 @@
 
 <ion-content>
 
-  <!-- <div class="hero-wrap hero-bread" style="background-image: url('assets/images/bg_1.jpg');">
-    <div class="container">
-      <div class="row no-gutters slider-text align-items-center justify-content-center">
-        <div class="col-md-9 text-center">
-          <p class="breadcrumbs"><span class="mr-2"><a routerLink="/">Home</a></span> <span>Lista de deseos</span></p>
-          <h1 class="mb-0 bread">Mi lista de deseos</h1>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
-  <section class="ftco-section ftco-cart">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="cart-list">
-            <table class="table">
-              <thead>
-                <tr class="text-center">
-                  <th>Acciones</th>
-                  <th>Producto</th>
-                  <th>Descripcion</th>
-                  <th>Precio</th>
-                </tr>
-              </thead>
-              <tbody *ngIf="productos">
-                <tr class="text-center" *ngFor="let producto of productos">
-
-                  <td class="d-flex">
-                    <a (click)="confirmEliminarDeFavoritos(producto)"
-                      class="btn btn-primary d-flex justify-content-center align-items-center text-center">
-                      <ion-icon name="close"></ion-icon>
+  <ion-grid class="container">
+    <ion-row>
+      <ion-col size="12" class="border-bottom">
+        <ion-title color="primary">Mi lista de deseos</ion-title>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="productos && productos.length">
+      <ion-col size="12">
+        <div class="cart-list">
+          <ion-row *ngFor="let producto of productos">
+            <ion-col size-lg="2" size-md="2" size-sm="4" size-xs="4" class="picture-col">
+              <div class="product-picture text-center">
+                <a [routerLink]="['/producto', producto.slug]" class="miniCart_prod_title">
+                  <img [src]="producto.imagen | productImage | urlSanitizer" alt="Product picture">
+                </a>
+                <div class="oferta"></div>
+              </div>
+            </ion-col>
+            <ion-col size-lg="10" size-md="10" size-sm="8" size-xs="8" class="desc-col">
+              <ion-row>
+                <ion-col size-lg="5" size-md="5" size-sm="9" size-xs="10" class="cart-item">
+                  <div class="productdata">
+                    <a class="miniCart_prod_title" [routerLink]="['/producto', producto.slug]" title="Ver detalles">
+                      {{ producto.descripcion }}
                     </a>
-                    <a (click)="agregarAlCarrito(producto)"
-                      class="btn btn-primary d-flex justify-content-center align-items-center text-center">
-                      <ion-icon name="cart"></ion-icon>
-                    </a>
-                  </td>
-
-                  <td> {{ producto.descripcion }} </td>
-
-                  <td>Gs. {{ producto.precio_venta }}</td>
-
-                  <td>Gs. {{ producto.precio_venta * producto.cantidad }}</td>
-                </tr><!-- END TR-->
-
-              </tbody>
-            </table>
-
-          </div>
+                    <div class="codigo">
+                      Código: {{ producto.codigo_barras }}
+                    </div>
+                  </div>
+                </ion-col>
+                <ion-col size-lg="3" size-md="2" size-sm="9" size-xs="9" class="cart-item price">
+                  <div class="ion-text-sm-left ion-text-md-center">
+                    <!-- <p style="margin-bottom: 0;">Total:</p> -->
+                    <span class="gs">Gs. </span>
+                    <span class="productPrice"> {{producto.precio_venta | numberFormat}}</span>
+                  </div>
+                </ion-col>
+                <ion-col size="4" size-md="4" size-xs="12" class="ion-text-xs-left ion-text-md-center actions m-auto">
+                  <a (click)="agregarAlCarrito(producto)" class="btn btn-primary mr-2 add-to-cart">
+                    <ion-icon name="cart"></ion-icon>
+                  </a>
+                  <a (click)="confirmEliminarDeFavoritos(producto)" class="btn btn-primary remove-product">
+                    <ion-icon name="close"></ion-icon>
+                  </a>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+          <div class="clear"></div>
         </div>
-      </div>
-    </div>
-  </section>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
   <app-footer></app-footer>
 
