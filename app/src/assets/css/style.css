@@ -110,7 +110,7 @@ hr {
 
 .home-slider {
   position: relative;
-  height: 650px;
+  height: 90vh;
   z-index: 0;
 }
 
@@ -141,7 +141,7 @@ hr {
 }
 
 .home-slider .slider-item .slider-text {
-  height: 650px;
+  height: 100%;
   z-index: 3;
 }
 
