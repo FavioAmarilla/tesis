@@ -3,10 +3,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
 
-import { SidebarModule } from './sidebar/sidebar.module';
-import { FooterModule } from './shared/footer/footer.module';
-import { NavbarModule} from './shared/navbar/navbar.module';
-
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
 
@@ -23,11 +19,8 @@ import { HttpClientModule } from '@angular/common/http';
     RouterModule.forRoot(AppRoutes, {
       useHash: true
     }),
-    SidebarModule,
-    NavbarModule,
     HttpClientModule,
-    ToastrModule.forRoot(),
-    FooterModule
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

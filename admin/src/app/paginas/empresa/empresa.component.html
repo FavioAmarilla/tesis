@@ -1,124 +1,148 @@
-<app-breadcrumb pagina="Empresas"></app-breadcrumb>
+<div class="wrapper">
+    <navbar-cmp></navbar-cmp>
 
-<div class="row">
-    <div class="col-md-12">
+    <div class="sidebar" data-color="white" data-active-color="success">
+        <sidebar-cmp></sidebar-cmp>
+    </div>
 
-        <div class="card" *ngIf="!form">
-            <div class="card-header">
-                <button class="btn btn-round btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)"
-                    style="margin: 0px;">Agregar</button>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="text-primary">
-                            <th>
-                                Codigo
-                            </th>
-                            <th>
-                                Nombre
-                            </th>
-                            <th>
-                                Nro. Documento
-                            </th>
-                            <th class="text-right">
-                                Opciones
-                            </th>
-                        </thead>
-                        <tbody>
-                            <tr
-                                *ngFor="let row of listaEmpresas | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
-                                <td>
-                                    {{ row.codigo }}
-                                </td>
-                                <td>
-                                    {{ row.nombre }}
-                                </td>
-                                <td>
-                                    {{ row.numero_documento }}
-                                </td>
-                                <td class="text-right">
-                                    <button class="btn btn-round btn-sm btn-warning"
-                                        (click)="obtenerEmpresa(row.identificador)"><i class="fas fa-edit"></i></button>
-                                    &nbsp;
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div *ngIf="!cargando && !form && accion == 'LST'">
-                        <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="barrio" [porPagina]="porPagina"
-                            [total]="total"></app-paginacion>
-                    </div>
-                    <div class="row justify-content-center align-items-center col-md-12">
-                        <span *ngIf="cargando && !form && accion == 'LST'"
-                            class="spinner-border spinner-border-lg spinner-table" role="status"
-                            aria-hidden="true"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="main-panel">
+        <div class="content">
 
-        <div class="card" *ngIf="form">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <form #formulario="ngForm">
-                        <div class="form-group">
-                            <label for="image">Imagen</label>
+            <app-breadcrumb pagina="Empresas"></app-breadcrumb>
 
-                            <div *ngIf="empresa && empresa.imagen">
-                                <img *ngIf="!empresa.imagen" src="{{url + '/empresa/getImage/' + empresa.imagen}}"
-                                    width="100" height="100">
-                                <img *ngIf="!empresa.imagen" src="https://via.placeholder.com/150" width="100"
-                                    height="100">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card" *ngIf="!form">
+                        <div class="card-header">
+                            <button class="btn btn-round btn-primary pull-right"
+                                (click)="mostrarFormulario(true, 'INS', true)" style="margin: 0px;">Agregar</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="text-primary">
+                                        <th>
+                                            Codigo
+                                        </th>
+                                        <th>
+                                            Nombre
+                                        </th>
+                                        <th>
+                                            Nro. Documento
+                                        </th>
+                                        <th class="text-right">
+                                            Opciones
+                                        </th>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let row of listaEmpresas | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
+                                            <td>
+                                                {{ row.codigo }}
+                                            </td>
+                                            <td>
+                                                {{ row.nombre }}
+                                            </td>
+                                            <td>
+                                                {{ row.numero_documento }}
+                                            </td>
+                                            <td class="text-right">
+                                                <button class="btn btn-round btn-sm btn-warning"
+                                                    (click)="obtenerEmpresa(row.identificador)"><i
+                                                        class="fas fa-edit"></i></button>
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="!cargando && !form && accion == 'LST'">
+                                    <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="barrio"
+                                        [porPagina]="porPagina" [total]="total"></app-paginacion>
+                                </div>
+                                <div class="row justify-content-center align-items-center col-md-12">
+                                    <span *ngIf="cargando && !form && accion == 'LST'"
+                                        class="spinner-border spinner-border-lg spinner-table" role="status"
+                                        aria-hidden="true"></span>
+                                </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <angular-file-uploader [config]="fileUploaderConfig" [resetUpload]=resetVar
-                                (ApiResponse)="subirImagen($event)">
-                            </angular-file-uploader>
+                    <div class="card" *ngIf="form">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <form #formulario="ngForm">
+                                    <div class="form-group">
+                                        <label for="image">Imagen</label>
+
+                                        <div *ngIf="empresa && empresa.imagen">
+                                            <img *ngIf="!empresa.imagen"
+                                                src="{{url + '/empresa/getImage/' + empresa.imagen}}" width="100"
+                                                height="100">
+                                            <img *ngIf="!empresa.imagen" src="https://via.placeholder.com/150"
+                                                width="100" height="100">
+                                        </div>
+
+                                        <angular-file-uploader [config]="fileUploaderConfig" [resetUpload]=resetVar
+                                            (ApiResponse)="subirImagen($event)">
+                                        </angular-file-uploader>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="codigo">Codigo</label>
+                                        <input type="text" class="form-control" name="codigo"
+                                            [(ngModel)]="empresa.codigo" required #codigo="ngModel">
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!codigo.valid && codigo.touched">Este campo es
+                                            obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nombre">Nombre</label>
+                                        <input type="text" class="form-control" name="nombre"
+                                            [(ngModel)]="empresa.nombre" required #nombre="ngModel">
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!nombre.valid && nombre.touched">Este campo es
+                                            obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="numero_documento">Número Documento</label>
+                                        <input type="text" class="form-control" name="numero_documento" required
+                                            [(ngModel)]="empresa.numero_documento" #numero_documento="ngModel">
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!numero_documento.valid && numero_documento.touched">Este campo es
+                                            obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-round btn-primary" (click)="registrar()"
+                                            *ngIf="accion == 'INS'" [disabled]="formulario.invalid">
+                                            <span *ngIf="cargando && accion == 'INS'"
+                                                class="spinner-border  spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Guardar
+                                        </button>
+                                        <button type="button" class="btn btn-round btn-primary" (click)="actualizar()"
+                                            [disabled]="formulario.invalid" *ngIf="accion == 'UPD'">
+                                            <span *ngIf="cargando && accion == 'UPD'"
+                                                class="spinner-border  spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Actualizar
+                                        </button>
+                                        <button type="button" class="btn btn-round btn-danger"
+                                            (click)="mostrarFormulario(false, 'LST')">
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="codigo">Codigo</label>
-                            <input type="text" class="form-control" name="codigo" [(ngModel)]="empresa.codigo" required
-                                #codigo="ngModel">
-                            <span class="invalid-feedback d-block" *ngIf="!codigo.valid && codigo.touched">Este campo es
-                                obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="nombre">Nombre</label>
-                            <input type="text" class="form-control" name="nombre" [(ngModel)]="empresa.nombre" required
-                                #nombre="ngModel">
-                            <span class="invalid-feedback d-block" *ngIf="!nombre.valid && nombre.touched">Este campo es
-                                obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="numero_documento">Número Documento</label>
-                            <input type="text" class="form-control" name="numero_documento" required
-                                [(ngModel)]="empresa.numero_documento" #numero_documento="ngModel">
-                            <span class="invalid-feedback d-block"
-                                *ngIf="!numero_documento.valid && numero_documento.touched">Este campo es
-                                obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-round btn-primary" (click)="registrar()" *ngIf="accion == 'INS'"
-                                [disabled]="formulario.invalid">
-                                <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm"
-                                    role="status" aria-hidden="true"></span>
-                                Guardar
-                            </button>
-                            <button type="button" class="btn btn-round btn-primary" (click)="actualizar()"
-                                [disabled]="formulario.invalid" *ngIf="accion == 'UPD'">
-                                <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm"
-                                    role="status" aria-hidden="true"></span>
-                                Actualizar
-                            </button>
-                            <button type="button" class="btn btn-round btn-danger" (click)="mostrarFormulario(false, 'LST')">
-                                Cancelar
-                            </button>
-                        </div>
-                    </form>
+                    </div>
+
                 </div>
             </div>
-        </div>
 
+
+
+        </div>
+        <footer-cmp></footer-cmp>
     </div>
 </div>

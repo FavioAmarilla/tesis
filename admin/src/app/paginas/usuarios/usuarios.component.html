@@ -1,153 +1,180 @@
-<app-breadcrumb pagina="Usuarios"></app-breadcrumb>
+<div class="wrapper">
+    <navbar-cmp></navbar-cmp>
 
-<div class="row">
-    <div class="col-md-12">
+    <div class="sidebar" data-color="white" data-active-color="success">
+        <sidebar-cmp></sidebar-cmp>
+    </div>
 
-        <div class="card" *ngIf="!form">
-            <div class="card-header">
-                <button class="btn btn-round btn-primary pull-right"
-                    (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="text-primary">
-                            <th>
-                                Imagen
-                            </th>
-                            <th>
-                                Nombre
-                            </th>
-                            <th>
-                                Email
-                            </th>
-                            <th class="text-right">
-                                Opciones
-                            </th>
-                        </thead>
-                        <tbody>
-                            <tr
-                                *ngFor="let row of listaUsuario | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
-                                <td>
-                                    <img *ngIf="row.imagen" src="{{url + '/user/getImage/' + row.imagen}}" width="50"
-                                        height="50">
-                                    <img *ngIf="!row.imagen" src="https://via.placeholder.com/150" width="50"
-                                        height="50">
-                                </td>
-                                <td>
-                                    {{ row.nombre_completo }}
-                                </td>
-                                <td>
-                                    {{ row.email }}
-                                </td>
-                                <td class="text-right">
-                                    <button class="btn btn-round btn-sm btn-warning"
-                                        (click)="obtenerUsuario(row.identificador)"><i class="fas fa-edit"></i></button>
-                                    &nbsp;
-                                    <button class="btn btn-round btn-sm"
-                                        (click)="activarDesactivarUsuario(row.identificador, (row.estado) ? 'desactivar' : 'activar')"
-                                        [ngClass]="{'btn-danger': row.estado, 'btn-primary': !row.estado}"
-                                        [title]="(row.estado) ? 'Desactivar Usuario' : 'Activar Usuario'"><i class="fas"
-                                            [ngClass]="{'fa-times': row.estado, 'fa-check-square': !row.estado}"></i></button>
-                                    &nbsp;
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div *ngIf="!cargando && !form && accion == 'LST'">
-                        <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="barrio" [porPagina]="porPagina"
-                            [total]="total"></app-paginacion>
-                    </div>
-                    <div class="row justify-content-center align-items-center col-md-12">
-                        <span *ngIf="cargando && !form && accion == 'LST'"
-                            class="spinner-border spinner-border-lg spinner-table" role="status"
-                            aria-hidden="true"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="main-panel">
+        <div class="content">
 
-        <div class="card" *ngIf="form">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <form #formulario="ngForm">
-                        <div class="form-group">
-                            <label for="image">Imagen</label>
-                            <div>
-                                <img *ngIf="usuario.imagen" src="{{url + '/user/getImage/' + usuario.imagen}}"
-                                    width="100" height="100">
-                                <img *ngIf="!usuario.imagen" src="https://via.placeholder.com/150" width="100"
-                                    height="100">
+            <app-breadcrumb pagina="Usuarios"></app-breadcrumb>
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card" *ngIf="!form">
+                        <div class="card-header">
+                            <button class="btn btn-round btn-primary pull-right"
+                                (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="text-primary">
+                                        <th>
+                                            Imagen
+                                        </th>
+                                        <th>
+                                            Nombre
+                                        </th>
+                                        <th>
+                                            Email
+                                        </th>
+                                        <th class="text-right">
+                                            Opciones
+                                        </th>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let row of listaUsuario | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
+                                            <td>
+                                                <img *ngIf="row.imagen" src="{{url + '/user/getImage/' + row.imagen}}"
+                                                    width="50" height="50">
+                                                <img *ngIf="!row.imagen" src="https://via.placeholder.com/150"
+                                                    width="50" height="50">
+                                            </td>
+                                            <td>
+                                                {{ row.nombre_completo }}
+                                            </td>
+                                            <td>
+                                                {{ row.email }}
+                                            </td>
+                                            <td class="text-right">
+                                                <button class="btn btn-round btn-sm btn-warning"
+                                                    (click)="obtenerUsuario(row.identificador)"><i
+                                                        class="fas fa-edit"></i></button>
+                                                &nbsp;
+                                                <button class="btn btn-round btn-sm"
+                                                    (click)="activarDesactivarUsuario(row.identificador, (row.estado) ? 'desactivar' : 'activar')"
+                                                    [ngClass]="{'btn-danger': row.estado, 'btn-primary': !row.estado}"
+                                                    [title]="(row.estado) ? 'Desactivar Usuario' : 'Activar Usuario'"><i
+                                                        class="fas"
+                                                        [ngClass]="{'fa-times': row.estado, 'fa-check-square': !row.estado}"></i></button>
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="!cargando && !form && accion == 'LST'">
+                                    <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="barrio"
+                                        [porPagina]="porPagina" [total]="total"></app-paginacion>
+                                </div>
+                                <div class="row justify-content-center align-items-center col-md-12">
+                                    <span *ngIf="cargando && !form && accion == 'LST'"
+                                        class="spinner-border spinner-border-lg spinner-table" role="status"
+                                        aria-hidden="true"></span>
+                                </div>
                             </div>
-                            <angular-file-uploader [config]="fileUploaderConfig" [resetUpload]="resetVar"
-                                (ApiResponse)="subirImagen($event)">
-                            </angular-file-uploader>
                         </div>
-                        <div class="form-group">
-                            <label for="nombre_completo">Nombre</label>
-                            <input type="text" class="form-control" placeholder="Nombre" name="nombre_completo"
-                                [(ngModel)]="usuario.nombre_completo" required #nombre_completo="ngModel">
-                            <span class="invalid-feedback d-block"
-                                *ngIf="!nombre_completo.valid && nombre_completo.touched">Este
-                                campo es obligatorio</span>
+                    </div>
+
+                    <div class="card" *ngIf="form">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <form #formulario="ngForm">
+                                    <div class="form-group">
+                                        <label for="image">Imagen</label>
+                                        <div>
+                                            <img *ngIf="usuario.imagen"
+                                                src="{{url + '/user/getImage/' + usuario.imagen}}" width="100"
+                                                height="100">
+                                            <img *ngIf="!usuario.imagen" src="https://via.placeholder.com/150"
+                                                width="100" height="100">
+                                        </div>
+                                        <angular-file-uploader [config]="fileUploaderConfig" [resetUpload]="resetVar"
+                                            (ApiResponse)="subirImagen($event)">
+                                        </angular-file-uploader>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nombre_completo">Nombre</label>
+                                        <input type="text" class="form-control" placeholder="Nombre"
+                                            name="nombre_completo" [(ngModel)]="usuario.nombre_completo" required
+                                            #nombre_completo="ngModel">
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!nombre_completo.valid && nombre_completo.touched">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="text" class="form-control" placeholder="Email" name="email"
+                                            [(ngModel)]="usuario.email" required #email="ngModel">
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!email.valid && email.touched">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                                        <input type="date" class="form-control" placeholder="Nombre"
+                                            name="fecha_nacimiento" [(ngModel)]="usuario.fecha_nacimiento" required
+                                            #fecha_nacimiento="ngModel">
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!fecha_nacimiento.valid && fecha_nacimiento.touched">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="telefono">Telefono</label>
+                                        <input type="text" class="form-control" placeholder="Telefono" name="telefono"
+                                            [(ngModel)]="usuario.telefono">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="celular">Celular</label>
+                                        <input type="text" class="form-control" placeholder="Celular" name="celular"
+                                            [(ngModel)]="usuario.celular" required #celular="ngModel">
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!celular.valid && celular.touched">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group" *ngIf="accion == 'INS'">
+                                        <label for="clave_acceso">Clave de Acceso</label>
+                                        <input type="password" class="form-control" placeholder="Clave de Acceso"
+                                            name="clave_acceso" [(ngModel)]="usuario.clave_acceso" required
+                                            #clave_acceso="ngModel">
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!clave_acceso.valid && clave_acceso.touched">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-round btn-primary" (click)="registrar()"
+                                            *ngIf="accion == 'INS'" [disabled]="formulario.invalid">
+                                            <span *ngIf="cargando && accion == 'INS'"
+                                                class="spinner-border  spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Guardar
+                                        </button>
+                                        <button type="button" class="btn btn-round btn-primary" (click)="actualizar()"
+                                            *ngIf="accion == 'UPD'" [disabled]="formulario.invalid">
+                                            <span *ngIf="cargando && accion == 'UPD'"
+                                                class="spinner-border  spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Actualizar
+                                        </button>
+                                        <button type="button" class="btn btn-round btn-danger"
+                                            (click)="mostrarFormulario(false, 'LST')">
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" class="form-control" placeholder="Email" name="email"
-                                [(ngModel)]="usuario.email" required #email="ngModel">
-                            <span class="invalid-feedback d-block" *ngIf="!email.valid && email.touched">Este
-                                campo es obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                            <input type="date" class="form-control" placeholder="Nombre" name="fecha_nacimiento"
-                                [(ngModel)]="usuario.fecha_nacimiento" required #fecha_nacimiento="ngModel">
-                            <span class="invalid-feedback d-block"
-                                *ngIf="!fecha_nacimiento.valid && fecha_nacimiento.touched">Este
-                                campo es obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="telefono">Telefono</label>
-                            <input type="text" class="form-control" placeholder="Telefono" name="telefono"
-                                [(ngModel)]="usuario.telefono">
-                        </div>
-                        <div class="form-group">
-                            <label for="celular">Celular</label>
-                            <input type="text" class="form-control" placeholder="Celular" name="celular"
-                                [(ngModel)]="usuario.celular" required #celular="ngModel">
-                            <span class="invalid-feedback d-block" *ngIf="!celular.valid && celular.touched">Este
-                                campo es obligatorio</span>
-                        </div>
-                        <div class="form-group" *ngIf="accion == 'INS'">
-                            <label for="clave_acceso">Clave de Acceso</label>
-                            <input type="password" class="form-control" placeholder="Clave de Acceso"
-                                name="clave_acceso" [(ngModel)]="usuario.clave_acceso" required #clave_acceso="ngModel">
-                            <span class="invalid-feedback d-block"
-                                *ngIf="!clave_acceso.valid && clave_acceso.touched">Este
-                                campo es obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-round btn-primary" (click)="registrar()"
-                                *ngIf="accion == 'INS'" [disabled]="formulario.invalid">
-                                <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm"
-                                    role="status" aria-hidden="true"></span>
-                                Guardar
-                            </button>
-                            <button type="button" class="btn btn-round btn-primary" (click)="actualizar()"
-                                *ngIf="accion == 'UPD'" [disabled]="formulario.invalid">
-                                <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm"
-                                    role="status" aria-hidden="true"></span>
-                                Actualizar
-                            </button>
-                            <button type="button" class="btn btn-round btn-danger"
-                                (click)="mostrarFormulario(false, 'LST')">
-                                Cancelar
-                            </button>
-                        </div>
-                    </form>
+                    </div>
+
                 </div>
             </div>
-        </div>
 
+
+
+        </div>
+        <footer-cmp></footer-cmp>
     </div>
 </div>

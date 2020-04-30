@@ -1,176 +1,205 @@
-<app-breadcrumb pagina="Productos"></app-breadcrumb>
-<div class="row">
-    <div class="col-md-12">
+<div class="wrapper">
+    <navbar-cmp></navbar-cmp>
 
-        <div class="card" *ngIf="!form">
-            <div class="card-header">
-                <button class="btn btn-round btn-primary pull-right"
-                    (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="text-primary">
-                            <th>Descripción</th>
-                            <th>Cod. Barras</th>
-                            <th>Precio Unitario</th>
-                            <th>Precio Venta</th>
-                            <th class="text-right">Opciones</th>
-                        </thead>
-                        <tbody>
-                            <tr
-                                *ngFor="let row of listaProductos | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
-                                <td>{{ row.descripcion }}</td>
-                                <td>{{ row.codigo_barras }}</td>
-                                <td>{{ row.costo_unitario }}</td>
-                                <td>{{ row.precio_venta }}</td>
-                                <td class="text-right">
-                                    <button class="btn btn-round btn-sm btn-warning"
-                                        (click)="obtenerProducto(row.identificador)"><i
-                                            class="fas fa-edit"></i></button> &nbsp;
-                                    <button class="btn btn-round btn-sm btn-danger"><i class="fas fa-times"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div *ngIf="!cargando && !form && accion == 'LST'">
-                        <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="barrio" [porPagina]="porPagina"
-                            [total]="total"></app-paginacion>
-                    </div>
-                    <div class="row justify-content-center align-items-center col-md-12">
-                        <span *ngIf="cargando && !form && accion == 'LST'"
-                            class="spinner-border spinner-border-lg spinner-table" role="status"
-                            aria-hidden="true"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="sidebar" data-color="white" data-active-color="success">
+        <sidebar-cmp></sidebar-cmp>
+    </div>
 
-        <div class="card" *ngIf="form">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <form #formulario="ngForm">
-                        <div class="form-group">
-                            <label for="image">Imagen</label>
+    <div class="main-panel">
+        <div class="content">
 
-                            <div *ngIf="producto && producto.imagen">
-                                <img *ngIf="producto.imagen" src="{{url + '/producto/getImage/' + producto.imagen}}"
-                                    width="100" height="100">
-                                <img *ngIf="!producto.imagen" src="https://via.placeholder.com/150" width="100"
-                                    height="100">
+            <app-breadcrumb pagina="Productos"></app-breadcrumb>
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card" *ngIf="!form">
+                        <div class="card-header">
+                            <button class="btn btn-round btn-primary pull-right"
+                                (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="text-primary">
+                                        <th>Descripción</th>
+                                        <th>Cod. Barras</th>
+                                        <th>Precio Unitario</th>
+                                        <th>Precio Venta</th>
+                                        <th class="text-right">Opciones</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let row of listaProductos | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
+                                            <td>{{ row.descripcion }}</td>
+                                            <td>{{ row.codigo_barras }}</td>
+                                            <td>{{ row.costo_unitario }}</td>
+                                            <td>{{ row.precio_venta }}</td>
+                                            <td class="text-right">
+                                                <button class="btn btn-round btn-sm btn-warning"
+                                                    (click)="obtenerProducto(row.identificador)"><i
+                                                        class="fas fa-edit"></i></button> &nbsp;
+                                                <button class="btn btn-round btn-sm btn-danger"><i
+                                                        class="fas fa-times"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="!cargando && !form && accion == 'LST'">
+                                    <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="barrio"
+                                        [porPagina]="porPagina" [total]="total"></app-paginacion>
+                                </div>
+                                <div class="row justify-content-center align-items-center col-md-12">
+                                    <span *ngIf="cargando && !form && accion == 'LST'"
+                                        class="spinner-border spinner-border-lg spinner-table" role="status"
+                                        aria-hidden="true"></span>
+                                </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <angular-file-uploader [config]="fileUploaderConfig" [resetUpload]=resetVar
-                                (ApiResponse)="subirImagen($event)">
-                            </angular-file-uploader>
+                    <div class="card" *ngIf="form">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <form #formulario="ngForm">
+                                    <div class="form-group">
+                                        <label for="image">Imagen</label>
+
+                                        <div *ngIf="producto && producto.imagen">
+                                            <img *ngIf="producto.imagen"
+                                                src="{{url + '/producto/getImage/' + producto.imagen}}" width="100"
+                                                height="100">
+                                            <img *ngIf="!producto.imagen" src="https://via.placeholder.com/150"
+                                                width="100" height="100">
+                                        </div>
+
+                                        <angular-file-uploader [config]="fileUploaderConfig" [resetUpload]=resetVar
+                                            (ApiResponse)="subirImagen($event)">
+                                        </angular-file-uploader>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="descripcion">Descripción</label>
+                                        <input type="text" class="form-control" placeholder="Descripción"
+                                            name="descripcion" [(ngModel)]="producto.descripcion" required
+                                            #descripcion="ngModel">
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!descripcion.valid && descripcion.touched">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="vr_unidad_medida">Unidad de medida</label>
+                                        <select name="vr_unidad_medida" id="vr_unidad_medida" class="form-control"
+                                            [(ngModel)]="producto.vr_unidad_medida" required
+                                            #vr_unidad_medida="ngModel">
+                                            <option value="null">-- SELECCIONE--</option>
+                                            <option value="UN">Unidad</option>
+                                            <option value="KG">Kilogramo</option>
+                                            <option value="ME">Metro</option>
+                                            <option value="LI">Litros</option>
+                                        </select>
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!vr_unidad_medida.valid && vr_unidad_medida.touched || producto.vr_unidad_medida == null">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="costo_unitario">Costo unitario</label>
+                                        <input type="text" class="form-control" placeholder="Costo unitario"
+                                            name="costo_unitario" [(ngModel)]="producto.costo_unitario" required
+                                            #costo_unitario="ngModel">
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!costo_unitario.valid && costo_unitario.touched">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="precio_venta">Precio Venta</label>
+                                        <input type="text" class="form-control" placeholder="Precio venta"
+                                            name="precio_venta" [(ngModel)]="producto.precio_venta" required
+                                            #precio_venta="ngModel">
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!precio_venta.valid && precio_venta.touched">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_tipo_impuesto">Tipo de impuesto</label>
+                                        <select name="id_tipo_impuesto" id="id_tipo_impuesto" class="form-control"
+                                            [(ngModel)]="producto.id_tipo_impuesto" required
+                                            #id_tipo_impuesto="ngModel">
+                                            <option value="null">-- SELECCIONE--</option>
+                                            <option *ngFor="let impuesto of listaImpuestos"
+                                                value="{{impuesto.identificador}}">
+                                                {{impuesto.descripcion}}</option>
+                                        </select>
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!id_tipo_impuesto.valid && id_tipo_impuesto.touched || producto.id_tipo_impuesto == null">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_linea">Linea del producto</label>
+                                        <select name="id_linea" id="id_linea" class="form-control"
+                                            [(ngModel)]="producto.id_linea" required #id_linea="ngModel">
+                                            <option value="null">-- SELECCIONE--</option>
+                                            <option *ngFor="let linea of listaLineas" value="{{linea.identificador}}">
+                                                {{linea.descripcion}}</option>
+                                        </select>
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!id_linea.valid && id_linea.touched || producto.id_linea == null">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_marca">Marca</label>
+                                        <select name="id_marca" id="id_marca" class="form-control"
+                                            [(ngModel)]="producto.id_marca" required #id_marca="ngModel">
+                                            <option value="null">-- SELECCIONE--</option>
+                                            <option *ngFor="let marca of listaMarcas" value="{{marca.identificador}}">
+                                                {{marca.nombre}}</option>
+                                        </select>
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!id_marca.valid && id_marca.touched || producto.id_marca == null">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" id="generateBarcode" class="btn btn-round btn-success"
+                                            (click)="generarCodigoBarras()">Generar código de barras</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" name="codigo_barras"
+                                            [(ngModel)]="producto.codigo_barras" required #codigo_barras="ngModel">
+                                        <svg id="barcode"></svg>
+                                        <span class="invalid-feedback d-block"
+                                            *ngIf="!codigo_barras.valid && codigo_barras.touched">Este
+                                            campo es obligatorio</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-round btn-primary" (click)="registrar()"
+                                            *ngIf="accion == 'INS'" [disabled]="formulario.invalid">
+                                            <span *ngIf="cargando && accion == 'INS'"
+                                                class="spinner-border  spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Guardar
+                                        </button>
+                                        <button type="button" class="btn btn-round btn-primary" (click)="actualizar()"
+                                            *ngIf="accion == 'UPD'" [disabled]="formulario.invalid">
+                                            <span *ngIf="cargando && accion == 'UPD'"
+                                                class="spinner-border  spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            Actualizar
+                                        </button>
+                                        <button type="button" class="btn btn-round btn-danger"
+                                            (click)="mostrarFormulario(false, 'LST')">
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="descripcion">Descripción</label>
-                            <input type="text" class="form-control" placeholder="Descripción" name="descripcion"
-                                [(ngModel)]="producto.descripcion" required #descripcion="ngModel">
-                            <span class="invalid-feedback d-block"
-                                *ngIf="!descripcion.valid && descripcion.touched">Este
-                                campo es obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="vr_unidad_medida">Unidad de medida</label>
-                            <select name="vr_unidad_medida" id="vr_unidad_medida" class="form-control"
-                                [(ngModel)]="producto.vr_unidad_medida" required #vr_unidad_medida="ngModel">
-                                <option value="null">-- SELECCIONE--</option>
-                                <option value="UN">Unidad</option>
-                                <option value="KG">Kilogramo</option>
-                                <option value="ME">Metro</option>
-                                <option value="LI">Litros</option>
-                            </select>
-                            <span class="invalid-feedback d-block"
-                                *ngIf="!vr_unidad_medida.valid && vr_unidad_medida.touched || producto.vr_unidad_medida == null">Este
-                                campo es obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="costo_unitario">Costo unitario</label>
-                            <input type="text" class="form-control" placeholder="Costo unitario" name="costo_unitario"
-                                [(ngModel)]="producto.costo_unitario" required #costo_unitario="ngModel">
-                            <span class="invalid-feedback d-block"
-                                *ngIf="!costo_unitario.valid && costo_unitario.touched">Este
-                                campo es obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="precio_venta">Precio Venta</label>
-                            <input type="text" class="form-control" placeholder="Precio venta" name="precio_venta"
-                                [(ngModel)]="producto.precio_venta" required #precio_venta="ngModel">
-                            <span class="invalid-feedback d-block"
-                                *ngIf="!precio_venta.valid && precio_venta.touched">Este
-                                campo es obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="id_tipo_impuesto">Tipo de impuesto</label>
-                            <select name="id_tipo_impuesto" id="id_tipo_impuesto" class="form-control"
-                                [(ngModel)]="producto.id_tipo_impuesto" required #id_tipo_impuesto="ngModel">
-                                <option value="null">-- SELECCIONE--</option>
-                                <option *ngFor="let impuesto of listaImpuestos" value="{{impuesto.identificador}}">
-                                    {{impuesto.descripcion}}</option>
-                            </select>
-                            <span class="invalid-feedback d-block"
-                                *ngIf="!id_tipo_impuesto.valid && id_tipo_impuesto.touched || producto.id_tipo_impuesto == null">Este
-                                campo es obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="id_linea">Linea del producto</label>
-                            <select name="id_linea" id="id_linea" class="form-control" [(ngModel)]="producto.id_linea"
-                                required #id_linea="ngModel">
-                                <option value="null">-- SELECCIONE--</option>
-                                <option *ngFor="let linea of listaLineas" value="{{linea.identificador}}">
-                                    {{linea.descripcion}}</option>
-                            </select>
-                            <span class="invalid-feedback d-block"
-                                *ngIf="!id_linea.valid && id_linea.touched || producto.id_linea == null">Este
-                                campo es obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="id_marca">Marca</label>
-                            <select name="id_marca" id="id_marca" class="form-control" [(ngModel)]="producto.id_marca"
-                                required #id_marca="ngModel">
-                                <option value="null">-- SELECCIONE--</option>
-                                <option *ngFor="let marca of listaMarcas" value="{{marca.identificador}}">
-                                    {{marca.nombre}}</option>
-                            </select>
-                            <span class="invalid-feedback d-block"
-                                *ngIf="!id_marca.valid && id_marca.touched || producto.id_marca == null">Este
-                                campo es obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" id="generateBarcode" class="btn btn-round btn-success"
-                                (click)="generarCodigoBarras()">Generar código de barras</button>
-                        </div>
-                        <div class="form-group">
-                            <input type="hidden" class="form-control" name="codigo_barras"
-                                [(ngModel)]="producto.codigo_barras" required #codigo_barras="ngModel">
-                            <svg id="barcode"></svg>
-                            <span class="invalid-feedback d-block"
-                                *ngIf="!codigo_barras.valid && codigo_barras.touched">Este
-                                campo es obligatorio</span>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-round btn-primary" (click)="registrar()" *ngIf="accion == 'INS'"
-                                [disabled]="formulario.invalid">
-                                <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm"
-                                    role="status" aria-hidden="true"></span>
-                                Guardar
-                            </button>
-                            <button type="button" class="btn btn-round btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'"
-                                [disabled]="formulario.invalid">
-                                <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm"
-                                    role="status" aria-hidden="true"></span>
-                                Actualizar
-                            </button>
-                            <button type="button" class="btn btn-round btn-danger" (click)="mostrarFormulario(false, 'LST')">
-                                Cancelar
-                            </button>
-                        </div>
-                    </form>
+                    </div>
+
                 </div>
             </div>
-        </div>
 
+
+
+        </div>
+        <footer-cmp></footer-cmp>
     </div>
 </div>

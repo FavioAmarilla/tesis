@@ -14,3 +14,12 @@
 .main-panel .content {
 	margin-top: 53px !important;
 }
+
+.sidebar .nav li a, i, p {
+	color: white !important;
+}
+
+button:disabled,
+button[disabled]{
+  background-color: #079A4A !important;
+}

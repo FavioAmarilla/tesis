@@ -29,6 +29,9 @@ import { MarcaComponent } from '../../paginas/marca/marca.component';
 
 import { PaginacionComponent } from '../../shared/paginacion/paginacion.component';
 import { SucursalComponent } from 'app/paginas/sucursal/sucursal.component';
+import { NavbarComponent } from 'app/shared/navbar/navbar.component';
+import { SidebarComponent } from 'app/sidebar/sidebar.component';
+import { FooterComponent } from 'app/shared/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -42,6 +45,9 @@ import { SucursalComponent } from 'app/paginas/sucursal/sucursal.component';
     ComponentesModule
   ],
   declarations: [
+    NavbarComponent,
+    SidebarComponent,
+    FooterComponent,
     DashboardComponent,
     LoginComponent,
     TiposImpuestoComponent,
