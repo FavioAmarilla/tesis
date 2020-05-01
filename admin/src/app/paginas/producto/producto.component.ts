@@ -80,7 +80,7 @@ export class ProductoComponent implements OnInit {
   }
 
   async obtenerSucursales() {
-    const response: any = await this.servicioSucursal.obtenerSucursal();
+    const response: any = await this.servicioSucursal.obtener();
 
     if (response.success) {
       this.listaSucursales = response.data;
@@ -91,7 +91,7 @@ export class ProductoComponent implements OnInit {
   }
 
   async obtenerImpuestos() {
-    const response: any = await this.servicioImpuesto.obtenerImpuesto();
+    const response: any = await this.servicioImpuesto.obtener();
 
     if (response.success) {
       this.listaImpuestos = response.data;
@@ -102,7 +102,7 @@ export class ProductoComponent implements OnInit {
   }
 
   async obtenerLineasProducto() {
-    const response: any = await this.servicioLineaProducto.obtenerLinea();
+    const response: any = await this.servicioLineaProducto.obtener();
 
     if (response.success) {
       this.listaLineas = response.data;
@@ -113,7 +113,7 @@ export class ProductoComponent implements OnInit {
   }
 
   async obtenerMarcas() {
-    const response: any = await this.servicioMarca.obtenerMarca();
+    const response: any = await this.servicioMarca.obtener();
 
     if (response.success) {
       this.listaMarcas = response.data;
@@ -134,7 +134,7 @@ export class ProductoComponent implements OnInit {
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioProducto.obtenerProducto(null, parametros);
+    const response: any = await this.servicioProducto.obtener(null, parametros);
 
     if (response.success) {
       this.listaProductos = response.data;
@@ -150,8 +150,8 @@ export class ProductoComponent implements OnInit {
   async obtenerProducto(id) {
     this.accion = 'LST';
     this.cargando = true;
-    const response: any = await this.servicioProducto.obtenerProducto(id);
-    
+    const response: any = await this.servicioProducto.obtener(id);
+
     if (response.success) {
       this.producto = response.data;
       this.mostrarFormulario(true, 'UPD');

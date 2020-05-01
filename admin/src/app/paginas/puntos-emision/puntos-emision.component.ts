@@ -48,7 +48,7 @@ export class PuntosEmisionComponent implements OnInit {
   }
 
   async obtenerSucursales() {
-    const response: any = await this.servicioSucursal.obtenerSucursal();
+    const response: any = await this.servicioSucursal.obtener();
     
     if (response.success) {
       this.listaSucursal = response.data;
@@ -70,7 +70,7 @@ export class PuntosEmisionComponent implements OnInit {
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioPuntoEmision.obtenerPuntoEmision(null, parametros);
+    const response: any = await this.servicioPuntoEmision.obtener(null, parametros);
 
     if (response.success) {
       this.listaPuntosEmision = response.data;
@@ -88,7 +88,7 @@ export class PuntosEmisionComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response: any = await this.servicioPuntoEmision.obtenerPuntoEmision(id);
+    const response: any = await this.servicioPuntoEmision.obtener(id);
 
     if (response.success) {
       this.puntoEmision = response.data;

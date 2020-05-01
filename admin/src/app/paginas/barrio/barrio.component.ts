@@ -20,6 +20,8 @@ export class BarrioComponent implements OnInit {
   public listaBarrio: Barrio;
   public listaCiudad: Ciudad;
   public errors = [];
+  public parametros: any = {};
+  public filtrosTabla: any = {};
   public paginaActual = 1;
   public porPagina;
   public total;
@@ -30,12 +32,19 @@ export class BarrioComponent implements OnInit {
     private servicioCiudad: ServicioCiudad,
     private servicioAlerta: ServicioAlertas
   ) {
-    this.cargando = false;
+    this.inicializarFiltros();
   }
 
   ngOnInit() {
     this.paginacion(this.paginaActual);
     this.obtenerCiudades();
+  }
+
+  async inicializarFiltros() {
+    this.filtrosTabla = {
+      id_ciudad: null,
+      nombre: ''
+    }
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -51,7 +60,7 @@ export class BarrioComponent implements OnInit {
   }
 
   async obtenerCiudades() {
-    const response: any = await this.servicioCiudad.obtenerCiudad();
+    const response: any = await this.servicioCiudad.obtener();
     if (response.success) {
       this.listaCiudad = response.data;
     } else {
@@ -59,19 +68,26 @@ export class BarrioComponent implements OnInit {
     }
   }
 
-  async paginacion(pagina?) {
+  async paginacion(pagina?, parametrosFiltro?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaBarrio = null;
     this.accion = "LST";
     this.cargando = true;
     this.errors = [];
 
-    const parametros = {
+    this.parametros = null;
+    this.parametros = {
       paginar: true,
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioBarrio.obtenerBarrio(null, parametros);
+    if (parametrosFiltro) {
+      this.parametros[parametrosFiltro.key] = parametrosFiltro.value;
+    }
+
+    console.log(this.parametros);
+
+    const response: any = await this.servicioBarrio.obtener(null, this.parametros);
 
     if (response.success) {
       this.listaBarrio = response.data;
@@ -89,7 +105,7 @@ export class BarrioComponent implements OnInit {
     this.cargando = true;
 
     this.errors = [];
-    const response: any = await this.servicioBarrio.obtenerBarrio(id);
+    const response: any = await this.servicioBarrio.obtener(id);
 
     if (response.success) {
       this.barrio = response.data;
@@ -130,6 +146,16 @@ export class BarrioComponent implements OnInit {
       this.mostrarFormulario(false, 'LST');
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
+
+  async filtrarTabla(key, value) {
+    if (key == null || value == null) {
+      await this.inicializarFiltros();
+      await this.paginacion(null, null);
+    } else {
+      let parametros = { key, value };
+      await this.paginacion(null, parametros);
     }
   }
 

@@ -74,7 +74,7 @@ export class EmpresaComponent implements OnInit {
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioEmpresa.obtenerEmpresa(null, parametros);
+    const response: any = await this.servicioEmpresa.obtener(null, parametros);
 
     if (response.success) {
       this.listaEmpresas = response.data;
@@ -91,7 +91,7 @@ export class EmpresaComponent implements OnInit {
     this.accion = "LST";
     this.cargando = true;
     this.errores = [];
-    const response = <any>await this.servicioEmpresa.obtenerEmpresa(id);
+    const response = <any>await this.servicioEmpresa.obtener(id);
 
     if (response.success) {
       this.empresa = response.data;

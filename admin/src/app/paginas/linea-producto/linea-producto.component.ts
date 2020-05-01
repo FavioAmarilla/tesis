@@ -54,7 +54,7 @@ export class LineaProductoComponent implements OnInit {
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioLineaProducto.obtenerLinea(null, parametros);
+    const response: any = await this.servicioLineaProducto.obtener(null, parametros);
 
     if (response.success) {
       this.listaLineas = response.data;
@@ -72,7 +72,7 @@ export class LineaProductoComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response: any = await this.servicioLineaProducto.obtenerLinea(id);
+    const response: any = await this.servicioLineaProducto.obtener(id);
 
     if (response.success) {
       this.lineaProducto = response.data;

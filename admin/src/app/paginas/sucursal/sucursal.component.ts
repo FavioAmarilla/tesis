@@ -59,7 +59,7 @@ export class SucursalComponent implements OnInit {
   }
 
   async obtenerEmpresas() {
-    const response = <any>await this.servicioEmpresa.obtenerEmpresa();
+    const response = <any>await this.servicioEmpresa.obtener();
 
     if (response.success) {
       this.listaEmpresas = response.data
@@ -70,7 +70,7 @@ export class SucursalComponent implements OnInit {
   }
 
   async obtenerPaises() {
-    const response = <any>await this.servicioPais.obtenerPais();
+    const response = <any>await this.servicioPais.obtener();
 
     if (response.success) {
       this.listaPaises = response.data
@@ -86,7 +86,7 @@ export class SucursalComponent implements OnInit {
       id_pais
     };
 
-    const response = <any>await this.servicioCiudad.obtenerCiudad(null, parametros);
+    const response = <any>await this.servicioCiudad.obtener(null, parametros);
 
     if (response.success) {
       this.listaCiudades = response.data
@@ -108,7 +108,7 @@ export class SucursalComponent implements OnInit {
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioSucursal.obtenerSucursal(null, parametros);
+    const response: any = await this.servicioSucursal.obtener(null, parametros);
 
     if (response.success) {
       this.listaSucursales = response.data;
@@ -125,7 +125,7 @@ export class SucursalComponent implements OnInit {
     this.accion = 'LST';
     this.cargando = true;
 
-    const response = <any>await this.servicioSucursal.obtenerSucursal(id);
+    const response = <any>await this.servicioSucursal.obtener(id);
 
     if (response.success) {
       this.sucursal = response.data;

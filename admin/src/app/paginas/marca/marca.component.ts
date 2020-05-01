@@ -55,7 +55,7 @@ export class MarcaComponent implements OnInit {
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioMarca.obtenerMarca(null, parametros);
+    const response: any = await this.servicioMarca.obtener(null, parametros);
 
     if (response.success) {
       this.listaMarcas = response.data;
@@ -73,7 +73,7 @@ export class MarcaComponent implements OnInit {
     this.cargando = true;
 
     this.errores = [];
-    const response = <any>await this.servicioMarca.obtenerMarca(id);
+    const response = <any>await this.servicioMarca.obtener(id);
 
     if (response.success) {
       this.marca = response.data;
