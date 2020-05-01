@@ -20,7 +20,9 @@ export class UsuariosComponent implements OnInit {
   public usuario: Usuario;
   public listaUsuario: Usuario;
   public cargando: boolean = false;
-  public errores = [];
+  public parametros: any = {};
+  public filtrosTabla: any = {};
+  public parametrosTabla: any = []
   public paginaActual = 1;
   public porPagina;
   public total;
@@ -45,10 +47,18 @@ export class UsuariosComponent implements OnInit {
     private servicioAlerta: ServicioAlertas
   ) {
     this.url = environment.api;
+    this.inicializarFiltros();
   }
 
   ngOnInit() {
     this.paginacion(this.paginaActual);
+  }
+
+  async inicializarFiltros() {
+    this.filtrosTabla = {
+      nombre_completo: '',
+      email: '',
+    }
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -58,24 +68,27 @@ export class UsuariosComponent implements OnInit {
     if (flag && accion == 'INS') {
       this.usuario = new Usuario(null, null, null, null, null, null, null, null);
     }
-    if (limpiarError) {
-      this.errores = [];
-    }
   }
 
-  async paginacion(pagina?) {
+  async paginacion(pagina?, parametrosFiltro?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaUsuario = null;
     this.accion = 'LST';
     this.cargando = true;
-    this.errores = [];
 
-    const parametros = {
+    this.parametros = null;
+    this.parametros = {
       paginar: true,
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioUsuario.obtenerUsuarios(null, parametros);
+    if (parametrosFiltro) {
+      this.parametrosTabla.forEach(element => {
+        this.parametros[element.key] = element.value;
+      });
+    }
+
+    const response: any = await this.servicioUsuario.obtenerUsuarios(null, this.parametros);
 
     if (response.success) {
       this.listaUsuario = response.data;
@@ -91,7 +104,6 @@ export class UsuariosComponent implements OnInit {
   async obtenerUsuario(id) {
     this.accion = 'LST';
     this.cargando = true;
-    this.errores = [];
     const response: any = await this.servicioUsuario.obtenerUsuarios(id);
 
     console.log(response);
@@ -106,7 +118,6 @@ export class UsuariosComponent implements OnInit {
 
   async registrar() {
     this.cargando = true;
-    this.errores = [];
     const response: any = await this.servicioUsuario.registrar(this.usuario);
 
     this.cargando = false;
@@ -121,7 +132,6 @@ export class UsuariosComponent implements OnInit {
 
   async actualizar() {
     this.cargando = true;
-    this.errores = [];
     const response: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.identificador);
 
     this.cargando = false;
@@ -150,6 +160,21 @@ export class UsuariosComponent implements OnInit {
       this.paginacion(1);
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
+
+  async filtrarTabla(event?) {
+
+    if (event) {
+      let key = event.target.name;
+      let value = event.target.value;
+      let parametros = { key, value };
+      this.parametrosTabla.push(parametros);
+
+      await this.paginacion(null, parametros);
+    } else {
+      await this.inicializarFiltros();
+      await this.paginacion(null, null);
     }
   }
 

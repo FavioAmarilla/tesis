@@ -16,7 +16,9 @@ export class LineaProductoComponent implements OnInit {
   public accion: string = '';
   public lineaProducto: LineaProducto;
   public listaLineas: LineaProducto;
-  public errores = [];
+  public parametros: any = {};
+  public filtrosTabla: any = {};
+  public parametrosTabla: any = []
   public paginaActual = 1;
   public porPagina;
   public total;
@@ -24,10 +26,18 @@ export class LineaProductoComponent implements OnInit {
   constructor(
     private servicioLineaProducto: ServicioLineaProducto,
     private servicioAlerta: ServicioAlertas
-  ) { }
+  ) {
+    this.inicializarFiltros();
+  }
 
   ngOnInit() {
     this.paginacion(this.paginaActual);
+  }
+
+  async inicializarFiltros() {
+    this.filtrosTabla = {
+      nombre: ''
+    }
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -37,24 +47,28 @@ export class LineaProductoComponent implements OnInit {
     if (flag && accion == 'INS') {
       this.lineaProducto = new LineaProducto(null, null);
     }
-    if (limpiarError) {
-      this.errores = [];
-    }
   }
 
-  async paginacion(pagina?) {
+  async paginacion(pagina?, parametrosFiltro?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaLineas = null;
     this.accion = 'LST';
     this.cargando = true;
-    this.errores = [];
 
-    const parametros = {
+    this.parametros = null;
+    this.parametros = {
       paginar: true,
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioLineaProducto.obtener(null, parametros);
+    if (parametrosFiltro) {
+      this.parametrosTabla.forEach(element => {
+        this.parametros[element.key] = element.value;
+      });
+    }
+
+
+    const response: any = await this.servicioLineaProducto.obtener(null, this.parametros);
 
     if (response.success) {
       this.listaLineas = response.data;
@@ -70,8 +84,6 @@ export class LineaProductoComponent implements OnInit {
   async obtenerLinea(id) {
     this.accion = 'LST';
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.servicioLineaProducto.obtener(id);
 
     if (response.success) {
@@ -86,8 +98,6 @@ export class LineaProductoComponent implements OnInit {
 
   async registrar() {
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.servicioLineaProducto.registrar(this.lineaProducto);
 
     this.cargando = false;
@@ -102,8 +112,6 @@ export class LineaProductoComponent implements OnInit {
 
   async actualizar() {
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.servicioLineaProducto.actualizar(this.lineaProducto, this.lineaProducto.identificador);
 
     this.cargando = false;
@@ -113,6 +121,21 @@ export class LineaProductoComponent implements OnInit {
       this.mostrarFormulario(false, 'LST');
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
+
+  async filtrarTabla(event?) {
+
+    if (event) {
+      let key = event.target.name;
+      let value = event.target.value;
+      let parametros = { key, value };
+      this.parametrosTabla.push(parametros);
+
+      await this.paginacion(null, parametros);
+    } else {
+      await this.inicializarFiltros();
+      await this.paginacion(null, null);
     }
   }
 

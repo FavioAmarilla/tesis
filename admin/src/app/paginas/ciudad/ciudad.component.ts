@@ -18,7 +18,9 @@ export class CiudadComponent implements OnInit {
   public ciudad: Ciudad;
   public listaCiudades: Ciudad;
   public listaPaises: Pais;
-  public errores = [];
+  public parametros: any = {};
+  public filtrosTabla: any = {};
+  public parametrosTabla: any = []
   public paginaActual = 1;
   public porPagina;
   public total;
@@ -29,11 +31,19 @@ export class CiudadComponent implements OnInit {
     private servicioAlerta: ServicioAlertas
   ) {
     this.cargando = false;
+    this.inicializarFiltros();
   }
 
   ngOnInit() {
     this.paginacion(this.paginaActual);
     this.obtenerPaises();
+  }
+
+  async inicializarFiltros() {
+    this.filtrosTabla = {
+      id_pais: null,
+      nombre: ''
+    }
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -42,9 +52,6 @@ export class CiudadComponent implements OnInit {
 
     if (flag && accion === 'INS') {
       this.ciudad = new Ciudad(null, null, null, [], null);
-    }
-    if (limpiarError) {
-      this.errores = [];
     }
   }
 
@@ -59,19 +66,25 @@ export class CiudadComponent implements OnInit {
     }
   }
 
-  async paginacion(pagina?) {
+  async paginacion(pagina?, parametrosFiltro?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaCiudades = null;
-    this.accion = 'LST';
+    this.accion = "LST";
     this.cargando = true;
-    this.errores = [];
 
-    const parametros = {
+    this.parametros = null;
+    this.parametros = {
       paginar: true,
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioCiudad.obtener(null, parametros);
+    if (parametrosFiltro) {
+      this.parametrosTabla.forEach(element => {
+        this.parametros[element.key] = element.value;
+      });
+    }
+
+    const response: any = await this.servicioCiudad.obtener(null, this.parametros);
 
     if (response.success) {
       this.listaCiudades = response.data;
@@ -87,8 +100,6 @@ export class CiudadComponent implements OnInit {
   async obtenerCiudad(id) {
     this.accion = 'LST';
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.servicioCiudad.obtener(id);
 
     if (response.success) {
@@ -103,8 +114,6 @@ export class CiudadComponent implements OnInit {
 
   async registrar() {
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.servicioCiudad.registrar(this.ciudad);
 
     this.cargando = false;
@@ -119,8 +128,6 @@ export class CiudadComponent implements OnInit {
 
   async actualizar() {
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.servicioCiudad.actualizar(this.ciudad, this.ciudad.identificador);
 
     this.cargando = false;
@@ -136,5 +143,20 @@ export class CiudadComponent implements OnInit {
   obtenerCoordenadas(coords) {
     this.ciudad.marcador = coords.marcador;
     this.ciudad.poligono = coords.poligono;
+  }
+
+  async filtrarTabla(event?) {
+
+    if (event) {
+      let key = event.target.name;
+      let value = event.target.value;
+      let parametros = { key, value };
+      this.parametrosTabla.push(parametros);
+
+      await this.paginacion(null, parametros);
+    } else {
+      await this.inicializarFiltros();
+      await this.paginacion(null, null);
+    }
   }
 }

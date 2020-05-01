@@ -15,7 +15,9 @@ export class MarcaComponent implements OnInit {
   public accion: string = '';
   public marca: Marca;
   public listaMarcas: Marca;
-  public errores = [];
+  public parametros: any = {};
+  public filtrosTabla: any = {};
+  public parametrosTabla: any = []
   public paginaActual = 1;
   public porPagina;
   public total;
@@ -25,10 +27,17 @@ export class MarcaComponent implements OnInit {
     private servicioAlerta: ServicioAlertas
   ) {
     this.cargando = false;
+    this.inicializarFiltros();
   }
 
   ngOnInit() {
     this.paginacion(this.paginaActual);
+  }
+
+  async inicializarFiltros() {
+    this.filtrosTabla = {
+      nombre: ''
+    }
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -38,24 +47,27 @@ export class MarcaComponent implements OnInit {
     if (flag && accion === 'INS') {
       this.marca = new Marca(null, null);
     }
-    if (limpiarError) {
-      this.errores = [];
-    }
   }
 
-  async paginacion(pagina?) {
+  async paginacion(pagina?, parametrosFiltro?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaMarcas = null;
     this.accion = 'LST';
     this.cargando = true;
-    this.errores = [];
 
-    const parametros = {
+    this.parametros = null;
+    this.parametros = {
       paginar: true,
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioMarca.obtener(null, parametros);
+    if (parametrosFiltro) {
+      this.parametrosTabla.forEach(element => {
+        this.parametros[element.key] = element.value;
+      });
+    }
+
+    const response: any = await this.servicioMarca.obtener(null, this.parametros);
 
     if (response.success) {
       this.listaMarcas = response.data;
@@ -71,8 +83,6 @@ export class MarcaComponent implements OnInit {
   async obtenerMarca(id) {
     this.accion = 'LST';
     this.cargando = true;
-
-    this.errores = [];
     const response = <any>await this.servicioMarca.obtener(id);
 
     if (response.success) {
@@ -87,8 +97,6 @@ export class MarcaComponent implements OnInit {
 
   async registrar() {
     this.cargando = true;
-
-    this.errores = [];
     const response = <any>await this.servicioMarca.registrar(this.marca);
 
     this.cargando = false;
@@ -102,11 +110,8 @@ export class MarcaComponent implements OnInit {
   }
 
   async actualizar() {
-    this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.servicioMarca.actualizar(this.marca, this.marca.identificador);
-    console.log(response);
+
     this.cargando = false;
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
@@ -114,6 +119,21 @@ export class MarcaComponent implements OnInit {
       this.mostrarFormulario(false, 'LST');
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
+
+  async filtrarTabla(event?) {
+
+    if (event) {
+      let key = event.target.name;
+      let value = event.target.value;
+      let parametros = { key, value };
+      this.parametrosTabla.push(parametros);
+
+      await this.paginacion(null, parametros);
+    } else {
+      await this.inicializarFiltros();
+      await this.paginacion(null, null);
     }
   }
 

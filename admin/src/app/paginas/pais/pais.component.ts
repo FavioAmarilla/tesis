@@ -16,7 +16,9 @@ export class PaisComponent implements OnInit {
   public accion: string = 'LST';
   public pais: Pais;
   public listaPaises: Pais;
-  public errors = [];
+  public parametros: any = {};
+  public filtrosTabla: any = {};
+  public parametrosTabla: any = []
   public paginaActual = 1;
   public porPagina;
   public total;
@@ -24,10 +26,18 @@ export class PaisComponent implements OnInit {
   constructor(
     private servicioPais: ServicioPais,
     private servicioAlerta: ServicioAlertas
-  ) { }
+  ) {
+    this.inicializarFiltros();
+  }
 
   ngOnInit() {
     this.paginacion(this.paginaActual);
+  }
+
+  async inicializarFiltros() {
+    this.filtrosTabla = {
+      nombre: ''
+    }
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -37,24 +47,27 @@ export class PaisComponent implements OnInit {
     if (flag && accion == 'INS') {
       this.pais = new Pais(null, null);
     }
-    if (limpiarError) {
-      this.errors = [];
-    }
   }
 
-  async paginacion(pagina?) {
+  async paginacion(pagina?, parametrosFiltro?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaPaises = null;
     this.accion = 'LST';
     this.cargando = true;
-    this.errors = [];
 
-    const parametros = {
+    this.parametros = null;
+    this.parametros = {
       paginar: true,
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioPais.obtener(null, parametros);
+    if (parametrosFiltro) {
+      this.parametrosTabla.forEach(element => {
+        this.parametros[element.key] = element.value;
+      });
+    }
+
+    const response: any = await this.servicioPais.obtener(null, this.parametros);
     if (response.success) {
       this.listaPaises = response.data;
       this.porPagina = response.per_page;
@@ -69,8 +82,6 @@ export class PaisComponent implements OnInit {
   async obtenerPais(id) {
     this.accion = 'LST';
     this.cargando = true;
-
-    this.errors = [];
     const response: any = await this.servicioPais.obtener(id);
 
     if (response.success) {
@@ -85,8 +96,6 @@ export class PaisComponent implements OnInit {
 
   async registrar() {
     this.cargando = true;
-
-    this.errors = [];
     const response: any = await this.servicioPais.registrar(this.pais);
 
     this.cargando = false;
@@ -101,8 +110,6 @@ export class PaisComponent implements OnInit {
 
   async actualizar() {
     this.cargando = true;
-
-    this.errors = [];
     const response: any = await this.servicioPais.actualizar(this.pais, this.pais.identificador);
 
     this.cargando = false;
@@ -112,6 +119,21 @@ export class PaisComponent implements OnInit {
       this.mostrarFormulario(false, 'LST');
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
+
+  async filtrarTabla(event?) {
+
+    if (event) {
+      let key = event.target.name;
+      let value = event.target.value;
+      let parametros = { key, value };
+      this.parametrosTabla.push(parametros);
+
+      await this.paginacion(null, parametros);
+    } else {
+      await this.inicializarFiltros();
+      await this.paginacion(null, null);
     }
   }
 

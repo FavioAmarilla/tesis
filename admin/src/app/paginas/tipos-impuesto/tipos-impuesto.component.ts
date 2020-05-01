@@ -15,7 +15,9 @@ export class TiposImpuestoComponent implements OnInit {
   public tipoImpuesto: TipoImpuesto;
   public listaImpuesto: TipoImpuesto;
   public cargando: boolean = false;
-  public errores = [];
+  public parametros: any = {};
+  public filtrosTabla: any = {};
+  public parametrosTabla: any = []
   public paginaActual = 1;
   public porPagina;
   public total;
@@ -23,10 +25,19 @@ export class TiposImpuestoComponent implements OnInit {
   constructor(
     private impuestoService: ServicioTipoImpuesto,
     private servicioAlerta: ServicioAlertas
-  ) { }
+  ) {
+    this.inicializarFiltros();
+  }
 
   ngOnInit() {
     this.paginacion(this.paginaActual);
+  }
+
+  async inicializarFiltros() {
+    this.filtrosTabla = {
+      descripcion: '',
+      valor: '',
+    }
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -36,24 +47,27 @@ export class TiposImpuestoComponent implements OnInit {
     if (flag && accion == 'INS') {
       this.tipoImpuesto = new TipoImpuesto(null, null, null);
     }
-    if (limpiarError) {
-      this.errores = [];
-    }
   }
 
-  async paginacion(pagina?) {
+  async paginacion(pagina?, parametrosFiltro?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaImpuesto = null;
     this.accion = 'LST';
     this.cargando = true;
-    this.errores = [];
 
-    const parametros = {
+    this.parametros = null;
+    this.parametros = {
       paginar: true,
       page: this.paginaActual
     };
 
-    const response: any = await this.impuestoService.obtener(null, parametros);
+    if (parametrosFiltro) {
+      this.parametrosTabla.forEach(element => {
+        this.parametros[element.key] = element.value;
+      });
+    }
+
+    const response: any = await this.impuestoService.obtener(null, this.parametros);
 
     if (response.success) {
       this.listaImpuesto = response.data;
@@ -69,8 +83,6 @@ export class TiposImpuestoComponent implements OnInit {
   async obtenerImpuesto(id) {
     this.accion = 'LST';
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.impuestoService.obtener(id);
 
     if (response.success) {
@@ -84,8 +96,6 @@ export class TiposImpuestoComponent implements OnInit {
 
   async registrar() {
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.impuestoService.registrar(this.tipoImpuesto);
 
     this.cargando = false;
@@ -100,8 +110,6 @@ export class TiposImpuestoComponent implements OnInit {
 
   async actualizar() {
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.impuestoService.actualizar(this.tipoImpuesto, this.tipoImpuesto.identificador);
 
     this.cargando = false;
@@ -111,6 +119,21 @@ export class TiposImpuestoComponent implements OnInit {
       this.mostrarFormulario(false, 'LST');
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
+
+  async filtrarTabla(event?) {
+
+    if (event) {
+      let key = event.target.name;
+      let value = event.target.value;
+      let parametros = { key, value };
+      this.parametrosTabla.push(parametros);
+
+      await this.paginacion(null, parametros);
+    } else {
+      await this.inicializarFiltros();
+      await this.paginacion(null, null);
     }
   }
 

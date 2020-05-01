@@ -20,7 +20,9 @@ export class CarruselComponent implements OnInit {
   public slide: Carrusel;
   public listaSlide: Carrusel;
   public cargando: boolean = false;
-  public errores = [];
+  public parametros: any = {};
+  public filtrosTabla: any = {};
+  public parametrosTabla: any = []
   public paginaActual = 1;
   public porPagina;
   public total;
@@ -45,10 +47,18 @@ export class CarruselComponent implements OnInit {
     private servicioAlerta: ServicioAlertas
   ) {
     this.url = environment.api;
+    this.inicializarFiltros()
   }
 
   ngOnInit() {
     this.paginacion(this.paginaActual);
+  }
+
+  async inicializarFiltros() {
+    this.filtrosTabla = {
+      titulo: null,
+      descripcion: ''
+    }
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -58,24 +68,29 @@ export class CarruselComponent implements OnInit {
     if (flag && accion == 'INS') {
       this.slide = new Carrusel(null, null, null, null);
     }
-    if (limpiarError) {
-      this.errores = [];
-    }
   }
 
-  async paginacion(pagina?) {
+  async paginacion(pagina?, parametrosFiltro?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaSlide = null;
     this.accion = 'LST';
     this.cargando = true;
-    this.errores = [];
-
-    const parametros = {
+    
+    this.parametros = null;
+    this.parametros = {
       paginar: true,
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioCarrusel.obtener(null, parametros);
+    if (parametrosFiltro) {
+      this.parametrosTabla.forEach(element => {
+        this.parametros[element.key] = element.value;
+      });
+    }
+
+    console.log(this.parametros);
+
+    const response: any = await this.servicioCarrusel.obtener(null, this.parametros);
 
     if (response.success) {
       this.listaSlide = response.data;
@@ -91,8 +106,6 @@ export class CarruselComponent implements OnInit {
   async obtenerCarrusel(id) {
     this.accion = 'LST';
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.servicioCarrusel.obtener(id);
 
     if (response.success) {
@@ -106,8 +119,6 @@ export class CarruselComponent implements OnInit {
 
   async registrar() {
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.servicioCarrusel.registrar(this.slide);
 
     this.cargando = false;
@@ -122,8 +133,6 @@ export class CarruselComponent implements OnInit {
 
   async actualizar() {
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.servicioCarrusel.actualizar(this.slide, this.slide.identificador);
 
     this.cargando = false;
@@ -139,8 +148,6 @@ export class CarruselComponent implements OnInit {
   async eliminar(id) {
     this.accion = 'LST';
     this.cargando = true;
-
-    this.errores = [];
     const response: any = await this.servicioCarrusel.eliminar(id);
 
     this.cargando = false;
@@ -156,6 +163,21 @@ export class CarruselComponent implements OnInit {
   subirImagen(event) {
     const data = JSON.parse(event.response);
     this.slide.imagen = data.data;
+  }
+
+  async filtrarTabla(event?) {
+
+    if (event) {
+      let key = event.target.name;
+      let value = event.target.value;
+      let parametros = { key, value };
+      this.parametrosTabla.push(parametros);
+
+      await this.paginacion(null, parametros);
+    } else {
+      await this.inicializarFiltros();
+      await this.paginacion(null, null);
+    }
   }
 
 }

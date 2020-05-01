@@ -23,9 +23,6 @@
                                 <table class="table">
                                     <thead class="text-primary">
                                         <th>
-                                            Imagen
-                                        </th>
-                                        <th>
                                             Nombre
                                         </th>
                                         <th>
@@ -36,14 +33,26 @@
                                         </th>
                                     </thead>
                                     <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="text" name="nombre_completo" class="form-control"
+                                                    placeholder="Nombre completo"
+                                                    [(ngModel)]="filtrosTabla.nombre_completo"
+                                                    (keyup.enter)="filtrarTabla($event)">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="email" class="form-control" placeholder="Email"
+                                                    [(ngModel)]="filtrosTabla.email"
+                                                    (keyup.enter)="filtrarTabla($event)">
+                                            </td>
+                                            <td class="text-right">
+                                                <button class="btn btn-round btn-sm btn-danger"
+                                                    (click)="filtrarTabla(null)"><i class="fas fa-times"></i></button>
+                                                &nbsp;
+                                            </td>
+                                        </tr>
                                         <tr
                                             *ngFor="let row of listaUsuario | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
-                                            <td>
-                                                <img *ngIf="row.imagen" src="{{url + '/user/getImage/' + row.imagen}}"
-                                                    width="50" height="50">
-                                                <img *ngIf="!row.imagen" src="https://via.placeholder.com/150"
-                                                    width="50" height="50">
-                                            </td>
                                             <td>
                                                 {{ row.nombre_completo }}
                                             </td>

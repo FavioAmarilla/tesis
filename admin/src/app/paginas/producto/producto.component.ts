@@ -32,6 +32,9 @@ export class ProductoComponent implements OnInit {
   public listaImpuestos: TipoImpuesto;
   public listaLineas: LineaProducto;
   public listaMarcas: Marca;
+  public parametros: any = {};
+  public filtrosTabla: any = {};
+  public parametrosTabla: any = []
   public cargando: boolean = false;
   public paginaActual = 1;
   public porPagina;
@@ -60,6 +63,7 @@ export class ProductoComponent implements OnInit {
     private servicioAlerta: ServicioAlertas
   ) {
     this.url = environment.api;
+    this.inicializarFiltros();
   }
 
   ngOnInit() {
@@ -68,6 +72,12 @@ export class ProductoComponent implements OnInit {
     this.obtenerMarcas();
     this.obtenerSucursales();
     this.paginacion(this.paginaActual);
+  }
+
+  async inicializarFiltros() {
+    this.filtrosTabla = {
+      nombre: ''
+    }
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -123,18 +133,26 @@ export class ProductoComponent implements OnInit {
     }
   }
 
-  async paginacion(pagina?) {
+  async paginacion(pagina?, parametrosFiltro?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaProductos = null;
     this.accion = 'LST';
     this.cargando = true;
 
-    const parametros = {
+    this.parametros = null;
+    this.parametros = {
       paginar: true,
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioProducto.obtener(null, parametros);
+    if (parametrosFiltro) {
+      this.parametrosTabla.forEach(element => {
+        this.parametros[element.key] = element.value;
+      });
+    }
+
+
+    const response: any = await this.servicioProducto.obtener(null, this.parametros);
 
     if (response.success) {
       this.listaProductos = response.data;
@@ -201,6 +219,21 @@ export class ProductoComponent implements OnInit {
     const random = uuid(null, buffer, 0).join('').slice(0, 13);
     this.producto.codigo_barras = random;
     JsBarcode('#barcode', random);
+  }
+
+  async filtrarTabla(event?) {
+
+    if (event) {
+      let key = event.target.name;
+      let value = event.target.value;
+      let parametros = { key, value };
+      this.parametrosTabla.push(parametros);
+
+      await this.paginacion(null, parametros);
+    } else {
+      await this.inicializarFiltros();
+      await this.paginacion(null, null);
+    }
   }
 
 }

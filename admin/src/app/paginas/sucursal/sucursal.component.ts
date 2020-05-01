@@ -28,6 +28,9 @@ export class SucursalComponent implements OnInit {
   public listaSucursales: Sucursal;
   public listaEmpresas: Empresa;
 
+  public parametros: any = {};
+  public filtrosTabla: any = {};
+  public parametrosTabla: any = []
   public paginaActual = 1;
   public porPagina;
   public total;
@@ -40,13 +43,28 @@ export class SucursalComponent implements OnInit {
     private servicioAlerta: ServicioAlertas
   ) {
     this.cargando = false;
+    this.inicializarFiltros();
   }
 
   ngOnInit() {
     this.paginacion(this.paginaActual);
     this.obtenerEmpresas();
     this.obtenerPaises();
+    this.obtenerCiudades();
   }
+
+  async inicializarFiltros() {
+    this.filtrosTabla = {
+      id_empresa: null,
+      codigo: '',
+      nombre: '',
+      telefono: '',
+      id_ciudad: null,
+      ecommerce: null,
+      central: null,
+    }
+  }
+
 
   async mostrarFormulario(flag, accion) {
     this.accion = accion;
@@ -81,10 +99,13 @@ export class SucursalComponent implements OnInit {
     }
   }
 
-  async obtenerCiudades(id_pais) {
-    let parametros = {
-      id_pais
-    };
+  async obtenerCiudades(id_pais?) {
+    let parametros: any = {};
+    if (id_pais) {
+      parametros = {
+        id_pais
+      };
+    }
 
     const response = <any>await this.servicioCiudad.obtener(null, parametros);
 
@@ -97,18 +118,25 @@ export class SucursalComponent implements OnInit {
     }
   }
 
-  async paginacion(pagina?) {
+  async paginacion(pagina?, parametrosFiltro?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaSucursales = null;
     this.accion = 'LST';
     this.cargando = true;
 
-    const parametros = {
+    this.parametros = null;
+    this.parametros = {
       paginar: true,
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioSucursal.obtener(null, parametros);
+    if (parametrosFiltro) {
+      this.parametrosTabla.forEach(element => {
+        this.parametros[element.key] = element.value;
+      });
+    }
+
+    const response: any = await this.servicioSucursal.obtener(null, this.parametros);
 
     if (response.success) {
       this.listaSucursales = response.data;
@@ -165,6 +193,21 @@ export class SucursalComponent implements OnInit {
       this.mostrarFormulario(false, 'LST');
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
+
+  async filtrarTabla(event?) {
+
+    if (event) {
+      let key = event.target.name;
+      let value = event.target.value;
+      let parametros = { key, value };
+      this.parametrosTabla.push(parametros);
+
+      await this.paginacion(null, parametros);
+    } else {
+      await this.inicializarFiltros();
+      await this.paginacion(null, null);
     }
   }
 

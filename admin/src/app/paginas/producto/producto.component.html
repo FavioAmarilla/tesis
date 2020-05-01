@@ -29,6 +29,32 @@
                                         <th class="text-right">Opciones</th>
                                     </thead>
                                     <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="text" name="descripcion" class="form-control"
+                                                    placeholder="Descripcion" [(ngModel)]="filtrosTabla.descripcion"
+                                                    (keyup.enter)="filtrarTabla($event)">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="codigo_barras" class="form-control"
+                                                    placeholder="Codigo Barras" [(ngModel)]="filtrosTabla.codigo_barras"
+                                                    (keyup.enter)="filtrarTabla($event)">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="costo_unitario" class="form-control"
+                                                    placeholder="Costo Unitario" [(ngModel)]="filtrosTabla.costo_unitario"
+                                                    (keyup.enter)="filtrarTabla($event)">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="precio_venta" class="form-control"
+                                                    placeholder="Precio Venta" [(ngModel)]="filtrosTabla.precio_venta"
+                                                    (keyup.enter)="filtrarTabla($event)">
+                                            </td>
+                                            <td class="text-right">
+                                              <button class="btn btn-round btn-sm btn-danger" (click)="filtrarTabla(null)"><i
+                                                  class="fas fa-times"></i></button> &nbsp;
+                                            </td>
+                                        </tr>
                                         <tr
                                             *ngFor="let row of listaProductos | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
                                             <td>{{ row.descripcion }}</td>

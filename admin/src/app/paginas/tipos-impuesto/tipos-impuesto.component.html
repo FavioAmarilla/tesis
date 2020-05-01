@@ -33,6 +33,20 @@
                     </th>
                   </thead>
                   <tbody>
+                    <tr>
+                      <td>
+                        <input type="text" name="descripcion" class="form-control" placeholder="Descripcion"
+                          [(ngModel)]="filtrosTabla.descripcion" (keyup.enter)="filtrarTabla($event)">
+                      </td>
+                      <td>
+                        <input type="text" name="valor" class="form-control" placeholder="Valor"
+                          [(ngModel)]="filtrosTabla.valor" (keyup.enter)="filtrarTabla($event)">
+                      </td>
+                      <td class="text-right">
+                        <button class="btn btn-round btn-sm btn-danger" (click)="filtrarTabla(null)"><i
+                            class="fas fa-times"></i></button> &nbsp;
+                      </td>
+                    </tr>
                     <tr
                       *ngFor="let row of listaImpuesto | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
                       <td>

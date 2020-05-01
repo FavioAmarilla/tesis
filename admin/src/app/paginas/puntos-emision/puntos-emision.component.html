@@ -39,6 +39,38 @@
                     </th>
                   </thead>
                   <tbody>
+                    <tr>
+                      <td>
+                        <select name="id_sucursal" class="form-control" [(ngModel)]="filtrosTabla.id_sucursal"
+                          (change)="filtrarTabla($event)">
+                          <option value="null">-- SELECCIONAR --</option>
+                          <option *ngFor="let sucursal of listaSucursal" value="{{sucursal.identificador}}">
+                            {{sucursal.nombre}}
+                          </option>
+                        </select>
+                      </td>
+                      <td>
+                        <input type="text" name="nombre" class="form-control" placeholder="Nombre"
+                          [(ngModel)]="filtrosTabla.nombre" (keyup.enter)="filtrarTabla($event)">
+                      </td>
+                      <td>
+                        <input type="text" name="codigo" class="form-control" placeholder="Codigo"
+                          [(ngModel)]="filtrosTabla.codigo" (keyup.enter)="filtrarTabla($event)">
+                      </td>
+                      <td>
+                        <select name="vr_tipo" class="form-control" [(ngModel)]="filtrosTabla.vr_tipo"
+                          (change)="filtrarTabla($event)">
+                          <option value="null">-- SELECCIONAR --</option>
+                          <option value="ON">ONLINE</option>
+                          <option value="PI">PRE IMPRESO</option>
+                          <option value="AI">AUTO IMPRESO</option>
+                        </select>
+                      </td>
+                      <td class="text-right">
+                        <button class="btn btn-round btn-sm btn-danger" (click)="filtrarTabla(null)"><i
+                            class="fas fa-times"></i></button> &nbsp;
+                      </td>
+                    </tr>
                     <tr
                       *ngFor="let puntoEmision of listaPuntosEmision | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
                       <td>
@@ -50,10 +82,10 @@
                       <td>
                         {{ puntoEmision.codigo }}
                       </td>
-                      <td class="text-right">
-                        <p *ngIf="puntoEmision.vr_tipo == 'ON'">ONLINE</p>
-                        <p *ngIf="puntoEmision.vr_tipo == 'PI'">PRE IMPRESO</p>
-                        <p *ngIf="puntoEmision.vr_tipo == 'AI'">AUTO IMPRESO</p>
+                      <td>
+                        <div *ngIf="puntoEmision.vr_tipo == 'ON'">ONLINE</div>
+                        <div *ngIf="puntoEmision.vr_tipo == 'PI'">PRE IMPRESO</div>
+                        <div *ngIf="puntoEmision.vr_tipo == 'AI'">AUTO IMPRESO</div>
                       </td>
                       <td class="text-right">
                         <button class="btn btn-round btn-sm btn-warning"

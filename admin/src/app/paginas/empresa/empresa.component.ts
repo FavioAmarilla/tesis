@@ -20,7 +20,9 @@ export class EmpresaComponent implements OnInit {
   public accion: string = '';
   public empresa: Empresa;
   public listaEmpresas: Empresa;
-  public errores = [];
+  public parametros: any = {};
+  public filtrosTabla: any = {};
+  public parametrosTabla: any = []
   public paginaActual = 1;
   public porPagina;
   public total;
@@ -44,10 +46,18 @@ export class EmpresaComponent implements OnInit {
     private servicioAlerta: ServicioAlertas
   ) {
     this.url = environment.api;
+    this.inicializarFiltros();
   }
 
   ngOnInit() {
     this.paginacion(this.paginaActual);
+  }
+
+  async inicializarFiltros() {
+    this.filtrosTabla = {
+      id_pais: null,
+      nombre: ''
+    }
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -57,24 +67,27 @@ export class EmpresaComponent implements OnInit {
     if (flag && accion == 'INS') {
       this.empresa = new Empresa(null, null, null, null, null);
     }
-    if (limpiarError) {
-      this.errores = [];
-    }
   }
 
-  async paginacion(pagina?) {
+  async paginacion(pagina?, parametrosFiltro?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaEmpresas = null;
-    this.accion = 'LST';
+    this.accion = "LST";
     this.cargando = true;
-    this.errores = [];
 
-    const parametros = {
+    this.parametros = null;
+    this.parametros = {
       paginar: true,
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioEmpresa.obtener(null, parametros);
+    if (parametrosFiltro) {
+      this.parametrosTabla.forEach(element => {
+        this.parametros[element.key] = element.value;
+      });
+    }
+
+    const response: any = await this.servicioEmpresa.obtener(null, this.parametros);
 
     if (response.success) {
       this.listaEmpresas = response.data;
@@ -90,7 +103,6 @@ export class EmpresaComponent implements OnInit {
   async obtenerEmpresa(id) {
     this.accion = "LST";
     this.cargando = true;
-    this.errores = [];
     const response = <any>await this.servicioEmpresa.obtener(id);
 
     if (response.success) {
@@ -105,8 +117,6 @@ export class EmpresaComponent implements OnInit {
 
   async registrar() {
     this.cargando = true;
-
-    this.errores = [];
     const response = <any>await this.servicioEmpresa.registrar(this.empresa);
 
     this.cargando = false;
@@ -121,8 +131,6 @@ export class EmpresaComponent implements OnInit {
 
   async actualizar() {
     this.cargando = true;
-
-    this.errores = [];
     const response = <any>await this.servicioEmpresa.actualizar(this.empresa, this.empresa.identificador);
 
     this.cargando = false;
@@ -139,6 +147,21 @@ export class EmpresaComponent implements OnInit {
     console.log(event);
     const data = JSON.parse(event.response);
     this.empresa.imagen = data;
+  }
+
+  async filtrarTabla(event?) {
+
+    if (event) {
+      let key = event.target.name;
+      let value = event.target.value;
+      let parametros = { key, value };
+      this.parametrosTabla.push(parametros);
+
+      await this.paginacion(null, parametros);
+    } else {
+      await this.inicializarFiltros();
+      await this.paginacion(null, null);
+    }
   }
 
 }

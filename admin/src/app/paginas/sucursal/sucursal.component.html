@@ -36,13 +36,7 @@
                                             Telefono
                                         </th>
                                         <th>
-                                            Pais
-                                        </th>
-                                        <th>
                                             Ciudad
-                                        </th>
-                                        <th>
-                                            Direccion
                                         </th>
                                         <th>
                                             Ecommerce
@@ -55,6 +49,66 @@
                                         </th>
                                     </thead>
                                     <tbody>
+                                        <tr>
+                                            <td>
+                                                <select name="id_empresa" class="form-control"
+                                                    [(ngModel)]="filtrosTabla.id_empresa"
+                                                    (change)="filtrarTabla($event)">
+                                                    <option value="null">-- SELECCIONAR --</option>
+                                                    <option *ngFor="let empresa of listaEmpresas"
+                                                        value="{{empresa.identificador}}">
+                                                        {{empresa.nombre}}
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="codigo" class="form-control"
+                                                    placeholder="Codigo" [(ngModel)]="filtrosTabla.codigo"
+                                                    (keyup.enter)="filtrarTabla($event)">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="nombre" class="form-control"
+                                                    placeholder="Nombre" [(ngModel)]="filtrosTabla.nombre"
+                                                    (keyup.enter)="filtrarTabla($event)">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="telefono" class="form-control"
+                                                    placeholder="Telefono" [(ngModel)]="filtrosTabla.telefono"
+                                                    (keyup.enter)="filtrarTabla($event)">
+                                            </td>
+                                            <td>
+                                                <select name="id_ciudad" class="form-control"
+                                                    [(ngModel)]="filtrosTabla.id_ciudad"
+                                                    (change)="filtrarTabla($event)">
+                                                    <option value="null">-- SELECCIONAR --</option>
+                                                    <option *ngFor="let ciudad of listaCiudades"
+                                                        value="{{ciudad.identificador}}">
+                                                        {{ciudad.nombre}}</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select name="ecommerce" class="form-control"
+                                                    [(ngModel)]="filtrosTabla.ecommerce"
+                                                    (change)="filtrarTabla($event)">
+                                                    <option value="null">-- SELECCIONAR --</option>
+                                                    <option value="S">SI</option>
+                                                    <option value="N">NO</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select name="central" class="form-control"
+                                                    [(ngModel)]="filtrosTabla.central" (change)="filtrarTabla($event)">
+                                                    <option value="null">-- SELECCIONAR --</option>
+                                                    <option value="S">SI</option>
+                                                    <option value="N">NO</option>
+                                                </select>
+                                            </td>
+                                            <td class="text-right">
+                                                <button class="btn btn-round btn-sm btn-danger"
+                                                    (click)="filtrarTabla(null)"><i class="fas fa-times"></i></button>
+                                                &nbsp;
+                                            </td>
+                                        </tr>
                                         <tr
                                             *ngFor="let row of listaSucursales | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
                                             <td>
@@ -70,19 +124,15 @@
                                                 {{ row.telefono }}
                                             </td>
                                             <td>
-                                                {{ row.pais.nombre }}
-                                            </td>
-                                            <td>
                                                 {{ row.ciudad.nombre }}
                                             </td>
                                             <td>
-                                                {{ row.direccion }}
+                                                <div *ngIf="row.ecommerce == 'S'">SI</div>
+                                                <div *ngIf="row.ecommerce == 'N'">NO</div>
                                             </td>
                                             <td>
-                                                {{ row.ecommerce }}
-                                            </td>
-                                            <td>
-                                                {{ row.central }}
+                                                <div *ngIf="row.central == 'S'">SI</div>
+                                                <div *ngIf="row.central == 'N'">NO</div>
                                             </td>
                                             <td class="text-right">
                                                 <button class="btn btn-round btn-sm btn-warning"

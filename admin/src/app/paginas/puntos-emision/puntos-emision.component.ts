@@ -19,7 +19,9 @@ export class PuntosEmisionComponent implements OnInit {
   public listaSucursal: Sucursal;
   public puntoEmision: PuntoEmision;
   public cargando: boolean = false;
-  public errors = [];
+  public parametros: any = {};
+  public filtrosTabla: any = {};
+  public parametrosTabla: any = []
   public paginaActual = 1;
   public porPagina;
   public total;
@@ -28,11 +30,21 @@ export class PuntosEmisionComponent implements OnInit {
     private servicioPuntoEmision: ServicioPuntoEmision,
     private servicioSucursal: ServicioSucursal,
     private servicioAlerta: ServicioAlertas
-  ) { }
+  ) {
+    this.inicializarFiltros();
+  }
 
   ngOnInit() {
     this.paginacion(this.paginaActual);
     this.obtenerSucursales();
+  }
+
+  async inicializarFiltros() {
+    this.filtrosTabla = {
+      id_sucursal: null,
+      nombre: '',
+      vr_tipo: null
+    }
   }
 
   mostrarFormulario(flag, accion, limpiarError?) {
@@ -42,14 +54,11 @@ export class PuntosEmisionComponent implements OnInit {
     if (flag && accion == 'INS') {
       this.puntoEmision = new PuntoEmision(null, null, null, null, null);
     }
-    if (limpiarError) {
-      this.errors = [];
-    }
   }
 
   async obtenerSucursales() {
     const response: any = await this.servicioSucursal.obtener();
-    
+
     if (response.success) {
       this.listaSucursal = response.data;
     } else {
@@ -58,19 +67,25 @@ export class PuntosEmisionComponent implements OnInit {
     }
   }
 
-  async paginacion(pagina?) {
+  async paginacion(pagina?, parametrosFiltro?) {
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
     this.listaPuntosEmision = null;
     this.accion = 'LST';
     this.cargando = true;
-    this.errors = [];
 
-    const parametros = {
+    this.parametros = null;
+    this.parametros = {
       paginar: true,
       page: this.paginaActual
     };
 
-    const response: any = await this.servicioPuntoEmision.obtener(null, parametros);
+    if (parametrosFiltro) {
+      this.parametrosTabla.forEach(element => {
+        this.parametros[element.key] = element.value;
+      });
+    }
+
+    const response: any = await this.servicioPuntoEmision.obtener(null, this.parametros);
 
     if (response.success) {
       this.listaPuntosEmision = response.data;
@@ -86,8 +101,6 @@ export class PuntosEmisionComponent implements OnInit {
   async obtenerPuntoEmision(id) {
     this.accion = 'LST';
     this.cargando = true;
-
-    this.errors = [];
     const response: any = await this.servicioPuntoEmision.obtener(id);
 
     if (response.success) {
@@ -102,10 +115,8 @@ export class PuntosEmisionComponent implements OnInit {
 
   async registrar() {
     this.cargando = true;
-
-    this.errors = [];
     const response: any = await this.servicioPuntoEmision.registrar(this.puntoEmision);
-    console.log(response);
+    
     this.cargando = false;
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
@@ -118,8 +129,6 @@ export class PuntosEmisionComponent implements OnInit {
 
   async actualizar() {
     this.cargando = true;
-
-    this.errors = [];
     const response: any = await this.servicioPuntoEmision.actualizar(this.puntoEmision, this.puntoEmision.identificador);
 
     this.cargando = false;
@@ -129,6 +138,21 @@ export class PuntosEmisionComponent implements OnInit {
       this.mostrarFormulario(false, 'LST');
     } else {
       this.servicioAlerta.dialogoExito(response.message, '');
+    }
+  }
+
+  async filtrarTabla(event?) {
+
+    if (event) {
+      let key = event.target.name;
+      let value = event.target.value;
+      let parametros = { key, value };
+      this.parametrosTabla.push(parametros);
+
+      await this.paginacion(null, parametros);
+    } else {
+      await this.inicializarFiltros();
+      await this.paginacion(null, null);
     }
   }
 

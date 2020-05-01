@@ -28,14 +28,29 @@
                                         <th>
                                             Descripción
                                         </th>
-                                        <th>
-                                            Imagen
-                                        </th>
                                         <th class="text-right">
                                             Opciones
                                         </th>
                                     </thead>
                                     <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="text" name="titulo" class="form-control"
+                                                    placeholder="Titulo" name="titulo" [(ngModel)]="filtrosTabla.titulo"
+                                                    (keyup.enter)="filtrarTabla($event)">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="descripcion" class="form-control"
+                                                    placeholder="Titulo" name="descripcion"
+                                                    [(ngModel)]="filtrosTabla.descripcion"
+                                                    (keyup.enter)="filtrarTabla($event)">
+                                            </td>
+                                            <td class="text-right">
+                                                <button class="btn btn-round btn-sm btn-danger"
+                                                    (click)="filtrarTabla(null)"><i class="fas fa-times"></i></button>
+                                                &nbsp;
+                                            </td>
+                                        </tr>
                                         <tr
                                             *ngFor="let row of listaSlide | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
                                             <td>
@@ -43,12 +58,6 @@
                                             </td>
                                             <td>
                                                 {{ row.descripcion }}
-                                            </td>
-                                            <td>
-                                                <img *ngIf="row.imagen" src="{{url + '/slide/getImage/' + row.imagen}}"
-                                                    width="50" height="50">
-                                                <img *ngIf="!row.imagen" src="https://via.placeholder.com/150"
-                                                    width="100" height="100">
                                             </td>
                                             <td class="text-right">
                                                 <button class="btn btn-round btn-sm btn-warning"

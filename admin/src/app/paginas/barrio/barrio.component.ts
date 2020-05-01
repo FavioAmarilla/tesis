@@ -19,9 +19,9 @@ export class BarrioComponent implements OnInit {
   public barrio: Barrio;
   public listaBarrio: Barrio;
   public listaCiudad: Ciudad;
-  public errors = [];
   public parametros: any = {};
   public filtrosTabla: any = {};
+  public parametrosTabla: any = []
   public paginaActual = 1;
   public porPagina;
   public total;
@@ -54,9 +54,6 @@ export class BarrioComponent implements OnInit {
     if (flag && accion == 'INS') {
       this.barrio = new Barrio(null, null, null);
     }
-    if (limpiarError) {
-      this.errors = [];
-    }
   }
 
   async obtenerCiudades() {
@@ -73,7 +70,6 @@ export class BarrioComponent implements OnInit {
     this.listaBarrio = null;
     this.accion = "LST";
     this.cargando = true;
-    this.errors = [];
 
     this.parametros = null;
     this.parametros = {
@@ -82,10 +78,11 @@ export class BarrioComponent implements OnInit {
     };
 
     if (parametrosFiltro) {
-      this.parametros[parametrosFiltro.key] = parametrosFiltro.value;
+      this.parametrosTabla.forEach(element => {
+        this.parametros[element.key] = element.value;
+      });
     }
 
-    console.log(this.parametros);
 
     const response: any = await this.servicioBarrio.obtener(null, this.parametros);
 
@@ -103,8 +100,6 @@ export class BarrioComponent implements OnInit {
   async obtenerBarrio(id) {
     this.accion = 'LST';
     this.cargando = true;
-
-    this.errors = [];
     const response: any = await this.servicioBarrio.obtener(id);
 
     if (response.success) {
@@ -120,7 +115,6 @@ export class BarrioComponent implements OnInit {
   async registrar() {
     this.cargando = true;
 
-    this.errors = [];
     const response: any = await this.servicioBarrio.registrar(this.barrio);
 
     this.cargando = false;
@@ -135,8 +129,6 @@ export class BarrioComponent implements OnInit {
 
   async actualizar() {
     this.cargando = true;
-
-    this.errors = [];
     const response: any = await this.servicioBarrio.actualizar(this.barrio, this.barrio.identificador);
 
     this.cargando = false;
@@ -149,13 +141,18 @@ export class BarrioComponent implements OnInit {
     }
   }
 
-  async filtrarTabla(key, value) {
-    if (key == null || value == null) {
+  async filtrarTabla(event?) {
+
+    if (event) {
+      let key = event.target.name;
+      let value = event.target.value;
+      let parametros = { key, value };
+      this.parametrosTabla.push(parametros);
+
+      await this.paginacion(null, parametros);
+    } else {
       await this.inicializarFiltros();
       await this.paginacion(null, null);
-    } else {
-      let parametros = { key, value };
-      await this.paginacion(null, parametros);
     }
   }
 
