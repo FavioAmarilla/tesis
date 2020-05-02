@@ -28,6 +28,18 @@
         ]
     },
     {
+        "icono": "information-circle-outline",
+        "titulo": "Acerca de",
+        "url": "/acerca-de",
+        "soloLogueados": false
+    },
+    {
+        "icono": "contacts",
+        "titulo": "Contacto",
+        "url": "/contacto",
+        "soloLogueados": false
+    },
+    {
         "titulo": "Cuenta",
         "children": [
             {
@@ -56,17 +68,5 @@
                 "soloLogueados": true
             }
         ]
-    },
-    {
-        "icono": "information-circle-outline",
-        "titulo": "Acerca de",
-        "url": "/acerca-de",
-        "soloLogueados": false
-    },
-    {
-        "icono": "contacts",
-        "titulo": "Contacto",
-        "url": "/contacto",
-        "soloLogueados": false
     }
 ]
