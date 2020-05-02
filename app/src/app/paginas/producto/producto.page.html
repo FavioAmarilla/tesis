@@ -4,7 +4,7 @@
   <nav aria-label="breadcrumb" *ngIf="producto">
     <ol class="breadcrumb">
       <div class="container d-flex">
-        <li class="breadcrumb-item"><a [routerLink]="['/inicio']">INICIO</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/']">INICIO</a></li>
         <li class="breadcrumb-item"><a [routerLink]="['/producto/linea',  producto.linea_producto.slug]">{{ producto.linea_producto.descripcion }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ producto.descripcion }} </li>
       </div>

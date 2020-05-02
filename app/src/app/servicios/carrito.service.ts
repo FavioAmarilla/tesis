@@ -29,13 +29,8 @@ export class CarritoService {
 
   async obtenerCantidad(key) {
     const data = await this.storage.get(key) || [];
-    if (data.length > 0) {
-      if (key == 'carrito') this.carrito.emit(data.length);
-      if (key == 'favorito') this.favorito.emit(data.length);
-    } else {
-      if (key == 'carrito') this.carrito.emit(0);
-      if (key == 'favorito') this.favorito.emit(0);
-    }
+    if (key == 'carrito') this.carrito.emit(data.length);
+    if (key == 'favorito') this.favorito.emit(data.length);
   }
 
   // ---------

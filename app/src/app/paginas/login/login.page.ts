@@ -39,12 +39,12 @@ export class LoginPage implements OnInit {
 
     this.cargandoBoton = false;
     if (response.success) {
-      this.router.navigate(['/inicio']);
+      this.router.navigate(['/']);
     } else {
       this.cargandoBoton = false;
       this.servicioAlerta.dialogoError('Usuario y/o Contraseña no validos', '');
     }
-    
+
     this.cargandoBoton = false;
   }
 

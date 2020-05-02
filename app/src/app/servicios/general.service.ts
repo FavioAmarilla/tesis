@@ -1,11 +1,18 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeneralService {
 
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
+
+  public obtenerMenuItems() {
+    return this.http.get<any>('/assets/menu.json');
+  }
 
   public unidadMedida(medida, tipo = 'medida') {
     let valor = 1;

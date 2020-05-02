@@ -108,7 +108,7 @@
           </div>
 
           <div class="row" *ngIf="listaProductos != null">
-            <div class="col-md-6 col-lg-3" *ngFor="let producto of listaProductos">
+            <div class="col-sm-6 col-lg-3" *ngFor="let producto of listaProductos">
               <div class="product">
                 <div class="m-2">
                   <a [routerLink]="['/producto', producto.slug]" class="img-prod">

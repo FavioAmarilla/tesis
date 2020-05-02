@@ -28,20 +28,22 @@ export class PedidoListadoPage implements OnInit {
 
   async obtenerPedidos() {
     const usuario: any = await this.servicioUsuario.obtenerUsuario();
-    let parametros = {
-      id_usuario: usuario.sub
-    }
+    if (usuario) {
+      const parametros = {
+        id_usuario: usuario.sub
+      };
 
-    const response: any = await this.servicioPedido.obtenerPedido(null, parametros);
-    if (response.success) {
-      this.listaPedido = response.data;
-    } else {
+      const response: any = await this.servicioPedido.obtenerPedido(null, parametros);
+      if (response.success) {
+        this.listaPedido = response.data;
+      } else {
+        this.cargando = false;
+        this.servicioAlerta.dialogoError(response.message, '');
+        this.router.navigate(['/']);
+      }
+
       this.cargando = false;
-      this.servicioAlerta.dialogoError(response.message, '');
-      this.router.navigate(['/inicio']);
-    }
-
-    this.cargando = false;
+    } else this.router.navigate(['/']);
   }
 
   async obtenerItems(id_pedido) {

@@ -1,0 +1,36 @@
+<ion-menu side="start" menuId="mainMenu" contentId="main">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <a class="navbar-brand" routerLink="/"> <img src="assets/images/logo-super.png" width="150" height="45"></a>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <div *ngFor="let item of menuItems | async">
+
+      <ion-menu-toggle autoHide="false" *ngIf="item.url" [ngClass]="{'hidden': item.soloLogueados && !logueado}">
+        <ion-item [routerLink]="item.url" routerDirection="root" routerLinkActive="active">
+          <ion-icon slot="start" [name]="item.icono" color="primary"></ion-icon>
+          <ion-label>{{ item.titulo }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+
+      <ion-item *ngIf="item.children?.length" (click)="item.open = !item.open" [ngClass]="{'active-parent': item.open}">
+        <ion-icon slot="start" name="arrow-forward" mode="ios" color="primary" *ngIf="!item.open"></ion-icon>
+        <ion-icon slot="start" name="arrow-down" mode="ios" color="primary" *ngIf="item.open"></ion-icon>
+        <ion-label>{{ item.titulo }}</ion-label>
+      </ion-item>
+
+      <ion-list *ngIf="item.open">
+        <ion-menu-toggle autoHide="false">
+          <ion-item *ngFor="let sub of item.children" (click)="(sub.icono == 'exit') ? servicioUsuario.cerrarSession() : false;" class="sub-item" [routerLink]="sub.url" routerDirection="root" routerLinkActive="active" [ngClass]="{'hidden': (sub.soloLogueados && !logueado) || (sub.ocultarLogueados && logueado)}">
+            <ion-icon slot="start" [name]="sub.icono" color="primary"></ion-icon>
+            <ion-label>{{ sub.titulo }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+
+    </div>
+  </ion-content>
+</ion-menu>
+
+<ion-router-outlet id="main" main></ion-router-outlet>

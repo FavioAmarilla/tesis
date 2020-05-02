@@ -118,7 +118,7 @@ hr {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-  height: 650px;
+  height: 90vh;
   position: relative;
   z-index: 1;
 }
@@ -771,4 +771,8 @@ table tbody tr td.image-prod .img {
 
 .form-control:disabled, .form-control[readonly] {
   background-color: var(--white) !important;
+}
+
+.hidden {
+  display: none !important;
 }

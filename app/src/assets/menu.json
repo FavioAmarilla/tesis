@@ -1,0 +1,72 @@
+[
+    {
+        "icono": "home",
+        "titulo": "Inicio",
+        "url": "/",
+        "admin": false,
+        "soloLogueados": false
+    },
+    {
+        "titulo": "Tienda",
+        "children": [
+            {
+                "icono": "cart",
+                "titulo": "Carrito",
+                "url": "/carrito"
+            },
+            {
+                "icono": "star-outline",
+                "titulo": "Favoritos",
+                "url": "/favoritos"
+            },
+            {
+                "icono": "basket",
+                "titulo": "Pedidos",
+                "url": "/pedido-lista",
+                "soloLogueados": true
+            }
+        ]
+    },
+    {
+        "titulo": "Cuenta",
+        "children": [
+            {
+                "icono": "log-in",
+                "titulo": "Iniciar sessión",
+                "url": "/login",
+                "soloLogueados": false,
+                "ocultarLogueados": true
+            },
+            {
+                "icono": "person-add",
+                "titulo": "Registrarse",
+                "url": "/signup",
+                "soloLogueados": false,
+                "ocultarLogueados": true
+            },
+            {
+                "icono": "person",
+                "titulo": "Mi perfil",
+                "url": "/mi-cuenta",
+                "soloLogueados": true
+            },
+            {
+                "icono": "exit",
+                "titulo": "Cerrar Sessión",
+                "soloLogueados": true
+            }
+        ]
+    },
+    {
+        "icono": "information-circle-outline",
+        "titulo": "Acerca de",
+        "url": "/acerca-de",
+        "soloLogueados": false
+    },
+    {
+        "icono": "contacts",
+        "titulo": "Contacto",
+        "url": "/contacto",
+        "soloLogueados": false
+    }
+]

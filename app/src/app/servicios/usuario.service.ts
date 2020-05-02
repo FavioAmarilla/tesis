@@ -125,7 +125,7 @@ export class UsuarioService {
     this.usuario = null;
     this.storage.remove('token');
     this.logoutEmitter.emit(true);
-    this.router.navigate(['/inicio']);
+    this.router.navigate(['/']);
   }
 
   async cambiarPassword(usuario: any) {
