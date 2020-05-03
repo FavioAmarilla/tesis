@@ -21,6 +21,7 @@ class JwtAuth extends BaseController
         $user = User::where([
             'email'     =>  $email,
             'clave_acceso'  =>  $clave_acceso,
+            'activo' => 'S'
         ])->first();
 
         $signIn = is_object($user);
@@ -53,24 +54,27 @@ class JwtAuth extends BaseController
     public function checkToken($jwt){
         $auth = false;
 
-        try {
-            $jwt = str_replace('"', '', $jwt);
-            $decoded = JWT::decode($jwt, $this->key, ['HS256']);
-        } catch (\UnexpectedValueException $e) {
-            $auth = false;
-        } catch (\DomainException $e) {
-            $auth = false;
-        }
+        if ($jwt) {
+            try {
+                $jwt = str_replace('"', '', $jwt);
+                $decoded = JWT::decode($jwt, $this->key, ['HS256']);
+            } catch (\UnexpectedValueException $e) {
+                $auth = false;
+            } catch (\DomainException $e) {
+                $auth = false;
+            }
 
-        if (!empty($decoded) && is_object($decoded) && isset($decoded->sub)) {
-            $auth = true;
-        }else{
-            $auth = false;
-        }
+            if (!empty($decoded) && is_object($decoded) && isset($decoded->sub)) {
+                $auth = true;
+            }else{
+                $auth = false;
+            }
 
-        $auth = $decoded;
+            $auth = $decoded;
+            return $auth;
+        }
         
-        return $auth;
+        return null;
     }
 
 }

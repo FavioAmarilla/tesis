@@ -36,7 +36,6 @@ export class LoginPage implements OnInit {
   async iniciarSession() {
     this.cargandoBoton = true;
     const response: any = await this.UsuarioService.iniciarSession(this.usuario);
-
     this.cargandoBoton = false;
     if (response.success) {
       this.router.navigate(['/']);

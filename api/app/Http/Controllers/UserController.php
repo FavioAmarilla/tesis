@@ -43,6 +43,16 @@ class UserController extends BaseController {
             $query->where('celular', '=', $celular);
         }
 
+        $activo = $request->query('activo');
+        if ($activo) {
+            $query->where('activo', '=', $activo);
+        }
+
+        $rol = $request->query('rol');
+        if ($rol) {
+            $query->where('rol', '=', $rol);
+        }
+
 
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
