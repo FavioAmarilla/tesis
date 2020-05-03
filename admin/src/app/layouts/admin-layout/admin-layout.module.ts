@@ -32,6 +32,7 @@ import { SucursalComponent } from 'app/paginas/sucursal/sucursal.component';
 import { NavbarComponent } from 'app/shared/navbar/navbar.component';
 import { SidebarComponent } from 'app/sidebar/sidebar.component';
 import { FooterComponent } from 'app/shared/footer/footer.component';
+import { CambiarClaveComponent } from 'app/paginas/cambiar-clave/cambiar-clave.component';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { FooterComponent } from 'app/shared/footer/footer.component';
     PaginacionComponent,
     BreadcrumbComponent,
     MarcaComponent,
-    SucursalComponent
+    SucursalComponent,
+    CambiarClaveComponent
   ]
 })
 

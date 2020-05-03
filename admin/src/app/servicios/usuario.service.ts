@@ -20,30 +20,30 @@ export class ServicioUsuario {
   constructor(
     private http: HttpClient,
     private router: Router
-  ) {}
+  ) { }
 
   iniciarSession(usuario: any) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.post(`${API}/user/signIn`, usuario, {headers})
-      .subscribe(
-        async (response: any) => {
-          if (response.success) {
-            // se guarda el token en el Storage
-            await this.guardarToken(response.data);
-            // se manda el usuario mediante el emmiter
-            this.loginEmitter.emit(this.usuario);
-            // se retorna true
-            resolve({success: true});
+      this.http.post(`${API}/user/signIn`, usuario, { headers })
+        .subscribe(
+          async (response: any) => {
+            if (response.success) {
+              // se guarda el token en el Storage
+              await this.guardarToken(response.data);
+              // se manda el usuario mediante el emmiter
+              this.loginEmitter.emit(this.usuario);
+              // se retorna true
+              resolve({ success: true });
+            }
+          },
+          (error) => {
+            this.token = null;
+            localStorage.removeItem('user-admin-token');
+            resolve({ success: false, error: error.error });
           }
-        },
-        (error) => {
-          this.token = null;
-          localStorage.removeItem('user-admin-token');
-          resolve({ success: false, error: error.error });
-        }
-      );
+        );
     });
   }
 
@@ -97,7 +97,7 @@ export class ServicioUsuario {
 
   activarDesactivarUsuario(id, accion) {
     const estado = (accion === 'activar') ? 1 : 0;
-    const json = JSON.stringify({estado});
+    const json = JSON.stringify({ estado });
 
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const params = new HttpParams().append('json', json);
@@ -142,17 +142,17 @@ export class ServicioUsuario {
 
     return new Promise<boolean>(resolve => {
       const headers = new HttpHeaders().set('Content-Type', 'application/json');
-      this.http.post(`${API}/user/checkToken`, data, {headers})
-      .subscribe(
-        (response: any) => {
-          if (response.success) {
-            this.usuario = response.data;
-            resolve(true);
-          } else {
-            resolve(false);
+      this.http.post(`${API}/user/checkToken`, data, { headers })
+        .subscribe(
+          (response: any) => {
+            if (response.success) {
+              this.usuario = response.data;
+              resolve(true);
+            } else {
+              resolve(false);
+            }
           }
-        }
-      );
+        );
     });
   }
 
@@ -160,15 +160,15 @@ export class ServicioUsuario {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise<boolean>(resolve => {
-      this.http.post(`${API}/user/validarEmail`, {id, email}, { headers })
-      .subscribe(
-        (response: any) => {
-          resolve(true);
-        },
-        (error) => {
-          resolve(false);
-        }
-      );
+      this.http.post(`${API}/user/validarEmail`, { id, email }, { headers })
+        .subscribe(
+          (response: any) => {
+            resolve(true);
+          },
+          (error) => {
+            resolve(false);
+          }
+        );
     });
   }
 
@@ -178,6 +178,23 @@ export class ServicioUsuario {
     localStorage.removeItem('user-admin-token');
     this.logoutEmitter.emit(true);
     this.router.navigate(['/login']);
+  }
+
+
+  async cambiarPassword(usuario: any) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return new Promise(resolve => {
+      this.http.post(`${API}/user/cambiarPassword`, usuario, { headers })
+        .subscribe(
+          (response: any) => {
+            resolve(response);
+          },
+          error => {
+            resolve(error.error);
+          }
+        );
+    });
   }
 
 

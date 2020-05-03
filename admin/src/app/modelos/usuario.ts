@@ -8,6 +8,7 @@ export class Usuario {
         public fecha_nacimiento: string,
         public telefono: string,
         public celular: string,
-        public estado?: number
+        public estado?: number,
+        public sub?: number
     ) {}
 }

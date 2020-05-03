@@ -1,33 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from 'src/app/servicios/usuario.service';
-import { AlertaService } from 'src/app/servicios/alerta.service';
+import { ServicioUsuario } from 'app/servicios/usuario.service';
+import { ServicioAlertas } from 'app/servicios/alertas.service';
+import { Usuario } from 'app/modelos/usuario';
 import { Router } from '@angular/router';
-import { Usuario } from 'src/app/interfaces/interfaces';
 
 @Component({
-  selector: 'app-mi-cuenta',
-  templateUrl: './mi-cuenta.page.html',
-  styleUrls: ['./mi-cuenta.page.scss'],
+  selector: 'app-cambiar-clave',
+  templateUrl: './cambiar-clave.component.html',
+  styleUrls: ['./cambiar-clave.component.scss']
 })
-export class MiCuentaPage implements OnInit {
+export class CambiarClaveComponent implements OnInit {
 
-  public cargando = true;
   public cargandoBoton = false;
   public password: any = {};
   public usuario: Usuario = {
-    sub: null,
     identificador: null,
     nombre_completo: null,
     email: null,
     clave_acceso: null,
+    imagen: null,
+    fecha_nacimiento: null,
     telefono: null,
     celular: null,
-    fecha_nacimiento: null
+    estado: null,
+    sub: null
   };
 
   constructor(
-    private servicioUsuario: UsuarioService,
-    private servicioAlerta: AlertaService,
+    private servicioUsuario: ServicioUsuario,
+    private servicioAlerta: ServicioAlertas,
     private router: Router
   ) {
     this.inicializar();
@@ -35,6 +36,13 @@ export class MiCuentaPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  async obtenerUsuario() {
+    let logueado: any = await this.servicioUsuario.obtenerUsuario();
+    if (logueado) {
+      this.usuario = logueado;
+    }
   }
 
   async inicializar() {
@@ -47,13 +55,6 @@ export class MiCuentaPage implements OnInit {
     }
   }
 
-  async obtenerUsuario() {
-    let logueado: any = await this.servicioUsuario.obtenerUsuario();
-    if (logueado) {
-      this.usuario = logueado;
-    }
-    this.cargando = false;
-  }
 
   async cambiarPassword() {
     this.cargandoBoton = await true;
@@ -73,8 +74,8 @@ export class MiCuentaPage implements OnInit {
 
     this.password.email = logueado.email;
     this.password.id = logueado.sub;
-    this.password.clave_actual = this.usuario.clave_acceso;
     let response: any = await this.servicioUsuario.cambiarPassword(this.password);
+    console.log(response);
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message, '');
 
@@ -86,25 +87,6 @@ export class MiCuentaPage implements OnInit {
       let login: any = this.servicioUsuario.iniciarSession(loguear);
       this.obtenerUsuario();
 
-    } else {
-      this.cargandoBoton = await false;
-      this.servicioAlerta.dialogoError(response.message, '');
-    }
-
-    this.cargandoBoton = await false;
-  }
-
-  async actualizarDatos() {
-    this.cargandoBoton = await true;
-    console.log(this.usuario);
-
-    let response: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.sub);
-    console.log(response);
-    if (response.success) {
-      //se guarda token con los nuevos datos del usuario
-      this.servicioUsuario.guardarToken(response.data.token);
-      //se obtiene los nuevos datos del usuario
-      this.obtenerUsuario();
     } else {
       this.cargandoBoton = await false;
       this.servicioAlerta.dialogoError(response.message, '');

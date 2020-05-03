@@ -50,8 +50,9 @@ export class PerfilComponent implements OnInit {
       identificador: ['', Validators.required],
       nombre_completo: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      clave_acceso: ['', Validators.required],
-      confirmar_clave_acceso: ['', Validators.required],
+      fecha_nacimiento: ['', [Validators.required]],
+      celular: ['', [Validators.required]],
+      telefono: [''],
       imagen: ['']
     });
   }
@@ -62,6 +63,9 @@ export class PerfilComponent implements OnInit {
     if (usuario) {
       this.angForm.controls['identificador'].setValue(usuario.sub);
       this.angForm.controls['nombre_completo'].setValue(usuario.nombre_completo);
+      this.angForm.controls['fecha_nacimiento'].setValue(usuario.fecha_nacimiento);
+      this.angForm.controls['celular'].setValue(usuario.celular);
+      this.angForm.controls['telefono'].setValue(usuario.telefono);
       this.angForm.controls['email'].setValue(usuario.email);
       this.angForm.controls['imagen'].setValue(usuario.imagen);
       this.servicioUsuario.loginEmitter.emit(usuario);
@@ -81,8 +85,8 @@ export class PerfilComponent implements OnInit {
 
     if (form.value.clave_acceso !== '' && form.value.confirmar_clave_acceso !== '') {
       if (form.value.clave_acceso !== form.value.confirmar_clave_acceso) {
-        form.controls['clave_acceso'].setErrors({invalid: true});
-        form.controls['confirmar_clave_acceso'].setErrors({invalid: true});
+        form.controls['clave_acceso'].setErrors({ invalid: true });
+        form.controls['confirmar_clave_acceso'].setErrors({ invalid: true });
         return;
       }
     }
@@ -109,5 +113,4 @@ export class PerfilComponent implements OnInit {
 
     this.cargando = false;
   }
-
 }
