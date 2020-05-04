@@ -26,6 +26,11 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('getImage/{filename}', ['as' => 'user.getImage', 'uses' => 'UserController@getImage']);
     Route::post('cambiarPassword', ['as' => 'user.cambiarPassword', 'uses' => 'UserController@cambiarPassword']);
 });
+Route::resource('rol', 'RolController');
+Route::resource('permiso', 'RolController');
+Route::group(['prefix' => 'permiso'], function () {
+    Route::get('/', 'RolController@permisos');
+});
 
 Route::resource('producto', 'ProductoController');
 Route::group(['prefix' => 'producto'], function () {
