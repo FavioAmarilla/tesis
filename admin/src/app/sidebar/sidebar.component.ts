@@ -2,29 +2,52 @@ import { Component, OnInit, OnChanges } from '@angular/core';
 import { ServicioUsuario } from '../servicios/usuario.service';
 
 export interface RouteInfo {
-    path: string;
+    path?: string;
     title: string;
     icon: string;
+    children?: RouteInfo[];
 }
 
 export const ROUTES: RouteInfo[] = [
-    { path: '/dashboard', title: 'Dashboard', icon: 'fas fa-tachometer-alt' },
-    { path: '/empresas', title: 'Empresa', icon: 'fas fa-building' },
-    { path: '/sucursal', title: 'Sucursales', icon: 'fas fa-building' },
-    { path: '/slides', title: 'Banners', icon: 'far fa-window-restore' },
-    { path: '/punto-emision', title: 'Puntos de emision', icon: 'fas fa-list-ol' },
-
-    { path: '/tipos-impuesto', title: 'Tipos de impuesto', icon: 'fas fa-percent' },
-    { path: '/linea-producto', title: 'Lineas de productos', icon: 'fas fa-th-list' },
-    { path: '/marca', title: 'Marcas', icon: 'fas fa-tags' },
-    { path: '/productos', title: 'Productos', icon: 'fas fa-barcode' },
-
-    { path: '/pais', title: 'Paises', icon: 'fas fa-globe' },
-    { path: '/ciudad', title: 'Ciudades', icon: 'fas fa-city' },
-    { path: '/barrio', title: 'Barrio', icon: 'fas fa-map-marker-alt' },
-
-    { path: '/roles', title: 'Roles', icon: 'fas fa-key' },
-    { path: '/usuarios', title: 'Usuarios', icon: 'fas fa-user-friends' }
+    {
+        path: '/dashboard',
+        title: 'Dashboard',
+        icon: 'fas fa-tachometer-alt',
+    },
+    { path: '/dashboard/usuarios', title: 'Usuarios', icon: 'fas fa-user-friends' },
+    { path: '/dashboard/empresas', title: 'Empresa', icon: 'fas fa-building' },
+    { path: '/dashboard/sucursal', title: 'Sucursales', icon: 'fas fa-building' },
+    { path: '/dashboard/slides', title: 'Banners', icon: 'far fa-window-restore' },
+    { path: '/dashboard/punto-emision', title: 'Puntos de emision', icon: 'fas fa-list-ol' },
+    {
+        path: '/dashboard/productos',
+        title: 'Productos',
+        icon: '',
+        children: [
+            { path: '/dashboard/productos', title: 'Todos los productos', icon: 'fas fa-barcode' },
+            { path: '/dashboard/productos/marcas', title: 'Marcas', icon: 'fas fa-tags' },
+            { path: '/dashboard/productos/tipos-impuesto', title: 'Tipos de impuesto', icon: 'fas fa-percent' },
+            { path: '/dashboard/productos/linea-producto', title: 'Lineas de productos', icon: 'fas fa-th-list' },
+        ]
+    },
+    {
+        path: '/dashboard/ubicaciones',
+        title: 'Ubicaciones',
+        icon: '',
+        children: [
+            { path: '/dashboard/ubicaciones/pais', title: 'Paises', icon: 'fas fa-globe' },
+            { path: '/dashboard/ubicaciones/ciudad', title: 'Ciudades', icon: 'fas fa-city' },
+            { path: '/dashboard/ubicaciones/barrio', title: 'Barrio', icon: 'fas fa-map-marker-alt' },
+        ]
+    },
+    {
+        path: '/dashboard/administrar',
+        title: 'Administrar',
+        icon: '',
+        children: [
+            { path: '/dashboard/administrar/roles', title: 'Roles', icon: 'fas fa-key' },
+        ]
+    }
 ];
 
 @Component({
@@ -49,16 +72,16 @@ export class SidebarComponent implements OnInit {
         this.obtenerUsuario();
 
         this.servicioUsuario.loginEmitter
-            .subscribe(response => {
-                this.usuario = response;
-                // console.log('loginEmitter: ', this.usuario);
-            });
+        .subscribe(response => {
+            this.usuario = response;
+            // console.log('loginEmitter: ', this.usuario);
+        });
 
         this.servicioUsuario.logoutEmitter
-            .subscribe(event => {
-                this.obtenerUsuario();
-                // console.log('logoutEmitter: ', this.usuario);
-            });
+        .subscribe(event => {
+            this.obtenerUsuario();
+            // console.log('logoutEmitter: ', this.usuario);
+        });
     }
 
     async obtenerUsuario() {

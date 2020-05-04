@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { UserGuard } from '../../guards/user.guard';
 
+import { BaseComponent } from '../../paginas/base/base.component';
 import { DashboardComponent } from '../../paginas/dashboard/dashboard.component';
 import { LoginComponent } from '../../paginas/login/login.component';
 import { TiposImpuestoComponent } from '../../paginas/tipos-impuesto/tipos-impuesto.component';
@@ -22,26 +23,53 @@ import { RolesComponent } from 'app/paginas/roles/roles.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    { path: 'dashboard', component: DashboardComponent, canActivate: [UserGuard] },
-
     { path: 'login', component: LoginComponent },
-    { path: 'perfil', component: PerfilComponent, canActivate: [UserGuard] },
-    { path: 'password', component: CambiarClaveComponent, canActivate: [UserGuard] },
-    { path: 'usuarios', component: UsuariosComponent, canActivate: [UserGuard] },
-    { path: 'roles', component: RolesComponent, canActivate: [UserGuard] },
+    {
+        path: 'dashboard',
+        component: BaseComponent,
+        canActivate: [UserGuard],
+        children: [
+            { path: '', component: DashboardComponent},
+            { path: 'usuarios', component: UsuariosComponent },
+            { path: 'empresas', component: EmpresaComponent },
+            { path: 'sucursal', component: SucursalComponent },
+            { path: 'slides', component: CarruselComponent },
 
-    { path: 'empresas', component: EmpresaComponent, canActivate: [UserGuard] },
-    { path: 'sucursal', component: SucursalComponent, canActivate: [UserGuard] },
-    { path: 'slides', component: CarruselComponent, canActivate: [UserGuard] },
+            {
+                path: 'productos',
+                children: [
+                    { path: '', component: ProductoComponent },
+                    { path: 'marcas', component: MarcaComponent },
+                    { path: 'linea-producto', component: LineaProductoComponent },
+                    { path: 'tipos-impuesto', component: TiposImpuestoComponent },
+                ]
+            },
+            { path: 'punto-emision', component: PuntosEmisionComponent },
+            {
+                path: 'ubicaciones',
+                children: [
+                    { path: '', redirectTo: 'pais'},
+                    { path: 'pais', component: PaisComponent },
+                    { path: 'ciudad', component: CiudadComponent },
+                    { path: 'barrio', component: BarrioComponent },
+                ]
+            },
+            {
+                path: 'administrar',
+                children: [
+                    { path: '', redirectTo: 'roles' },
+                    { path: 'roles', component: RolesComponent }
+                ]
+            },
+            {
+                path: 'cuenta',
+                children: [
+                    { path: '', redirectTo: 'perfil' },
+                    { path: 'perfil', component: PerfilComponent },
+                    { path: 'password', component: CambiarClaveComponent },
+                ]
+            }
+        ]
+    },
 
-    { path: 'productos', component: ProductoComponent, canActivate: [UserGuard] },
-    { path: 'tipos-impuesto', component: TiposImpuestoComponent, canActivate: [UserGuard] },
-    { path: 'linea-producto', component: LineaProductoComponent, canActivate: [UserGuard] },
-    { path: 'marca', component: MarcaComponent, canActivate: [UserGuard] },
-
-    { path: 'punto-emision', component: PuntosEmisionComponent, canActivate: [UserGuard] },
-
-    { path: 'pais', component: PaisComponent, canActivate: [UserGuard] },
-    { path: 'ciudad', component: CiudadComponent, canActivate: [UserGuard] },
-    { path: 'barrio', component: BarrioComponent, canActivate: [UserGuard] },
 ];

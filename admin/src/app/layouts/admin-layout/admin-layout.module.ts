@@ -13,6 +13,7 @@ import { ComponentesModule } from 'app/componentes/componentes.module';
 import { DashboardComponent } from '../../paginas/dashboard/dashboard.component';
 
 import { LoginComponent } from '../../paginas/login/login.component';
+import { BaseComponent } from '../../paginas/base/base.component';
 import { TiposImpuestoComponent } from '../../paginas/tipos-impuesto/tipos-impuesto.component';
 import { EmpresaComponent } from '../../paginas/empresa/empresa.component';
 import { UsuariosComponent } from '../../paginas/usuarios/usuarios.component';
@@ -47,6 +48,7 @@ import { RolesComponent } from 'app/paginas/roles/roles.component';
     ComponentesModule
   ],
   declarations: [
+    BaseComponent,
     NavbarComponent,
     SidebarComponent,
     FooterComponent,
