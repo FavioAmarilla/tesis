@@ -8,22 +8,23 @@ export interface RouteInfo {
 }
 
 export const ROUTES: RouteInfo[] = [
-    { path: '/dashboard',       title: 'Dashboard',             icon: 'fas fa-tachometer-alt'},
-    { path: '/empresas',        title: 'Empresa',               icon: 'fas fa-building'},
-    { path: '/sucursal',        title: 'Sucursales',            icon: 'fas fa-building'},
-    { path: '/slides',          title: 'Banners',               icon: 'far fa-window-restore'},
-    { path: '/punto-emision',   title: 'Puntos de emision',     icon: 'fas fa-list-ol'},
+    { path: '/dashboard', title: 'Dashboard', icon: 'fas fa-tachometer-alt' },
+    { path: '/empresas', title: 'Empresa', icon: 'fas fa-building' },
+    { path: '/sucursal', title: 'Sucursales', icon: 'fas fa-building' },
+    { path: '/slides', title: 'Banners', icon: 'far fa-window-restore' },
+    { path: '/punto-emision', title: 'Puntos de emision', icon: 'fas fa-list-ol' },
 
-    { path: '/tipos-impuesto',  title: 'Tipos de impuesto',     icon: 'fas fa-percent'},
-    { path: '/linea-producto',  title: 'Lineas de productos',   icon: 'fas fa-th-list'},
-    { path: '/marca',           title: 'Marcas',                icon: 'fas fa-tags'},
-    { path: '/productos',       title: 'Productos',             icon: 'fas fa-barcode'},
+    { path: '/tipos-impuesto', title: 'Tipos de impuesto', icon: 'fas fa-percent' },
+    { path: '/linea-producto', title: 'Lineas de productos', icon: 'fas fa-th-list' },
+    { path: '/marca', title: 'Marcas', icon: 'fas fa-tags' },
+    { path: '/productos', title: 'Productos', icon: 'fas fa-barcode' },
 
-    { path: '/pais',            title: 'Paises',                icon: 'fas fa-globe'},
-    { path: '/ciudad',          title: 'Ciudades',              icon: 'fas fa-city'},
-    { path: '/barrio',          title: 'Barrio',                icon: 'fas fa-map-marker-alt'},
+    { path: '/pais', title: 'Paises', icon: 'fas fa-globe' },
+    { path: '/ciudad', title: 'Ciudades', icon: 'fas fa-city' },
+    { path: '/barrio', title: 'Barrio', icon: 'fas fa-map-marker-alt' },
 
-    { path: '/usuarios',        title: 'Usuarios',              icon: 'fas fa-user-friends'}
+    { path: '/roles', title: 'Roles', icon: 'fas fa-key' },
+    { path: '/usuarios', title: 'Usuarios', icon: 'fas fa-user-friends' }
 ];
 
 @Component({
@@ -48,16 +49,16 @@ export class SidebarComponent implements OnInit {
         this.obtenerUsuario();
 
         this.servicioUsuario.loginEmitter
-        .subscribe(response => {
-            this.usuario = response;
-            // console.log('loginEmitter: ', this.usuario);
-        });
+            .subscribe(response => {
+                this.usuario = response;
+                // console.log('loginEmitter: ', this.usuario);
+            });
 
         this.servicioUsuario.logoutEmitter
-        .subscribe(event => {
-            this.obtenerUsuario();
-            // console.log('logoutEmitter: ', this.usuario);
-        });
+            .subscribe(event => {
+                this.obtenerUsuario();
+                // console.log('logoutEmitter: ', this.usuario);
+            });
     }
 
     async obtenerUsuario() {

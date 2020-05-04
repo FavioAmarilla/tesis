@@ -18,6 +18,7 @@ import { BarrioComponent } from '../../paginas/barrio/barrio.component';
 import { MarcaComponent } from 'app/paginas/marca/marca.component';
 import { SucursalComponent } from 'app/paginas/sucursal/sucursal.component';
 import { CambiarClaveComponent } from 'app/paginas/cambiar-clave/cambiar-clave.component';
+import { RolesComponent } from 'app/paginas/roles/roles.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -27,6 +28,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'perfil', component: PerfilComponent, canActivate: [UserGuard] },
     { path: 'password', component: CambiarClaveComponent, canActivate: [UserGuard] },
     { path: 'usuarios', component: UsuariosComponent, canActivate: [UserGuard] },
+    { path: 'roles', component: RolesComponent, canActivate: [UserGuard] },
 
     { path: 'empresas', component: EmpresaComponent, canActivate: [UserGuard] },
     { path: 'sucursal', component: SucursalComponent, canActivate: [UserGuard] },

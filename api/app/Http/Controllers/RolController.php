@@ -54,7 +54,7 @@ class RolController extends BaseController
     public function store(Request $request)
     {  
         $nombre = $request->input("nombre");
-        $permisos = json_decode($request->input("permisos"), true);
+        $permisos = $request->input("permisos");
 
         $validator = Validator::make($request->all(), [
             'nombre'  => 'required',
@@ -128,7 +128,7 @@ class RolController extends BaseController
     public function update(Request $request, $id)
     {
         $nombre = $request->input("nombre");
-        $permisos = json_decode($request->input("permisos"), true);
+        $permisos = $request->input("permisos");
 
         $validator = Validator::make($request->all(), [
             'nombre'  => 'required',
