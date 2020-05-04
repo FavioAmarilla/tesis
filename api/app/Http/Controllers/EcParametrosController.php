@@ -221,8 +221,6 @@ class EcParametrosController extends BaseController
             }
             
             return $this->sendResponse(false, 'Parametro no actualizado', null, 400);
-            
-            return $this->sendResponse(false, 'Parametro no actualizado', null, 400);
         }
         
         return $this->sendResponse(false, 'No se encontro el Parametro', null, 404);

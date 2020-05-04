@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Validator;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\BaseController as BaseController;
+use App\EcParametros;
+use App\EcParamCiudades;
 use App\EcParamSucursal;
 
-class EcParamSucursalesController extends Controller
+class EcParamSucursalesController extends BaseController
 {
     /**
      * Display a listing of the resource.
