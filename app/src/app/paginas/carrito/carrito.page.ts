@@ -51,7 +51,6 @@ export class PaginaCarrito implements OnInit {
 
   async obtenerCarrito() {
     const carrito = await this.servicioCarrito.obtenerCarrito();
-    if (!carrito.length) this.router.navigate(['/']);
     this.listaCarrito = carrito;
 
     this.actualizarTotal();

@@ -96,11 +96,10 @@ export class MiCuentaPage implements OnInit {
 
   async actualizarDatos() {
     this.cargandoBoton = await true;
-    console.log(this.usuario);
-
     let response: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.sub);
-    console.log(response);
+    
     if (response.success) {
+      this.servicioAlerta.dialogoExito(response.message, '');
       //se guarda token con los nuevos datos del usuario
       this.servicioUsuario.guardarToken(response.data.token);
       //se obtiene los nuevos datos del usuario

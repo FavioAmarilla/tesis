@@ -8,7 +8,8 @@
         <ion-title color="primary">Mi lista de deseos</ion-title>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="productos && productos.length">
+
+    <ion-row *ngIf="productos && productos.length" class="text-center">
       <ion-col size="12">
         <div class="cart-list">
           <ion-row *ngFor="let producto of productos">
@@ -54,6 +55,13 @@
         </div>
       </ion-col>
     </ion-row>
+
+    <ion-row *ngIf="!productos || !productos.length" class="text-center">
+      <ion-col size="12" class="text-center">
+        <h5>No se encontraron productos en el su lista de deseos</h5>
+      </ion-col>
+    </ion-row>
+
   </ion-grid>
 
   <app-footer></app-footer>
