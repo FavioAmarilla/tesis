@@ -74,10 +74,10 @@ class RolController extends BaseController
 
         if ($rol->save()) {
 
-            for ($i=0; $i <= count($permisos) - 1 ; $i++) {
+            foreach ($permisos as $permiso) {
                 $rolPermisos = new RolPermisos();
-                $rolPermisos->id_rol = $rol->identificador;
-                $rolPermisos->id_permiso = $permisos[$i];
+                $rolPermisos->id_rol = $id;
+                $rolPermisos->id_permiso = $permiso;
                 if (!$rolPermisos->save()) {
                     return $this->sendResponse(true, 'Permisos no registrados', $rolPermisos, 201);
                     break;
@@ -140,7 +140,7 @@ class RolController extends BaseController
 
         //validar que los datos de permisos llegaron
         if (count($permisos) <= 0) {
-            return $this->sendResponse(false, 'Debe agregar por lo un permiso', null, 400);
+            return $this->sendResponse(false, 'Debe agregar al menos un permiso', null, 400);
         }
 
         $rol = Rol::find($id);
@@ -148,11 +148,11 @@ class RolController extends BaseController
             $rol->nombre = $nombre;
 
             if ($rol->save()) {
-                $rolPermisos = rolPermisos::where('id_rol', $id)->delete();
-                for ($i=0; $i <= count($permisos) - 1 ; $i++) {
-                    $rolPermisos = new rolPermisos();
-                    $rolPermisos->id_rol = $rol->identificador;
-                    $rolPermisos->id_permiso = $permisos[$i];
+                RolPermisos::where('id_rol', $id)->delete();
+                foreach ($permisos as $permiso) {
+                    $rolPermisos = new RolPermisos();
+                    $rolPermisos->id_rol = $id;
+                    $rolPermisos->id_permiso = $permiso;
                     if (!$rolPermisos->save()) {
                         return $this->sendResponse(true, 'Permisos no registrados', $rolPermisos, 201);
                         break;

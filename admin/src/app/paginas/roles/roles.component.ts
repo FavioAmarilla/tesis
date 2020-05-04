@@ -84,6 +84,7 @@ export class RolesComponent implements OnInit {
       this.listaPermisos = response.data;
       this.porPagina = response.per_page;
       this.total = response.total;
+      this.seleccionarPermisos();
     } else {
       this.cargandoPermisos = false;
       this.servicioAlerta.dialogoError(response.message, '');
@@ -146,6 +147,7 @@ export class RolesComponent implements OnInit {
 
     this.cargando = false;
     if (response.success) {
+      this.listaPermisosTmp = [];
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -158,9 +160,10 @@ export class RolesComponent implements OnInit {
     this.cargando = true;
     this.rol.permisos = this.listaPermisosTmp;
     const response: any = await this.servicioRol.actualizar(this.rol, this.rol.identificador);
-    console.log(this.rol.identificador);
+
     this.cargando = false;
     if (response.success) {
+      this.listaPermisosTmp = [];
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
@@ -168,7 +171,6 @@ export class RolesComponent implements OnInit {
       this.servicioAlerta.dialogoError(response.message, '');
     }
   }
-
 
   async filtrarTabla(metodo?, event?) {
     if (event) {
@@ -196,8 +198,17 @@ export class RolesComponent implements OnInit {
     }
   }
 
-  async checkPermisos(permisoId, event) {
-    let add = event.target.checked;
+  seleccionarPermisos() {
+    for (let i = 0; i < this.listaPermisos.length; i++) {
+      const permisoId = this.listaPermisos[i].identificador;
+      const index = this.rol.rol_permisos.findIndex(permiso => permiso.id_permiso == permisoId);
+
+      if (index != -1) this.listaPermisosTmp.push(permisoId);
+    }
+  }
+
+  permisosSeleccionados(permisoId, event) {
+    const add = event.target.checked;
 
     if (add) {
       this.listaPermisosTmp.push(permisoId);
@@ -209,18 +220,13 @@ export class RolesComponent implements OnInit {
     }
   }
 
-  async validarCheck(permisoId) {
-    let permisos: any = [];
-    permisos = this.rol.permisos;
-    let index = null;
+  verificarCheck(permisoId): boolean {
+    const permisos: any = this.rol.rol_permisos || [];
+    const index = permisos.findIndex(permiso => permiso.id_permiso == permisoId);
 
-    if (permisos) {
-      console.log('entra')
-      index = permisos.indexOf(permisoId);
-    }
+    const check = (index != -1) ? true : false;
 
-    console.log(index);
-    return index >= 0 && index != null;
+    return check;
   }
 
 }
