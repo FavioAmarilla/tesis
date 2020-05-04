@@ -24,7 +24,7 @@ class RolController extends BaseController
 
         $nombre = $request->query('nombre');
         if ($nombre) {
-            $query->where('nombre', '=', $nombre);
+            $query->where('nombre', 'LIKE', '%'.$nombre.'%');
         }
 
         $paginar = $request->query('paginar');
