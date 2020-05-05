@@ -2,50 +2,63 @@ import { Component, OnInit, OnChanges } from '@angular/core';
 import { ServicioUsuario } from '../servicios/usuario.service';
 
 export interface RouteInfo {
-    path?: string;
-    title: string;
-    icon: string;
+    url?: string;
+    titulo: string;
+    icono: string;
     children?: RouteInfo[];
 }
 
 export const ROUTES: RouteInfo[] = [
     {
-        path: '/dashboard',
-        title: 'Dashboard',
-        icon: 'fas fa-tachometer-alt',
+        url: '/dashboard',
+        titulo: 'Dashboard',
+        icono: 'fa fa-home',
     },
-    { path: '/dashboard/usuarios', title: 'Usuarios', icon: 'fas fa-user-friends' },
-    { path: '/dashboard/empresas', title: 'Empresa', icon: 'fas fa-building' },
-    { path: '/dashboard/sucursal', title: 'Sucursales', icon: 'fas fa-building' },
-    { path: '/dashboard/slides', title: 'Banners', icon: 'far fa-window-restore' },
-    { path: '/dashboard/punto-emision', title: 'Puntos de emision', icon: 'fas fa-list-ol' },
     {
-        path: '/dashboard/productos',
-        title: 'Productos',
-        icon: '',
+        url: '/dashboard/configuracion',
+        titulo: 'Configuración',
+        icono: 'fa fa-laptop',
         children: [
-            { path: '/dashboard/productos', title: 'Todos los productos', icon: 'fas fa-barcode' },
-            { path: '/dashboard/productos/marcas', title: 'Marcas', icon: 'fas fa-tags' },
-            { path: '/dashboard/productos/tipos-impuesto', title: 'Tipos de impuesto', icon: 'fas fa-percent' },
-            { path: '/dashboard/productos/linea-producto', title: 'Lineas de productos', icon: 'fas fa-th-list' },
+            { url: '/dashboard/configuracion/empresas', titulo: 'Empresa', icono: 'fas fa-building' },
+            { url: '/dashboard/configuracion/sucursal', titulo: 'Sucursales', icono: 'fas fa-building' },
+            { url: '/dashboard/configuracion/slides', titulo: 'Banners', icono: 'far fa-window-restore' },
         ]
     },
     {
-        path: '/dashboard/ubicaciones',
-        title: 'Ubicaciones',
-        icon: '',
+        titulo: 'Ventas',
+        icono: 'fa fa-shopping-cart',
         children: [
-            { path: '/dashboard/ubicaciones/pais', title: 'Paises', icon: 'fas fa-globe' },
-            { path: '/dashboard/ubicaciones/ciudad', title: 'Ciudades', icon: 'fas fa-city' },
-            { path: '/dashboard/ubicaciones/barrio', title: 'Barrio', icon: 'fas fa-map-marker-alt' },
+            { url: '/dashboard/ventas/punto-emision', titulo: 'Puntos de emision', icono: 'fas fa-list-ol' },
+            { url: '/dashboard/ventas/timbrados', titulo: 'Timbrados', icono: 'fas fa-list-ol' },
+            { url: '/dashboard/ventas/asignacion-comprobante', titulo: 'Asignación de comprob.', icono: 'fas fa-list-ol' },
+            { url: '/dashboard/ventas/clientes', titulo: 'Clientes', icono: 'fas fa-user-friends' },
         ]
     },
     {
-        path: '/dashboard/administrar',
-        title: 'Administrar',
-        icon: '',
+        titulo: 'Productos',
+        icono: 'fa fa-barcode',
         children: [
-            { path: '/dashboard/administrar/roles', title: 'Roles', icon: 'fas fa-key' },
+            { url: '/dashboard/productos', titulo: 'Todos los productos', icono: 'fas fa-barcode' },
+            { url: '/dashboard/productos/marcas', titulo: 'Marcas', icono: 'fas fa-tags' },
+            { url: '/dashboard/productos/tipos-impuesto', titulo: 'Tipos de impuesto', icono: 'fas fa-percent' },
+            { url: '/dashboard/productos/linea-producto', titulo: 'Lineas de productos', icono: 'fas fa-th-list' },
+        ]
+    },
+    {
+        titulo: 'Geografia',
+        icono: 'fa fa-globe',
+        children: [
+            { url: '/dashboard/geografia/pais', titulo: 'Paises', icono: 'fas fa-globe' },
+            { url: '/dashboard/geografia/ciudad', titulo: 'Ciudades', icono: 'fas fa-city' },
+            { url: '/dashboard/geografia/barrio', titulo: 'Barrio', icono: 'fas fa-map-marker-alt' },
+        ]
+    },
+    {
+        titulo: 'Acceso',
+        icono: 'fa fa-folder',
+        children: [
+            { url: '/dashboard/acceso/usuarios', titulo: 'Usuarios', icono: 'fas fa-users' },
+            { url: '/dashboard/acceso/roles', titulo: 'Roles', icono: 'fas fa-key' },
         ]
     }
 ];

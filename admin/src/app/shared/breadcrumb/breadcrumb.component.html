@@ -1,6 +1,8 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#" [routerLink]="['/dashboard']">Inicio</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ pagina }}</li>
+        <li class="breadcrumb-item" *ngFor="let item of menuItems">
+            <span *ngIf="item.icono" [class]="item.icono + ' mr-1'"></span>
+            <a [routerLink]="[item.url]">{{item.titulo}}</a>
+        </li>
     </ol>
 </nav>

@@ -28,45 +28,63 @@ export const AdminLayoutRoutes: Routes = [
         path: 'dashboard',
         component: BaseComponent,
         canActivate: [UserGuard],
+        data: { breadcrumb: 'Inicio', icono: 'fa fa-home' },
         children: [
-            { path: '', component: DashboardComponent},
-            { path: 'usuarios', component: UsuariosComponent },
-            { path: 'empresas', component: EmpresaComponent },
-            { path: 'sucursal', component: SucursalComponent },
-            { path: 'slides', component: CarruselComponent },
-
+            { path: '', component: DashboardComponent },
+            {
+                path: 'configuracion',
+                data: { breadcrumb: 'Configuración' },
+                children: [
+                    { path: '', redirectTo: 'empresas' },
+                    { path: 'empresas', component: EmpresaComponent, data: { breadcrumb: 'Empresas' } },
+                    { path: 'sucursal', component: SucursalComponent, data: { breadcrumb: 'Sucursal' } },
+                    { path: 'slides', component: CarruselComponent, data: { breadcrumb: 'Carrusel' } },
+                ]
+            },
+            {
+                path: 'ventas',
+                data: { breadcrumb: 'Ventas' },
+                children: [
+                    { path: '', redirectTo: 'punto-emision' },
+                    { path: 'punto-emision', component: PuntosEmisionComponent, data: { breadcrumb: 'Punto de Emisión' } },
+                ]
+            },
             {
                 path: 'productos',
+                data: { breadcrumb: 'Productos' },
                 children: [
-                    { path: '', component: ProductoComponent },
-                    { path: 'marcas', component: MarcaComponent },
-                    { path: 'linea-producto', component: LineaProductoComponent },
-                    { path: 'tipos-impuesto', component: TiposImpuestoComponent },
-                ]
-            },
-            { path: 'punto-emision', component: PuntosEmisionComponent },
-            {
-                path: 'ubicaciones',
-                children: [
-                    { path: '', redirectTo: 'pais'},
-                    { path: 'pais', component: PaisComponent },
-                    { path: 'ciudad', component: CiudadComponent },
-                    { path: 'barrio', component: BarrioComponent },
+                    { path: '', component: ProductoComponent, data: { breadcrumb: 'Todos los productos' } },
+                    { path: 'marcas', component: MarcaComponent, data: { breadcrumb: 'Marcas' } },
+                    { path: 'linea-producto', component: LineaProductoComponent, data: { breadcrumb: 'Lineas de producto' } },
+                    { path: 'tipos-impuesto', component: TiposImpuestoComponent, data: { breadcrumb: 'Tipos de impuesto' } },
                 ]
             },
             {
-                path: 'administrar',
+                path: 'geografia',
+                data: { breadcrumb: 'Geografía' },
                 children: [
-                    { path: '', redirectTo: 'roles' },
-                    { path: 'roles', component: RolesComponent }
+                    { path: '', redirectTo: 'pais' },
+                    { path: 'pais', component: PaisComponent, data: { breadcrumb: 'Paises' } },
+                    { path: 'ciudad', component: CiudadComponent, data: { breadcrumb: 'Ciudades' } },
+                    { path: 'barrio', component: BarrioComponent, data: { breadcrumb: 'Barrios' } },
+                ]
+            },
+            {
+                path: 'acceso',
+                data: { breadcrumb: 'Acceso' },
+                children: [
+                    { path: '', redirectTo: 'usuarios' },
+                    { path: 'usuarios', component: UsuariosComponent, data: { breadcrumb: 'Usuarios' } },
+                    { path: 'roles', component: RolesComponent, data: { breadcrumb: 'Roles' } }
                 ]
             },
             {
                 path: 'cuenta',
+                data: { breadcrumb: 'Cuenta' },
                 children: [
                     { path: '', redirectTo: 'perfil' },
-                    { path: 'perfil', component: PerfilComponent },
-                    { path: 'password', component: CambiarClaveComponent },
+                    { path: 'perfil', component: PerfilComponent, data: { breadcrumb: 'Perfil' } },
+                    { path: 'password', component: CambiarClaveComponent, data: { breadcrumb: 'Cambiar Contraseña' } },
                 ]
             }
         ]

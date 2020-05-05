@@ -9,8 +9,7 @@
         </button>
       </div>
     </div>
-    <button class="navbar-toggler" type="button" (click)="collapse()" [attr.aria-expanded]="!isCollapsed"
-      aria-controls="collapseExample">
+    <button class="navbar-toggler" type="button" (click)="collapse()" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
       <span class="navbar-toggler-bar navbar-kebab"></span>
       <span class="navbar-toggler-bar navbar-kebab"></span>
       <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -20,13 +19,12 @@
       <ul class="navbar-nav usuario" *ngIf="usuario">
         <li class="nav-item btn-rotate" ngbDropdown placement="bottom-left">
           <a class="nav-link" ngbDropdownToggle id="navbarDropdownMenuLink" style="color: white;">
-            <img src="{{ url + '/user/getImage/' + usuario.imagen }}" class="img-fluid img-thumbnail" width="35"
-              height="35">
+            <img src="{{ url + '/user/getImage/' + usuario.imagen }}" class="img-fluid img-thumbnail" width="35" height="35">
             {{ usuario.nombre_completo}} &nbsp;
           </a>
           <div ngbDropdownMenu aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu dropdown-menu-right">
-            <a ngbDropdownItem [routerLink]="['/perfil']">Mi Perfil</a>
-            <a ngbDropdownItem [routerLink]="['/password']">Cambiar contraseña</a>
+            <a ngbDropdownItem [routerLink]="['/dashboard/cuenta/perfil']">Mi Perfil</a>
+            <a ngbDropdownItem [routerLink]="['/dashboard/cuenta/password']">Cambiar contraseña</a>
             <a ngbDropdownItem (click)="cerrarSession()">Cerrar sesion</a>
           </div>
         </li>
