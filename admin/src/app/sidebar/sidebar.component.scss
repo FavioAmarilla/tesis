@@ -18,10 +18,13 @@ span.sidebar-mini-icon {
   display: block;
 }
 
-// ver aca estilos para focus
-.nav .menu-class .collapse .nav li:focus a.menu-item {
+.nav .menu-class.active a.menu-item {
   background-color: #1e282c !important;
   border-left: 4px solid #079a4a !important;
+}
+
+.nav .menu-class.active .collapse li.active span {
+  color: #fff !important;
 }
 
 .nav .menu-class a > i.fa {
