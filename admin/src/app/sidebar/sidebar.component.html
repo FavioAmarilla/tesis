@@ -1,4 +1,4 @@
-<div class="sidebar-wrapper bg-dark">
+<div class="sidebar-wrapper">
     <div class="logo d-flex justify-content-center">
         <a [routerLink]="['/dashboard']" class="simple-text logo-normal">
             <img src="assets/img/logo-super.png" width="150" height="45">
@@ -8,13 +8,14 @@
     <ul class="nav menu" *ngIf="usuario">
         <li *ngFor="let menuItem of menuItems" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
             class="menu-class">
-            <a *ngIf="!menuItem.children?.length" [routerLink]="[menuItem.url]">
+
+            <a *ngIf="!menuItem.children?.length" [routerLink]="[menuItem.url]" class="menu-item">
                 <i class="{{menuItem.icono}}"></i>
-                <p>{{menuItem.titulo}}</p>
+                <span>{{menuItem.titulo}}</span>
             </a>
-            <a *ngIf="menuItem.children?.length" (click)="menuItem.collapsed = !menuItem.collapsed">
+            <a *ngIf="menuItem.children?.length" (click)="menuItem.collapsed = !menuItem.collapsed" class="menu-item">
                 <i class="{{menuItem.icono}}"></i>
-                <p>{{menuItem.titulo}} <b class="caret"></b></p>
+                <span>{{menuItem.titulo}} <b class="caret"></b></span>
             </a>
             <div class="collapse" *ngIf="menuItem.children?.length" [ngClass]="{'show': menuItem.collapsed}">
                 <ul class="nav">

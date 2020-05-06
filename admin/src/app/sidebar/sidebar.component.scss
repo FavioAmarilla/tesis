@@ -1,14 +1,5 @@
-.sidebar {
-  height: 100%; /* 100% Full-height */
-  width: 0; /* 0 width - change this with JavaScript */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Stay on top */
-  top: 0;
-  left: 0;
-  background-color: #111; /* Black*/
-  // overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 60px; /* Place content 60px from the top */
-  transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+.sidebar-wrapper {
+  background-color: #222d32 !important;
 }
 
 span.sidebar-mini-icon {
@@ -16,86 +7,35 @@ span.sidebar-mini-icon {
   padding-right: 5px;
 }
 
-.nav li > a {
-  margin: 0px 10px !important;
+.nav .menu-class:hover {
+  background-color: #1e282c !important;
+}
+
+.nav .menu-class a {
+  margin: 0px !important;
+  padding-left: 10px;
+  border-left: 4px solid transparent;
   display: block;
 }
 
-.nav li a > i.fa {
+// ver aca estilos para focus
+.nav .menu-class:focus a.menu-item {
+  background-color: #1e282c !important;
+  border-left: 4px solid #079a4a !important;
+}
+
+.nav .menu-class a > i.fa {
   font-size: 14px;
 }
 
-/* The sidebar links */
-.sidebar a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
+.collapse {
+  background-color: #2c3b41;
 }
 
-/* When you mouse over the navigation links, change their color */
-.sidebar a:hover {
-  color: #f1f1f1;
+.nav .menu-class .collapse .nav li a {
+  color: #8aa4af !important;
 }
 
-/* Position and style the close button (top right corner) */
-.sidebar .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-
-/* The button used to open the sidebar */
-.openbtn {
-  font-size: 20px;
-  cursor: pointer;
-  background-color: #111;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-}
-
-.openbtn:hover {
-  background-color: #444;
-}
-
-.sidebar-wrapper .collapse li.active > a:not([data-toggle="collapse"]):after,
-.sidebar-wrapper .collapse li.active > [data-toggle="collapse"] + div .nav li:after {
-  border: none !important;
-}
-
-.sidebar-wrapper .collapse li.active > a {
-  color: var(--green) !important;
-}
-
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-  transition: margin-left 0.5s; /* If you want a transition effect */
-  padding: 20px;
-}
-
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidebar {
-    padding-top: 15px;
-  }
-  .sidebar a {
-    font-size: 18px;
-  }
-}
-
-@media screen and (min-width: 992px) {
-  .sidebar-wrapper li.active > a:not([data-toggle="collapse"]):after,
-  .sidebar-wrapper li.active > [data-toggle="collapse"] + div .nav li:after {
-    right: 0 !important;
-    top: 0 !important;
-  }
-}
-
-.caret, .dropdown-toggle:after {
-  transition: all 150ms ease 0s !important;
+.nav .menu-class .collapse .nav li:hover a {
+  color: white !important;
 }
