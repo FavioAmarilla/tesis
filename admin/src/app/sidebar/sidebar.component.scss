@@ -17,7 +17,8 @@ span.sidebar-mini-icon {
 }
 
 .nav li > a {
-  margin: 0 !important;
+  margin: 0px 10px !important;
+  display: block;
 }
 
 .nav li a > i.fa {
@@ -62,8 +63,8 @@ span.sidebar-mini-icon {
   background-color: #444;
 }
 
-.sidebar-wrapper .collapse li.active > a:not([data-toggle=collapse]):after,
-.sidebar-wrapper .collapse li.active > [data-toggle=collapse] + div .nav li:after {
+.sidebar-wrapper .collapse li.active > a:not([data-toggle="collapse"]):after,
+.sidebar-wrapper .collapse li.active > [data-toggle="collapse"] + div .nav li:after {
   border: none !important;
 }
 
@@ -88,9 +89,13 @@ span.sidebar-mini-icon {
 }
 
 @media screen and (min-width: 992px) {
-  .sidebar-wrapper li.active > a:not([data-toggle=collapse]):after,
-  .sidebar-wrapper li.active > [data-toggle=collapse] + div .nav li:after {
+  .sidebar-wrapper li.active > a:not([data-toggle="collapse"]):after,
+  .sidebar-wrapper li.active > [data-toggle="collapse"] + div .nav li:after {
     right: 0 !important;
     top: 0 !important;
   }
+}
+
+.caret, .dropdown-toggle:after {
+  transition: all 150ms ease 0s !important;
 }
