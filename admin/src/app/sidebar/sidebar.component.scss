@@ -19,7 +19,7 @@ span.sidebar-mini-icon {
 }
 
 // ver aca estilos para focus
-.nav .menu-class:focus a.menu-item {
+.nav .menu-class .collapse .nav li:focus a.menu-item {
   background-color: #1e282c !important;
   border-left: 4px solid #079a4a !important;
 }
