@@ -19,4 +19,13 @@ class EcParametros extends Model
         return $this->belongsTo('App\Pais', 'id_pais');
     }
 
+    //obtener sucursales
+    public function sucursales(){
+        return $this->hasMany('App\EcParamSucursal', 'id_ec_parametro', 'identificador');
+    }
+
+    //obtener ciudades
+    public function ciudades(){
+        return $this->hasMany('App\EcParamCiudades', 'id_ec_parametro', 'identificador');
+    }
 }

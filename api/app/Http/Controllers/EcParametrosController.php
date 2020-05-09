@@ -20,7 +20,7 @@ class EcParametrosController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = EcParametros::with(['pais']);
+        $query = EcParametros::with(['pais', 'sucursales', 'ciudades']);
 
         $monto_minimo = $request->query('monto_minimo');
         if ($monto_minimo) {
@@ -66,8 +66,8 @@ class EcParametrosController extends BaseController
         $monto_minimo = $request->input("monto_minimo");
         $costo_delivery = $request->input("costo_delivery");
         $id_pais = $request->input("id_pais");
-        $ciudades = json_decode($request->input("ciudades"), true);
-        $sucursales = json_decode($request->input("sucursales"), true);
+        $ciudades = $request->input("ciudades");
+        $sucursales = $request->input("sucursales");
 
         $validator = Validator::make($request->all(), [
             'monto_minimo'  => 'required',
@@ -131,7 +131,7 @@ class EcParametrosController extends BaseController
      */
     public function show($id)
     {
-        $parametro = EcParametros::find($id);
+        $parametro = EcParametros::find($id)->load('pais')->load('sucursales')->load('ciudades');
 
         if (is_object($parametro)) {
             return $this->sendResponse(true, 'Se listaron exitosamente los registros', $parametro, 200);
@@ -163,8 +163,8 @@ class EcParametrosController extends BaseController
         $monto_minimo = $request->input("monto_minimo");
         $costo_delivery = $request->input("costo_delivery");
         $id_pais = $request->input("id_pais");
-        $ciudades = json_decode($request->input("ciudades"), true);
-        $sucursales = json_decode($request->input("sucursales"), true);
+        $ciudades = $request->input("ciudades");
+        $sucursales = $request->input("sucursales");
 
         $validator = Validator::make($request->all(), [
             'monto_minimo'  => 'required',
