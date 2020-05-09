@@ -20,6 +20,7 @@ import { MarcaComponent } from 'app/paginas/marca/marca.component';
 import { SucursalComponent } from 'app/paginas/sucursal/sucursal.component';
 import { CambiarClaveComponent } from 'app/paginas/cambiar-clave/cambiar-clave.component';
 import { RolesComponent } from 'app/paginas/roles/roles.component';
+import { EcParametrosComponent } from 'app/paginas/ec-parametros/ec-parametros.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -39,6 +40,7 @@ export const AdminLayoutRoutes: Routes = [
                     { path: 'empresas', component: EmpresaComponent, data: { breadcrumb: 'Empresas' } },
                     { path: 'sucursal', component: SucursalComponent, data: { breadcrumb: 'Sucursal' } },
                     { path: 'slides', component: CarruselComponent, data: { breadcrumb: 'Carrusel' } },
+                    { path: 'parametro-ec', component: EcParametrosComponent, data: { breadcrumb: 'Parametros Ec.' } },
                 ]
             },
             {

@@ -35,6 +35,7 @@ import { SidebarComponent } from 'app/sidebar/sidebar.component';
 import { FooterComponent } from 'app/shared/footer/footer.component';
 import { CambiarClaveComponent } from 'app/paginas/cambiar-clave/cambiar-clave.component';
 import { RolesComponent } from 'app/paginas/roles/roles.component';
+import { EcParametrosComponent  } from 'app/paginas/ec-parametros/ec-parametros.component';
 
 @NgModule({
   imports: [
@@ -70,7 +71,8 @@ import { RolesComponent } from 'app/paginas/roles/roles.component';
     MarcaComponent,
     SucursalComponent,
     CambiarClaveComponent,
-    RolesComponent
+    RolesComponent,
+    EcParametrosComponent
   ]
 })
 

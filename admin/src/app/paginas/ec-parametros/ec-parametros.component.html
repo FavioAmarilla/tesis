@@ -1,0 +1,278 @@
+<div class="main-panel">
+    <div class="content">
+
+        <app-breadcrumb></app-breadcrumb>
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card" *ngIf="!form">
+                    <div class="card-header">
+                        <button *ngIf="total == 0" class="btn btn-round btn-primary pull-right" (click)="mostrarFormulario(true, 'INS')">
+                            <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm"
+                                role="status" aria-hidden="true"></span>
+                            Agregar
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                    <th>
+                                        Pais
+                                    </th>
+                                    <th>
+                                        Monto Minimo
+                                    </th>
+                                    <th>
+                                        Costo Delivery
+                                    </th>
+                                    <th class="text-right">
+                                        Opciones
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <select name="id_pais" class="form-control"
+                                                [(ngModel)]="filtrosTabla.id_pais"
+                                                (change)="filtrarTabla('paginacion', $event)">
+                                                <option value="null">-- SELECCIONAR --</option>
+                                                <option *ngFor="let pais of listaPaises" value="{{pais.identificador}}">
+                                                    {{pais.nombre}}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="costo_delivery" class="form-control"
+                                                placeholder="Costo Delivery" [(ngModel)]="filtrosTabla.costo_delivery"
+                                                (keyup.enter)="filtrarTabla('paginacion', $event)">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="monto_minimo" class="form-control"
+                                                placeholder="Monto Minimo" [(ngModel)]="filtrosTabla.monto_minimo"
+                                                (keyup.enter)="filtrarTabla('paginacion', $event)">
+                                        </td>
+                                        <td class="text-right">
+                                            <button class="btn btn-round btn-sm btn-danger"
+                                                (click)="filtrarTabla('paginacion', null)"><i
+                                                    class="fas fa-times"></i></button>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+
+                                    <tr
+                                        *ngFor="let row of listaParametros | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
+                                        <td>
+                                            {{ row.pais.nombre }}
+                                        </td>
+                                        <td>
+                                            {{ row.monto_minimo }}
+                                        </td>
+                                        <td>
+                                            {{ row.costo_delivery }}
+                                        </td>
+                                        <td class="text-right">
+                                            <button class="btn btn-round btn-sm btn-warning"
+                                                (click)="obtenerParametro(row.identificador)"><i
+                                                    class="fas fa-edit"></i></button> &nbsp;
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div *ngIf="!cargando && !form && accion == 'LST'">
+                                <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="pais"
+                                    [porPagina]="porPagina" [total]="total"></app-paginacion>
+                            </div>
+                            <div class="row justify-content-center align-items-center col-md-12">
+                                <span *ngIf="cargando && !form && accion == 'LST'"
+                                    class="spinner-border spinner-border-lg spinner-table" role="status"
+                                    aria-hidden="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card" *ngIf="form">
+                    <div class="card-body">
+                        <form #formulario="ngForm">
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <label for="">Pais</label>
+                                    <select name="id_pais" id="id_pais" class="form-control"
+                                        [(ngModel)]="ecParametro.id_pais" required #id_pais="ngModel"
+                                        (change)="seleccionarPais($event.target.value)">
+                                        <option value="null">-- SELECCIONAR --</option>
+                                        <option *ngFor="let pais of listaPaises" value="{{pais.identificador}}"
+                                            [selected]="pais.identificador == ecParametro.id_pais">
+                                            {{pais.nombre}}
+                                        </option>
+                                    </select>
+                                    <span class="invalid-feedback d-block"
+                                        *ngIf="!id_pais.valid && id_pais.touched || ecParametro.id_pais == null">Este
+                                        campo es obligatorio</span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="Monto Minimo">Monto Minimo</label>
+                                    <input type="number" class="form-control" placeholder="Monto Minimo"
+                                        name="monto_minimo" [(ngModel)]="ecParametro.monto_minimo" required
+                                        #monto_minimo="ngModel">
+                                    <span class="invalid-feedback d-block"
+                                        *ngIf="!monto_minimo.valid && monto_minimo.touched">Este
+                                        campo es obligatorio</span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="Costo Delivery">Costo Delivery</label>
+                                    <input type="number" class="form-control" placeholder="Costo Delivery"
+                                        name="costo_delivery" [(ngModel)]="ecParametro.costo_delivery" required
+                                        #costo_delivery="ngModel">
+                                    <span class="invalid-feedback d-block"
+                                        *ngIf="!costo_delivery.valid && costo_delivery.touched">Este
+                                        campo es obligatorio</span>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="form-group col-md-6">
+                                    <label for="Sucursales">Sucursales</label>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead class=" text-primary">
+                                                <th class="text-center">Agregar</th>
+                                                <th>
+                                                    Nombre
+                                                </th>
+                                                <th class="text-center">Acciones</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td> </td>
+                                                    <td>
+                                                        <input type="text" name="nombre" class="form-control"
+                                                            placeholder="Nombre" [(ngModel)]="filtrosTabla.nombre"
+                                                            (keyup.enter)="filtrarTabla('obtenerSucursales', $event)">
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-round btn-sm btn-danger"
+                                                            (click)="filtrarTabla('obtenerSucursales', null)"><i
+                                                                class="fas fa-times"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr
+                                                    *ngFor="let row of listaSucursales | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
+                                                    <td>
+                                                        <input class="form-control" type="checkbox"
+                                                            [value]="row.identificador"
+                                                            (change)="seleccionarSucursal(row.identificador, $event)"
+                                                            [checked]="verificarCheck('sucursal', row.identificador)">
+                                                    </td>
+                                                    <td>
+                                                        {{ row.nombre }}
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div *ngIf="!cargandoSucursales">
+                                            <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="pais"
+                                                [porPagina]="porPagina" [total]="total"></app-paginacion>
+                                        </div>
+                                        <div class="row justify-content-center align-items-center col-md-12">
+                                            <span *ngIf="cargandoSucursales"
+                                                class="spinner-border spinner-border-lg spinner-table" role="status"
+                                                aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="Ciudades">Ciudades</label>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead class=" text-primary">
+                                                <th class="text-center">Agregar</th>
+                                                <th>
+                                                    Nombre
+                                                </th>
+                                                <th class="text-center">Acciones</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td> </td>
+                                                    <td>
+                                                        <input type="text" name="nombre" class="form-control"
+                                                            placeholder="Nombre" [(ngModel)]="filtrosTabla.nombre"
+                                                            (keyup.enter)="filtrarTabla('obtenerCiudades', $event)">
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-round btn-sm btn-danger"
+                                                            (click)="filtrarTabla('obtenerCiudades', null)"><i
+                                                                class="fas fa-times"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr
+                                                    *ngFor="let row of listaCiudades | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
+                                                    <td>
+                                                        <input class="form-control" type="checkbox"
+                                                            [value]="row.identificador"
+                                                            (change)="seleccionarCiudad(row.identificador, $event)"
+                                                            [checked]="verificarCheck('ciudad', row.identificador)">
+                                                    </td>
+                                                    <td>
+                                                        {{ row.nombre }}
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div *ngIf="!cargandoCiudades">
+                                            <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="pais"
+                                                [porPagina]="porPagina" [total]="total"></app-paginacion>
+                                        </div>
+
+                                        <div class="row justify-content-center align-items-center col-md-12">
+                                            <span *ngIf="cargandoCiudades"
+                                                class="spinner-border spinner-border-lg spinner-table" role="status"
+                                                aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group  col-md-12">
+                                    <button type="button" class="btn btn-round btn-primary" (click)="registrar()"
+                                        *ngIf="accion == 'INS'"
+                                        [disabled]="formulario.invalid || listaSucursalesTmp.length == 0 || listaCiudadesTmp.length == 0">
+                                        <span *ngIf="cargando && accion == 'INS'"
+                                            class="spinner-border  spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        Guardar
+                                    </button>
+                                    <button type="button" class="btn btn-round btn-primary" (click)="actualizar()"
+                                        *ngIf="accion == 'UPD'"
+                                        [disabled]="formulario.invalid || listaSucursalesTmp.length == 0 || listaCiudadesTmp.length == 0">
+                                        <span *ngIf="cargando && accion == 'UPD'"
+                                            class="spinner-border  spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        Actualizar
+                                    </button>
+                                    <button type="button" class="btn btn-round btn-danger"
+                                        (click)="mostrarFormulario(false, 'LST')">
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <footer-cmp></footer-cmp>
+</div>

@@ -109,6 +109,7 @@ export class RolesComponent implements OnInit {
       this.parametrosTabla.forEach(element => {
         this.parametros[element.key] = element.value;
       });
+      this.parametros.push(parametrosFiltro);
     }
 
     const response: any = await this.servicioRol.obtener(null, this.parametros);
