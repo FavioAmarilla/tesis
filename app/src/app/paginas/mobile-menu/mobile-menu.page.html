@@ -22,7 +22,7 @@
 
       <ion-list *ngIf="item.open">
         <ion-menu-toggle autoHide="false">
-          <ion-item *ngFor="let sub of item.children" (click)="(sub.icono == 'exit') ? servicioUsuario.cerrarSession() : false;" class="sub-item" [routerLink]="sub.url" routerDirection="root" routerLinkActive="active" [ngClass]="{'hidden': (sub.soloLogueados && !logueado) || (sub.ocultarLogueados && logueado)}">
+          <ion-item *ngFor="let sub of item.children" (click)="(sub.icono == 'exit') ? logout() : false;" class="sub-item" [routerLink]="sub.url" routerDirection="root" routerLinkActive="active" [ngClass]="{'hidden': (sub.soloLogueados && !logueado) || (sub.ocultarLogueados && logueado)}">
             <ion-icon slot="start" [name]="sub.icono" color="primary"></ion-icon>
             <ion-label>{{ sub.titulo }}</ion-label>
           </ion-item>

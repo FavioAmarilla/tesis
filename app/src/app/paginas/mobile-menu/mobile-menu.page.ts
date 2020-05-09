@@ -50,4 +50,8 @@ export class MobileMenuPage implements OnInit {
     });
   }
 
+  logout() {
+    this.servicioUsuario.cerrarSession();
+  }
+
 }
