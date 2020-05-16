@@ -68,7 +68,7 @@ export class BaseService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.delete(`${API}/${this.recurso}/delete/${id}`, { headers: headers }).subscribe(
+      this.http.delete(`${API}/${this.recurso}/${id}`, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -79,5 +79,4 @@ export class BaseService {
     });
   }
 
-  
 }
