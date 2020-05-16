@@ -149,17 +149,20 @@ export class UsuariosComponent implements OnInit {
     this.usuario.imagen = data.data;
   }
 
-  async activarDesactivarUsuario(id, accion) {
-    const preConfirm = { servicio: 'servicioUsuario', callback: 'activarDesactivarUsuario', data: id };
-    const titulo = '¿Estas seguro?';
-    const mensaje = 'No podras utilizar este usuario tras realizar esta acción';
+  async activarDesactivarUsuario(usuario) {
+    const accion = (usuario.activo == 'S') ? 'desactivar' : 'activar';
+    const preConfirm = { servicio: 'servicioUsuario', callback: 'activarDesactivarUsuario', data: usuario.identificador };
+    const titulo = `¿Estas seguro de ${accion} el usuario?`;
+    const mensaje = (usuario.activo == 'S') ? 'No podras utilizar este usuario tras realizar esta acción' : '';
     const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
 
-    if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
-      this.paginacion(1);
-    } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+    if (response) {
+      if (response.success) {
+        this.servicioAlerta.dialogoExito(response.message, '');
+        this.paginacion(1);
+      } else {
+        this.servicioAlerta.dialogoError(response.message, '');
+      }
     }
   }
 

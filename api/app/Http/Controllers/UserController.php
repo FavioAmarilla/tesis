@@ -195,11 +195,10 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id, Request $request) {
-        $estado = $request->input("estado");
-
         $usuario = User::find($id);
+
         if ($usuario) {
-            $usuario->estado = $estado;
+            $usuario->activo = ($usuario->activo == 'S') ? 'N' : 'S';
             
             if ($usuario->update()) {
                 return $this->sendResponse(true, 'Usuario actualizado', $usuario, 200);

@@ -96,14 +96,10 @@ export class ServicioUsuario {
   }
 
   activarDesactivarUsuario(id, accion) {
-    const estado = (accion === 'activar') ? 1 : 0;
-    const json = JSON.stringify({ estado });
-
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    const params = new HttpParams().append('json', json);
 
     return new Promise(resolve => {
-      this.http.delete(`${API}/user/${id}`, { headers: headers, params: params }).subscribe(
+      this.http.delete(`${API}/user/${id}`, { headers: headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
