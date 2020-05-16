@@ -176,9 +176,11 @@ class ProductoController extends BaseController
      */
     public function show($id)
     {
-        $producto = Producto::find($id);
+        $producto = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca'])->find($id);
 
         if (is_object($producto)) {
+            $relacionados = Producto::where('id_linea', '=', $producto->id_linea)->where('identificador', '!=', $id)->get();
+            $producto['relacionados'] = $relacionados;
             return $this->sendResponse(true, 'Se listaron exitosamente los registros', $producto, 200);
         }
         
@@ -193,9 +195,11 @@ class ProductoController extends BaseController
      */
     public function showBySlug($slug)
     {
-        $producto = Producto::where('slug', '=', $slug)->first();
+        $producto = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca'])->where('slug', '=', $slug)->first();
 
         if (is_object($producto)) {
+            $relacionados = Producto::where('id_linea', '=', $producto->id_linea)->where('identificador', '!=', $producto->identificador)->get();
+            $producto['relacionados'] = $relacionados;
             return $this->sendResponse(true, 'Se listaron exitosamente los registros', $producto, 200);
         }
         
