@@ -211,4 +211,21 @@ export class SucursalComponent implements OnInit {
     }
   }
 
+  async alternarEstado(sucursal) {
+    const accion = (sucursal.activo == 'S') ? 'desactivar' : 'activar';
+    const titulo = `¿Estas seguro de ${accion} la sucursal?`;
+    const mensaje = '';
+    const preConfirm = { servicio: 'servicioSucursal', callback: 'eliminar', data: sucursal.identificador };
+    const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
+
+    if (response) {
+      if (response.success) {
+        this.servicioAlerta.dialogoExito(response.message, '');
+        this.paginacion();
+        this.mostrarFormulario(false, 'LST');
+      } else {
+        this.servicioAlerta.dialogoError(response.message, '');
+      }
+    }
+  }
 }

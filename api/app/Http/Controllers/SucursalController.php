@@ -234,6 +234,16 @@ class SucursalController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        $sucursal = Sucursal::find($id);
+        
+        if ($sucursal) {
+            $sucursal->activo = ($sucursal->activo == 'S') ? 'N' : 'S';
+
+            if ($sucursal->save()) return $this->sendResponse(true, 'El estado de la sucursal ha sido actualizado correctamente', $sucursal, 200);
+
+            return $this->sendResponse(false, 'Ha ocurrido un problema al intentar actualizar la sucursal', null, 500);
+        }
+
+        return $this->sendResponse(false, 'No se encontro la sucursal', null, 404);
     }
 }
