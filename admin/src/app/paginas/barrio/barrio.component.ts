@@ -156,5 +156,19 @@ export class BarrioComponent implements OnInit {
     }
   }
 
+  async alternarEstado(barrio) {
+    const accion = (barrio.activo == 'S') ? 'desactivar' : 'activar';
+    const titulo = `¿Estas seguro de ${accion} el barrio?`;
+    const mensaje = '';
+    const preConfirm = { servicio: 'servicioBarrio', callback: 'eliminar', data: barrio.identificador };
+    const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
 
+    if (response.success) {
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
+    } else {
+      this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
 }

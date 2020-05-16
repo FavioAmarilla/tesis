@@ -157,6 +157,16 @@ class BarrioController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        $barrio = Barrio::find($id);
+        
+        if ($barrio) {
+            $barrio->activo = ($barrio->activo == 'S') ? 'N' : 'S';
+
+            if ($barrio->save()) return $this->sendResponse(true, 'El estado del barrio ha sido actualizado correctamente', $barrio, 200);
+
+            return $this->sendResponse(false, 'Ha ocurrido un problema al intentar actualizar el barrio', null, 500);
+        }
+
+        return $this->sendResponse(false, 'No se encontro el barrio', null, 404);
     }
 }
