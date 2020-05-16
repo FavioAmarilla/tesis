@@ -144,6 +144,16 @@ class PaisController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        $pais = Pais::find($id);
+        
+        if ($pais) {
+            $pais->activo = ($pais->activo == 'S') ? 'N' : 'S';
+
+            if ($pais->save()) return $this->sendResponse(true, 'El estado del pais ha sido actualizado correctamente', $pais, 200);
+
+            return $this->sendResponse(false, 'Ha ocurrido un problema al intentar actualizar el pais', null, 500);
+        }
+
+        return $this->sendResponse(false, 'No se encontro el pais', null, 404);
     }
 }

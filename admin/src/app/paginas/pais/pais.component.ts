@@ -137,5 +137,19 @@ export class PaisComponent implements OnInit {
     }
   }
 
+  async alternarEstado(pais) {
+    const accion = (pais.activo == 'S') ? 'desactivar' : 'activar';
+    const titulo = `¿Estas seguro de ${accion} el pais?`;
+    const mensaje = '';
+    const preConfirm = { servicio: 'servicioPais', callback: 'eliminar', data: pais.identificador };
+    const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
 
+    if (response.success) {
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
+    } else {
+      this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
 }
