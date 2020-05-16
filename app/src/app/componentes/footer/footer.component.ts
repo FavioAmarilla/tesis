@@ -16,10 +16,6 @@ export class FooterComponent implements OnInit {
 
   ngOnInit() {}
 
-  redireccionar(url) {
-    this.router.navigate([url]);
-  }
-
   openBrowser(url: string) {
     const browser = this.iab.create(url, '_system');
   }

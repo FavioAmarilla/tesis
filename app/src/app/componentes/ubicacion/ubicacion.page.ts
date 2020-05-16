@@ -67,15 +67,16 @@ export class UbicacionPage implements OnInit {
           .addTo(mapa);
 
         coordenadas.marcador = marker.getLngLat();
-      } else { 
+      } else {
         this.servicioAlerta.dialogoError('La ubicacion no se encuentra dentro del area de cobertura','')
-        coordenadas.marcador = null; 
+        coordenadas.marcador = null;
       }
 
     } else { coordenadas.marcador = null; }
   }
 
   dibujarAreaCobertura(e) {
+    mapa.resize();
     if (coordenadas && coordenadas.poligono.length) {
       mapa.addSource('maine', {
         type: 'geojson',

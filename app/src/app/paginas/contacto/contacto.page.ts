@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 declare var mapboxgl: any;
 
@@ -10,8 +11,8 @@ declare var mapboxgl: any;
 export class PaginaContacto implements OnInit {
 
   public cargando = true;
-  public longitud = -25.403561;
-  public latitud = -57.284329;
+  public longitud = environment.mapbox.defaultCoords.lng;
+  public latitud = environment.mapbox.defaultCoords.lat;
 
   constructor() { }
 
@@ -25,16 +26,20 @@ export class PaginaContacto implements OnInit {
   }
 
   dibujarMapa() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZmF2aW9hbWFyaWxsYSIsImEiOiJjazd1dGJjMXEwM210M2ZwaDN3bzAwc3cxIn0.hFQSvmuxyr_rtRbzPvJdvA';
+    mapboxgl.accessToken = environment.mapbox.apiKey;
     const mapa = new mapboxgl.Map({
       container: 'mapa',
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [this.latitud, this.longitud],
+      center: [this.longitud, this.latitud],
       zoom: 14
     });
 
-    const marker = new mapboxgl.Marker().setLngLat([this.latitud, this.longitud]).addTo(mapa);
+    const marker = new mapboxgl.Marker().setLngLat([this.longitud, this.latitud]).addTo(mapa);
     this.cargando = false;
+
+    mapa.on('load', () => {
+      mapa.resize();
+    });
   }
 
 

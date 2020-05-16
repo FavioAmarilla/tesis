@@ -57,10 +57,6 @@ export class HeaderComponent implements OnInit, OnChanges {
     this.mostrarMobileMenu = (width > 991) ? false : true;
   }
 
-  redireccionar(url) {
-    this.router.navigate([url]);
-  }
-
   async obtenerUsuario() {
     this.usuario = await this.servicioUsuario.obtenerUsuario();
   }
