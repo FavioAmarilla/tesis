@@ -180,4 +180,19 @@ export class CarruselComponent implements OnInit {
     }
   }
 
+  async alternarEstado(slider) {
+    const accion = (slider.activo == 'S') ? 'desactivar' : 'activar';
+    const titulo = `¿Estas seguro de ${accion} el slider?`;
+    const mensaje = '';
+    const preConfirm = { servicio: 'servicioCarrusel', callback: 'eliminar', data: slider.identificador };
+    const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
+
+    if (response.success) {
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
+    } else {
+      this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
 }

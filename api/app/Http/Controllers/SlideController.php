@@ -158,7 +158,17 @@ class SlideController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        $banner = Slide::find($id);
+        
+        if ($banner) {
+            $banner->activo = ($banner->activo == 'S') ? 'N' : 'S';
+
+            if ($banner->save()) return $this->sendResponse(true, 'El estado del banner ha sido actualizado correctamente', $banner, 200);
+
+            return $this->sendResponse(false, 'Ha ocurrido un problema al intentar actualizar el banner', null, 500);
+        }
+
+        return $this->sendResponse(false, 'No se encontro el banner', null, 404);
     }
 
     public function upload(Request $request){
