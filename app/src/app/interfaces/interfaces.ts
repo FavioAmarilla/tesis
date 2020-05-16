@@ -23,6 +23,8 @@ export interface Producto {
     precio_venta?: number;
     archivo_img?: string;
     cantidad?: number;
+    imagen?: string;
+    slug?: string;
     length?: number;
 }
 
