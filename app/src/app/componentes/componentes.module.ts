@@ -8,23 +8,30 @@ import { FiltrosComponent } from './filtros/filtros.component';
 import { UbicacionPage } from './ubicacion/ubicacion.page';
 import { FormsModule } from '@angular/forms';
 import { UbicacionPageModule } from './ubicacion/ubicacion.module';
+import { ProductoComponent } from './producto/producto.component';
+import { RouterModule } from '@angular/router';
+import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
-    FiltrosComponent
+    FiltrosComponent,
+    ProductoComponent
   ],
   imports: [
     CommonModule,
     IonicModule,
     FormsModule,
-    UbicacionPageModule
+    UbicacionPageModule,
+    RouterModule,
+    PipesModule
   ],
   exports: [
     HeaderComponent,
     FooterComponent,
-    FiltrosComponent
+    FiltrosComponent,
+    ProductoComponent
   ],
   entryComponents: [UbicacionPage]
 })

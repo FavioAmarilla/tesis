@@ -16,6 +16,7 @@ export class PaginaProducto implements OnInit {
   public slug: string;
   public cargando = true;
   public producto: any;
+  public relacionados: Producto[] = [];
 
   public cantidad: number = 1;
   public minimo = 1;
@@ -41,14 +42,12 @@ export class PaginaProducto implements OnInit {
 
   async obtenerProducto(slug) {
     this.cargando = true;
-    let parametros = {
-      slug
-    }
-    const response: any = await this.servicioProducto.obtenerProducto(null, parametros);
+    const response: any = await this.servicioProducto.obtenerProducto(slug);
 
     if (response.success) {
       this.cargando = false;
-      this.producto = response.data[0];
+      this.producto = response.data;
+      this.relacionados = this.producto.relacionados;
       this.cantidad = this.minimo = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida, 'minimo');
       this.valor = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida);
     } else {

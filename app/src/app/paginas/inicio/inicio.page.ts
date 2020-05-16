@@ -22,7 +22,7 @@ export class PaginaInicio implements OnInit {
   public cargando = true;
 
   public listaSucursales: Sucursal;
-  public listaProductos: Producto;
+  public listaProductos: Producto[] = [];
   public listaSlides: Banner;
   public listaLineas: LineaProducto;
   public idLineaProducto: any = 0;
@@ -149,31 +149,11 @@ export class PaginaInicio implements OnInit {
 
     if (response.success) {
       this.listaProductos = response.data;
-      if (response.data.length <= 0) {
-        this.listaProductos = null;
-      }
     } else {
       this.cargando = false;
-      this.listaProductos = null;
       this.servicioAlerta.dialogoError(response.message, '');
     }
     this.cargando = false;
-  }
-
-  async agregarAlCarrito(producto: any) {
-    producto.cantidad = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida, 'medida');
-    const add = this.servicioCarrito.agregarAlCarrito(producto);
-
-    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido al carrito', '');
-    else this.servicioAlerta.dialogoError('No se pudo añadir el producto al carrito', '');
-  }
-
-  async agregarAFavoritos(producto: any) {
-    producto.cantidad = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida, 'medida');
-    const add = this.servicioCarrito.agregarAFavoritos(producto);
-
-    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido sus favoritos', '');
-    else this.servicioAlerta.dialogoError('No se pudo añadir el producto sus favoritos', '');
   }
 
 }
