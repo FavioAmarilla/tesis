@@ -159,4 +159,20 @@ export class CiudadComponent implements OnInit {
       await this.paginacion(null, null);
     }
   }
+
+  async alternarEstado(ciudad) {
+    const accion = (ciudad.activo == 'S') ? 'desactivar' : 'activar';
+    const titulo = `¿Estas seguro de ${accion} la ciudad?`;
+    const mensaje = '';
+    const preConfirm = { servicio: 'servicioCiudad', callback: 'eliminar', data: ciudad.identificador };
+    const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
+
+    if (response.success) {
+      this.servicioAlerta.dialogoExito(response.message, '');
+      this.paginacion();
+      this.mostrarFormulario(false, 'LST');
+    } else {
+      this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
 }

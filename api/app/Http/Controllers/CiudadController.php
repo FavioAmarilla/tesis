@@ -192,7 +192,7 @@ class CiudadController extends BaseController
                 return $this->sendResponse(false, 'Ha ocurrido un problema', $ciudad, 400);
             }
             
-            return $this->sendResponse(false, 'Ciudad no actualizada', null, 200);
+            return $this->sendResponse(false, 'Ciudad no actualizada', null, 500);
         }
         
         return $this->sendResponse(false, 'No se encontro la Ciudad', null, 404);
@@ -206,7 +206,18 @@ class CiudadController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        $ciudad = Ciudad::find($id);
+        
+        if ($ciudad) {
+            $ciudad->activo = ($ciudad->activo == 'S') ? 'N' : 'S';
+
+            if ($ciudad->save()) return $this->sendResponse(true, 'El estado de la ciudad ha sido actualizada correctamente', $ciudad, 200);
+
+            return $this->sendResponse(false, 'Ha ocurrido un problema al intentar actualizar la ciudad', null, 500);
+        }
+
+        return $this->sendResponse(false, 'No se encontro la ciudad', null, 404);
+
     }
 
     /**
