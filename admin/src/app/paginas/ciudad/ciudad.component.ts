@@ -167,12 +167,14 @@ export class CiudadComponent implements OnInit {
     const preConfirm = { servicio: 'servicioCiudad', callback: 'eliminar', data: ciudad.identificador };
     const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
 
-    if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
-      this.paginacion();
-      this.mostrarFormulario(false, 'LST');
-    } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+    if (response) {
+      if (response.success) {
+        this.servicioAlerta.dialogoExito(response.message, '');
+        this.paginacion();
+        this.mostrarFormulario(false, 'LST');
+      } else {
+        this.servicioAlerta.dialogoError(response.message, '');
+      }
     }
   }
 }
