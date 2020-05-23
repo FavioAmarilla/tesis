@@ -48,4 +48,8 @@ class Pedido extends Model
     public function barrio(){
         return $this->hasOne('App\Barrio', 'identificador', 'id_barrio');
     }
+
+    public function pagos(){
+        return $this->hasOne('App\PedidoPagos', 'identificador', 'id_pedido');
+    }
 }

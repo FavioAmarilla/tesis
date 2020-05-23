@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Pedido;
 use App\PedidoItems;
+use App\PedidoPagos;
 use App\CuponDescuento;
 
 class PedidoController extends BaseController
@@ -20,7 +21,7 @@ class PedidoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Pedido::with(['sucursal', 'cupon', 'pais', 'ciudad', 'barrio']);
+        $query = Pedido::with(['sucursal', 'cupon', 'pais', 'ciudad', 'barrio', 'pagos']);
 
         $identificador = $request->query('identificador');
         if ($identificador) {
@@ -130,6 +131,7 @@ class PedidoController extends BaseController
         $tipo_envio = $request->input("tipo_envio");
         $estado = $request->input("estado");
         $productos = $request->input("productos");
+        $pagos = $request->input("pagos");
         
         $validator = Validator::make($request->all(), [
             'id_usuario'  => 'required',
@@ -181,12 +183,16 @@ class PedidoController extends BaseController
         if (count($productos) <= 0) {
             return $this->sendResponse(false, 'Debe agregar por lo menos un producto', 400);
         }
+        
+        //validar que llego los datos del pago
+        if (count($pago) <= 0) {
+            return $this->sendResponse(false, 'Debe agregar los datos de pago', 400);
+        }
 
         if ($pedido->save()) {
             $total = 0;
 
             foreach ($productos as $producto) {
-
                 $item = new PedidoItems();
                 $item->id_pedido = $pedido->identificador;
                 $item->id_producto = $producto['identificador'];
@@ -206,6 +212,21 @@ class PedidoController extends BaseController
             $totalPedido->total = $total;
             if (!$totalPedido->save()) {
                 return $this->sendResponse(true, 'Total de pedido no actualizado', $item, 400);
+            }
+
+            //registrar datos de pago
+            foreach ($pagos as $pago) {
+                $pagoIt = new PedidoPago();
+                $pagoIt->id_pedido = $pedido->identificador;
+                $pagoIt->vr_tipo = $pago['vr_tipo'];
+                $pagoIt->total = $total;
+                $pagoIt->importe = $pago['importe'];
+                $pagoIt->vuelto = $pago['vuelto'];
+
+                if (!$pagoIt->save()) {
+                    return $this->sendResponse(true, 'Pago de pedido no registrado', $pagoIt, 400);
+                    break;
+                }
             }
 
             return $this->sendResponse(true, 'Pedido registrado', $pedido, 201);
@@ -314,7 +335,7 @@ class PedidoController extends BaseController
     
                     $item = new PedidoItems();
                     $item->id_pedido = $pedido->identificador;
-                    $item->id_producto = $producto['identificador'];
+                    $item->vr_tipo = $producto['identificador'];
                     $item->precio_venta = $producto['precio_venta'];
                     $item->cantidad = $producto['cantidad'];
                     $item->activo = 'S';
