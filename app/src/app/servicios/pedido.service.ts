@@ -66,7 +66,7 @@ export class PedidoService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
-      this.http.put(`${API}/pedido/${id}`, pedido, { headers }).subscribe(
+      this.http.put(`${API}pedido/${id}`, pedido, { headers }).subscribe(
         (response: any) => {
           resolve(response);
         },

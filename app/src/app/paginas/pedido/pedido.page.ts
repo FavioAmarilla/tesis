@@ -1,18 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { Barrio, CuponDescuento, EcParametro, EcParamCiudad } from 'src/app/interfaces/interfaces';
-import { BarrioService } from 'src/app/servicios/barrio.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { Router } from '@angular/router';
+
 import { UbicacionPage } from '../../componentes/ubicacion/ubicacion.page';
+
+import { BarrioService } from 'src/app/servicios/barrio.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 import { CarritoService } from 'src/app/servicios/carrito.service';
 import { CuponDescuentoService } from 'src/app/servicios/cupon-descuento.service';
 import { EcParametrosService } from 'src/app/servicios/ec-parametros.service';
 import { ServicioUbicacion } from 'src/app/servicios/ubicacion.service';
-import { Router } from '@angular/router';
 import { PedidoService } from 'src/app/servicios/pedido.service';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
+
+import { Barrio, CuponDescuento, EcParametro, EcParamCiudad, Pedido } from 'src/app/interfaces/interfaces';
 import { trigger, style, animate, transition, state } from '@angular/animations';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { MatFormFieldControl } from '@angular/material/form-field';
+import { MatStepper } from '@angular/material/stepper';
 import * as moment from 'moment';
+
+declare var Bancard: any;
 
 @Component({
   selector: 'app-pedido',
@@ -51,14 +59,18 @@ export class PedidoPage implements OnInit {
 
   public cuponDescuento: CuponDescuento;
   public submitCuponDescuento = false;
-  public datosEnvio: any;
+  public datosEnvio: FormGroup;
   public datosPago: any;
   public totales: any;
 
+  public pedido: Pedido = {};
+
   public coordenadas;
 
+  @ViewChild('stepper', {static: false}) stepper: MatStepper;
+
   constructor(
-    private serivioPedido: PedidoService,
+    private servicioPedido: PedidoService,
     private servicioUsuario: UsuarioService,
     private servicioBarrio: BarrioService,
     private servicioAlerta: AlertaService,
@@ -67,7 +79,8 @@ export class PedidoPage implements OnInit {
     private servicioEcParametros: EcParametrosService,
     private servicioUbicacion: ServicioUbicacion,
     private modalCtrl: ModalController,
-    private router: Router
+    private router: Router,
+    private formBuilder: FormBuilder
 
   ) {
     this.inicializarTotales();
@@ -111,7 +124,7 @@ export class PedidoPage implements OnInit {
 
   async inicializarDatosPago() {
     this.datosPago = {
-      tipo: ''
+      tipo: 'PO'
     };
   }
 
@@ -141,7 +154,7 @@ export class PedidoPage implements OnInit {
   }
 
   async abrirModal() {
-    if (!this.datosEnvio.ciudad || this.datosEnvio.ciudad <= 0) {
+    if (!this.datosEnvio.value.id_ciudad || this.datosEnvio.value.id_ciudad <= 0) {
       this.servicioAlerta.dialogoError('Debe selecciona una ciudad', '');
       return;
     }
@@ -158,45 +171,38 @@ export class PedidoPage implements OnInit {
 
     const { data } = await modal.onWillDismiss();
     const { coordenadas } = data;
-    this.datosEnvio.ubicacion = (coordenadas.marcador) ? `${coordenadas.marcador.lat},${coordenadas.marcador.lng}` : '';
+    const ubicacion = (coordenadas.marcador) ? `${coordenadas.marcador.lat},${coordenadas.marcador.lng}` : '';
+    this.datosEnvio.controls.ubicacion.setValue(ubicacion);
 
-    this.servicioUbicacion.validarUbicacion(this.datosEnvio.ciudad, coordenadas.marcador);
+    this.servicioUbicacion.validarUbicacion(this.datosEnvio.value.id_ciudad, coordenadas.marcador);
 
   }
 
   async inicializarDatosEnvio() {
-    this.datosEnvio = {
-      tipo_envio: '',
-      pais: 0,
-      ciudad: 0,
-      barrio: 0,
-      direccion: '',
-      ubicacion: '',
-      observacion: '',
-      persona: '',
-      nro_documento: ''
-    };
+    this.datosEnvio = this.formBuilder.group({
+      observacion:    ['', Validators.required],
+      tipo_envio:     [0, Validators.required],
+      id_pais:        [0],
+      id_ciudad:      [0],
+      id_barrio:      [0],
+      direccion:      [''],
+      ubicacion:      [''],
+      persona:        [''],
+      nro_documento:  [''],
+    });
   }
 
   datosEnvioSelect(value, select) {
-    if (select === 'tipo_envio') {
-      this.datosEnvio.tipo_envio = value;
-    }
+
     if (select === 'pais') {
       this.cargando = true;
-      this.datosEnvio.pais = value;
       this.obtenerParamCiudades(this.parametros.identificador);
     }
 
     if (select === 'ciudad') {
       this.cargando = true;
-      this.datosEnvio.ciudad = value;
       this.asignarCoordenadas(value);
       this.obtenerBarrios(value);
-    }
-
-    if (select === 'barrio') {
-      this.datosEnvio.barrio = value;
     }
   }
 
@@ -219,22 +225,24 @@ export class PedidoPage implements OnInit {
   }
 
   async obtenerCupones() {
-    this.submitCuponDescuento = true;
     const codigo = this.cuponDescuento.codigo;
 
-    const parametros = {
-      codigo
-    };
+    if (codigo != '') {
+      this.submitCuponDescuento = true;
+      const parametros = {
+        codigo
+      };
 
-    const response: any = await this.servicioCupon.obtenerCupones(null, parametros);
-    if (response.success) {
-      this.cuponDescuento = response.data;
-      this.cuponDescuento.codigo = codigo;
+      const response: any = await this.servicioCupon.obtenerCupones(null, parametros);
+      if (response.success) {
+        this.cuponDescuento = response.data;
+        this.cuponDescuento.codigo = codigo;
 
-      this.obtenerTotales();
-    } else {
-      this.cargando = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+        this.obtenerTotales();
+      } else {
+        this.cargando = false;
+        this.servicioAlerta.dialogoError(response.message, '');
+      }
     }
 
     this.cargando = false;
@@ -295,45 +303,74 @@ export class PedidoPage implements OnInit {
   }
 
   async registrarPedido() {
-    let pedido: any = {};
     if (await this.obtenerUsuario() == false) {
       return;
     }
 
+    this.cargando = true;
+
     const sucursal: any = await this.servicioCarrito.getStorage('sucursal');
     const fecha = moment().format('YYYY-MM-DD');
-    const ubicacion = this.datosEnvio.ubicacion.split(',');
+    const ubicacion = this.datosEnvio.value.ubicacion.split(',');
 
-    pedido.id_cupon_descuento = this.cuponDescuento.identificador;
-    pedido.id_usuario = this.usuario.sub;
-    pedido.id_sucursal = sucursal;
-    pedido.fecha = fecha;
-    pedido.id_pais = this.datosEnvio.pais;
-    pedido.id_ciudad = this.datosEnvio.ciudad;
-    pedido.id_barrio = this.datosEnvio.barrio;
-    pedido.direccion = this.datosEnvio.direccion;
-    pedido.latitud = ubicacion[0];
-    pedido.longitud = ubicacion[1];
-    pedido.persona = this.datosEnvio.persona;
-    pedido.nro_documento = this.datosEnvio.nro_documento;
-    pedido.costo_envio = this.parametros.costo_delivery;
-    pedido.observacion = this.datosEnvio.observacion;
-    pedido.tipo_envio = this.datosEnvio.tipo_envio;
-    pedido.estado = 'PENDIENTE';
-    pedido.productos = [];
+    this.pedido.id_cupon_descuento = this.cuponDescuento.identificador;
+    this.pedido.id_usuario = this.usuario.sub;
+    this.pedido.id_sucursal = sucursal;
+    this.pedido.fecha = fecha;
+    this.pedido.latitud = ubicacion[0];
+    this.pedido.longitud = ubicacion[1];
+    this.pedido.costo_envio = this.parametros.costo_delivery;
+    this.pedido.estado = 'PENDIENTE';
+    this.pedido.productos = [];
+    // tslint:disable-next-line: forin
+    for (const index in this.datosEnvio.value) {
+      this.pedido[index] = this.datosEnvio.value[index];
+    }
     this.carrito.forEach(element => {
-      pedido.productos.push(element);
+      this.pedido.productos.push({...element});
     });
 
-    const response: any = await this.serivioPedido.registrar(pedido);
+    const response: any = await this.servicioPedido.registrar(this.pedido);
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      // this.servicioAlerta.dialogoExito(response.message, '');
+      this.pedido.identificador = response.data.identificador;
       this.servicioCarrito.removeStorage('carrito');
       this.servicioCarrito.obtenerCantidad('carrito');
-      this.router.navigate(['/pedido-lista']);
+      // this.router.navigate(['/pedido-lista']);
+      this.stepper.next();
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }
+
+    this.cargando = false;
+  }
+
+  async procesarPedido() {
+    this.cargando = true;
+
+    this.pedido.pago = this.datosPago;
+
+    const styles = {
+      'form-background-color': '#001b60',
+      'button-background-color': '#4faed1',
+      'button-text-color': '#fcfcfc',
+      'button-border-color': '#dddddd',
+      'input-background-color': '#fcfcfc',
+      'input-text-color': '#111111',
+      'input-placeholder-color': '#111111'
+    };
+
+    const response: any = await this.servicioPedido.actualizar(this.pedido, this.pedido.identificador);
+
+    if (response.success) {
+      Bancard.Checkout.createForm('iframe-container', response.data.process_id, styles);
+      this.stepper.next();
+    } else {
+      this.servicioAlerta.dialogoError(response.message, '');
+    }
+
+
+    this.cargando = false;
   }
 
   async checkTipoPago(value) {
