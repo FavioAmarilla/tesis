@@ -68,9 +68,16 @@ Route::resource('sucursal', 'SucursalController');
 Route::resource('cuponDescuento', 'CuponDescuentoController');
 Route::resource('ecParametro', 'EcParametrosController');
 Route::resource('ecParamCiudad', 'EcParamCiudadesController');
-Route::resource('ecParamSucursal', 'EcParamSucursalController');
+Route::resource('ecParamSucursal', 'EcParamSucursalesController');
 Route::resource('marca', 'MarcaController');
 Route::resource('pedido', 'PedidoController');
 Route::group(['prefix' => 'pedidoItems'], function () {
     Route::get('/', ['as' => 'pedido.items', 'uses' => 'PedidoController@items']);
+});
+
+Route::group(['prefix' => 'payment'], function() {
+    Route::post('single_buy', ['as' => 'payment.single_buy', 'uses' => 'BancardController@singleBuy']);
+    Route::post('confirm', ['as' => 'payment.confirm', 'uses' => 'BancardController@singleBuyConfirm']);
+    Route::post('get_confirmation/{shop_process_id}', ['as' => 'payment.get_confirmation', 'uses' => 'BancardController@getSingleBuyConfirmation']);
+    Route::post('rollback/{shop_process_id}', ['as' => 'payment.rollback', 'uses' => 'BancardController@singleBuyRollback']);
 });
