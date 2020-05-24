@@ -776,3 +776,7 @@ table tbody tr td.image-prod .img {
 .hidden {
   display: none !important;
 }
+
+.mat-horizontal-stepper-header .mat-step-icon {
+  color: #fff !important;
+}
