@@ -18,7 +18,7 @@ export class LoginPage implements OnInit {
 
 
   constructor(
-    private UsuarioService: UsuarioService,
+    private usuarioService: UsuarioService,
     private servicioAlerta: AlertaService,
     private router: Router
   ) {
@@ -35,12 +35,11 @@ export class LoginPage implements OnInit {
 
   async iniciarSession() {
     this.cargandoBoton = true;
-    const response: any = await this.UsuarioService.iniciarSession(this.usuario);
-    this.cargandoBoton = false;
+    const response: any = await this.usuarioService.iniciarSession(this.usuario);
+
     if (response.success) {
       this.router.navigate(['/']);
     } else {
-      this.cargandoBoton = false;
       this.servicioAlerta.dialogoError('Usuario y/o Contraseña no validos', '');
     }
 
