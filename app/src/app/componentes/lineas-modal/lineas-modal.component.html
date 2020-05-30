@@ -1,0 +1,27 @@
+<div class="modal fade show" id="modalLineas" tabindex="-1" role="dialog" aria-labelledby="modalLineasLabel" aria-hidden="true" style="display: block;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filterModal">Lineas de Producto</h5>
+        <button type="button" class="close" (click)="close()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center" (click)="seleccionarLineaProducto(0)" [ngClass]="{'active': idLineaProducto == null || idLineaProducto == 0 }"> TODOS
+            <span class="">
+              <ion-icon name="ios-arrow-forward"></ion-icon>
+            </span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let linea of listaLineas" (click)="seleccionarLineaProducto(linea.identificador)" [ngClass]="{'active': linea.identificador == idLineaProducto }" >
+            {{ linea.descripcion }}
+            <span class="">
+              <ion-icon name="ios-arrow-forward"></ion-icon>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

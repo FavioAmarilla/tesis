@@ -11,13 +11,15 @@ import { UbicacionPageModule } from './ubicacion/ubicacion.module';
 import { ProductoComponent } from './producto/producto.component';
 import { RouterModule } from '@angular/router';
 import { PipesModule } from '../pipes/pipes.module';
+import { LineasModalComponent } from './lineas-modal/lineas-modal.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
     FiltrosComponent,
-    ProductoComponent
+    ProductoComponent,
+    LineasModalComponent
   ],
   imports: [
     CommonModule,
@@ -31,8 +33,9 @@ import { PipesModule } from '../pipes/pipes.module';
     HeaderComponent,
     FooterComponent,
     FiltrosComponent,
-    ProductoComponent
+    ProductoComponent,
+    LineasModalComponent
   ],
-  entryComponents: [UbicacionPage]
+  entryComponents: [UbicacionPage, LineasModalComponent]
 })
 export class ModuloComponentes { }

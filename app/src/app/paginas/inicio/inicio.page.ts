@@ -6,10 +6,11 @@ import { CarruselService } from 'src/app/servicios/carrusel.service';
 import { environment } from '../../../environments/environment';
 import { LineasProductoService } from 'src/app/servicios/linea-producto.service';
 import { CarritoService } from 'src/app/servicios/carrito.service';
-import { IonSlides } from '@ionic/angular';
+import { IonSlides, ModalController } from '@ionic/angular';
 import { GeneralService } from 'src/app/servicios/general.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 import { SucursalService } from 'src/app/servicios/sucursal.service';
+import { LineasModalComponent } from 'src/app/componentes/lineas-modal/lineas-modal.component';
 
 @Component({
   selector: 'app-inicio',
@@ -50,6 +51,7 @@ export class PaginaInicio implements OnInit {
     private servicioLineaProd: LineasProductoService,
     private servicioGeneral: GeneralService,
     private servicioAlerta: AlertaService,
+    private modalController: ModalController,
     private router: Router
   ) {
     this.API = environment.api;
@@ -90,9 +92,10 @@ export class PaginaInicio implements OnInit {
   async seleccionarLineaProducto(value) {
     this.cargando = true;
 
-    let parametros = {
+    const parametros = {
       id_linea: value
-    }
+    };
+
     if (value <= 0) {
       delete parametros.id_linea;
     }
@@ -105,6 +108,7 @@ export class PaginaInicio implements OnInit {
     const parametros = {
       ecommerce: 'S'
     };
+
     const response: any = await this.servicioSucursal.obtenerSucursal(null, parametros);
 
     if (response.success) {
@@ -123,9 +127,10 @@ export class PaginaInicio implements OnInit {
   async seleccionarSucursal(value) {
     this.cargando = true;
 
-    let parametros = {
+    const parametros = {
       id_sucursal: value
-    }
+    };
+
     await this.servicioCarrito.setStorage('sucursal', value);
     await this.obtenerProductos(parametros);
   }
@@ -136,9 +141,10 @@ export class PaginaInicio implements OnInit {
     if (this.buscarProductoDescripcion != '' && this.buscarProductoDescripcion != null) {
       this.cargando = true;
 
-      let parametros = {
+      const parametros = {
         descripcion: this.buscarProductoDescripcion
-      }
+      };
+
       await this.obtenerProductos(parametros);
     }
   }
@@ -154,6 +160,22 @@ export class PaginaInicio implements OnInit {
       this.servicioAlerta.dialogoError(response.message, '');
     }
     this.cargando = false;
+  }
+
+  async modalLineas() {
+    const modal = await this.modalController.create({
+      component: LineasModalComponent,
+      componentProps: {
+        listaLineas: this.listaLineas,
+        idLineaProducto: this.idLineaProducto
+      }
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onWillDismiss();
+
+    if (data) { this.seleccionarLineaProducto(data.idLineaProducto); }
   }
 
 }
