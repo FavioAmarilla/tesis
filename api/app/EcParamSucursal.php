@@ -15,7 +15,7 @@ class EcParamSucursal extends Model
     ];
 
     //obtener sucursal
-    public function ciudad(){
+    public function sucursal(){
         return $this->belongsTo('App\Sucursal', 'id_sucursal');
     }
 

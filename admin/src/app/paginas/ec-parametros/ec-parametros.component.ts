@@ -8,6 +8,8 @@ import { ServicioSucursal } from 'app/servicios/sucursal.service';
 import { ServicioPais } from 'app/servicios/pais.service';
 import { ServicioAlertas } from 'app/servicios/alertas.service';
 import { ServicioCiudad } from 'app/servicios/ciudad.service';
+import { EcParametrosCiudadesService } from 'app/servicios/ec-parametros-ciudades.service';
+import { EcParametrosSucursalesService } from 'app/servicios/ec-parametros-sucursales.service';
 
 @Component({
   selector: 'app-ec-parametros',
@@ -22,6 +24,7 @@ export class EcParametrosComponent implements OnInit {
 
   public form = false;
   public accion: string = 'LST';
+  public seccion: string = 'general';
   public ecParametro: EcParametro;
   public listaParametros: EcParametro;
   public listaPaises: Pais;
@@ -40,6 +43,8 @@ export class EcParametrosComponent implements OnInit {
 
   constructor(
     private servicioParametro: EcParametrosService,
+    private servicioParamCiu: EcParametrosCiudadesService,
+    private servicioParamSuc: EcParametrosSucursalesService,
     private servicioSucursal: ServicioSucursal,
     private servicioPais: ServicioPais,
     private servicioCiudad: ServicioCiudad,
@@ -64,11 +69,18 @@ export class EcParametrosComponent implements OnInit {
   async mostrarFormulario(flag, accion, limpiarError?) {
     this.form = flag
     this.accion = accion;
+    if (!flag && accion === 'LST') {
+      this.total = 0;
+    }
+    if (flag) {
+      this.seccion = 'general';
+    }
 
     if (flag && accion === 'INS') {
       this.cargandoSucursales = true;
       this.ecParametro = new EcParametro(null, null, null, null, null, null, null);
       await this.obtenerSucursales(null, null, true);
+
       await this.obtenerPaises();
       this.listaCiudades = null;
     }
@@ -111,6 +123,7 @@ export class EcParametrosComponent implements OnInit {
     const response: any = await this.servicioParametro.obtener(id);
 
     if (response.success) {
+      console.log(response);
       this.ecParametro = response.data;
       await this.obtenerPaises();
       await this.obtenerSucursales(null, null, false);
@@ -178,12 +191,22 @@ export class EcParametrosComponent implements OnInit {
     this.cargandoSucursales = false;
   }
 
-  obtenerParamSucursales() {
+  async obtenerParamSucursales() {
     this.listaSucursalesTmp = [];
     if (this.accion != 'INS') {
-      this.ecParametro.sucursales.forEach(element => {
-        this.listaSucursalesTmp.push(element.id_sucursal)
-      });
+      let parametros = {
+        id_ec_parametro: this.ecParametro.identificador
+      }
+      const response: any = await this.servicioParamSuc.obtener(null, this.parametros);
+      let sucursales = [];
+      sucursales = response.data;
+
+      console.log(response);
+      if (sucursales) {
+        sucursales.forEach(element => {
+          this.listaSucursalesTmp.push(element.id_sucursal)
+        });
+      }
     }
   }
 
@@ -220,7 +243,6 @@ export class EcParametrosComponent implements OnInit {
       this.parametros[parametrosFiltro.key] = parametrosFiltro.value;
     }
 
-    console.log(this.parametros);
     const response: any = await this.servicioCiudad.obtener(null, this.parametros);
 
     if (response.success) {
@@ -311,11 +333,11 @@ export class EcParametrosComponent implements OnInit {
 
     this.cargando = false;
     if (response.success) {
-      this.listaSucursalesTmp = [];
-      this.listaCiudadesTmp = [];
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
+      this.listaSucursalesTmp = [];
+      this.listaCiudadesTmp = [];
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }
@@ -329,13 +351,35 @@ export class EcParametrosComponent implements OnInit {
 
     this.cargando = false;
     if (response.success) {
-      this.listaSucursalesTmp = [];
-      this.listaCiudadesTmp = [];
       this.servicioAlerta.dialogoExito(response.message, '');
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
+      this.listaSucursalesTmp = [];
+      this.listaCiudadesTmp = [];
     } else {
       this.servicioAlerta.dialogoError(response.message, '');
+    }
+  }
+
+  siguiente() {
+    if (this.seccion == 'general') {
+      this.seccion = 'sucursal';
+      return;
+    }
+    if (this.seccion == 'sucursal') {
+      this.seccion = 'ciudad';
+      return;
+    }
+  }
+
+  atras() {
+    if (this.seccion == 'ciudad') {
+      this.seccion = 'sucursal';
+      return;
+    }
+    if (this.seccion == 'sucursal') {
+      this.seccion = 'general';
+      return;
     }
   }
 

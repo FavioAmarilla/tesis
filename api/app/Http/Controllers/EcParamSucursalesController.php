@@ -7,8 +7,6 @@ use Illuminate\Http\Response;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
-use App\EcParametros;
-use App\EcParamCiudades;
 use App\EcParamSucursal;
 
 class EcParamSucursalesController extends BaseController
@@ -37,7 +35,7 @@ class EcParamSucursalesController extends BaseController
 
         $data = $query->orderBy('identificador', 'asc')->$listar();
         
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data);
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
     /**
