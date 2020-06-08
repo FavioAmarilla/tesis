@@ -20,7 +20,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nombre_completo', 'email', 'clave_acceso', 'imagen', 'fecha_nacimiento', 'telefono', 'celular', 'activo'
+        'nombre_completo', 'email', 'clave_acceso', 'imagen', 'fecha_nacimiento', 'telefono', 
+        'celular', 'activo', 'id_rol'
     ];
 
     /**
@@ -40,4 +41,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    //obtener rol
+    public function rol(){
+        return $this->belongsTo('App\Rol', 'id_rol');
+    }
 }

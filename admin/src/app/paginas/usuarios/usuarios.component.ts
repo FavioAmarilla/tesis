@@ -4,6 +4,8 @@ import { ServicioAlertas } from '../../servicios/alertas.service';
 import { Usuario } from '../../modelos/usuario';
 import { environment } from 'environments/environment';
 import swal from 'sweetalert2';
+import { Rol } from 'app/modelos/rol';
+import { RolesService } from 'app/servicios/roles.service';
 
 const API = environment.api;
 
@@ -19,7 +21,7 @@ export class UsuariosComponent implements OnInit {
   public accion: string = '';
   public usuario: Usuario;
   public listaUsuario: Usuario;
-  public cargando: boolean = false;
+  public cargando: boolean = true;
   public parametros: any = {};
   public filtrosTabla: any = {};
   public parametrosTabla: any = []
@@ -42,8 +44,11 @@ export class UsuariosComponent implements OnInit {
     attachPinText: 'Seleccionar imagen'
   };
 
+  public listaRol: Rol;
+
   constructor(
     private servicioUsuario: ServicioUsuario,
+    private servicioRol: RolesService,
     private servicioAlerta: ServicioAlertas
   ) {
     this.url = environment.api;
@@ -51,6 +56,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.obtenerRoles();
     this.paginacion(this.paginaActual);
   }
 
@@ -58,6 +64,7 @@ export class UsuariosComponent implements OnInit {
     this.filtrosTabla = {
       nombre_completo: '',
       email: '',
+      id_rol: null,
     }
   }
 
@@ -66,7 +73,18 @@ export class UsuariosComponent implements OnInit {
     this.accion = accion;
 
     if (flag && accion == 'INS') {
-      this.usuario = new Usuario(null, null, null, null, null, null, null, null);
+      this.usuario = new Usuario(null, null, null, null, null, null, null, null, null, null, null);
+    }
+  }
+
+  async obtenerRoles() {
+    const response = <any>await this.servicioRol.obtener();
+
+    if (response.success) {
+      this.listaRol = response.data
+    } else {
+      this.servicioAlerta.dialogoError(response.message, '');
+      this.mostrarFormulario(false, 'LST');
     }
   }
 
