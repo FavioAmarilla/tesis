@@ -9,6 +9,7 @@ export class Usuario {
         public telefono: string,
         public celular: string,
         public estado?: number,
-        public sub?: number
+        public sub?: number,
+        public id_rol?: number,
     ) {}
 }

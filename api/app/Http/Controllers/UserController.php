@@ -16,7 +16,7 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
-        $query = User::orderBy('nombre_completo', 'asc');
+        $query = User::with(['rol']);
 
         $nombre_completo = $request->query('nombre_completo');
         if ($nombre_completo) {
@@ -48,16 +48,16 @@ class UserController extends BaseController {
             $query->where('activo', '=', $activo);
         }
 
-        $rol = $request->query('rol');
-        if ($rol) {
-            $query->where('rol', '=', $rol);
+        $id_rol = $request->query('id_rol');
+        if ($id_rol) {
+            $query->where('id_rol', '=', $id_rol);
         }
 
 
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
-
-        $data = $query->$listar();
+        
+        $data = $query->orderBy('nombre_completo', 'asc')->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
@@ -85,6 +85,7 @@ class UserController extends BaseController {
         $fecha_nacimiento = $request->input('fecha_nacimiento');
         $telefono = $request->input('telefono');
         $celular = $request->input('celular');
+        $id_rol = $request->input('id_rol');
 
         $validator = Validator::make($request->all(), [
             'nombre_completo'  => 'required',
@@ -92,6 +93,7 @@ class UserController extends BaseController {
             'celular'  => 'required',
             'email'  => 'required',
             'clave_acceso'  => 'required',
+            'id_rol'  => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -106,6 +108,7 @@ class UserController extends BaseController {
         $usuario->email = $email;
         $usuario->clave_acceso = $clave_acceso;
         $usuario->imagen = $imagen;
+        $usuario->id_rol = $id_rol;
 
         if ($usuario->save()) {
             return $this->sendResponse(true, 'Usuario registrado', $usuario, 201);
@@ -121,7 +124,7 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        $usuario = User::find($id);
+        $usuario = User::find($id)->load('rol');
 
         if (is_object($usuario)) {
             return $this->sendResponse(true, 'Listado obtenido exitosamente', $usuario, 200);
@@ -154,12 +157,14 @@ class UserController extends BaseController {
         $fecha_nacimiento = $request->input('fecha_nacimiento');
         $telefono = $request->input('telefono');
         $celular = $request->input('celular');
+        $id_rol = $request->input('id_rol');
 
         $validator = Validator::make($request->all(), [
             'nombre_completo'  => 'required',
             'fecha_nacimiento'  => 'required',
             'celular'  => 'required',
-            'email'  => 'required'
+            'email'  => 'required',
+            'id_rol'  => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -174,6 +179,7 @@ class UserController extends BaseController {
             $usuario->fecha_nacimiento = $fecha_nacimiento;
             $usuario->telefono = $telefono;
             $usuario->celular = $celular;
+            $usuario->id_rol = $id_rol;
     
             if ($usuario->save()) {
                 $jwtAuth = new \JwtAuth();

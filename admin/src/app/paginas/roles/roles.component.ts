@@ -53,8 +53,8 @@ export class RolesComponent implements OnInit {
     this.accion = accion;
 
     if (flag && accion === 'INS') {
+      this.rol = new Rol(null, null, null, null, null);
       await this.obtenerPermisos();
-      this.rol = new Rol(null, null, null);
     }
   }
 
@@ -200,11 +200,13 @@ export class RolesComponent implements OnInit {
   }
 
   seleccionarPermisos() {
-    for (let i = 0; i < this.listaPermisos.length; i++) {
-      const permisoId = this.listaPermisos[i].identificador;
-      const index = this.rol.rol_permisos.findIndex(permiso => permiso.id_permiso == permisoId);
+    if (this.accion != 'INS') {
+      for (let i = 0; i < this.listaPermisos.length; i++) {
+        const permisoId = this.listaPermisos[i].identificador;
+        const index = this.rol.rol_permisos.findIndex(permiso => permiso.id_permiso == permisoId);
 
-      if (index != -1) this.listaPermisosTmp.push(permisoId);
+        if (index != -1) this.listaPermisosTmp.push(permisoId);
+      }
     }
   }
 
