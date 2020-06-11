@@ -36,6 +36,7 @@ import { FooterComponent } from 'app/shared/footer/footer.component';
 import { CambiarClaveComponent } from 'app/paginas/cambiar-clave/cambiar-clave.component';
 import { RolesComponent } from 'app/paginas/roles/roles.component';
 import { EcParametrosComponent  } from 'app/paginas/ec-parametros/ec-parametros.component';
+import { TimbradoComponent } from 'app/paginas/timbrado/timbrado.component';
 
 @NgModule({
   imports: [
@@ -72,7 +73,8 @@ import { EcParametrosComponent  } from 'app/paginas/ec-parametros/ec-parametros.
     SucursalComponent,
     CambiarClaveComponent,
     RolesComponent,
-    EcParametrosComponent
+    EcParametrosComponent,
+    TimbradoComponent
   ]
 })
 

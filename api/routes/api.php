@@ -57,6 +57,7 @@ Route::group(['prefix' => 'empresa'], function () {
 
 Route::resource('puntoEmision', 'PuntoEmisionController');
 Route::resource('pais', 'PaisController');
+Route::resource('timbrado', 'TimbradoController');
 
 Route::resource('ciudad', 'CiudadController');
 Route::group(['prefix' => 'ciudad'], function () {

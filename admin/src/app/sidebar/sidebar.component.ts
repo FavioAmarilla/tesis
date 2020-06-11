@@ -30,7 +30,7 @@ export const ROUTES: RouteInfo[] = [
         icono: 'fa fa-shopping-cart',
         children: [
             { url: '/dashboard/ventas/punto-emision', titulo: 'Puntos de emision', icono: 'fas fa-list-ol' },
-            { url: '/dashboard/ventas/timbrados', titulo: 'Timbrados', icono: 'fas fa-list-ol' },
+            { url: '/dashboard/ventas/timbrado', titulo: 'Timbrados', icono: 'fas fa-list-ol' },
             { url: '/dashboard/ventas/asignacion-comprobante', titulo: 'Asignación de comprob.', icono: 'fas fa-list-ol' },
             { url: '/dashboard/ventas/clientes', titulo: 'Clientes', icono: 'fas fa-user-friends' },
         ]
