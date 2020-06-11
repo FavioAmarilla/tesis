@@ -25,22 +25,17 @@
           <table class="table">
             <thead>
               <tr class="text-center">
-                <th>Productos</th>
                 <th>Fecha</th>
                 <th>Sucursal</th>
                 <th>Total</th>
                 <th>Tipo de Envio</th>
-                <th>Estado</th>
+                <th>Estado Pago</th>
+                <th>Estado Envio</th>
+                <th>Opciones</th>
               </tr>
             </thead>
             <tbody>
               <tr class="text-center" *ngFor="let pedido of listaPedido">
-                <td>
-                  <a (click)="obtenerItems(pedido.identificador)" data-toggle="modal" data-target="#modalProductos"
-                    class="btn btn-primary d-flex justify-content-center align-items-center text-center">
-                    <ion-icon name="menu"></ion-icon>
-                  </a>
-                </td>
                 <td>{{ pedido.created_at | date: "dd/MM/yyyy hh:mm:ss" }}</td>
                 <td>{{ pedido.sucursal.nombre }}</td>
                 <td>{{ pedido.total | numberFormat }} Gs.</td>
@@ -49,9 +44,20 @@
                   <div *ngIf="pedido.tipo_envio == 'RT'">RETIRO EN TIENDA</div>
                 </td>
                 <td>
+                  <div *ngIf="pedido.pagos">{{pedido.pagos.estado}}</div>
+                  <div *ngIf="!pedido.pagos">PENDIENTE</div>
+                </td>
+                <td>
                   <ion-icon class="text-warning" *ngIf="pedido.estado == 'PENDIENTE'" name="clock"></ion-icon>
                   <ion-icon class="text-info" *ngIf="pedido.estado == 'EN CAMINO'" name="md-car"></ion-icon>
                   <ion-icon class="text-success" *ngIf="pedido.estado == 'ENTREGADO'" name="md-checkbox"></ion-icon>
+                </td>
+                <td>
+                  <a (click)="obtenerItems(pedido.identificador)" data-toggle="modal" data-target="#modalProductos"
+                    class="btn btn-primary d-flex justify-content-center align-items-center text-center" title="Ver detalles">
+                    <ion-icon name="menu"></ion-icon>
+                  </a>
+                  
                 </td>
               </tr>
             </tbody>

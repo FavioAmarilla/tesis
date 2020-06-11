@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\BaseController as BaseController;
 
+use App\PedidoPagos;
+
 class BancardController extends BaseController
 {
     protected $public_key;
@@ -111,9 +113,15 @@ class BancardController extends BaseController
             // $token = md5($this->private_key.$shop_process_id."confirm".$amount.$currency);
 
             // Actualizar pago del pedido
+            $pago = PedidoPagos::find($operation['shop_process_id']);
 
+            if ($pago) {
+                $pago->estado = 'PAGADO';
 
-            return response()->json(['status' => 'success'], 200);
+                return response()->json(['status' => 'success'], 200);
+            }
+
+            return response()->json(['status' => 'error'], 200);
         }
 
         return response()->json(['status' => 'error'], 200);

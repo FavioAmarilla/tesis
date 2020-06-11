@@ -50,6 +50,6 @@ class Pedido extends Model
     }
 
     public function pagos(){
-        return $this->hasOne('App\PedidoPagos', 'identificador', 'id_pedido');
+        return $this->hasOne('App\PedidoPagos', 'id_pedido', 'identificador');
     }
 }
