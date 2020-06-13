@@ -8,8 +8,7 @@
     <a class="navbar-brand" [routerLink]="['/']"> <img src="assets/images/logo-super.png" width="150" height="45"></a>
 
     <ion-buttons slot="end" [routerLink]="['/carrito']">
-      <ion-icon class="mr-2" slot="icon-only" name="cart"></ion-icon>
-      <span class="count-cart" *ngIf="carrito">{{carrito}}</span>
+      <mat-icon class="mr-2" [matBadge]="carrito" matBadgeColor="warn" [matBadgeHidden]="!carrito">shopping_cart</mat-icon>   
     </ion-buttons>
 
   </ion-toolbar>
@@ -35,7 +34,7 @@
   <a mat-button [routerLink]="['/acerca-de']">Acerca de</a>
   <a mat-button [routerLink]="['/contacto']">Contacto</a>
   <a mat-button [routerLink]="['/carrito']">
-    <span class="icon-shopping_cart"></span>[{{ carrito }}]
+    <mat-icon class="mr-2" [matBadge]="carrito" matBadgeColor="warn" [matBadgeHidden]="!carrito">shopping_cart</mat-icon>
   </a>
 
   <a mat-button [routerLink]="['/login']" *ngIf="!usuario" >Login</a>
