@@ -1,0 +1,44 @@
+<div class="modal fade show" id="modalProductos" tabindex="-1" role="dialog" aria-labelledby="modalProductosLabel" aria-hidden="true" style="display: block;">
+  <div class="" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalProductosLabel">Detalle del pedido</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrar()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <mat-table [dataSource]="listaItems">
+
+          <ng-container matColumnDef="producto">
+            <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+            <mat-cell *matCellDef="let item">{{ item.producto.descripcion }}</mat-cell>
+          </ng-container>
+        
+          <ng-container matColumnDef="cantidad">
+            <mat-header-cell *matHeaderCellDef> Cantidad </mat-header-cell>
+            <mat-cell *matCellDef="let item">{{ item.cantidad }} </mat-cell>
+          </ng-container>
+        
+          <ng-container matColumnDef="precio_venta">
+            <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+            <mat-cell *matCellDef="let item">{{ item.precio_venta | numberFormat }} Gs.</mat-cell>
+          </ng-container>
+        
+          <ng-container matColumnDef="total">
+            <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
+            <mat-cell *matCellDef="let item">{{ item.precio_venta * item.cantidad | numberFormat }} Gs.</mat-cell>
+          </ng-container>
+        
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrar()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
