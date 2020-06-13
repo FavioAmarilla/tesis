@@ -15,45 +15,42 @@
   </ion-toolbar>
 </ion-header>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary" *ngIf="!mostrarMobileMenu">
-  <div class="container">
-    <a class="navbar-brand" [routerLink]="['/']"> <img src="assets/images/logo-super.png" width="150" height="45"></a>
+<mat-toolbar color="primary" *ngIf="!mostrarMobileMenu">
+  <a class="navbar-brand" [routerLink]="['/']"> <img src="assets/images/logo-super.png" width="150" height="45"></a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <div class="spacer"></div>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a [routerLink]="['/']" class="nav-link">Inicio</a></li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tienda</a>
-          <div class="dropdown-menu" aria-labelledby="dropdown04">
-            <a class="dropdown-item" [routerLink]="['/favoritos']">Favoritos</a>
-            <a class="dropdown-item" [routerLink]="['/carrito']">Carrito</a>
-            <a class="dropdown-item" [routerLink]="['/pedido-lista']" *ngIf="usuario">Pedidos</a>
-          </div>
-        </li>
-        <li class="nav-item"><a class="nav-link" [routerLink]="['/acerca-de']">Acerca de</a></li>
-        <li class="nav-item"><a class="nav-link" [routerLink]="['/contacto']">Contacto</a></li>
-        <li class="nav-item"><a [routerLink]="['/carrito']" class="nav-link"><span class="icon-shopping_cart"></span>[{{ carrito }}]</a></li>
-        <li class="nav-item" *ngIf="!usuario"><a class="nav-link" [routerLink]="['/login']">Login</a></li>
-        <li class="nav-item" *ngIf="!usuario"><a class="nav-link" [routerLink]="['/signup']">Registrate</a></li>
+  <a mat-button [routerLink]="['/']">Inicio</a>
 
-        <li *ngIf="usuario" class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">{{ usuario.nombre_completo }}</a>
-          <div class="dropdown-menu" aria-labelledby="dropdown04">
-            <a class="dropdown-item" [routerLink]="['/mi-cuenta']">Mi Cuenta</a>
-            <a class="dropdown-item" (click)="cerrarSession()">Cerrar sesion</a>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+  <button mat-button [matMenuTriggerFor]="tienda">
+    Tienda
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+  <mat-menu #tienda="matMenu" >
+    <a mat-menu-item [routerLink]="['/favoritos']">Favoritos</a>
+    <a mat-menu-item [routerLink]="['/carrito']">Carrito</a>
+    <a mat-menu-item [routerLink]="['/pedido-lista']" *ngIf="usuario">Pedidos</a>
+  </mat-menu>
 
+  <a mat-button [routerLink]="['/acerca-de']">Acerca de</a>
+  <a mat-button [routerLink]="['/contacto']">Contacto</a>
+  <a mat-button [routerLink]="['/carrito']">
+    <span class="icon-shopping_cart"></span>[{{ carrito }}]
+  </a>
 
+  <a mat-button [routerLink]="['/login']" *ngIf="!usuario" >Login</a>
+  <a mat-button [routerLink]="['/signup']" *ngIf="!usuario" >Registrate</a>
+
+  <button mat-button [matMenuTriggerFor]="cuenta" *ngIf="usuario">
+    {{ usuario.nombre_completo }}
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+  <mat-menu #cuenta="matMenu">
+    <a mat-menu-item class="dropdown-item" [routerLink]="['/mi-cuenta']">Mi Cuenta</a>
+    <button mat-menu-item class="dropdown-item" (click)="cerrarSession()">Cerrar sesion</button>
+  </mat-menu>
+
+</mat-toolbar>
 
 <div *ngIf="cargando" id="overlay">
   <div class="text-center">
