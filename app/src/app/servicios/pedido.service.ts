@@ -13,7 +13,7 @@ export class PedidoService {
     private http: HttpClient
   ) { }
 
-  async obtenerPedido(id?, parametros?) {
+  obtenerPedido(id?, parametros?) {
     const url = (id) ? `pedido/${id}` : `pedido`;
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -31,7 +31,7 @@ export class PedidoService {
     });
   }
 
-  async obtenerItems(parametros?) {
+  obtenerItems(parametros?) {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     const params = new HttpParams({ fromObject: parametros });
 
@@ -47,7 +47,7 @@ export class PedidoService {
     });
   }
 
-  async registrar(pedido) {
+  registrar(pedido) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
@@ -62,11 +62,28 @@ export class PedidoService {
     });
   }
 
-  async actualizar(pedido, id) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+  actualizar(pedido, id) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json');
 
     return new Promise(resolve => {
       this.http.put(`${API}pedido/${id}`, pedido, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error.error);
+        }
+      );
+    });
+  }
+
+  cancelar(id) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json');
+
+    return new Promise(resolve => {
+      this.http.delete(`${API}pedido/${id}`, { headers }).subscribe(
         (response: any) => {
           resolve(response);
         },
