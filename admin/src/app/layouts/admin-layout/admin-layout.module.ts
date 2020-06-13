@@ -37,6 +37,7 @@ import { CambiarClaveComponent } from 'app/paginas/cambiar-clave/cambiar-clave.c
 import { RolesComponent } from 'app/paginas/roles/roles.component';
 import { EcParametrosComponent  } from 'app/paginas/ec-parametros/ec-parametros.component';
 import { TimbradoComponent } from 'app/paginas/timbrado/timbrado.component';
+import { ClienteComponent } from 'app/paginas/cliente/cliente.component';
 
 @NgModule({
   imports: [
@@ -74,7 +75,8 @@ import { TimbradoComponent } from 'app/paginas/timbrado/timbrado.component';
     CambiarClaveComponent,
     RolesComponent,
     EcParametrosComponent,
-    TimbradoComponent
+    TimbradoComponent,
+    ClienteComponent
   ]
 })
 

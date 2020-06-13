@@ -22,6 +22,7 @@ import { CambiarClaveComponent } from 'app/paginas/cambiar-clave/cambiar-clave.c
 import { RolesComponent } from 'app/paginas/roles/roles.component';
 import { EcParametrosComponent } from 'app/paginas/ec-parametros/ec-parametros.component';
 import { TimbradoComponent } from 'app/paginas/timbrado/timbrado.component';
+import { ClienteComponent } from 'app/paginas/cliente/cliente.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -50,7 +51,8 @@ export const AdminLayoutRoutes: Routes = [
                 children: [
                     { path: '', redirectTo: 'punto-emision' },
                     { path: 'punto-emision', component: PuntosEmisionComponent, data: { breadcrumb: 'Punto de Emisión' } },
-                    { path: 'timbrado', component: TimbradoComponent, data: { breadcrumb: 'Timbrados' } }
+                    { path: 'timbrado', component: TimbradoComponent, data: { breadcrumb: 'Timbrados' } },
+                    { path: 'cliente', component: ClienteComponent, data: { breadcrumb: 'Clientes' } }
                 ]
             },
             {

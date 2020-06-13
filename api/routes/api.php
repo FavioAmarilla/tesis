@@ -82,3 +82,5 @@ Route::group(['prefix' => 'payment'], function() {
     Route::post('get_confirmation/{shop_process_id}', ['as' => 'payment.get_confirmation', 'uses' => 'BancardController@getSingleBuyConfirmation']);
     Route::post('rollback/{shop_process_id}', ['as' => 'payment.rollback', 'uses' => 'BancardController@singleBuyRollback']);
 });
+
+Route::resource('cliente', 'ClienteController');
