@@ -12,3 +12,24 @@
     margin: 10px;
     display: inline-block;
 }
+
+mat-expansion-panel {
+
+    position: relative;
+
+    mat-label {
+        display: block;
+        width: 100%;
+        font-weight: 500;
+    
+        span {
+            font-weight: 300;
+        }
+    }
+
+    ion-button {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+}

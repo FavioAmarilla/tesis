@@ -8,6 +8,7 @@ import { PipesModule } from '../../pipes/pipes.module';
 
 import { ModuloComponentes } from '../../componentes/componentes.module';
 import { PedidoListadoPage } from './pedido-listado.page';
+import { MatMenuModule, MatIconModule, MatExpansionModule, MatFormFieldModule, MatGridListModule, MatListModule } from '@angular/material';
 
 const routes: Routes = [
   {
@@ -23,7 +24,13 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ModuloComponentes,
-    PipesModule
+    PipesModule,
+    MatIconModule,
+    MatMenuModule,
+    MatListModule,
+    MatFormFieldModule,
+    MatExpansionModule,
+    MatGridListModule
   ],
   declarations: [PedidoListadoPage]
 })

@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { MatToolbarModule, MatButtonModule, MatMenuTrigger, MatMenu, MatIcon, MatIconModule, MatMenuModule } from '@angular/material';
+import { MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatTableModule, MatBadgeModule } from '@angular/material';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -14,6 +14,7 @@ import { UbicacionPageModule } from './ubicacion/ubicacion.module';
 import { ProductoComponent } from './producto/producto.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { LineasModalComponent } from './lineas-modal/lineas-modal.component';
+import { DetallePedidoModalComponent } from './detalle-pedido-modal/detalle-pedido-modal.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { LineasModalComponent } from './lineas-modal/lineas-modal.component';
     FooterComponent,
     FiltrosComponent,
     ProductoComponent,
-    LineasModalComponent
+    LineasModalComponent,
+    DetallePedidoModalComponent
   ],
   imports: [
     CommonModule,
@@ -30,18 +32,25 @@ import { LineasModalComponent } from './lineas-modal/lineas-modal.component';
     UbicacionPageModule,
     RouterModule,
     PipesModule,
+    MatBadgeModule,
     MatIconModule,
     MatToolbarModule,
     MatMenuModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTableModule
   ],
   exports: [
     HeaderComponent,
     FooterComponent,
     FiltrosComponent,
     ProductoComponent,
-    LineasModalComponent
+    LineasModalComponent,
+    DetallePedidoModalComponent,
   ],
-  entryComponents: [UbicacionPage, LineasModalComponent]
+  entryComponents: [
+    UbicacionPage,
+    LineasModalComponent,
+    DetallePedidoModalComponent
+  ]
 })
 export class ModuloComponentes { }

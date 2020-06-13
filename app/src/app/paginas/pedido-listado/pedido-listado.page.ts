@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ModalController, ActionSheetController, Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
+
+import { DetallePedidoModalComponent } from 'src/app/componentes/detalle-pedido-modal/detalle-pedido-modal.component';
+
 import { PedidoService } from 'src/app/servicios/pedido.service';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
-import { Router } from '@angular/router';
+import { MatMenuTrigger } from '@angular/material';
 
 @Component({
   selector: 'app-pedido-listado',
@@ -13,17 +18,32 @@ export class PedidoListadoPage implements OnInit {
 
   public cargando = true;
   public listaPedido: any;
-  public listaItems: any;
+  public mostrarListaMovil = false;
 
   constructor(
+    private actionSheetController: ActionSheetController,
     private servicioPedido: PedidoService,
     private servicioUsuario: UsuarioService,
     private servicioAlerta: AlertaService,
-    private router: Router
-  ) { }
+    private modalController: ModalController,
+    private platform: Platform,
+    private router: Router,
+  ) {
+    this.verificarResolucion();
+  }
 
   async ngOnInit() {
     await this.obtenerPedidos();
+
+    this.platform.resize
+    .subscribe(() => {
+      this.verificarResolucion();
+    });
+  }
+
+  verificarResolucion() {
+    const width = this.platform.width();
+    this.mostrarListaMovil = (width > 991) ? false : true;
   }
 
   async obtenerPedidos() {
@@ -46,6 +66,47 @@ export class PedidoListadoPage implements OnInit {
     } else this.router.navigate(['/']);
   }
 
+  async mostrarOpciones(pedido) {
+    // if (this.platform.is('cordova')) {
+      const botones = [
+        {
+          text: 'Ver productos',
+          icon: 'eye',
+          handler: () => {
+            this.obtenerItems(pedido.identificador);
+          }
+        }
+      ];
+
+      if (pedido.pagos && pedido.pagos.estado == 'PENDIENTE') {
+        if (pedido.pagos.vr_tipo == 'PO') {
+          botones.push({
+            text: 'Finalizar pedido',
+            icon: 'card',
+            handler: () => {
+              this.finalizarPedido(pedido);
+            }
+          });
+        }
+
+        botones.push({
+          text: 'Cancelar pedido',
+          icon: 'close',
+          handler: () => {
+            this.cancelarPedido(pedido);
+          }
+        });
+      }
+
+      const actionSheet = await this.actionSheetController.create({
+        header: 'Opciones',
+        buttons: botones
+      });
+
+      await actionSheet.present();
+    // }
+  }
+
   async obtenerItems(id_pedido) {
     this.cargando = true;
 
@@ -54,9 +115,35 @@ export class PedidoListadoPage implements OnInit {
     };
     const response: any = await this.servicioPedido.obtenerItems(parametros);
     if (response.success) {
-      this.listaItems = response.data;
+      const modal = await this.modalController.create({
+        component: DetallePedidoModalComponent,
+        componentProps: {
+          listaItems: response.data
+        }
+      });
+
+      await modal.present();
     } else {
       this.cargando = false;
+      this.servicioAlerta.dialogoError(response.message, '');
+    }
+
+    this.cargando = false;
+  }
+
+  finalizarPedido(pedido) {
+
+  }
+
+  async cancelarPedido(id_pedido) {
+    this.cargando = true;
+
+    const response: any = await this.servicioPedido.cancelar(id_pedido);
+    console.log('response: ', response);
+
+    if (response.success) {
+      this.servicioAlerta.dialogoExito(response.message, '');
+    } else {
       this.servicioAlerta.dialogoError(response.message, '');
     }
 

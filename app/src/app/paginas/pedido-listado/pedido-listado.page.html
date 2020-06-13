@@ -8,7 +8,7 @@
       <div class="estados">
         <div class="estados-item text-center text-warning">
           <ion-icon name="clock"></ion-icon>
-          <p>PENDINTE</p>
+          <p>PENDIENTE</p>
         </div>
         <div class="estados-item text-center text-info">
           <ion-icon name="md-car"></ion-icon>
@@ -18,92 +18,114 @@
           <ion-icon name="md-checkbox"></ion-icon>
           <p>ENTREGADO</p>
         </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-12">
-          <table class="table">
-            <thead>
-              <tr class="text-center">
-                <th>Fecha</th>
-                <th>Sucursal</th>
-                <th>Total</th>
-                <th>Tipo de Envio</th>
-                <th>Estado Pago</th>
-                <th>Estado Envio</th>
-                <th>Opciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="text-center" *ngFor="let pedido of listaPedido">
-                <td>{{ pedido.created_at | date: "dd/MM/yyyy hh:mm:ss" }}</td>
-                <td>{{ pedido.sucursal.nombre }}</td>
-                <td>{{ pedido.total | numberFormat }} Gs.</td>
-                <td>
-                  <div *ngIf="pedido.tipo_envio == 'DE'">DELIVERY</div>
-                  <div *ngIf="pedido.tipo_envio == 'RT'">RETIRO EN TIENDA</div>
-                </td>
-                <td>
-                  <div *ngIf="pedido.pagos">{{pedido.pagos.estado}}</div>
-                  <div *ngIf="!pedido.pagos">PENDIENTE</div>
-                </td>
-                <td>
-                  <ion-icon class="text-warning" *ngIf="pedido.estado == 'PENDIENTE'" name="clock"></ion-icon>
-                  <ion-icon class="text-info" *ngIf="pedido.estado == 'EN CAMINO'" name="md-car"></ion-icon>
-                  <ion-icon class="text-success" *ngIf="pedido.estado == 'ENTREGADO'" name="md-checkbox"></ion-icon>
-                </td>
-                <td>
-                  <a (click)="obtenerItems(pedido.identificador)" data-toggle="modal" data-target="#modalProductos"
-                    class="btn btn-primary d-flex justify-content-center align-items-center text-center" title="Ver detalles">
-                    <ion-icon name="menu"></ion-icon>
-                  </a>
-                  
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="estados-item text-center text-danger">
+          <mat-icon>remove_shopping_cart</mat-icon>
+          <p>CANCELADO</p>
         </div>
       </div>
+
+      <div class="row" *ngIf="!mostrarListaMovil">
+        <div class="col-md-12">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr class="text-center">
+                  <th>Fecha</th>
+                  <th>Sucursal</th>
+                  <th>Total</th>
+                  <th>Tipo de Envio</th>
+                  <th>Estado Pago</th>
+                  <th>Estado Envio</th>
+                  <th>Opciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let pedido of listaPedido">
+                  <td>{{ pedido.created_at | date: "dd/MM/yyyy hh:mm:ss" }}</td>
+                  <td>{{ pedido.sucursal.nombre }}</td>
+                  <td>{{ pedido.total | numberFormat }} Gs.</td>
+                  <td>
+                    <div *ngIf="pedido.tipo_envio == 'DE'">DELIVERY</div>
+                    <div *ngIf="pedido.tipo_envio == 'RT'">RETIRO EN TIENDA</div>
+                  </td>
+                  <td>
+                    <div>{{ (pedido.pagos) ? pedido.pagos.estado : (pedido.estado == 'CANCELADO') ? pedido.estado : 'PENDIENTE' }}</div>
+                  </td>
+                  <td>
+                    <ion-icon class="text-warning" *ngIf="pedido.estado == 'PENDIENTE'" name="clock"></ion-icon>
+                    <ion-icon class="text-info" *ngIf="pedido.estado == 'EN CAMINO'" name="md-car"></ion-icon>
+                    <ion-icon class="text-success" *ngIf="pedido.estado == 'ENTREGADO'" name="md-checkbox"></ion-icon>
+                    <mat-icon class="text-danger" *ngIf="pedido.estado == 'CANCELADO'">remove_shopping_cart</mat-icon>
+                  </td>
+                  <td class="text-center">
+                    <a mat-button [matMenuTriggerFor]="opciones" class="btn btn-primary d-flex justify-content-center align-items-center">
+                      <ion-icon name="menu"></ion-icon>
+                    </a>
+                    <mat-menu #opciones="matMenu">
+                      <button mat-menu-item (click)="obtenerItems(pedido.identificador)">
+                        <mat-icon>remove_red_eye</mat-icon>
+                        <span>Ver productos</span>
+                      </button>
+  
+                      <button mat-menu-item (click)="finalizarPedido(pedido)" *ngIf="pedido.pagos && pedido.pagos.estado == 'PENDIENTE' && pedido.pagos.vr_tipo == 'PO'">
+                        <mat-icon>credit_card</mat-icon>
+                        <span>Finalizar pedido</span>
+                      </button>
+  
+                      <button mat-menu-item (click)="cancelarPedido(pedido.identificador)" *ngIf="pedido.pagos && pedido.pagos.estado == 'PENDIENTE'">
+                        <mat-icon>cancel</mat-icon>
+                        <span>Cancelar pedido</span>
+                      </button>
+                    </mat-menu>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <mat-accordion *ngIf="mostrarListaMovil">
+        <mat-expansion-panel *ngFor="let pedido of listaPedido" class="mat-elevation-z1">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="d-flex justify-content-left align-items-center">
+              <ion-icon class="text-warning mr-2" *ngIf="pedido.estado == 'PENDIENTE'" name="clock"></ion-icon>
+              <ion-icon class="text-info mr-2" *ngIf="pedido.estado == 'EN CAMINO'" name="md-car"></ion-icon>
+              <ion-icon class="text-success mr-2" *ngIf="pedido.estado == 'ENTREGADO'" name="md-checkbox"></ion-icon>
+              <mat-icon class="text-danger mr-2" *ngIf="pedido.estado == 'CANCELADO'">remove_shopping_cart</mat-icon>
+              {{ pedido.created_at | date: "dd/MM/yyyy hh:mm:ss" }}
+            </mat-panel-title>
+            <!-- <mat-panel-description>
+              Descripción
+            </mat-panel-description> -->
+          </mat-expansion-panel-header>
+      
+          <mat-label>Sucursal: <span>{{ pedido.sucursal.nombre }}</span></mat-label>
+          <mat-label>
+            Tipo de Envio: 
+            <span *ngIf="pedido.tipo_envio == 'DE'">DELIVERY</span>
+            <span *ngIf="pedido.tipo_envio == 'RT'">RETIRO EN TIENDA</span>
+          </mat-label>
+
+          <mat-label>
+            Estado Pago: <span>{{ (pedido.pagos) ? pedido.pagos.estado : 'PENDIENTE' }}</span>
+          </mat-label>
+
+          <mat-label>
+            Estado Envio: <span>{{ pedido.estado || 'PENDIENTE'}}</span>
+          </mat-label>
+          <mat-label>Total: <span>{{ pedido.total | numberFormat }} Gs.</span></mat-label>
+
+          <ion-button (click)="mostrarOpciones(pedido)" fill="clear" shape="round">
+            <ion-icon mode="ios" slot="icon-only" name="more"></ion-icon>
+          </ion-button>
+        </mat-expansion-panel>
+      </mat-accordion>
+
     </div>
 
 
   </section>
-
-  <div class="modal fade" id="modalProductos" tabindex="-1" role="dialog" aria-labelledby="modalProductosLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalProductosLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <table class="table">
-            <thead>
-              <td>Producto</td>
-              <td>Cantidad</td>
-              <td>Precio Venta</td>
-              <td>Total</td>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of listaItems">
-                <td>{{ item.producto.nombre }}</td>
-                <td>{{ item.cantidad }}</td>
-                <td>{{ item.precio_venta | numberFormat }} Gs.</td>
-                <td>{{ item.precio_venta * item.cantidad | numberFormat }} Gs.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <app-footer></app-footer>
 

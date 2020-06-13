@@ -664,6 +664,16 @@ table tbody tr td.image-prod .img {
   .shop-filters {
     display: none;
   }
+  .estados {
+    margin-top: 10px !important;
+  }
+  .estados-item {
+    margin: 0 !important;
+    padding: 5px !important;
+  }
+  .ftco-section {
+    padding: 0px !important;
+  }
 }
 
 .filter-toggle {
