@@ -92,7 +92,7 @@ class CiudadController extends BaseController
 
         if ($ciudad->save()) {
             $ciudadCoord = new CiudadCoord();
-            $ciudadCoord->id_ciudad = $id;
+            $ciudadCoord->id_ciudad = $ciudad->identificador;
 
             if (count($poligono) > 0) {
                 $coordenadas = [];
