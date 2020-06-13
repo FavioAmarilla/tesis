@@ -391,12 +391,47 @@ class PedidoController extends BaseController
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $pedido = Pedido::find($id);
+
+        if ($pedido) {
+
+            $pago = PedidoPagos::where('id_pedido', '=', $pedido->identificador)->first();
+            if ($pago) {
+                $tipo_envio = $pago->vr_tipo;
+                if ($tipo_envio == 'PO') {
+                    $bancard = new BancardController();
+                    return $bancard->singleBuyRollback($request, $pago->referencia);
+                } else {
+                    $pago->estado = 'CANCELADO';
+                    if ($pago->save()) {
+                        return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
+                    }
+                    return $this->sendResponse(false, 'Ha ocurrido un problema, por favor intentelo más tarde', false, 500);
+                }
+            } else {
+                $pagoIt = new PedidoPagos();
+                $pagoIt->id_pedido = $pedido->identificador;
+                $pagoIt->vr_tipo = 'AUTO';
+                $pagoIt->total = 0;
+                $pagoIt->importe = 0;
+                $pagoIt->vuelto = 0;
+                $pagoIt->referencia = 0;
+
+                if ($pagoIt->save()) {
+                    return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
+                }
+
+                return $this->sendResponse(false, 'Ha ocurrido un problema, por favor intentelo más tarde', false, 500);
+            }
+        }
+
+        return $this->sendResponse(false, 'No se encontro el pedido', null, 404);
     }
 
     public function items(Request $request)
