@@ -8,6 +8,8 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Timbrado;
+use App\AsignacionComprobante;
+use App\PuntoEmision;
 
 class TimbradoController extends BaseController
 {
@@ -18,7 +20,7 @@ class TimbradoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Timbrado::orderBy('fecha_desde', 'asc');
+        $query = Timbrado::orderBy('fecha_desde', 'desc');
 
         $numero = $request->query('numero');
         if ($numero) {
@@ -97,7 +99,22 @@ class TimbradoController extends BaseController
         $timbrado->fecha_hasta = $fecha_hasta;
 
         if ($timbrado->save()) {
-            return $this->sendResponse(true, 'Timbrado registrado', $timbrado, 201);
+            //obtener todos los puntos de emision
+            $puntosEmision = PuntoEmision::orderBy('identificador', 'asc')->get();
+            foreach($puntosEmision as $puntoEm){
+                
+                //se aguarda la asignacion de comprobante
+                $asignacion = new AsignacionComprobante();
+                $asignacion->id_timbrado = $timbrado->identificador;
+                $asignacion->id_punto_emision = $puntoEm->identificador;
+                $asignacion->ult_usado = 0;
+                if (!$asignacion->save()) {
+                    return $this->sendResponse(false, 'Error al registrar asignacion de comprobante', null, 400);
+                }
+            } 
+            
+
+            return $this->sendResponse(true, 'Timbrado registrado', $timbrado, 200);
         }
         
         return $this->sendResponse(false, 'Timbrado no registrado', null, 400);
@@ -165,6 +182,28 @@ class TimbradoController extends BaseController
             $timbrado->numero_hasta = $numero_hasta;
             $timbrado->fecha_desde = $fecha_desde;
             $timbrado->fecha_hasta = $fecha_hasta;
+            
+            //validar si ya tiene asignaciones de comprobantes
+            //en caso de no tener se crean
+            $asignacion = AsignacionComprobante::where('id_timbrado', '=', $id)->exists();
+            if (!$asignacion) {
+
+                //obtener todos los puntos de emision
+                $puntosEmision = PuntoEmision::orderBy('identificador', 'asc')->get();
+                foreach($puntosEmision as $puntoEm){
+                    
+                    //se aguarda la asignacion de comprobante
+                    $asignacion = new AsignacionComprobante();
+                    $asignacion->id_timbrado = $id;
+                    $asignacion->id_punto_emision = $puntoEm->identificador;
+                    $asignacion->ult_usado = 0;
+                    if (!$asignacion->save()) {
+                        return $this->sendResponse(false, 'Error al registrar asignacion de comprobante', null, 400);
+                    }
+                } 
+            }
+
+
             if ($timbrado->save()) {
                 return $this->sendResponse(true, 'Timbrado actualizado', $timbrado, 200);
             }
