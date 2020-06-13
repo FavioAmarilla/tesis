@@ -76,7 +76,7 @@ class RolController extends BaseController
 
             foreach ($permisos as $permiso) {
                 $rolPermisos = new RolPermisos();
-                $rolPermisos->id_rol = $id;
+                $rolPermisos->id_rol = $rol->identificador;
                 $rolPermisos->id_permiso = $permiso;
                 if (!$rolPermisos->save()) {
                     return $this->sendResponse(true, 'Permisos no registrados', $rolPermisos, 201);
