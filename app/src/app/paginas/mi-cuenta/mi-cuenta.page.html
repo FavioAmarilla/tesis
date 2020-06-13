@@ -1,101 +1,95 @@
 <app-header [cargando]="cargando"></app-header>
 
 <ion-content>
-  <section class="ftco-section tab-principal ">
-    <h1 class="mb-4">Mi Cuenta</h1>
+  <ion-grid class="container">
 
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a href="#inf-cliente" class="nav-link active" data-toggle="tab">
-          <ion-icon name="person"></ion-icon>&nbsp;
-          Informacion del Cliente
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="#cambiar-pass" class="nav-link" data-toggle="tab">
-          <ion-icon name="key"></ion-icon>&nbsp;
-          Cambiar contraseña
-        </a>
-      </li>
-    </ul>
+    <ion-row>
+      <ion-col size="12" class="border-bottom">
+        <ion-title color="primary">Mi Cuenta</ion-title>
+      </ion-col>
+    </ion-row>
 
-    <div class="tab-content">
-      <br>
+    <ion-row>
+      <ion-col size="12">
+        <mat-tab-group mat-align-tabs="start">
+          <mat-tab label="Informacion General">
+            <form class="col-md-12">
+              <div class="row">
+                <div class="col-md-6">
+                  <h3>
+                    <ion-icon name="person"></ion-icon> &nbsp; Datos Personales
+                  </h3>
+                  <hr class="border-top mt-0">
+                  <div class="form-group">
+                    <label for="Nombre completo">Nombre completo</label>
+                    <input type="text" class="form-control" name="nombre_completo"
+                      [(ngModel)]="usuario.nombre_completo">
+                  </div>
+                  <div class="form-group">
+                    <label for="Email">Email</label>
+                    <input type="email" class="form-control" name="email" [(ngModel)]="usuario.email">
+                  </div>
+                  <div class="form-group">
+                    <label for="Fecha de nacimiento">Fecha de nacimiento</label>
+                    <input type="date" class="form-control" name="fecha_nacimiento"
+                      [(ngModel)]="usuario.fecha_nacimiento">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <h3>
+                    <ion-icon name="call"></ion-icon> &nbsp; Informacion de Contacto
+                  </h3>
+                  <hr class="border-top mt-0">
+                  <div class="form-group">
+                    <label for="Telefono">Telefono</label>
+                    <input type="text" class="form-control" name="telefono" [(ngModel)]="usuario.telefono">
+                  </div>
+                  <div class="form-group">
+                    <label for="Celular">Celular</label>
+                    <input type="text" class="form-control" name="celular" [(ngModel)]="usuario.celular">
+                  </div>
+                  <hr>
+                </div>
+              </div>
 
-      <div class="tab-pane fade show active" id="inf-cliente">
-        <form class="col-md-12">
-          <div class="row">
-            <div class="col-md-6">
-              <h3>
-                <ion-icon name="person"></ion-icon> &nbsp; Datos Personales
-              </h3>
-              <hr class="border-top mt-0">
+              <br>
               <div class="form-group">
-                <label for="Nombre completo">Nombre completo</label>
-                <input type="text" class="form-control" name="nombre_completo" [(ngModel)]="usuario.nombre_completo">
+                <a class="btn btn-primary py-2 px-4" (click)="actualizarDatos()">
+                  <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status"
+                    aria-hidden="true"></span>
+                  Aceptar
+                </a>
+              </div>
+            </form>
+          </mat-tab>
+          <mat-tab label="Cambiar contraseña">
+            <form class="col-md-5">
+              <div class="form-group">
+                <label for="Contraseña actual">Contraseña actual</label>
+                <input type="password" class="form-control" name="clave_actual" [(ngModel)]="usuario.clave_actual">
               </div>
               <div class="form-group">
-                <label for="Email">Email</label>
-                <input type="email" class="form-control" name="email" [(ngModel)]="usuario.email">
+                <label for="Contraseña actual">Contraseña nueva</label>
+                <input type="password" class="form-control" name="clave_nueva" [(ngModel)]="usuario.clave_nueva">
               </div>
               <div class="form-group">
-                <label for="Fecha de nacimiento">Fecha de nacimiento</label>
-                <input type="date" class="form-control" name="fecha_nacimiento" [(ngModel)]="usuario.fecha_nacimiento">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <h3>
-                <ion-icon name="call"></ion-icon> &nbsp; Informacion de Contacto
-              </h3>
-              <hr class="border-top mt-0">
-              <div class="form-group">
-                <label for="Telefono">Telefono</label>
-                <input type="text" class="form-control" name="telefono" [(ngModel)]="usuario.telefono">
+                <label for="Contraseña actual">Repita contraseña</label>
+                <input type="password" class="form-control" name="repita" [(ngModel)]="usuario.repita">
               </div>
               <div class="form-group">
-                <label for="Celular">Celular</label>
-                <input type="text" class="form-control" name="celular" [(ngModel)]="usuario.celular">
+                <a class="btn btn-primary py-2 px-4" (click)="cambiarPassword()">
+                  <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status"
+                    aria-hidden="true"></span>
+                  Aceptar
+                </a>
               </div>
-              <hr>
-            </div>
-          </div>
+            </form>
+          </mat-tab>
+        </mat-tab-group>
+      </ion-col>
+    </ion-row>
 
-          <br>
-          <div class="form-group">
-            <a class="btn btn-primary py-2 px-4" (click)="actualizarDatos()">
-              <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status"
-                aria-hidden="true"></span>
-              Aceptar
-            </a>
-          </div>
-        </form>
-      </div>
-
-      <div class="tab-pane fade" id="cambiar-pass">
-        <form class="col-md-5">
-          <div class="form-group">
-            <label for="Contraseña actual">Contraseña actual</label>
-            <input type="password" class="form-control" name="clave_actual" [(ngModel)]="usuario.clave_actual">
-          </div>
-          <div class="form-group">
-            <label for="Contraseña actual">Contraseña nueva</label>
-            <input type="password" class="form-control" name="clave_nueva" [(ngModel)]="usuario.clave_nueva">
-          </div>
-          <div class="form-group">
-            <label for="Contraseña actual">Repita contraseña</label>
-            <input type="password" class="form-control" name="repita" [(ngModel)]="usuario.repita">
-          </div>
-          <div class="form-group">
-            <a class="btn btn-primary py-2 px-4" (click)="cambiarPassword()">
-              <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status"
-                aria-hidden="true"></span>
-              Aceptar
-            </a>
-          </div>
-        </form>
-      </div>
-    </div>
-  </section>
+  </ion-grid>
 
   <app-footer></app-footer>
 </ion-content>
