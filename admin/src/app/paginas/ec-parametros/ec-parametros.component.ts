@@ -362,6 +362,8 @@ export class EcParametrosComponent implements OnInit {
   }
 
   siguiente() {
+    this.inicializarFiltros();  
+    
     if (this.seccion == 'general') {
       this.seccion = 'sucursal';
       return;
@@ -373,6 +375,8 @@ export class EcParametrosComponent implements OnInit {
   }
 
   atras() {
+    this.inicializarFiltros();  
+
     if (this.seccion == 'ciudad') {
       this.seccion = 'sucursal';
       return;
