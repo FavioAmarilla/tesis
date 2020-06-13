@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\BaseController as BaseController;
 
+use App\Pedido;
 use App\PedidoPagos;
 
 class BancardController extends BaseController
@@ -82,7 +83,33 @@ class BancardController extends BaseController
         $respuesta = $this->requestHTTP($url, $data);
 
         if ($respuesta->status == 'success') {
-            return $this->sendResponse(true, 'La transacción ha sido cancelada correctamente', null, 200);
+
+            $pago = PedidoPagos::where('referencia', '=', $shop_process_id)->first();
+
+            if ($pago) {
+                $pago->estado = 'CANCELADO';
+
+                if ($pago->save()) {
+                    $pedido = Pedido::find($pedido->id_pedido);
+
+                    if ($pedido) {
+                        $pedido->estado = 'CANCELADO';
+
+                        if ($pedido->save()) {
+                            return $this->sendResponse(true, 'La transacción ha sido cancelada correctamente', null, 200);
+                        }
+
+                        return $this->sendResponse(false, 'Ha ocurrido un problema al intentar actualizar el estado del pedido', null, 500);
+                    }
+
+                    return $this->sendResponse(false, 'Ha ocurrido un problema al intentar actualizar el estado del pedido', null, 404);
+                }
+
+                return $this->sendResponse(false, 'Ha ocurrido un problema al intentar cancelar la transacción', null, 500);
+            }
+
+            return $this->sendResponse(false, 'Ha ocurrido un problema al intentar cancelar la transacción', null, 404);
+
         }
 
         return $this->sendResponse(false, 'No se pudo cancelar la transacción', null, 400);
@@ -118,7 +145,15 @@ class BancardController extends BaseController
             if ($pago) {
                 $pago->estado = 'PAGADO';
 
-                return response()->json(['status' => 'success'], 200);
+                if ($pago->save()) {
+                    $producto = Pedido::find($pago->id_pedido);
+    
+                    if ($producto) { }
+    
+                    return response()->json(['status' => 'success'], 200);
+                }
+
+                return response()->json(['status' => 'error'], 200);
             }
 
             return response()->json(['status' => 'error'], 200);
