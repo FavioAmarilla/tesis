@@ -62,13 +62,13 @@ export class CambiarClaveComponent implements OnInit {
     let logueado: any = await this.servicioUsuario.obtenerUsuario();
     if (!logueado) {
       this.cargandoBoton = await false;
-      this.servicioAlerta.dialogoError('Debe estar logueado', '');
+      this.servicioAlerta.dialogoError('Debe estar logueado');
       this.router.navigate(['/login']);
       return;
     }
     if (this.password.clave_nueva != this.password.repita) {
       this.cargandoBoton = await false;
-      this.servicioAlerta.dialogoError('Las contraseñas no coinciden', '');
+      this.servicioAlerta.dialogoError('Las contraseñas no coinciden');
       return;
     }
 
@@ -77,7 +77,7 @@ export class CambiarClaveComponent implements OnInit {
     let response: any = await this.servicioUsuario.cambiarPassword(this.password);
     console.log(response);
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
 
       //volver a loguear al usuario
       let loguear = {
@@ -89,7 +89,7 @@ export class CambiarClaveComponent implements OnInit {
 
     } else {
       this.cargandoBoton = await false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargandoBoton = await false;

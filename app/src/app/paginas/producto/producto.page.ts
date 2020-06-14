@@ -51,7 +51,7 @@ export class PaginaProducto implements OnInit {
       this.cantidad = this.minimo = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida, 'minimo');
       this.valor = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida);
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
       this.router.navigate(['/']);
     }
     this.cargando = false;
@@ -70,8 +70,8 @@ export class PaginaProducto implements OnInit {
     this.producto.cantidad = this.cantidad;
     const add = await this.servicioCarrito.agregarAlCarrito(this.producto);
 
-    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido al carrito', '');
-    else this.servicioAlerta.dialogoError('No se pudo añadir el producto al carrito', '');
+    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido al carrito');
+    else this.servicioAlerta.dialogoError('No se pudo añadir el producto al carrito');
   }
 
 }

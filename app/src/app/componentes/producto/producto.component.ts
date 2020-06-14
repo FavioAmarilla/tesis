@@ -25,16 +25,16 @@ export class ProductoComponent implements OnInit {
     producto.cantidad = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida, 'medida');
     const add = this.servicioCarrito.agregarAlCarrito(producto);
 
-    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido al carrito', '');
-    else this.servicioAlerta.dialogoError('No se pudo añadir el producto al carrito', '');
+    if (add) this.servicioAlerta.dialogoCarrito('El producto ha sido añadido al carrito');
+    else this.servicioAlerta.dialogoError('No se pudo añadir el producto al carrito');
   }
 
   async agregarAFavoritos(producto: any) {
     producto.cantidad = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida, 'medida');
     const add = this.servicioCarrito.agregarAFavoritos(producto);
 
-    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido sus favoritos', '');
-    else this.servicioAlerta.dialogoError('No se pudo añadir el producto sus favoritos', '');
+    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido sus favoritos');
+    else this.servicioAlerta.dialogoError('No se pudo añadir el producto sus favoritos');
   }
 
 }

@@ -61,7 +61,7 @@ export class CiudadComponent implements OnInit {
     if (response.success) {
       this.listaPaises = response.data
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
       this.mostrarFormulario(false, 'LST');
     }
   }
@@ -91,7 +91,7 @@ export class CiudadComponent implements OnInit {
       this.porPagina = response.per_page;
       this.total = response.total;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargando = false;
@@ -106,7 +106,7 @@ export class CiudadComponent implements OnInit {
       this.ciudad = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
       this.mostrarFormulario(false, 'LST');
     }
     this.cargando = false;
@@ -118,11 +118,11 @@ export class CiudadComponent implements OnInit {
 
     this.cargando = false;
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -132,11 +132,11 @@ export class CiudadComponent implements OnInit {
 
     this.cargando = false;
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -169,11 +169,11 @@ export class CiudadComponent implements OnInit {
 
     if (response) {
       if (response.success) {
-        this.servicioAlerta.dialogoExito(response.message, '');
+        this.servicioAlerta.dialogoExito(response.message);
         this.paginacion();
         this.mostrarFormulario(false, 'LST');
       } else {
-        this.servicioAlerta.dialogoError(response.message, '');
+        this.servicioAlerta.dialogoError(response.message);
       }
     }
   }

@@ -61,13 +61,13 @@ export class MiCuentaPage implements OnInit {
     let logueado: any = await this.servicioUsuario.obtenerUsuario();
     if (!logueado) {
       this.cargandoBoton = await false;
-      this.servicioAlerta.dialogoError('Debe estar logueado', '');
+      this.servicioAlerta.dialogoError('Debe estar logueado');
       this.router.navigate(['/login']);
       return;
     }
     if (this.password.clave_nueva != this.password.repita) {
       this.cargandoBoton = await false;
-      this.servicioAlerta.dialogoError('Las contraseñas no coinciden', '');
+      this.servicioAlerta.dialogoError('Las contraseñas no coinciden');
       return;
     }
 
@@ -76,7 +76,7 @@ export class MiCuentaPage implements OnInit {
     this.password.clave_actual = this.usuario.clave_acceso;
     let response: any = await this.servicioUsuario.cambiarPassword(this.password);
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
 
       //volver a loguear al usuario
       let loguear = {
@@ -88,7 +88,7 @@ export class MiCuentaPage implements OnInit {
 
     } else {
       this.cargandoBoton = await false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargandoBoton = await false;
@@ -99,14 +99,14 @@ export class MiCuentaPage implements OnInit {
     let response: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.sub);
     
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       //se guarda token con los nuevos datos del usuario
       this.servicioUsuario.guardarToken(response.data.token);
       //se obtiene los nuevos datos del usuario
       this.obtenerUsuario();
     } else {
       this.cargandoBoton = await false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargandoBoton = await false;

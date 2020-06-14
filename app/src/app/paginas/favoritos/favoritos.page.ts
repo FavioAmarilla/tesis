@@ -42,7 +42,7 @@ export class FavoritosPage implements OnInit {
     console.log(response);
 
     if (!response) {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
     this.obtenerFavoritos();
 
@@ -53,8 +53,8 @@ export class FavoritosPage implements OnInit {
     producto.cantidad = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida, 'medida');
     const add = this.servicioCarrito.agregarAlCarrito(producto);
 
-    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido al carrito', '');
-    else this.servicioAlerta.dialogoError('No se pudo añadir el producto al carrito', '');
+    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido al carrito');
+    else this.servicioAlerta.dialogoError('No se pudo añadir el producto al carrito');
   }
 
 }

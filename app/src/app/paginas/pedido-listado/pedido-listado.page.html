@@ -61,7 +61,7 @@
                     <a mat-button [matMenuTriggerFor]="opciones" class="btn btn-primary d-flex justify-content-center align-items-center">
                       <ion-icon name="menu"></ion-icon>
                     </a>
-                    <mat-menu #opciones="matMenu">
+                    <mat-menu #opciones="matMenu" xPosition="before">
                       <button mat-menu-item (click)="obtenerItems(pedido.identificador)">
                         <mat-icon>remove_red_eye</mat-icon>
                         <span>Ver productos</span>

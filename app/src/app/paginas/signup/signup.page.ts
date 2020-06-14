@@ -41,10 +41,10 @@ export class SignupPage implements OnInit {
 
     this.cargandoBoton = false;
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.router.navigate(['/']);
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 

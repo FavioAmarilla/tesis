@@ -94,7 +94,7 @@ export class PedidoPage implements OnInit {
     await this.obtenerTotales();
 
     if (this.totales.subtotal < this.parametros.monto_minimo) {
-      this.servicioAlerta.dialogoError('El monto de compra debe ser mayor a: ' + this.parametros.monto_minimo, '');
+      this.servicioAlerta.dialogoError('El monto de compra debe ser mayor a: ' + this.parametros.monto_minimo);
       this.router.navigate(['/carrito']);
     }
 
@@ -155,7 +155,7 @@ export class PedidoPage implements OnInit {
 
   async abrirModal() {
     if (!this.datosEnvio.value.id_ciudad || this.datosEnvio.value.id_ciudad <= 0) {
-      this.servicioAlerta.dialogoError('Debe selecciona una ciudad', '');
+      this.servicioAlerta.dialogoError('Debe selecciona una ciudad');
       return;
     }
     const coords = this.coordenadas;
@@ -218,7 +218,7 @@ export class PedidoPage implements OnInit {
       this.mostrarBarrios = true;
     } else {
       this.cargando = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargando = false;
@@ -241,7 +241,7 @@ export class PedidoPage implements OnInit {
         this.obtenerTotales();
       } else {
         this.cargando = false;
-        this.servicioAlerta.dialogoError(response.message, '');
+        this.servicioAlerta.dialogoError(response.message);
       }
     }
 
@@ -256,7 +256,7 @@ export class PedidoPage implements OnInit {
       this.listaPaises.push(response.data.pais);
     } else {
       this.cargando = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -276,7 +276,7 @@ export class PedidoPage implements OnInit {
       this.mostrarCiudades = true;
     } else {
       this.cargando = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargando = false;
@@ -295,7 +295,7 @@ export class PedidoPage implements OnInit {
     if (response) {
       this.usuario = response;
     } else {
-      this.servicioAlerta.dialogoError('Debe estar Logueado para confirmar la operacion', '');
+      this.servicioAlerta.dialogoError('Debe estar Logueado para confirmar la operacion');
       this.router.navigate(['/login']);
     }
 
@@ -332,14 +332,14 @@ export class PedidoPage implements OnInit {
 
     const response: any = await this.servicioPedido.registrar(this.pedido);
     if (response.success) {
-      // this.servicioAlerta.dialogoExito(response.message, '');
+      // this.servicioAlerta.dialogoExito(response.message);
       this.pedido.identificador = response.data.identificador;
       this.servicioCarrito.removeStorage('carrito');
       this.servicioCarrito.obtenerCantidad('carrito');
       // this.router.navigate(['/pedido-lista']);
       this.stepper.next();
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargando = false;
@@ -366,7 +366,7 @@ export class PedidoPage implements OnInit {
       Bancard.Checkout.createForm('iframe-container', response.data.process_id, styles);
       this.stepper.next();
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
 

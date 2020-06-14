@@ -111,7 +111,7 @@ export class EcParametrosComponent implements OnInit {
       this.porPagina = response.per_page;
       this.total = response.total;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargando = false;
@@ -135,7 +135,7 @@ export class EcParametrosComponent implements OnInit {
 
       this.mostrarFormulario(true, 'UPD');
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
       this.mostrarFormulario(false, 'LST');
     }
     this.cargando = false;
@@ -147,7 +147,7 @@ export class EcParametrosComponent implements OnInit {
     if (response.success) {
       this.listaPaises = response.data
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
       this.mostrarFormulario(false, 'LST');
     }
   }
@@ -185,7 +185,7 @@ export class EcParametrosComponent implements OnInit {
       this.total = response.total;
     } else {
       this.cargandoSucursales = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargandoSucursales = false;
@@ -251,7 +251,7 @@ export class EcParametrosComponent implements OnInit {
       this.total = response.total;
     } else {
       this.cargandoCiudades = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargandoCiudades = false;
@@ -333,13 +333,13 @@ export class EcParametrosComponent implements OnInit {
 
     this.cargando = false;
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
       this.listaSucursalesTmp = [];
       this.listaCiudadesTmp = [];
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -351,13 +351,13 @@ export class EcParametrosComponent implements OnInit {
 
     this.cargando = false;
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
       this.listaSucursalesTmp = [];
       this.listaCiudadesTmp = [];
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 

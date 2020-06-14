@@ -87,7 +87,7 @@ export class RolesComponent implements OnInit {
       this.seleccionarPermisos();
     } else {
       this.cargandoPermisos = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargandoPermisos = false;
@@ -119,7 +119,7 @@ export class RolesComponent implements OnInit {
       this.porPagina = response.per_page;
       this.total = response.total;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargando = false;
@@ -135,7 +135,7 @@ export class RolesComponent implements OnInit {
       await this.obtenerPermisos();
       this.mostrarFormulario(true, 'UPD');
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
       this.mostrarFormulario(false, 'LST');
     }
     this.cargando = false;
@@ -149,11 +149,11 @@ export class RolesComponent implements OnInit {
     this.cargando = false;
     if (response.success) {
       this.listaPermisosTmp = [];
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -165,11 +165,11 @@ export class RolesComponent implements OnInit {
     this.cargando = false;
     if (response.success) {
       this.listaPermisosTmp = [];
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 

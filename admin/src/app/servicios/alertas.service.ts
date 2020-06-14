@@ -65,7 +65,7 @@ export class ServicioAlertas {
     });
   }
 
-  dialogoExito(titulo, mensaje) {
+  dialogoExito(titulo, mensaje = '') {
     swal.fire({
       title: titulo,
       text: mensaje,
@@ -75,7 +75,7 @@ export class ServicioAlertas {
     });
   }
 
-  dialogoInformacion(titulo, mensaje) {
+  dialogoInformacion(titulo, mensaje = '') {
     swal.fire({
       title: titulo,
       text: mensaje,
@@ -85,7 +85,7 @@ export class ServicioAlertas {
     });
   }
 
-  dialogoError(titulo, mensaje) {
+  dialogoError(titulo, mensaje = '') {
     swal.fire({
       title: titulo,
       text: mensaje,

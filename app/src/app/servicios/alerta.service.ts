@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import swal from 'sweetalert2';
 import { CarritoService } from './carrito.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,8 @@ import { CarritoService } from './carrito.service';
 export class AlertaService {
 
   constructor(
-    private carritoService: CarritoService
+    private carritoService: CarritoService,
+    private router: Router
   ) { }
 
   dialogoConfirmacion(titulo, mensaje, preConfirm?) {
@@ -40,7 +42,7 @@ export class AlertaService {
     });
   }
 
-  dialogoExito(titulo, mensaje) {
+  dialogoExito(titulo, mensaje = '') {
     swal.fire({
       title: titulo,
       text: mensaje,
@@ -51,7 +53,7 @@ export class AlertaService {
     });
   }
 
-  dialogoInformacion(titulo, mensaje) {
+  dialogoInformacion(titulo, mensaje = '') {
     swal.fire({
       title: titulo,
       text: mensaje,
@@ -62,7 +64,7 @@ export class AlertaService {
     });
   }
 
-  dialogoError(titulo, mensaje) {
+  dialogoError(titulo, mensaje = '') {
     swal.fire({
       title: titulo,
       text: mensaje,
@@ -70,6 +72,23 @@ export class AlertaService {
       confirmButtonColor: '#6bd098',
       confirmButtonText: 'Aceptar',
       heightAuto: false
+    });
+  }
+
+  dialogoCarrito(titulo, mensaje = '') {
+    swal.fire({
+      title: titulo,
+      text: mensaje,
+      icon: 'success',
+      showCancelButton: true,
+      confirmButtonColor: '#6bd098',
+      confirmButtonText: 'Ver carrito',
+      cancelButtonText: 'Seguir comprando',
+      heightAuto: false
+    }).then((respuesta) => {
+      if (respuesta.value) {
+        this.router.navigate(['/carrito']);
+      }
     });
   }
 }

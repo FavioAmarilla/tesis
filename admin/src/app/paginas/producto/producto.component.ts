@@ -95,7 +95,7 @@ export class ProductoComponent implements OnInit {
     if (response.success) {
       this.listaSucursales = response.data;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
       this.mostrarFormulario(false, 'LST');
     }
   }
@@ -106,7 +106,7 @@ export class ProductoComponent implements OnInit {
     if (response.success) {
       this.listaImpuestos = response.data;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
       this.mostrarFormulario(false, 'LST');
     }
   }
@@ -117,7 +117,7 @@ export class ProductoComponent implements OnInit {
     if (response.success) {
       this.listaLineas = response.data;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
       this.mostrarFormulario(false, 'LST');
     }
   }
@@ -128,7 +128,7 @@ export class ProductoComponent implements OnInit {
     if (response.success) {
       this.listaMarcas = response.data;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
       this.mostrarFormulario(false, 'LST');
     }
   }
@@ -159,7 +159,7 @@ export class ProductoComponent implements OnInit {
       this.porPagina = response.per_page;
       this.total = response.total;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargando = false;
@@ -174,7 +174,7 @@ export class ProductoComponent implements OnInit {
       this.producto = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
       this.mostrarFormulario(false, 'LST');
     }
     this.cargando = false;
@@ -186,11 +186,11 @@ export class ProductoComponent implements OnInit {
 
     this.cargando = false;
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -200,11 +200,11 @@ export class ProductoComponent implements OnInit {
 
     this.cargando = false;
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 

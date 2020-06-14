@@ -58,7 +58,7 @@ export class PedidoListadoPage implements OnInit {
         this.listaPedido = response.data;
       } else {
         this.cargando = false;
-        this.servicioAlerta.dialogoError(response.message, '');
+        this.servicioAlerta.dialogoError(response.message);
         this.router.navigate(['/']);
       }
 
@@ -125,7 +125,7 @@ export class PedidoListadoPage implements OnInit {
       await modal.present();
     } else {
       this.cargando = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargando = false;
@@ -142,9 +142,9 @@ export class PedidoListadoPage implements OnInit {
     console.log('response: ', response);
 
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargando = false;

@@ -61,7 +61,7 @@ export class FiltrosComponent implements OnInit {
         await this.carritoService.setStorage('sucursal', central.identificador);
       }
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -77,7 +77,7 @@ export class FiltrosComponent implements OnInit {
     if (response.success) {
       this.listaLineas = response.data;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -91,7 +91,7 @@ export class FiltrosComponent implements OnInit {
     if (response.success) {
       this.listaMarcas = response.data;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 

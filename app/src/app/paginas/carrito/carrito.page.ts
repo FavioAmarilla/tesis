@@ -73,7 +73,7 @@ export class PaginaCarrito implements OnInit {
     const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, preConfirm);
 
     if (!response) {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
     this.obtenerCarrito();
   }
@@ -89,7 +89,7 @@ export class PaginaCarrito implements OnInit {
       this.listaSucursales = response.data;
     } else {
       this.cargando = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -100,7 +100,7 @@ export class PaginaCarrito implements OnInit {
       this.parametros = response.data;
     } else {
       this.cargando = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -108,13 +108,13 @@ export class PaginaCarrito implements OnInit {
     // validar que usuario este logueado
     const usuario: any = await this.servicioUsuario.obtenerUsuario();
     if (!usuario) {
-      this.servicioAlerta.dialogoError('Debe estar Logueado para confirmar la operacion', '');
+      this.servicioAlerta.dialogoError('Debe estar Logueado para confirmar la operacion');
       return;
     }
 
     // validar monto minimo de compra
     if (this.total < this.parametros.monto_minimo) {
-      this.servicioAlerta.dialogoError('El monto de compra debe ser mayor a: ' + this.parametros.monto_minimo, '');
+      this.servicioAlerta.dialogoError('El monto de compra debe ser mayor a: ' + this.parametros.monto_minimo);
       return;
     }
 

@@ -62,7 +62,7 @@ export class PuntosEmisionComponent implements OnInit {
     if (response.success) {
       this.listaSucursal = response.data;
     } else {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.mostrarFormulario(false, 'LST');
     }
   }
@@ -92,7 +92,7 @@ export class PuntosEmisionComponent implements OnInit {
       this.porPagina = response.per_page;
       this.total = response.total;
     } else {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
     }
 
     this.cargando = false;
@@ -107,7 +107,7 @@ export class PuntosEmisionComponent implements OnInit {
       this.puntoEmision = response.data;
       this.mostrarFormulario(true, 'UPD');
     } else {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.mostrarFormulario(false, 'LST');
     }
     this.cargando = false;
@@ -119,11 +119,11 @@ export class PuntosEmisionComponent implements OnInit {
     
     this.cargando = false;
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
     } else {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
     }
   }
 
@@ -133,11 +133,11 @@ export class PuntosEmisionComponent implements OnInit {
 
     this.cargando = false;
     if (response.success) {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
       this.mostrarFormulario(false, 'LST');
     } else {
-      this.servicioAlerta.dialogoExito(response.message, '');
+      this.servicioAlerta.dialogoExito(response.message);
     }
   }
 

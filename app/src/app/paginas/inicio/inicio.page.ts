@@ -75,7 +75,7 @@ export class PaginaInicio implements OnInit {
       this.listaSlides = response.data;
     } else {
       this.cargando = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -85,7 +85,7 @@ export class PaginaInicio implements OnInit {
     if (response.success) {
       this.listaLineas = response.data;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -120,7 +120,7 @@ export class PaginaInicio implements OnInit {
       }
     } else {
       this.cargando = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -157,7 +157,7 @@ export class PaginaInicio implements OnInit {
       this.listaProductos = response.data;
     } else {
       this.cargando = false;
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
     this.cargando = false;
   }

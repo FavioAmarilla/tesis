@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit, OnChanges {
         this.carrito = response;
       },
       (error: any) => {
-        this.servicioAlerta.dialogoError(error, '');
+        this.servicioAlerta.dialogoError(error);
       }
     );
   }

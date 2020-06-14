@@ -94,7 +94,7 @@ export class ClienteComponent implements OnInit {
     if (response.success) {
       this.listaRol = response.data
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
       this.mostrarFormulario(false, 'LST');
     }
   }
@@ -124,7 +124,7 @@ export class ClienteComponent implements OnInit {
       this.porPagina = response.per_page;
       this.total = response.total;
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargando = false;
@@ -152,7 +152,7 @@ export class ClienteComponent implements OnInit {
 
       this.mostrarFormulario(true, 'UPD');
     } else {
-      this.servicioAlerta.dialogoError(response.message, '');
+      this.servicioAlerta.dialogoError(response.message);
     }
     this.cargando = false;
   }
@@ -185,15 +185,15 @@ export class ClienteComponent implements OnInit {
       const responseCliente: any = await this.servicioCliente.registrar(this.cliente);
 
       if (responseCliente.success) {
-        this.servicioAlerta.dialogoExito(responseCliente.message, '');
+        this.servicioAlerta.dialogoExito(responseCliente.message);
         this.paginacion();
         this.mostrarFormulario(false, 'LST');
       } else {
-        this.servicioAlerta.dialogoError(responseCliente.message, '');
+        this.servicioAlerta.dialogoError(responseCliente.message);
       }
 
     } else {
-      this.servicioAlerta.dialogoError(responseUsuario.message, '');
+      this.servicioAlerta.dialogoError(responseUsuario.message);
     }
   }
 
@@ -226,15 +226,15 @@ export class ClienteComponent implements OnInit {
       console.log('responseCliente', responseCliente);
 
       if (responseCliente.success) {
-        this.servicioAlerta.dialogoExito(responseCliente.message, '');
+        this.servicioAlerta.dialogoExito(responseCliente.message);
         this.paginacion();
         this.mostrarFormulario(false, 'LST');
       } else {
-        this.servicioAlerta.dialogoError(responseCliente.message, '');
+        this.servicioAlerta.dialogoError(responseCliente.message);
       }
 
     } else {
-      this.servicioAlerta.dialogoError(responseUsuario.message, '');
+      this.servicioAlerta.dialogoError(responseUsuario.message);
     }
   }
 
