@@ -86,7 +86,7 @@
       </div>
 
       <mat-accordion *ngIf="mostrarListaMovil">
-        <mat-expansion-panel *ngFor="let pedido of listaPedido" class="mat-elevation-z1">
+        <mat-expansion-panel *ngFor="let pedido of listaPedido" class="mat-elevation-z0">
           <mat-expansion-panel-header>
             <mat-panel-title class="d-flex justify-content-left align-items-center">
               <ion-icon class="text-warning mr-2" *ngIf="pedido.estado == 'PENDIENTE'" name="clock"></ion-icon>
