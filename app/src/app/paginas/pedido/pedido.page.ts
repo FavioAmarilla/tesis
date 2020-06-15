@@ -180,7 +180,7 @@ export class PedidoPage implements OnInit {
 
   async inicializarDatosEnvio() {
     this.datosEnvio = this.formBuilder.group({
-      observacion:    ['', Validators.required],
+      observacion:    [''],
       tipo_envio:     [0, Validators.required],
       id_pais:        [0],
       id_ciudad:      [0],
