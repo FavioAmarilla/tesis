@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { UbicacionPage } from '../../componentes/ubicacion/ubicacion.page';
 
@@ -15,7 +15,7 @@ import { UsuarioService } from 'src/app/servicios/usuario.service';
 
 import { Barrio, CuponDescuento, EcParametro, EcParamCiudad, Pedido } from 'src/app/interfaces/interfaces';
 import { trigger, style, animate, transition, state } from '@angular/animations';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { MatStepper } from '@angular/material/stepper';
 import * as moment from 'moment';
@@ -60,7 +60,7 @@ export class PedidoPage implements OnInit {
   public cuponDescuento: CuponDescuento;
   public submitCuponDescuento = false;
   public datosEnvio: FormGroup;
-  public datosPago: any;
+  public datosPago: FormGroup;
   public totales: any;
 
   public pedido: Pedido = {};
@@ -79,14 +79,18 @@ export class PedidoPage implements OnInit {
     private servicioEcParametros: EcParametrosService,
     private servicioUbicacion: ServicioUbicacion,
     private modalCtrl: ModalController,
+    private formBuilder: FormBuilder,
     private router: Router,
-    private formBuilder: FormBuilder
+    private route: ActivatedRoute
 
   ) {
     this.inicializarTotales();
     this.inicializarCuponDescuento();
     this.inicializarDatosPago();
     this.inicializarDatosEnvio();
+    this.route.queryParams.subscribe(params => {
+      if (params.pedido) { this.obtenerPedido(params.pedido); }
+    });
   }
 
   async ngOnInit() {
@@ -101,7 +105,22 @@ export class PedidoPage implements OnInit {
     this.cargando = false;
   }
 
-  async inicializarTotales() {
+  async obtenerPedido(id) {
+    const response: any = await this.servicioPedido.obtenerPedido(id);
+    if (response.success) {
+      const pedido = response.data;
+      this.pedido.identificador = id;
+
+      Object.keys(pedido).map(key => {
+        if (this.datosEnvio.controls[key]) { this.datosEnvio.controls[key].setValue(pedido[key]); }
+        else if (this.datosPago.controls[key]) { this.datosPago.controls[key].setValue(pedido[key]); }
+      });
+
+      if (pedido.cupon) { this.cuponDescuento = pedido.cupon; }
+    }
+  }
+
+  inicializarTotales() {
     this.totales = {
       subtotal: 0,
       delivery: 10000,
@@ -110,7 +129,7 @@ export class PedidoPage implements OnInit {
     };
   }
 
-  async inicializarCuponDescuento() {
+  inicializarCuponDescuento() {
     this.cuponDescuento = {
       identificador: 0,
       descripcion: 0,
@@ -122,10 +141,15 @@ export class PedidoPage implements OnInit {
     };
   }
 
-  async inicializarDatosPago() {
-    this.datosPago = {
-      tipo: 'PO'
-    };
+  inicializarDatosPago() {
+    this.datosPago = this.formBuilder.group({
+      tipo:    ['', Validators.required],
+      importe: ['']
+    }, {
+      validators: [
+        this.requiredValidator('tipo', '==', 'PERC', 'importe')
+      ]
+    });
   }
 
   async obtenerTotales() {
@@ -171,17 +195,19 @@ export class PedidoPage implements OnInit {
 
     const { data } = await modal.onWillDismiss();
     const { coordenadas } = data;
-    const ubicacion = (coordenadas.marcador) ? `${coordenadas.marcador.lat},${coordenadas.marcador.lng}` : '';
-    this.datosEnvio.controls.ubicacion.setValue(ubicacion);
 
-    this.servicioUbicacion.validarUbicacion(this.datosEnvio.value.id_ciudad, coordenadas.marcador);
+    if (coordenadas.marcador) {
+      const ubicacion = `${coordenadas.marcador.lat},${coordenadas.marcador.lng}`;
+      this.datosEnvio.controls.ubicacion.setValue(ubicacion);
+
+      this.servicioUbicacion.validarUbicacion(this.datosEnvio.value.id_ciudad, coordenadas.marcador);
+    }
 
   }
 
-  async inicializarDatosEnvio() {
+  inicializarDatosEnvio() {
     this.datosEnvio = this.formBuilder.group({
-      observacion:    ['', Validators.required],
-      tipo_envio:     [0, Validators.required],
+      tipo_envio:     [0,  Validators.required],
       id_pais:        [0],
       id_ciudad:      [0],
       id_barrio:      [0],
@@ -189,7 +215,30 @@ export class PedidoPage implements OnInit {
       ubicacion:      [''],
       persona:        [''],
       nro_documento:  [''],
+      observacion:    ['']
+    }, {
+      validators: [
+        this.requiredValidator('tipo_envio', '==', 'DE', 'id_pais'),
+        this.requiredValidator('tipo_envio', '==', 'DE', 'id_ciudad'),
+        this.requiredValidator('tipo_envio', '==', 'DE', 'id_barrio'),
+        this.requiredValidator('tipo_envio', '==', 'DE', 'direccion'),
+        this.requiredValidator('tipo_envio', '==', 'DE', 'ubicacion'),
+        this.requiredValidator('tipo_envio', '==', 'RT', 'persona'),
+        this.requiredValidator('tipo_envio', '==', 'RT', 'nro_documento')
+      ]
     });
+  }
+
+  requiredValidator(masterControlLabel: string, operator: string, conditionalValue: any, slaveControlLabel: string) {
+    return (group: FormGroup): { [key: string]: any } => {
+      const masterControl = group.controls[masterControlLabel];
+      const slaveControl = group.controls[slaveControlLabel];
+      if (eval(`'${masterControl.value}' ${operator} '${conditionalValue}'`) || !masterControl.value) {
+        return Validators.required(slaveControl);
+      }
+      slaveControl.setErrors(null);
+      return null;
+    }
   }
 
   datosEnvioSelect(value, select) {
@@ -282,7 +331,7 @@ export class PedidoPage implements OnInit {
     this.cargando = false;
   }
 
-  async asignarCoordenadas(ciudadId) {
+  asignarCoordenadas(ciudadId) {
     const ciudad = this.listaCiudades.find(element => element.identificador == ciudadId);
     if (ciudad) {
       this.coordenadas = ciudad.coordenadas;
@@ -322,6 +371,8 @@ export class PedidoPage implements OnInit {
     this.pedido.costo_envio = this.parametros.costo_delivery;
     this.pedido.estado = 'PENDIENTE';
     this.pedido.productos = [];
+    this.pedido.pago = this.datosPago.value;
+
     // tslint:disable-next-line: forin
     for (const index in this.datosEnvio.value) {
       this.pedido[index] = this.datosEnvio.value[index];
@@ -330,14 +381,24 @@ export class PedidoPage implements OnInit {
       this.pedido.productos.push({...element});
     });
 
+    if (this.pedido.identificador) {
+      this.actualizarPedido();
+      return;
+    }
+
+    this.registrarPedido();
+  }
+
+  async procesarPedido() {
     const response: any = await this.servicioPedido.registrar(this.pedido);
+
     if (response.success) {
-      // this.servicioAlerta.dialogoExito(response.message);
-      this.pedido.identificador = response.data.identificador;
-      this.servicioCarrito.removeStorage('carrito');
-      this.servicioCarrito.obtenerCantidad('carrito');
-      // this.router.navigate(['/pedido-lista']);
-      this.stepper.next();
+      if (this.pedido.pago == 'PO') { this.pagoOnlineBancard(response.data.process_id); }
+      else {
+        this.servicioCarrito.removeStorage('carrito');
+        this.servicioCarrito.obtenerCantidad('carrito');
+        this.router.navigate(['/pago-finalizado']);
+      }
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }
@@ -345,10 +406,24 @@ export class PedidoPage implements OnInit {
     this.cargando = false;
   }
 
-  async procesarPedido() {
-    this.cargando = true;
+  async actualizarPedido() {
+    const response: any = await this.servicioPedido.actualizar(this.pedido, this.pedido.identificador);
 
-    this.pedido.pago = this.datosPago;
+    if (response.success) {
+      if (this.pedido.pago == 'PO') { this.pagoOnlineBancard(response.data.process_id); }
+      else {
+        this.servicioCarrito.removeStorage('carrito');
+        this.servicioCarrito.obtenerCantidad('carrito');
+        this.router.navigate(['/pago-finalizado']);
+      }
+    } else {
+      this.servicioAlerta.dialogoError(response.message);
+    }
+
+    this.cargando = false;
+  }
+
+  pagoOnlineBancard(process_id) {
 
     const styles = {
       'form-background-color': '#001b60',
@@ -360,21 +435,12 @@ export class PedidoPage implements OnInit {
       'input-placeholder-color': '#111111'
     };
 
-    const response: any = await this.servicioPedido.actualizar(this.pedido, this.pedido.identificador);
+    Bancard.Checkout.createForm('iframe-container', process_id, styles);
 
-    if (response.success) {
-      Bancard.Checkout.createForm('iframe-container', response.data.process_id, styles);
-      this.stepper.next();
-    } else {
-      this.servicioAlerta.dialogoError(response.message);
-    }
-
-
-    this.cargando = false;
   }
 
-  async checkTipoPago(value) {
-    this.datosPago.tipo = value;
+  checkTipoPago(radio) {
+    this.datosPago.controls.tipo.setValue(radio.value);
   }
 
 

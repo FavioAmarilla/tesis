@@ -11,6 +11,7 @@ import { IonicModule } from '@ionic/angular';
 import { PedidoPage } from './pedido.page';
 import { ModuloComponentes } from '../../componentes/componentes.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
+import { MatExpansionModule } from '@angular/material';
 
 const routes: Routes = [
   {
@@ -28,6 +29,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ModuloComponentes,
     PipesModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatStepperModule,
     MatInputModule

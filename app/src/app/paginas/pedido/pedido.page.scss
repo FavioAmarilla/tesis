@@ -1,1 +1,25 @@
 
+.stepper-title {
+    font-size: 20px !important;
+    margin: 0 !important;
+}
+
+mat-expansion-panel {
+
+    border-top: 0.5px solid #efefef;
+    border-bottom: 0.5px solid #efefef;
+    margin: 0;
+
+    .mat-expansion-panel-header-title {
+        flex-grow: 0 !important;
+    }
+
+    .mat-expansion-panel-header[aria-disabled=true] .mat-expansion-panel-header-description {
+        color: rgba(0, 0, 0, 0.54) !important;
+    }
+}
+
+.order-resume .title {
+    margin-top: 0 !important;
+    margin-bottom: 20px !important;
+}

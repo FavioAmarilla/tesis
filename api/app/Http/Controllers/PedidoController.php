@@ -132,7 +132,7 @@ class PedidoController extends BaseController
         $tipo_envio = $request->input("tipo_envio");
         $estado = $request->input("estado");
         $productos = $request->input("productos");
-        // $pagos = $request->input("pagos");
+        $pagos = $request->input("pago");
         
         $validator = Validator::make($request->all(), [
             'id_usuario'  => 'required',
@@ -185,10 +185,10 @@ class PedidoController extends BaseController
             return $this->sendResponse(false, 'Debe agregar por lo menos un producto', 400);
         }
         
-        //validar que llego los datos del pago
-        // if (count($pago) <= 0) {
-        //     return $this->sendResponse(false, 'Debe agregar los datos de pago', 400);
-        // }
+        // validar que llego los datos del pago
+        if (count($pago) <= 0) {
+            return $this->sendResponse(false, 'Debe agregar los datos de pago', 400);
+        }
 
         if ($pedido->save()) {
             $total = 0;
@@ -215,20 +215,31 @@ class PedidoController extends BaseController
                 return $this->sendResponse(true, 'Total de pedido no actualizado', $item, 400);
             }
 
-            // registrar datos de pago
-            // foreach ($pagos as $pago) {
-            //     $pagoIt = new PedidoPagos();
-            //     $pagoIt->id_pedido = $pedido->identificador;
-            //     $pagoIt->vr_tipo = $pago['vr_tipo'];
-            //     $pagoIt->total = $total;
-            //     $pagoIt->importe = $pago['importe'];
-            //     $pagoIt->vuelto = $pago['importe'] - $total;
+            if ($pago) {
+                $pagoIt = PedidoPagos::where('id_pedido', '=', $pedido->identificador)->first();
+                if (!$pagoIt) $pagoIt = new PedidoPagos();
+                
+                $pagoIt->id_pedido = $pedido->identificador;
+                $pagoIt->vr_tipo = $pago['tipo'];
+                $pagoIt->total = $total;
+                $pagoIt->importe = (isset($pago['importe'])) ? $pago['importe'] : 0;
+                $pagoIt->vuelto = (isset($pago['importe'])) ? $pago['importe'] - $total : 0;
+                $pagoIt->referencia = ($pagoIt->referencia) ? $pagoIt->referencia : $this->obtenerUltimaReferenciaPago();
 
-            //     if (!$pagoIt->save()) {
-            //         return $this->sendResponse(true, 'Pago de pedido no registrado', $pagoIt, 400);
-            //         break;
-            //     }
-            // }
+                if ($pagoIt->save()) {
+                    if ($pago && $pago['tipo'] == 'PO') {
+                        $request->request->add(['amount' => $total]);
+                        $request->request->add(['shop_process_id' => $pagoIt->referencia]);
+
+                        $bancard = new BancardController();
+                        return $bancard->singleBuy($request);
+                    }
+
+                    return $this->sendResponse(true, 'Pedido registrado correctamente', null, 200);
+                }
+
+                return $this->sendResponse(true, 'Pago de pedido no registrado', $pagoIt, 400);
+            }
 
             return $this->sendResponse(true, 'Pedido registrado', $pedido, 201);
         }
@@ -244,7 +255,7 @@ class PedidoController extends BaseController
      */
     public function show($id)
     {
-        $pedido = Pedido::find($id);
+        $pedido = Pedido::with(['sucursal', 'cupon', 'pais', 'ciudad', 'barrio', 'pagos'])->find($id);
 
         if (is_object($pedido)) {
             return $this->sendResponse(true, 'Se listaron exitosamente los registros', $pedido, 200);
@@ -364,7 +375,7 @@ class PedidoController extends BaseController
                     $pagoIt->total = $total;
                     $pagoIt->importe = (isset($pago['importe'])) ? $pago['importe'] : 0;
                     $pagoIt->vuelto = (isset($pago['importe'])) ? $pago['importe'] - $total : 0;
-                    $pagoIt->referencia = $this->obtenerUltimaReferenciaPago();
+                    $pagoIt->referencia = ($pagoIt->referencia) ? $pagoIt->referencia : $this->obtenerUltimaReferenciaPago();
 
                     if ($pagoIt->save()) {
                         if ($pago && $pago['tipo'] == 'PO') {
@@ -374,6 +385,8 @@ class PedidoController extends BaseController
                             $bancard = new BancardController();
                             return $bancard->singleBuy($request);
                         }
+
+                        return $this->sendResponse(true, 'Pedido registrado correctamente', null, 200);
                     }
 
                     return $this->sendResponse(true, 'Pago de pedido no registrado', $pagoIt, 400);
@@ -417,14 +430,21 @@ class PedidoController extends BaseController
             } else {
                 $pagoIt = new PedidoPagos();
                 $pagoIt->id_pedido = $pedido->identificador;
-                $pagoIt->vr_tipo = 'AUTO';
+                $pagoIt->vr_tipo = 'AT'; // AUTO
                 $pagoIt->total = 0;
                 $pagoIt->importe = 0;
                 $pagoIt->vuelto = 0;
                 $pagoIt->referencia = 0;
+                $pagoIt->estado = 'CANCELADO';
 
                 if ($pagoIt->save()) {
-                    return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
+
+                    $pedido->estado = 'CANCELADO';
+                    if ($pedido->save()) {
+                        return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
+                    }
+                    
+                    return $this->sendResponse(false, 'Ha ocurrido un problema, por favor intentelo más tarde', false, 500);
                 }
 
                 return $this->sendResponse(false, 'Ha ocurrido un problema, por favor intentelo más tarde', false, 500);

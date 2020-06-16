@@ -8,222 +8,237 @@
       <div class="col-md-12 tab-principal">
 
         <!-- <h1 class="mb-4">Proceso de Pago</h1> -->
-
-        <mat-horizontal-stepper linear #stepper>
-          <!-- datos de envio -->
-          <mat-step [stepControl]="datosEnvio">
-            <ng-template matStepLabel>Datos de Envio</ng-template>
-            <div class="container tab-vertical">
-              <div class="row justify-content-center">
-                <form [formGroup]="datosEnvio" class="d-flex col-lg-8">
-                  <div class="col-lg-6 cart-wrap">
-                    <div class="cart-total mb-3">
-                      <h3>Observación (*)</h3>
-                      <div class="form-group">
-                        <textarea formControlName="observacion" class="form-control text-left px-3" cols="30" rows="5"></textarea>
-                      </div>
-                    </div>
-                  </div>
-                
-                  <div class="col-lg-6 cart-wrap">
-                    <div class="cart-total mb-3">
-                      <h3>Tipo de envío (*)</h3>
+        <div class="content">
+          <div class="row">
+            <mat-vertical-stepper linear #stepper class="col-lg-8">
+              <!-- datos de envio -->
+              <mat-step [stepControl]="datosEnvio">
+                <ng-template matStepLabel><h2 class="stepper-title">Datos de Envio</h2></ng-template>
+                  <form [formGroup]="datosEnvio">
+                  
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-lg-6 col-sm-12 cart-wrap">
+                          <div class="cart-total mb-3">
+                            <h3>Tipo de envío (*)</h3>
+                          
+                            <div class="form-group">
+                              <select formControlName="tipo_envio" name="tipo_envio" class="form-control text-left px-3" placeholder="Tipo de Envio" (change)="datosEnvioSelect($event.target.value, 'tipo_envio')">
+                                <option value="0">-- SELECCIONE--</option>
+                                <option value="DE"> DELIVERY </option>
+                                <option value="RT"> RETIRO EN TIENDA </option>
+                              </select>
+                            </div>
                     
-                      <div class="form-group">
-                        <select formControlName="tipo_envio" name="tipo_envio" class="form-control text-left px-3" placeholder="Tipo de Envio" (change)="datosEnvioSelect($event.target.value, 'tipo_envio')">
-                          <option value="0" disabled>-- SELECCIONE--</option>
-                          <option value="DE"> DELIVERY </option>
-                          <option value="RT"> RETIRO EN TIENDA </option>
-                        </select>
-                      </div>
-              
-                      <!-- tipo de envio delivery -->
-                      <div *ngIf="datosEnvio.value.tipo_envio == 'DE'" [@enterAnimation]>
-                        <h3>Ingrese su destino para el envio</h3>
-              
-                        <div class="form-group">
-                          <select formControlName="id_pais" name="pais" class="form-control text-left px-3" placeholder="Pais" (change)="datosEnvioSelect($event.target.value, 'pais')">
-                            <option value="0" disabled>-- SELECCIONE--</option>
-                            <option *ngFor="let pais of listaPaises" value="{{ pais.identificador }}"> {{ pais.nombre }}</option>
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <div *ngIf="!mostrarCiudades">
-                            <input type="text" class="form-control" placeholder="Ciudad" disabled>
-                          </div>
-                          <div *ngIf="mostrarCiudades">
-                            <select formControlName="id_ciudad" name="ciudad" class="form-control text-left px-3" placeholder="Ciudad" (change)="datosEnvioSelect($event.target.value, 'ciudad')">
-                              <option value="0">-- SELECCIONE--</option>
-                              <option *ngFor="let ciudad of listaCiudades" value="{{ ciudad.identificador }}">
-                                {{ ciudad.nombre }}
-                              </option>
-                            </select>
-                          </div>
-              
-                        </div>
-                        <div class="form-group">
-                          <div *ngIf="!mostrarBarrios">
-                            <input type="text" class="form-control" placeholder="Barrio" disabled>
-                          </div>
-                          <div *ngIf="mostrarBarrios">
-                            <select formControlName="id_barrio" name="barrio" class="form-control text-left px-3" placeholder="Barrio" (change)="datosEnvioSelect($event.target.value, 'barrio')">
-                              <option value="0">-- SELECCIONE--</option>
-                              <option *ngFor="let barrio of listaBarrios" value="{{ barrio.identificador }}">
-                                {{ barrio.nombre }}
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <input type="text" name="direccion" class="form-control text-left px-3" placeholder="Direccion" formControlName="direccion">
-                        </div>
-                        <div class="form-group">
-                          <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                              <div class="input-group-prepend" data-toggle="modal" data-target="#modalUbicacion" (click)="abrirModal()">
-                                <span class=" input-group-text">
-                                  <ion-icon name="bookmark"></ion-icon>
-                                </span>
+                            <!-- tipo de envio delivery -->
+                            <div *ngIf="datosEnvio.value.tipo_envio == 'DE'" [@enterAnimation]>
+                              <h3>Ingrese su destino para el envio</h3>
+                    
+                              <div class="form-group">
+                                <select formControlName="id_pais" name="pais" class="form-control text-left px-3" placeholder="Pais" (change)="datosEnvioSelect($event.target.value, 'pais')">
+                                  <option value="0">-- SELECCIONE--</option>
+                                  <option *ngFor="let pais of listaPaises" value="{{ pais.identificador }}"> {{ pais.nombre }}</option>
+                                </select>
+                              </div>
+                              <div class="form-group">
+                                <div *ngIf="!mostrarCiudades">
+                                  <input type="text" class="form-control" placeholder="Ciudad" readonly>
+                                </div>
+                                <div *ngIf="mostrarCiudades">
+                                  <select formControlName="id_ciudad" name="ciudad" class="form-control text-left px-3" placeholder="Ciudad" (change)="datosEnvioSelect($event.target.value, 'ciudad')">
+                                    <option value="0">-- SELECCIONE--</option>
+                                    <option *ngFor="let ciudad of listaCiudades" value="{{ ciudad.identificador }}">
+                                      {{ ciudad.nombre }}
+                                    </option>
+                                  </select>
+                                </div>
+                    
+                              </div>
+                              <div class="form-group">
+                                <div *ngIf="!mostrarBarrios">
+                                  <input type="text" class="form-control" placeholder="Barrio" readonly>
+                                </div>
+                                <div *ngIf="mostrarBarrios">
+                                  <select formControlName="id_barrio" name="barrio" class="form-control text-left px-3" placeholder="Barrio" (change)="datosEnvioSelect($event.target.value, 'barrio')">
+                                    <option value="0">-- SELECCIONE--</option>
+                                    <option *ngFor="let barrio of listaBarrios" value="{{ barrio.identificador }}">
+                                      {{ barrio.nombre }}
+                                    </option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <input type="text" name="direccion" class="form-control text-left px-3" placeholder="Direccion" formControlName="direccion">
+                              </div>
+                              <div class="form-group">
+                                <div class="input-group mb-3">
+                                  <div class="input-group-prepend">
+                                    <div class="input-group-prepend" data-toggle="modal" data-target="#modalUbicacion" (click)="abrirModal()">
+                                      <span class=" input-group-text">
+                                        <ion-icon name="bookmark"></ion-icon>
+                                      </span>
+                                    </div>
+                                  </div>
+                    
+                                  <input type="text" name="ubicacion" class="form-control" placeholder="Ubicación" formControlName="ubicacion" readonly (click)="abrirModal()">
+                                </div>
                               </div>
                             </div>
-              
-                            <input type="text" name="ubicacion" class="form-control" placeholder="Ubicación" formControlName="ubicacion" disabled (click)="abrirModal()">
+                    
+                            <!-- retirar en tienda -->
+                            <div *ngIf="datosEnvio.value.tipo_envio == 'RT'" [@enterAnimation]>
+                              <h3>Persona encargada a retirar</h3>
+                    
+                              <div class="form-group">
+                                <input type="text" class="form-control" name="persona" placeholder="Nombre" formControlName="persona">
+                              </div>
+                              <div class="form-group">
+                                <input type="text" class="form-control" name="nro_documento" placeholder="Nombre" placeholder="Numero de C.I." formControlName="nro_documento">
+                              </div>
+                              <div class="form-group text-info">
+                                <span>Para poder retirar su pedido debe presentar C.I</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+      
+                        <div class="col-lg-6 col-sm-12 cart-wrap">
+                          <div class="cart-total mb-3">
+                            <h3>Observación</h3>
+                            <div class="form-group">
+                              <textarea formControlName="observacion" class="form-control text-left px-3" cols="30" rows="5"></textarea>
+                            </div>
                           </div>
                         </div>
                       </div>
-              
-                      <!-- retirar en tienda -->
-                      <div *ngIf="datosEnvio.value.tipo_envio == 'RT'" [@enterAnimation]>
-                        <h3>Persona encargada a retirar</h3>
-              
-                        <div class="form-group">
-                          <input type="text" class="form-control" name="persona" placeholder="Nombre" formControlName="persona">
-                        </div>
-                        <div class="form-group">
-                          <input type="text" class="form-control" name="nro_documento" placeholder="Nombre" placeholder="Numero de C.I." formControlName="nro_documento">
-                        </div>
-                        <div class="form-group text-info">
-                          <span>Para poder retirar su pedido debe presentar C.I</span>
-                        </div>
-                      </div>
                     </div>
-                  </div>
+                    
+                  </form>
+              </mat-step>
+    
+              <!-- datos de pago -->
+              <mat-step [stepControl]="datosPago">
+                <form [formGroup]="datosPago">
+                  <ng-template matStepLabel><h2 class="stepper-title">Medio de pago</h2></ng-template>
+  
+                  <mat-accordion>
+                    <ion-radio-group formControlName="tipo">
+                      <mat-expansion-panel disabled class="mat-elevation-z0">
+                        <mat-expansion-panel-header (click)="checkTipoPago(agregarTarjeta)">
+                          <mat-panel-title>
+                            <ion-radio value="ATCD" #agregarTarjeta></ion-radio>
+                          </mat-panel-title>
+                          <mat-panel-description>
+                            Agregar nueva tarjeta
+                          </mat-panel-description>
+                        </mat-expansion-panel-header>
+                      </mat-expansion-panel>
+  
+                      <mat-expansion-panel class="mat-elevation-z0">
+                        <mat-expansion-panel-header (click)="checkTipoPago(pagoOnline)">
+                          <mat-panel-title>
+                            <ion-radio value="PO" #pagoOnline></ion-radio>
+                          </mat-panel-title>
+                          <mat-panel-description>
+                            Pagar online ahora
+                          </mat-panel-description>
+                        </mat-expansion-panel-header>
+  
+                        <img src="assets/images/pago-seguro.jpg">
+                      </mat-expansion-panel>
+  
+                      <mat-expansion-panel class="mat-elevation-z0">
+                        <mat-expansion-panel-header (click)="checkTipoPago(pagoEfectivo)">
+                          <mat-panel-title>
+                            <ion-radio value="PERC" #pagoEfectivo></ion-radio>
+                          </mat-panel-title>
+                          <mat-panel-description>
+                            Pagar en mi casa con Efectivo o Al retirar
+                          </mat-panel-description>
+                        </mat-expansion-panel-header>
+  
+                        <div class="form-group">
+                          <input type="text" class="form-control mb-2" formControlName="importe" placeholder="Importe en Gs.">
+                          <span class="text-secondary">* Por favor ingrese el monto en Gs. que utilizara para hacer el pago, para facilitarle el vuelto correspondiente</span>
+                        </div>
+                      </mat-expansion-panel>
+  
+                      <mat-expansion-panel disabled class="mat-elevation-z0">
+                        <mat-expansion-panel-header (click)="checkTipoPago(pagoTarjeta)">
+                          <mat-panel-title>
+                            <ion-radio value="PCTCD" #pagoTarjeta></ion-radio>
+                          </mat-panel-title>
+                          <mat-panel-description>
+                            Pagar en casa o al retirar con Tarjeta Crédito, Débito
+                          </mat-panel-description>
+                        </mat-expansion-panel-header>
+  
+                        <!-- Podés pagar al recibir tu compra con cualquiera de estas tarjetas. -->
+                      </mat-expansion-panel>
+                    </ion-radio-group>
+                  </mat-accordion>
                 </form>
-                
-                <div class="col-lg-4 cart-wrap">
-                  <div class="cart-total mb-3">
-                    <h3>Totales de carrito</h3>
-                    <p class="d-flex">
-                      <span>Sub Total</span>
-                      <span style="text-align: right;">{{ totales.subtotal | numberFormat }} Gs.</span>
-                    </p>
-                    <p class="d-flex">
-                      <span>Delivery</span>
-                      <span style="text-align: right;">{{ totales.delivery | numberFormat }} Gs.</span>
-                    </p>
-                    <p class="d-flex">
-                      <span>Descuento</span>
-                      <span style="text-align: right;">{{ totales.descuento | numberFormat }} Gs.</span>
-                    </p>
-                    <hr style="border-top: 1px solid rgba(0,0,0,.05)">
-                    <p class="d-flex total-price">
-                      <span><b>Total</b></span>
-                      <span style="text-align: right;"><b>{{ totales.total | numberFormat }} Gs.</b></span>
-                    </p>
-              
-                    <hr style="border-top: 1px solid rgba(0,0,0,.05)">
-                    <div class="col-auto p-0">
-                      <form (ngSubmit)="obtenerCupones()">
-                        <label class="sr-only" for="inlineFormInputGroup">Cupón de descuento</label>
-                        <div class="input-group mb-2">
-                          <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="cuponDescuento.codigo" [ngModelOptions]="{standalone: true}" placeholder="Cupón de descuento">
-                          <div class="input-group-prepend">
-                            <button class="btn btn-primary" type="submit">Aplicar</button>
-                          </div>
-                        </div>
-                      </form>
+              </mat-step>
+    
+            </mat-vertical-stepper>
+    
+            <div class="col-lg-4 cart-wrap order-resume">
+              <div class="cart-total mb-3">
+                <h2 class="title">Totales de carrito</h2>
+                <p class="d-flex">
+                  <span>Sub Total</span>
+                  <span style="text-align: right;">{{ totales.subtotal | numberFormat }} Gs.</span>
+                </p>
+                <p class="d-flex">
+                  <span>Delivery</span>
+                  <span style="text-align: right;">{{ totales.delivery | numberFormat }} Gs.</span>
+                </p>
+                <p class="d-flex">
+                  <span>Descuento</span>
+                  <span style="text-align: right;">{{ totales.descuento | numberFormat }} Gs.</span>
+                </p>
+                <hr style="border-top: 1px solid rgba(0,0,0,.05)">
+                <p class="d-flex total-price">
+                  <span><b>Total</b></span>
+                  <span style="text-align: right;"><b>{{ totales.total | numberFormat }} Gs.</b></span>
+                </p>
+            
+                <hr style="border-top: 1px solid rgba(0,0,0,.05)">
+                <div class="col-auto p-0">
+                  <form (ngSubmit)="obtenerCupones()">
+                    <label class="sr-only" for="inlineFormInputGroup">Cupón de descuento</label>
+                    <div class="input-group mb-2">
+                      <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="cuponDescuento.codigo"
+                        [ngModelOptions]="{standalone: true}" placeholder="Cupón de descuento">
+                      <div class="input-group-prepend">
+                        <button class="btn btn-primary" type="submit">Aplicar</button>
+                      </div>
                     </div>
-
-                    <div class="form-group" *ngIf="cuponDescuento.length">
-                      <p class="d-flex">
-                        <span>{{ cuponDescuento.descripcion }}</span>
-                        <span style="text-align: right;">{{ cuponDescuento.porcentaje | numberFormat }} %</span>
-                      </p>
-                    </div>
-
-                    <div class="form-group" *ngIf="!cuponDescuento.length && submitCuponDescuento">
-                      <p class="text-danger">
-                        No existe el cupon de descuento
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                
-              </div>
-            </div>
-            <div class="text-right">
-              <button (click)="registrarPedido()" class="btn btn-primary" mat-button [disabled]="datosEnvio.invalid">Continuar</button>
-            </div>
-          </mat-step>
-
-          <!-- datos de pago -->
-          <mat-step [stepControl]="secondFormGroup">
-            <ng-template matStepLabel>Medio de pago</ng-template>
-            <div class="container tab-vertical">
-              <div class="row">
-                <div class="col-md-4 p-0 bg-primary">
-                  <ul class="nav nav-pills flex-column" id="tabsPago" role="tablist">
-                    <li class="nav-item">
-                      <a class="nav-link active" data-toggle="tab" href="#pago-online" role="tab" aria-controls="online" aria-selected="true" (click)="checkTipoPago('PO')"> Pagar ahora Online</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#pago-efectivo" role="tab" aria-controls="efectivo" aria-selected="false" (click)="checkTipoPago('PERC')">Pagar en mi casa con Efectivo o Al retirar</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#pago-dsps-tarj" role="tab" aria-controls="dsps-tarj" aria-selected="false" (click)="checkTipoPago('PCTCD')">Pagar en casa o al retirar con Tarjeta Crédito, Débito</a>
-                    </li>
-                  </ul>
+                  </form>
                 </div>
             
-                <div class="col-md-8 p-0 tab-container">
-                  <div class="tab-content" id="tabsPagoContent" style="border: 0px;">
-                    <div class="tab-pane fade show active row justify-content-end" id="pago-online" role="tabpanel" aria-labelledby="pago-online">
-                      <img src="assets/images/pago-seguro.jpg">
-                    </div>
-                    <div class="tab-pane fade" id="pago-efectivo" role="tabpanel" aria-labelledby="pago-efectivo">
-                      <div class="form-group col-md-8">
-                        <input type="text" class="form-control" placeholder="Importe">
-                      </div>
-                    </div>
-                    <div class="tab-pane fade" id="pago-dsps-tarj" role="tabpanel" aria-labelledby="pago-dsps-tarj">
-                      Podés pagar al recibir tu compra con cualquiera de estas tarjetas.
-                    </div>
-                  </div>
+                <div class="form-group" *ngIf="cuponDescuento.length">
+                  <p class="d-flex">
+                    <span>{{ cuponDescuento.descripcion }}</span>
+                    <span style="text-align: right;">{{ cuponDescuento.porcentaje | numberFormat }} %</span>
+                  </p>
+                </div>
+            
+                <div class="form-group" *ngIf="!cuponDescuento.length && submitCuponDescuento">
+                  <p class="text-danger">
+                    No existe el cupon de descuento
+                  </p>
                 </div>
               </div>
             </div>
-            <div class="text-right mt-4">
-              <button class="btn btn-primary" mat-button matStepperPrevious>Volver</button>
-              <button class="btn btn-primary" mat-button (click)="procesarPedido()">Continuar</button>
-            </div>
-          </mat-step>
+          </div>
+        </div>
 
-          <!-- confirmar pedido -->
-          <mat-step>
-            <ng-template matStepLabel>Finalizar pedido</ng-template>
-            <div class="container tab-vertical">
-              <div class="row">
-                <div class="col-md-12">
-                  <div id="iframe-container"></div>
-                </div>
-              </div>
-            </div>
-            <div class="text-right mt-4">
-              <button class="btn btn-primary" mat-button matStepperPrevious>Volver</button>
-              <button class="btn btn-primary" mat-button (click)="stepper.reset()">Reset</button>
-            </div>
-          </mat-step>
-        </mat-horizontal-stepper>
+
+        <div class="text-right">
+          <button *ngIf="datosEnvio.invalid || datosPago.invalid" (click)="stepper.next()" class="btn btn-primary" mat-button [disabled]="datosEnvio.invalid">Medio de pago</button>
+          <button *ngIf="datosEnvio.valid && datosPago.valid" (click)="procesarPedido()" class="btn btn-primary" mat-button [disabled]="datosEnvio.invalid || datosPago.invalid">Finalizar pedido</button>
+        </div>
       </div>
     </div>
 
@@ -232,4 +247,5 @@
 
   <app-footer></app-footer>
 
+  <script src="https://vpos.infonet.com.py:8888/checkout/javascript/dist/bancard-checkout-1.0.0.js"></script>
 </ion-content>
