@@ -68,7 +68,7 @@ export class UbicacionPage implements OnInit {
 
         coordenadas.marcador = marker.getLngLat();
       } else {
-        this.servicioAlerta.dialogoError('La ubicacion no se encuentra dentro del area de cobertura','')
+        // this.servicioAlerta.dialogoError('La ubicacion no se encuentra dentro del area de cobertura');
         coordenadas.marcador = null;
       }
 
@@ -99,6 +99,8 @@ export class UbicacionPage implements OnInit {
           'fill-opacity': 0.2
         }
       });
+
+      coordenadas.marcador = null;
     }
   }
 
