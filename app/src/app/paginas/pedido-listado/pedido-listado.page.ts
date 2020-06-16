@@ -78,7 +78,7 @@ export class PedidoListadoPage implements OnInit {
         }
       ];
 
-      if (pedido.pagos && pedido.pagos.estado == 'PENDIENTE') {
+      if (!pedido.pagos || pedido.pagos && pedido.pagos.estado == 'PENDIENTE') {
         if (pedido.pagos.vr_tipo == 'PO') {
           botones.push({
             text: 'Finalizar pedido',
@@ -131,8 +131,8 @@ export class PedidoListadoPage implements OnInit {
     this.cargando = false;
   }
 
-  finalizarPedido(pedido) {
-
+  finalizarPedido(id_pedido) {
+    this.router.navigate(['/pedido'], {queryParams: {pedido: id_pedido}});
   }
 
   async cancelarPedido(id_pedido) {
@@ -143,6 +143,7 @@ export class PedidoListadoPage implements OnInit {
 
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message);
+      this.obtenerPedidos();
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }

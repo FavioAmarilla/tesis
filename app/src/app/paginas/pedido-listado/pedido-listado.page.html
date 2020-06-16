@@ -67,12 +67,12 @@
                         <span>Ver productos</span>
                       </button>
   
-                      <button mat-menu-item (click)="finalizarPedido(pedido)" *ngIf="pedido.pagos && pedido.pagos.estado == 'PENDIENTE' && pedido.pagos.vr_tipo == 'PO'">
+                      <button mat-menu-item (click)="finalizarPedido(pedido.identificador)" *ngIf="!pedido.pagos || (pedido.pagos && pedido.pagos.estado == 'PENDIENTE' && pedido.pagos.vr_tipo == 'PO')">
                         <mat-icon>credit_card</mat-icon>
                         <span>Finalizar pedido</span>
                       </button>
   
-                      <button mat-menu-item (click)="cancelarPedido(pedido.identificador)" *ngIf="pedido.pagos && pedido.pagos.estado == 'PENDIENTE'">
+                      <button mat-menu-item (click)="cancelarPedido(pedido.identificador)" *ngIf="!pedido.pagos || (pedido.pagos && pedido.pagos.estado == 'PENDIENTE')">
                         <mat-icon>cancel</mat-icon>
                         <span>Cancelar pedido</span>
                       </button>
