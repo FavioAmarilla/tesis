@@ -30,8 +30,8 @@ class BancardController extends BaseController
 
         $front = env('FRONT_URL');
         $currency = "PYG";
-        $return_url = $front.'pedido/finalizado';
-        $cancel_url = $front.'pedido/finalizado';
+        $return_url = $front.'#/pedido/finalizado';
+        $cancel_url = $front.'#/pedido/finalizado';
 
         $amount = $request->input("amount");
         $shop_process_id = $request->input("shop_process_id");
