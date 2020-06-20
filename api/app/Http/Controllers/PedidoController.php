@@ -22,7 +22,7 @@ class PedidoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Pedido::with(['sucursal', 'cupon', 'pais', 'ciudad', 'barrio', 'pagos']);
+        $query = Pedido::with(['detalles', 'sucursal', 'cupon', 'pais', 'ciudad', 'barrio', 'pagos']);
 
         $identificador = $request->query('identificador');
         if ($identificador) {
@@ -255,7 +255,7 @@ class PedidoController extends BaseController
      */
     public function show($id)
     {
-        $pedido = Pedido::with(['sucursal', 'cupon', 'pais', 'ciudad', 'barrio', 'pagos'])->find($id);
+        $pedido = Pedido::with(['detalles', 'sucursal', 'cupon', 'pais', 'ciudad', 'barrio', 'pagos'])->find($id);
 
         if (is_object($pedido)) {
             return $this->sendResponse(true, 'Se listaron exitosamente los registros', $pedido, 200);

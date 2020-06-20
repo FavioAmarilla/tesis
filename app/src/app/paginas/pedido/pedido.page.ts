@@ -98,14 +98,16 @@ export class PedidoPage implements OnInit {
     await this.obtenerParametrosEcommerce();
     await this.obtenerTotales();
 
-    if (this.totales.subtotal < this.parametros.monto_minimo) {
-      this.servicioAlerta.dialogoError('El monto de compra debe ser mayor a: ' + this.parametros.monto_minimo);
-      this.router.navigate(['/carrito']);
-    }
+    let comprobarTotales = true;
 
     this.route.queryParams.subscribe(params => {
-      if (params.pedido) { this.obtenerPedido(params.pedido); }
+      if (params.pedido) {
+        comprobarTotales = false;
+        this.obtenerPedido(params.pedido);
+      }
     });
+
+    if (comprobarTotales) { this.comprobarTotales(); }
 
     this.cargando = false;
   }
@@ -124,7 +126,15 @@ export class PedidoPage implements OnInit {
         }
       });
 
-      if (pedido.cupon) { this.cuponDescuento = pedido.cupon; }
+      this.totales.subtotal = pedido.total - pedido.costo_envio;
+      this.totales.delivery = pedido.costo_envio;
+      this.totales.total = pedido.total;
+
+      if (pedido.cupon) {
+        this.cuponDescuento = pedido.cupon;
+        const descuentoSubtotal = (this.cuponDescuento.porc_descuento * 100) / this.totales.subtotal;
+        this.totales.descuento = descuentoSubtotal;
+      }
       this.datosEnvio.controls.ubicacion.setValue(`${pedido.latitud},${pedido.longitud}`);
 
       if (pedido.pagos) {
@@ -138,6 +148,13 @@ export class PedidoPage implements OnInit {
           this.pagoOnlineBancard(pedido.pagos.process_id);
         }
       }
+    }
+  }
+
+  comprobarTotales() {
+    if (this.totales.subtotal < this.parametros.monto_minimo) {
+      this.servicioAlerta.dialogoError('El monto de compra debe ser mayor a: ' + this.parametros.monto_minimo);
+      this.router.navigate(['/carrito']);
     }
   }
 
@@ -188,7 +205,7 @@ export class PedidoPage implements OnInit {
 
     // obtener descuento por cupones
     if (this.cuponDescuento.identificador > 0) {
-      let descuentoSubtotal = (this.cuponDescuento.porc_descuento * 100) / this.totales.subtotal;
+      const descuentoSubtotal = (this.cuponDescuento.porc_descuento * 100) / this.totales.subtotal;
       this.totales.descuento = descuentoSubtotal;
     }
 
