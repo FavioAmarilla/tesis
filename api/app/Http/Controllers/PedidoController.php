@@ -132,7 +132,7 @@ class PedidoController extends BaseController
         $tipo_envio = $request->input("tipo_envio");
         $estado = $request->input("estado");
         $productos = $request->input("productos");
-        $pagos = $request->input("pago");
+        $pago = $request->input("pago");
         
         $validator = Validator::make($request->all(), [
             'id_usuario'  => 'required',
@@ -186,7 +186,7 @@ class PedidoController extends BaseController
         }
         
         // validar que llego los datos del pago
-        if (count($pago) <= 0) {
+        if (!$pago) {
             return $this->sendResponse(false, 'Debe agregar los datos de pago', 400);
         }
 
@@ -375,7 +375,7 @@ class PedidoController extends BaseController
                     $pagoIt->total = $total;
                     $pagoIt->importe = (isset($pago['importe'])) ? $pago['importe'] : 0;
                     $pagoIt->vuelto = (isset($pago['importe'])) ? $pago['importe'] - $total : 0;
-                    $pagoIt->referencia = ($pagoIt->referencia) ? $pagoIt->referencia : $this->obtenerUltimaReferenciaPago();
+                    $pagoIt->referencia = ($pagoIt->referencia) ? $pagoIt->referencia : $this->obtenerUltimaReferenciaPago($pedido->identificador);
 
                     if ($pagoIt->save()) {
                         if ($pago && $pago['tipo'] == 'PO') {
@@ -491,8 +491,11 @@ class PedidoController extends BaseController
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
 
-    public function obtenerUltimaReferenciaPago() {
-        $pago = PedidoPagos::latest()->first();
+    public function obtenerUltimaReferenciaPago($idPedido = null) {
+        $pago = null;
+        if ($idPedido) $pago = PedidoPagos::where('id_pedido', '=', $idPedido)->first();
+
+        if (!$pago) $pago = PedidoPagos::where('referencia', '!=', 0)->latest()->first();
 
         return (is_object($pago)) ? $pago->referencia + 1 : 1000;
     }

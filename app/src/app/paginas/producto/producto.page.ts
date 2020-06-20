@@ -70,7 +70,7 @@ export class PaginaProducto implements OnInit {
     this.producto.cantidad = this.cantidad;
     const add = await this.servicioCarrito.agregarAlCarrito(this.producto);
 
-    if (add) this.servicioAlerta.dialogoExito('El producto ha sido añadido al carrito');
+    if (add) this.servicioAlerta.dialogoCarrito('El producto ha sido añadido al carrito');
     else this.servicioAlerta.dialogoError('No se pudo añadir el producto al carrito');
   }
 

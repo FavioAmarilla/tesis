@@ -30,8 +30,8 @@ class BancardController extends BaseController
 
         $front = env('FRONT_URL');
         $currency = "PYG";
-        $return_url = $front.'pago_finalizado';
-        $cancel_url = $front.'pago_cancelado';
+        $return_url = $front.'pedido/finalizado';
+        $cancel_url = $front.'pedido/finalizado';
 
         $amount = $request->input("amount");
         $shop_process_id = $request->input("shop_process_id");
@@ -58,8 +58,16 @@ class BancardController extends BaseController
 
         if ($respuesta->status == 'error') return $this->sendResponse(false, 'Ha ocurrido un problema al intentar procesar la solicitud', $respuesta, 500);
 
-        return $this->sendResponse(true, 'Petición realizada correctamente', $respuesta, 200);
+        $pago = PedidoPagos::where('referencia', '=', $shop_process_id)->first();
+        if ($pago) {
 
+            $pago->process_id = $respuesta->process_id;
+            if ($pago->save()) return $this->sendResponse(true, 'Petición realizada correctamente', $respuesta, 200);
+
+            return $this->sendResponse(false, 'Ha ocurrido un problema al procesar el pago', null, 400);
+        }
+
+        return $this->sendResponse(false, 'Ha ocurrido un problema, por favor intentelo más tarde', null, 400);
     }
 
     /**
@@ -140,10 +148,11 @@ class BancardController extends BaseController
             // $token = md5($this->private_key.$shop_process_id."confirm".$amount.$currency);
 
             // Actualizar pago del pedido
-            $pago = PedidoPagos::find($operation['shop_process_id']);
+            $pago = PedidoPagos::where('referencia', '=', $operation['shop_process_id'])->first();
 
             if ($pago) {
                 $pago->estado = 'PAGADO';
+                $pago->process_id = NULL;
 
                 if ($pago->save()) {
                     $producto = Pedido::find($pago->id_pedido);
@@ -153,13 +162,13 @@ class BancardController extends BaseController
                     return response()->json(['status' => 'success'], 200);
                 }
 
-                return response()->json(['status' => 'error'], 200);
+                return response()->json(['status' => 'error'], 400);
             }
 
-            return response()->json(['status' => 'error'], 200);
+            return response()->json(['status' => 'error'], 400);
         }
 
-        return response()->json(['status' => 'error'], 200);
+        return response()->json(['status' => 'error'], 400);
     }
 
     /**

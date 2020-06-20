@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { MobileMenuPage } from './mobile-menu.page';
+import { AuthGuard } from 'src/app/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -22,8 +23,9 @@ const routes: Routes = [
       { path: 'signup', loadChildren: () => import('../signup/signup.module').then(m => m.SignupPageModule) },
       { path: 'producto/:slug', loadChildren: () => import('../producto/producto.module').then(m => m.ModuloPaginaProducto) },
       { path: 'pedido', loadChildren: () => import('../pedido/pedido.module').then(m => m.PedidoPageModule) },
-      { path: 'pedido-lista', loadChildren: () => import('../pedido-listado/pedido-listado.module').then(m => m.PedidoListadoPageModule) },
-      { path: 'mi-cuenta', loadChildren: () => import('../mi-cuenta/mi-cuenta.module').then(m => m.MiCuentaPageModule) },
+      { path: 'pedido/finalizado', loadChildren: './paginas/pedido-finalizado/pedido-finalizado.module#PedidoFinalizadoPageModule' },
+      { path: 'pedido-lista', loadChildren: () => import('../pedido-listado/pedido-listado.module').then(m => m.PedidoListadoPageModule), canActivate: [AuthGuard]},
+      { path: 'mi-cuenta', loadChildren: () => import('../mi-cuenta/mi-cuenta.module').then(m => m.MiCuentaPageModule), canActivate: [AuthGuard]},
     ]
   }
 ];

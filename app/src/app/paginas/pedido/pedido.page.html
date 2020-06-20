@@ -12,7 +12,7 @@
           <div class="row">
             <mat-vertical-stepper linear #stepper class="col-lg-8">
               <!-- datos de envio -->
-              <mat-step [stepControl]="datosEnvio">
+              <mat-step [stepControl]="datosEnvio" [editable]="stepperEditable">
                 <ng-template matStepLabel><h2 class="stepper-title">Datos de Envio</h2></ng-template>
                   <form [formGroup]="datosEnvio">
                   
@@ -117,7 +117,7 @@
               </mat-step>
     
               <!-- datos de pago -->
-              <mat-step [stepControl]="datosPago">
+              <mat-step [stepControl]="datosPago" [editable]="stepperEditable">
                 <form [formGroup]="datosPago">
                   <ng-template matStepLabel><h2 class="stepper-title">Medio de pago</h2></ng-template>
   
@@ -180,6 +180,12 @@
                 </form>
               </mat-step>
     
+              <mat-step *ngIf="datosPago.value.tipo == 'PO'">
+                <ng-template matStepLabel><h2 class="stepper-title">Finalizar Pago</h2></ng-template>
+
+                <div id="iframe-container"></div>
+              </mat-step>
+
             </mat-vertical-stepper>
     
             <div class="col-lg-4 cart-wrap order-resume">
@@ -204,12 +210,11 @@
                 </p>
             
                 <hr style="border-top: 1px solid rgba(0,0,0,.05)">
-                <div class="col-auto p-0">
+                <div class="col-auto p-0" *ngIf="stepperEditable">
                   <form (ngSubmit)="obtenerCupones()">
                     <label class="sr-only" for="inlineFormInputGroup">Cupón de descuento</label>
                     <div class="input-group mb-2">
-                      <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="cuponDescuento.codigo"
-                        [ngModelOptions]="{standalone: true}" placeholder="Cupón de descuento">
+                      <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="cuponDescuento.codigo" [ngModelOptions]="{standalone: true}" placeholder="Cupón de descuento">
                       <div class="input-group-prepend">
                         <button class="btn btn-primary" type="submit">Aplicar</button>
                       </div>
@@ -237,15 +242,13 @@
 
         <div class="text-right">
           <button *ngIf="datosEnvio.invalid || datosPago.invalid" (click)="stepper.next()" class="btn btn-primary" mat-button [disabled]="datosEnvio.invalid">Medio de pago</button>
-          <button *ngIf="datosEnvio.valid && datosPago.valid" (click)="procesarPedido()" class="btn btn-primary" mat-button [disabled]="datosEnvio.invalid || datosPago.invalid">Finalizar pedido</button>
+          <button *ngIf="datosEnvio.valid && datosPago.valid && stepperEditable" (click)="procesarPedido()" class="btn btn-primary" mat-button [disabled]="datosEnvio.invalid || datosPago.invalid">Finalizar pedido</button>
         </div>
       </div>
     </div>
-
 
   </section>
 
   <app-footer></app-footer>
 
-  <script src="https://vpos.infonet.com.py:8888/checkout/javascript/dist/bancard-checkout-1.0.0.js"></script>
 </ion-content>

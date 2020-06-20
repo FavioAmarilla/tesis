@@ -89,13 +89,15 @@ export class PedidoListadoPage implements OnInit {
           });
         }
 
-        botones.push({
-          text: 'Cancelar pedido',
-          icon: 'close',
-          handler: () => {
-            this.cancelarPedido(pedido);
-          }
-        });
+        if (pedido.pagos.vr_tipo != 'PO') {
+          botones.push({
+            text: 'Cancelar pedido',
+            icon: 'close',
+            handler: () => {
+              this.cancelarPedido(pedido);
+            }
+          });
+        }
       }
 
       const actionSheet = await this.actionSheetController.create({

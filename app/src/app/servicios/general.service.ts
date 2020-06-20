@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, RendererFactory2, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { DOCUMENT } from '@angular/common';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +9,9 @@ import { HttpClient } from '@angular/common/http';
 export class GeneralService {
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private rendererFactory: RendererFactory2,
+    @Inject(DOCUMENT) private document: any
   ) { }
 
   public obtenerMenuItems() {
@@ -33,5 +37,30 @@ export class GeneralService {
     }
 
     return (tipo === 'medida') ? valor : minimo;
+  }
+
+  public agregarScriptBancard() {
+    return new Promise(resolve => {
+      const bancard = environment.bancard;
+      const prodMode = bancard.prodMode;
+      const api = (prodMode) ? bancard.production : bancard.staging;
+
+      const renderer = this.rendererFactory.createRenderer(null, null);
+      const script = renderer.createElement('script');
+      renderer.setAttribute(script, 'src', `${api}/checkout/javascript/dist/bancard-checkout-1.0.0.js`);
+
+      renderer.appendChild(this.document.body, script);
+
+      return resolve();
+    });
+  }
+
+  public promiseTimeout(time) {
+    return new Promise(resolve => {
+      const timeout = setTimeout(() => {
+        clearTimeout(timeout);
+        return resolve();
+      }, time);
+    });
   }
 }

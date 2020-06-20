@@ -1,0 +1,28 @@
+<app-header></app-header>
+
+<ion-content>
+
+  <div class="container d-flex align-items-center justify-content-center" style="height: 60vh;">
+    <div *ngIf="success">
+      <h1>¡Su pedido ha sido procesado!</h1>
+      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque, dicta!</p>
+  
+      <div class="text-right">
+        <a [routerLink]="['/home']" class="btn btn-primary">Finalizar</a>
+      </div>
+    </div>
+  
+    <div *ngIf="!success">
+      <h1>¡Pedido cancelado!</h1>
+      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque, dicta!</p>
+    
+      <div class="text-right">
+        <a [routerLink]="['/home']" class="btn btn-primary">Finalizar</a>
+      </div>
+    </div>
+  </div>
+
+
+  <app-footer></app-footer>
+
+</ion-content>

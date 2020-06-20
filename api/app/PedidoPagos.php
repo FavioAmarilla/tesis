@@ -13,6 +13,8 @@ class PedidoPagos extends Model
     protected $fillable =[
         'id_pedido',
         'vr_tipo',
+        'referencia',
+        'process_id',
         'total',
         'importe',	
         'vuelto',
