@@ -142,21 +142,6 @@
                                         obligatorio</span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="">Rol</label>
-                                    <select name="id_rol" class="form-control" [(ngModel)]="clienteUsuario.id_rol"
-                                        required #id_rol="ngModel">
-                                        <option value="null">-- SELECCIONAR --</option>
-                                        <option *ngFor="let rol of listaRol" value="{{rol.identificador}}"
-                                            [selected]="rol.identificador == clienteUsuario.id_rol"> {{rol.nombre}}
-                                        </option>
-                                    </select>
-                                    <span class="invalid-feedback d-block"
-                                        *ngIf="!id_rol.valid && id_rol.touched || clienteUsuario.id_rol == null">Este
-                                        campo
-                                        es
-                                        obligatorio</span>
-                                </div>
-                                <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="text" class="form-control" placeholder="Email" name="email"
                                         [(ngModel)]="clienteUsuario.email" required #email="ngModel">

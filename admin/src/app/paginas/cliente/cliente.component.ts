@@ -4,7 +4,6 @@ import { environment } from 'environments/environment';
 import { ClienteService } from 'app/servicios/cliente.service';
 import { RolesService } from 'app/servicios/roles.service';
 import { ServicioAlertas } from 'app/servicios/alertas.service';
-import { Rol } from 'app/modelos/rol';
 import { Usuario } from 'app/modelos/usuario';
 import { ClienteUsuario } from 'app/modelos/cliente-usuario';
 import { ServicioUsuario } from 'app/servicios/usuario.service';
@@ -49,12 +48,9 @@ export class ClienteComponent implements OnInit {
     attachPinText: 'Seleccionar imagen'
   };
 
-  public listaRol: Rol;
-
   constructor(
     private servicioCliente: ClienteService,
     private servicioUsuario: ServicioUsuario,
-    private servicioRol: RolesService,
     private servicioAlerta: ServicioAlertas
   ) {
     this.url = environment.api;
@@ -62,7 +58,6 @@ export class ClienteComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.obtenerRoles();
     this.paginacion(this.paginaActual);
   }
 
@@ -85,17 +80,6 @@ export class ClienteComponent implements OnInit {
       this.cliente = new Cliente(null, null, null, null, null, null);
       this.usuario = new Usuario(null, null, null, null, null, null, null, null, null, null, null);
       this.clienteUsuario = new ClienteUsuario(null, null, null, null, null, null, null, null, null);
-    }
-  }
-
-  async obtenerRoles() {
-    const response = <any>await this.servicioRol.obtener();
-
-    if (response.success) {
-      this.listaRol = response.data
-    } else {
-      this.servicioAlerta.dialogoError(response.message);
-      this.mostrarFormulario(false, 'LST');
     }
   }
 
@@ -147,7 +131,6 @@ export class ClienteComponent implements OnInit {
       this.clienteUsuario.email = this.usuario.email;
       this.clienteUsuario.fecha_nacimiento = this.usuario.fecha_nacimiento;
       this.clienteUsuario.imagen = this.usuario.imagen;
-      this.clienteUsuario.id_rol = this.usuario.id_rol;
 
 
       this.mostrarFormulario(true, 'UPD');
@@ -159,7 +142,6 @@ export class ClienteComponent implements OnInit {
 
   async registrar() {
     this.cargando = true;
-    console.log(this.clienteUsuario);
 
     //seguarda el usuario
     this.usuario.nombre_completo = this.clienteUsuario.nombre;
@@ -170,7 +152,6 @@ export class ClienteComponent implements OnInit {
     this.usuario.telefono = this.clienteUsuario.telefono;
     this.usuario.celular = this.clienteUsuario.celular;
     this.usuario.imagen = this.clienteUsuario.imagen;
-    this.usuario.id_rol = this.clienteUsuario.id_rol;
 
     const responseUsuario: any = await this.servicioUsuario.registrar(this.usuario);
 
@@ -209,10 +190,8 @@ export class ClienteComponent implements OnInit {
     this.usuario.telefono = this.clienteUsuario.telefono;
     this.usuario.celular = this.clienteUsuario.celular;
     this.usuario.imagen = this.clienteUsuario.imagen;
-    this.usuario.id_rol = this.clienteUsuario.id_rol;
 
     const responseUsuario: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.identificador);
-    console.log('responseUsuario', responseUsuario);
 
     if (responseUsuario.success) {
       //seguarda el cliente
@@ -223,7 +202,6 @@ export class ClienteComponent implements OnInit {
       this.cliente.telefono = this.clienteUsuario.telefono;
 
       const responseCliente: any = await this.servicioCliente.actualizar(this.cliente, this.cliente.identificador);
-      console.log('responseCliente', responseCliente);
 
       if (responseCliente.success) {
         this.servicioAlerta.dialogoExito(responseCliente.message);
