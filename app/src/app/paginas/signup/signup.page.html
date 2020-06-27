@@ -40,11 +40,11 @@
             <label for="Celular">Celular</label>
             <input type="text" class="form-control" name="celular" [(ngModel)]="usuario.celular">
           </div>
-          <hr>
         </div>
       </div>
 
       <div class="row">
+
         <div class="col-md-6">
           <h5 class="h5">
             <ion-icon name="key"></ion-icon>&nbsp; Su Contraseña
@@ -59,13 +59,26 @@
             <input type="password" class="form-control" name="repita" [(ngModel)]="repita_clave">
           </div>
         </div>
+
+        <div class="col-md-6">
+          <h5 class="h5">
+            <ion-icon name="md-cart"></ion-icon>&nbsp; Datos de Facturacion
+          </h5>
+          <hr class="border-top mt-0">
+          <div class="form-group">
+            <label for="RUC / CI">RUC / CI</label>
+            <input type="text" class="form-control" name="ruc" [(ngModel)]="usuario.ruc">
+          </div>
+        </div>
         <br>
+
       </div>
 
 
       <div class="form-group">
         <a class="btn btn-primary py-2 px-4" (click)="registro()">
-          <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status" aria-hidden="true"></span>
+          <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status"
+            aria-hidden="true"></span>
           Registrarse
         </a>
         <br>

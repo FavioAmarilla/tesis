@@ -92,8 +92,7 @@ class UserController extends BaseController {
             'fecha_nacimiento'  => 'required',
             'celular'  => 'required',
             'email'  => 'required',
-            'clave_acceso'  => 'required',
-            'id_rol'  => 'required',
+            'clave_acceso'  => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -163,8 +162,7 @@ class UserController extends BaseController {
             'nombre_completo'  => 'required',
             'fecha_nacimiento'  => 'required',
             'celular'  => 'required',
-            'email'  => 'required',
-            'id_rol'  => 'required'
+            'email'  => 'required'
         ]);
 
         if ($validator->fails()) {

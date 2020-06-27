@@ -10,6 +10,7 @@ export interface Usuario {
     clave_actual?: string;
     clave_nueva?: string;
     repita?: string;
+    ruc: string;
 }
 
 export interface Producto {
@@ -130,4 +131,13 @@ export interface Pedido {
   length?: number;
   productos?: Producto[];
   pago?: any;
+}
+
+export interface Cliente {
+    identificador: number,
+    id_usuario: number,
+    razon_social: string,
+    numero_documento: string,
+    celular: string,
+    telefono: string
 }
