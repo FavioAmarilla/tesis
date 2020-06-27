@@ -3,8 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Http\Controllers\BaseController as BaseController;
 
-class ApiAuthMiddleware
+class ApiAuthMiddleware extends BaseController
 {
     /**
      * Handle an incoming request.
@@ -15,6 +16,15 @@ class ApiAuthMiddleware
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        $token = $request->get('Authorization');
+        $jwt = new \JwtAuth();
+        $logueado = $jwt->checkToken($token);
+
+        if ($logueado) {
+            return $next($request);
+        }else{        
+            return $this->sendResponse(false, 'Usuario no logueado', null, 400);
+        }
+
     }
 }
