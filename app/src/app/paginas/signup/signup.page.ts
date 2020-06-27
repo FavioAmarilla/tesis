@@ -52,7 +52,7 @@ export class SignupPage implements OnInit {
 
     //se guarda el usuario
     const response: any = await this.UsuarioService.registro(this.usuario);
-console.log(response);
+    
     this.cargandoBoton = false;
     if (response.success) {
 
@@ -64,7 +64,7 @@ console.log(response);
       this.cliente.telefono = this.usuario.telefono;
 
       const responseCliente: any = await this.clienteService.registro(this.cliente);
-      console.log(responseCliente);
+      
       if (responseCliente.success) {
         this.servicioAlerta.dialogoExito(responseCliente.message);
         this.router.navigate(['/']);

@@ -84,3 +84,6 @@ Route::group(['prefix' => 'payment'], function() {
 });
 
 Route::resource('cliente', 'ClienteController');
+Route::group(['prefix' => 'cliente'], function () {
+    Route::get('usuario/{slug}', ['as' => 'cliente.usuario', 'uses' => 'ClienteController@showByUsuario']);
+});

@@ -30,6 +30,25 @@ export class ClienteService {
     });
   }
 
+
+
+  async obtenerClienteUsuario(id?) {
+    const url = `cliente/usuario/${id}`;
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return new Promise(resolve => {
+      this.http.get(`${API}${url}`, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error.error);
+        }
+      );
+    });
+  }
+
   async registro(cliente: Cliente) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 

@@ -120,6 +120,17 @@ class ClienteController extends BaseController
         return $this->sendResponse(false, 'No se encontro el Parametro', null, 404);
     }
 
+    public function showByUsuario($id)
+    {
+        $cliente = Cliente::with(['usuario'])->where('id_usuario', '=', $id)->first();
+
+        if (is_object($cliente)) {
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $cliente, 200);
+        }
+        
+        return $this->sendResponse(false, 'No se encontro el Cliente', null, 404);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
