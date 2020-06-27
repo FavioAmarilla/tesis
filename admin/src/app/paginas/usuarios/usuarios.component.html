@@ -50,7 +50,8 @@
                                         *ngFor="let row of listaUsuario | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
                                         <td>{{ row.nombre_completo }}</td>
                                         <td>{{ row.email }}</td>
-                                        <td>{{ row.rol.nombre }}</td>
+                                        <td *ngIf="row.rol">{{ row.rol.nombre }}</td>
+                                        <td *ngIf="!row.rol"></td>
                                         <td class="text-right">
                                             <button class="btn btn-round btn-sm btn-warning"
                                                 (click)="obtenerUsuario(row.identificador)"><i
