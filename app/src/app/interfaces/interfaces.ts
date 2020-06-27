@@ -10,7 +10,7 @@ export interface Usuario {
     clave_actual?: string;
     clave_nueva?: string;
     repita?: string;
-    ruc: string;
+    ruc?: string;
 }
 
 export interface Producto {
