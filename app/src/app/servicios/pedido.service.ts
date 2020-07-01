@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
@@ -10,13 +11,17 @@ const API = environment.api;
 export class PedidoService {
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private storage: Storage
   ) { }
 
-  obtenerPedido(id?, parametros?) {
+  async obtenerPedido(id?, parametros?) {
     const url = (id) ? `pedido/${id}` : `pedido`;
+    const token = await this.storage.get('token');
 
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .append('Authorization', token);
     const params = new HttpParams({ fromObject: parametros });
 
     return new Promise(resolve => {
@@ -31,8 +36,11 @@ export class PedidoService {
     });
   }
 
-  obtenerItems(parametros?) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+  async obtenerItems(parametros?) {
+    const token = await this.storage.get('token');
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .append('Authorization', token);
     const params = new HttpParams({ fromObject: parametros });
 
     return new Promise(resolve => {
@@ -47,8 +55,11 @@ export class PedidoService {
     });
   }
 
-  registrar(pedido) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+  async registrar(pedido) {
+    const token = await this.storage.get('token');
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Authorization', token);
 
     return new Promise(resolve => {
       this.http.post(`${API}pedido`, pedido, { headers }).subscribe(
@@ -62,9 +73,11 @@ export class PedidoService {
     });
   }
 
-  actualizar(pedido, id) {
+  async actualizar(pedido, id) {
+    const token = await this.storage.get('token');
     const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json');
+      .set('Content-Type', 'application/json')
+      .append('Authorization', token);
 
     return new Promise(resolve => {
       this.http.put(`${API}pedido/${id}`, pedido, { headers }).subscribe(
@@ -78,9 +91,11 @@ export class PedidoService {
     });
   }
 
-  cancelar(id) {
+  async cancelar(id) {
+    const token = await this.storage.get('token');
     const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json');
+      .set('Content-Type', 'application/json')
+      .append('Authorization', token);
 
     return new Promise(resolve => {
       this.http.delete(`${API}pedido/${id}`, { headers }).subscribe(

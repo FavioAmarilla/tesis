@@ -12,6 +12,7 @@ use App\Pedido;
 use App\PedidoItems;
 use App\PedidoPagos;
 use App\CuponDescuento;
+use App\UserTarjetas;
 
 class PedidoController extends BaseController
 {
@@ -227,12 +228,36 @@ class PedidoController extends BaseController
                 $pagoIt->referencia = ($pagoIt->referencia) ? $pagoIt->referencia : $this->obtenerUltimaReferenciaPago();
 
                 if ($pagoIt->save()) {
-                    if ($pago && $pago['tipo'] == 'PO') {
-                        $request->request->add(['amount' => $total]);
-                        $request->request->add(['shop_process_id' => $pagoIt->referencia]);
+                    switch ($pago['tipo']) {
+                        case 'ATCD':
+                            $usuario = $request->usuario;
 
-                        $bancard = new BancardController();
-                        return $bancard->singleBuy($request);
+                            $tarjeta = new UserTarjetas();
+                            $tarjeta->id_usuario = $usuario->sub;
+
+                            if ($tarjeta->save()) {
+                                $request->request->add([
+                                    'user_id' => $usuario->sub,
+                                    'card_id' => $tarjeta->identificador,
+                                    'email' => $usuario->email,
+                                    'celular' => $usuario->celular
+                                ]);
+    
+                                $bancard = new BancardController();
+                                return $bancard->newCard($request);
+                            }
+
+                            return $response = $this->sendResponse(false, 'Ha ocurrido un problema al intentar registrar la tarjeta', null, 500);
+                        case 'PO':
+                            $request->request->add([
+                                'amount' => $total,
+                                'shop_process_id' => $pagoIt->referencia
+                            ]);
+
+                            $bancard = new BancardController();
+                            return $bancard->singleBuy($request);
+                        default:
+                            return $this->sendResponse(true, 'Pedido registrado correctamente', null, 200);
                     }
 
                     return $this->sendResponse(true, 'Pedido registrado correctamente', null, 200);
@@ -378,12 +403,36 @@ class PedidoController extends BaseController
                     $pagoIt->referencia = ($pagoIt->referencia) ? $pagoIt->referencia : $this->obtenerUltimaReferenciaPago($pedido->identificador);
 
                     if ($pagoIt->save()) {
-                        if ($pago && $pago['tipo'] == 'PO') {
-                            $request->request->add(['amount' => $total]);
-                            $request->request->add(['shop_process_id' => $pagoIt->referencia]);
+                        switch ($pago['tipo']) {
+                            case 'ATCD':
+                                $usuario = $request->usuario;
 
-                            $bancard = new BancardController();
-                            return $bancard->singleBuy($request);
+                                $tarjeta = new UserTarjetas();
+                                $tarjeta->id_usuario = $usuario->sub;
+
+                                if ($tarjeta->save()) {
+                                    $request->request->add([
+                                        'user_id' => $usuario->sub,
+                                        'card_id' => $tarjeta->identificador,
+                                        'email' => $usuario->email,
+                                        'celular' => $usuario->celular
+                                    ]);
+        
+                                    $bancard = new BancardController();
+                                    return $bancard->newCard($request);
+                                }
+
+                                return $this->sendResponse(false, 'Ha ocurrido un problema al intentar registrar la tarjeta', null, 500);
+                            case 'PO':
+                                $request->request->add([
+                                    'amount' => $total,
+                                    'shop_process_id' => $pagoIt->referencia
+                                ]);
+
+                                $bancard = new BancardController();
+                                return $bancard->singleBuy($request);
+                            default:
+                                return $this->sendResponse(true, 'Pedido registrado correctamente', null, 200);
                         }
 
                         return $this->sendResponse(true, 'Pedido registrado correctamente', null, 200);

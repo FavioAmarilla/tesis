@@ -431,11 +431,18 @@ export class PedidoPage implements OnInit {
     const response: any = await this.servicioPedido.registrar(this.pedido);
 
     if (response.success) {
-      if (this.pedido.pago && this.pedido.pago.tipo == 'PO') { this.pagoOnlineBancard(response.data.process_id); }
-      else {
-        this.servicioCarrito.removeStorage('carrito');
-        this.servicioCarrito.obtenerCantidad('carrito');
-        this.router.navigate(['/pedido/finalizado'], {queryParams: {status: this.datosPago.value.tipo}});
+      switch (this.pedido.pago.tipo) {
+        case 'ATCD':
+          this.catastrarTajeta(response.data.process_id);
+          break;
+        case 'PO':
+          this.pagoOnlineBancard(response.data.process_id);
+          break;
+        default:
+          this.servicioCarrito.removeStorage('carrito');
+          this.servicioCarrito.obtenerCantidad('carrito');
+          this.router.navigate(['/pedido/finalizado'], { queryParams: { status: this.datosPago.value.tipo } });
+          break;
       }
     } else {
       this.servicioAlerta.dialogoError(response.message);
@@ -448,17 +455,43 @@ export class PedidoPage implements OnInit {
     const response: any = await this.servicioPedido.actualizar(this.pedido, this.pedido.identificador);
 
     if (response.success) {
-      if (this.pedido.pago && this.pedido.pago.tipo == 'PO') { this.pagoOnlineBancard(response.data.process_id); }
-      else {
-        this.servicioCarrito.removeStorage('carrito');
-        this.servicioCarrito.obtenerCantidad('carrito');
-        this.router.navigate(['/pago-finalizado']);
+      switch (this.pedido.pago.tipo) {
+        case 'ATCD':
+          this.catastrarTajeta(response.data.process_id);
+          break;
+        case 'PO':
+          this.pagoOnlineBancard(response.data.process_id);
+          break;
+        default:
+          this.servicioCarrito.removeStorage('carrito');
+          this.servicioCarrito.obtenerCantidad('carrito');
+          this.router.navigate(['/pedido/finalizado'], { queryParams: { status: this.datosPago.value.tipo } });
+          break;
       }
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargando = false;
+  }
+
+  catastrarTajeta(process_id) {
+    this.stepperEditable = false;
+
+    const styles = {
+      'form-background-color': '#001b60',
+      'button-background-color': '#4faed1',
+      'button-text-color': '#fcfcfc',
+      'button-border-color': '#dddddd',
+      'input-background-color': '#fcfcfc',
+      'input-text-color': '#111111',
+      'input-placeholder-color': '#111111'
+    };
+
+    Bancard.Cards.createForm('iframe-catastro-tarjeta', process_id, styles);
+
+    this.cargando = false;
+    this.stepper.next();
   }
 
   pagoOnlineBancard(process_id) {
@@ -475,7 +508,7 @@ export class PedidoPage implements OnInit {
       'input-placeholder-color': '#111111'
     };
 
-    Bancard.Checkout.createForm('iframe-container', process_id, styles);
+    Bancard.Checkout.createForm('iframe-pago-unico', process_id, styles);
     this.cargando = false;
     this.stepper.next();
 

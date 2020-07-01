@@ -14,7 +14,7 @@
   
     <div *ngIf="!success">
       <h1>¡Pedido cancelado!</h1>
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque, dicta!</p>
+      <p>{{ (description) ? description : 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque, dicta!' }}</p>
     
       <div class="text-right">
         <a [routerLink]="['/home']" class="btn btn-primary">Finalizar</a>

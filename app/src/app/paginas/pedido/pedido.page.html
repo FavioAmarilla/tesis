@@ -123,7 +123,7 @@
   
                   <mat-accordion>
                     <ion-radio-group formControlName="tipo">
-                      <mat-expansion-panel disabled class="mat-elevation-z0">
+                      <mat-expansion-panel class="mat-elevation-z0">
                         <mat-expansion-panel-header (click)="checkTipoPago(agregarTarjeta)">
                           <mat-panel-title>
                             <ion-radio value="ATCD" #agregarTarjeta></ion-radio>
@@ -132,6 +132,15 @@
                             Agregar nueva tarjeta
                           </mat-panel-description>
                         </mat-expansion-panel-header>
+
+                        <div class="new-card-info">
+                          <p>A continuación usted pasará por única vez por un proceso de validación con preguntas de seguridad. Para iniciar favor tener en cuenta las siguientes recomendaciones:</p>
+                          <ul>
+                            <li>Verifique su número de cédula de identidad</li>
+                            <li>Tenga a mano sus tarjetas de crédito y débito activas</li>
+                            <li>Verifique el monto y lugar de sus últimas compras en comercios o extracciones en cajeros</li>
+                          </ul>
+                        </div>
                       </mat-expansion-panel>
   
                       <mat-expansion-panel class="mat-elevation-z0">
@@ -180,10 +189,16 @@
                 </form>
               </mat-step>
     
-              <mat-step *ngIf="datosPago.value.tipo == 'PO'">
+              <mat-step *ngIf="datosPago.value.tipo == 'PO'" linear>
                 <ng-template matStepLabel><h2 class="stepper-title">Finalizar Pago</h2></ng-template>
 
-                <div id="iframe-container"></div>
+                <div id="iframe-pago-unico"></div>
+              </mat-step>
+
+              <mat-step *ngIf="datosPago.value.tipo == 'ATCD'" linear>
+                <ng-template matStepLabel><h2 class="stepper-title" (click)="procesarPedido()">Catastrar tarjeta y finalizar</h2></ng-template>
+
+                <div id="iframe-catastro-tarjeta"></div>
               </mat-step>
 
             </mat-vertical-stepper>

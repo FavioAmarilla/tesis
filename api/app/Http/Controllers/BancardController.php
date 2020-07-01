@@ -16,9 +16,10 @@ class BancardController extends BaseController
     protected $api;
 
     public function __construct() {
+        $prodMode = env('BANCARD_PROD_MODE');
+        $this->api = ($prodMode) ? env('BANCARD_API_PRODUCTION') : env('BANCARD_API_STAGING');
         $this->public_key = env('BANCARD_PUBLIC');
         $this->private_key = env('BANCARD_PRIVATE');
-        $this->api = env('BANCARD_API');
     }
 
     /**
@@ -30,8 +31,8 @@ class BancardController extends BaseController
 
         $front = env('FRONT_URL');
         $currency = "PYG";
-        $return_url = $front.'#/pedido/finalizado';
-        $cancel_url = $front.'#/pedido/finalizado';
+        $return_url = $front.'pedido/finalizado';
+        $cancel_url = $front.'pedido/finalizado';
 
         $amount = $request->input("amount");
         $shop_process_id = $request->input("shop_process_id");
@@ -197,10 +198,73 @@ class BancardController extends BaseController
         if ($respuesta->status == 'success') {
             $confirmation = $this->getPublicData($respuesta["confirmation"]);
 
-            return $this->sendReponse(true, 'Datos de la transacción', $confirmation, 200);
+            return $this->sendResponse(true, 'Datos de la transacción', $confirmation, 200);
         }
 
         return $this->sendResponse(false, 'La transacción no ha sido aprobada', null, 400);
+    }
+
+    /**
+     * Inicia el proceso de catastro de una tarjeta de credito/debito
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+    */
+    public function newCard(Request $request) {
+
+        $front = env('FRONT_URL');
+        $user_id = $request->get('user_id');
+        $card_id = $request->get('card_id');
+
+        $token = md5($this->private_key.$card_id.$user_id."request_new_card");
+        $return_url = $front.'pedido/finalizado';
+
+        $url = "$this->api/cards/new";
+        $data = json_encode(array(
+            "public_key" => $this->public_key,
+            "operation" => array(
+                "token" => $token,
+                "card_id" => $card_id,
+                "user_id" => $user_id,
+                "user_cell_phone" => $request->get('celular'),
+                "user_mail" => $request->get('email'),
+                "return_url" => $return_url,
+            )
+        ));
+
+        $respuesta = $this->requestHTTP($url, $data);
+
+        if ($respuesta->status == 'success') {
+
+            return $this->sendResponse(true, 'Datos de la solicitud', $respuesta, 200);
+        }
+
+        return $this->sendResponse(false, 'Ha ocurrido un problema al procesar la solicitud', null, 400);
+    }
+
+    /**
+     * Utiliza el alias token de la tarjeta catastrada para realizar el pago
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+    */
+    public function payWithToken(Request $requset) {
+
+        $token = md5($this->private_key.$shop_process_id."charge".$amount.$currency.$alias_token);
+
+        $url = "$this->api/charge";
+        $data = json_encode(array(
+            "public_key" => $this->public_key,
+            "operation" => array(
+                "token" => $token,
+                "shop_process_id" => $shop_process_id,
+                "amount" => $amount,
+                "number_of_payments" => 1,
+                "currency" => "PYG",
+                "alias_token" => $alias_token
+            )
+        ));
+
     }
 
     public function requestHTTP($url, $data) {
