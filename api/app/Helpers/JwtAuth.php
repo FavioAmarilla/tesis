@@ -53,6 +53,7 @@ class JwtAuth extends BaseController
 
     public function checkToken($jwt){
         $auth = false;
+        $decoded = null;
 
         if ($jwt) {
             try {

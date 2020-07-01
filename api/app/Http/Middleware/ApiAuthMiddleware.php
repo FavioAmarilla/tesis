@@ -16,13 +16,14 @@ class ApiAuthMiddleware extends BaseController
      */
     public function handle($request, Closure $next)
     {
-        $token = $request->get('Authorization');
+        $token = $request->header('Authorization');
         $jwt = new \JwtAuth();
         $logueado = $jwt->checkToken($token);
 
         if ($logueado) {
+            $request->request->add(['usuario' => $logueado]);
             return $next($request);
-        }else{        
+        } else {
             return $this->sendResponse(false, 'Usuario no logueado', null, 400);
         }
 
