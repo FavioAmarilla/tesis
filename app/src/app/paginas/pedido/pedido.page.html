@@ -10,7 +10,7 @@
         <!-- <h1 class="mb-4">Proceso de Pago</h1> -->
         <div class="content">
           <div class="row">
-            <mat-vertical-stepper linear #stepper class="col-lg-8">
+            <mat-vertical-stepper linear #stepper class="col-lg-7">
               <!-- datos de envio -->
               <mat-step [stepControl]="datosEnvio" [editable]="stepperEditable">
                 <ng-template matStepLabel><h2 class="stepper-title">Datos de Envio</h2></ng-template>
@@ -203,7 +203,7 @@
 
             </mat-vertical-stepper>
     
-            <div class="col-lg-4 cart-wrap order-resume">
+            <div class="col-md-4 offset-md-1 cart-wrap order-resume">
               <div class="cart-total mb-3">
                 <h2 class="title">Totales de carrito</h2>
                 <p class="d-flex">
@@ -256,8 +256,8 @@
 
 
         <div class="text-right">
-          <button *ngIf="datosEnvio.invalid || datosPago.invalid" (click)="stepper.next()" class="btn btn-primary" mat-button [disabled]="datosEnvio.invalid">Medio de pago</button>
-          <button *ngIf="datosEnvio.valid && datosPago.valid && stepperEditable" (click)="procesarPedido()" class="btn btn-primary" mat-button [disabled]="datosEnvio.invalid || datosPago.invalid">Finalizar pedido</button>
+          <!-- <button *ngIf="datosEnvio.invalid || datosPago.invalid" (click)="stepper.next()" class="btn btn-primary" mat-button [disabled]="datosEnvio.invalid">Medio de pago</button> -->
+          <button (click)="procesarPedido()" class="btn btn-primary" mat-button [disabled]="datosEnvio.invalid || datosPago.invalid">Finalizar pedido</button>
         </div>
       </div>
     </div>
