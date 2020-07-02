@@ -11,6 +11,7 @@ export interface Usuario {
     clave_nueva?: string;
     repita?: string;
     ruc?: string;
+    rol?: Rol
 }
 
 export interface Producto {
@@ -140,4 +141,9 @@ export interface Cliente {
     numero_documento: string,
     celular: string,
     telefono: string
+}
+
+export interface Rol {
+    identificador: number,
+    nombre: string,
 }
