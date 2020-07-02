@@ -18,7 +18,7 @@ class JwtAuth extends BaseController
 
     public function signIn($email, $clave_acceso, $getToken = null)
     {
-        $user = User::where([
+        $user = User::with(['rol'])->where([
             'email'     =>  $email,
             'clave_acceso'  =>  $clave_acceso,
             'activo' => 'S'
@@ -34,6 +34,7 @@ class JwtAuth extends BaseController
                 'telefono'          => $user->telefono,
                 'celular'           => $user->celular,
                 'imagen'            => $user->imagen,
+                'rol'               => $user->rol,
                 'iat'               =>  time(),
                 'exp'               =>  time() + (7 * 24 * 60 * 60)
             );
