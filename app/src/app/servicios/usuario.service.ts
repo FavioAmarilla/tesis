@@ -30,10 +30,10 @@ export class UsuarioService {
 
     return new Promise(resolve => {
       this.http.post(`${API}user`, usuario, { headers })
-      .subscribe(
-        (response: any) => resolve(response),
-        (error: any) => resolve(error.error)
-      );
+        .subscribe(
+          (response: any) => resolve(response),
+          (error: any) => resolve(error.error)
+        );
     });
   }
 
@@ -42,10 +42,10 @@ export class UsuarioService {
 
     return new Promise(resolve => {
       this.http.put(`${API}user/${id}`, usuario, { headers })
-      .subscribe(
-        (response: any) => resolve(response),
-        (error: any) => resolve(error.error)
-      );
+        .subscribe(
+          (response: any) => resolve(response),
+          (error: any) => resolve(error.error)
+        );
     });
   }
 
@@ -54,21 +54,32 @@ export class UsuarioService {
 
     return new Promise(resolve => {
       this.http.post(`${API}user/signIn`, usuario, { headers })
-      .subscribe(
-        async (response: any) => {
-          if (response.success) {
-            // se guarda el token en el Storage
-            await this.guardarToken(response.data);
-            this.loginEmitter.emit(this.usuario);
-            resolve({ success: true });
+        .subscribe(
+          async (response: any) => {
+            if (response.success) {
+
+              // se guarda el token en el Storage
+              await this.guardarToken(response.data);
+
+              //se valida el token y que tenga el rol nulo
+              //rol nulo = usuario cliente
+              const valido = await this.validarToken();
+              if (!valido) {
+                this.token = null;
+                this.usuario = null;
+                this.storage.remove('token');
+              }
+
+              this.loginEmitter.emit(this.usuario);
+              resolve({ success: valido });
+            }
+          },
+          (error) => {
+            this.token = null;
+            this.storage.remove('token');
+            resolve({ success: false, error });
           }
-        },
-        (error) => {
-          this.token = null;
-          this.storage.remove('token');
-          resolve({ success: false, error });
-        }
-      );
+        );
     });
   }
 
@@ -84,7 +95,6 @@ export class UsuarioService {
   async guardarToken(token: string) {
     this.token = token;
     await this.storage.set('token', token);
-    await this.validarToken();
   }
 
   async validarToken(): Promise<boolean> {
@@ -100,17 +110,17 @@ export class UsuarioService {
     return new Promise<boolean>(resolve => {
       const headers = new HttpHeaders().set('Content-Type', 'application/json');
       this.http.post(`${API}user/checkToken`, data, { headers })
-      .subscribe(
-        (response: any) => {
-          if (response.success) {
-            this.usuario = response.data;
-            resolve(true);
-          } else {
-            resolve(false);
-          }
-        },
-        (error) => resolve(false)
-      );
+        .subscribe(
+          (response: any) => {
+            if (response.success) {
+              this.usuario = response.data;
+              resolve(this.usuario.rol == null);
+            } else {
+              resolve(false);
+            }
+          },
+          (error) => resolve(false)
+        );
     });
   }
 
@@ -127,10 +137,10 @@ export class UsuarioService {
 
     return new Promise(resolve => {
       this.http.post(`${API}user/cambiarPassword`, usuario, { headers })
-      .subscribe(
-        (response: any) => resolve(response),
-        (error: any) => resolve(error.error)
-      );
+        .subscribe(
+          (response: any) => resolve(response),
+          (error: any) => resolve(error.error)
+        );
     });
   }
 }
