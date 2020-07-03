@@ -63,7 +63,7 @@ export class PedidoListadoPage implements OnInit {
       }
 
       this.cargando = false;
-    } else this.router.navigate(['/']);
+    } else { this.router.navigate(['/']); }
   }
 
   async mostrarOpciones(pedido) {
@@ -89,7 +89,7 @@ export class PedidoListadoPage implements OnInit {
           });
         }
 
-        if (pedido.pagos.vr_tipo != 'PO') {
+        if (pedido.pagos.vr_tipo != 'PO' && pedido.pagos.vr_tipo != 'ATCD') {
           botones.push({
             text: 'Cancelar pedido',
             icon: 'close',
@@ -112,7 +112,7 @@ export class PedidoListadoPage implements OnInit {
   async obtenerItems(id_pedido) {
     this.cargando = true;
 
-    let parametros = {
+    const parametros = {
       id_pedido
     };
     const response: any = await this.servicioPedido.obtenerItems(parametros);

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Platform, ActionSheetController } from '@ionic/angular';
+
 import { UsuarioService } from 'src/app/servicios/usuario.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
-import { Router } from '@angular/router';
 import { Usuario, Cliente } from 'src/app/interfaces/interfaces';
 import { ClienteService } from 'src/app/servicios/cliente.service';
 
@@ -14,7 +16,9 @@ export class MiCuentaPage implements OnInit {
 
   public cargando = true;
   public cargandoBoton = false;
+  public escritorio = true;
   public password: any = {};
+  public tarjetas = [];
   public usuario: Usuario = {
     sub: null,
     identificador: null,
@@ -36,16 +40,29 @@ export class MiCuentaPage implements OnInit {
   };
 
   constructor(
+    private actionSheetController: ActionSheetController,
     private servicioUsuario: UsuarioService,
     private clienteService: ClienteService,
     private servicioAlerta: AlertaService,
+    private platform: Platform,
     private router: Router
   ) {
     this.inicializar();
+    this.verificarResolucion();
     this.obtenerUsuario();
+    this.obtenerTarjetas();
   }
 
   ngOnInit() {
+    this.platform.resize
+    .subscribe(() => {
+      this.verificarResolucion();
+    });
+  }
+
+  verificarResolucion() {
+    const width = this.platform.width();
+    this.escritorio = (width > 991) ? true : false;
   }
 
   async inicializar() {
@@ -55,16 +72,16 @@ export class MiCuentaPage implements OnInit {
       clave_nueva: '',
       repita: '',
       id: ''
-    }
+    };
   }
 
   async obtenerUsuario() {
-    let logueado: any = await this.servicioUsuario.obtenerUsuario();
+    const logueado: any = await this.servicioUsuario.obtenerUsuario();
 
     if (logueado) {
       this.usuario = logueado;
 
-      let response: any = await this.clienteService.obtenerClienteUsuario(this.usuario.sub);
+      const response: any = await this.clienteService.obtenerClienteUsuario(this.usuario.sub);
       if (response.success) {
         this.cliente = response.data;
         this.usuario.ruc = this.cliente.numero_documento;
@@ -79,7 +96,7 @@ export class MiCuentaPage implements OnInit {
   async cambiarPassword() {
     this.cargandoBoton = await true;
 
-    let logueado: any = await this.servicioUsuario.obtenerUsuario();
+    const logueado: any = await this.servicioUsuario.obtenerUsuario();
     if (!logueado) {
       this.cargandoBoton = await false;
       this.servicioAlerta.dialogoError('Debe estar logueado');
@@ -95,16 +112,16 @@ export class MiCuentaPage implements OnInit {
     this.password.email = logueado.email;
     this.password.id = logueado.sub;
     this.password.clave_actual = this.usuario.clave_acceso;
-    let response: any = await this.servicioUsuario.cambiarPassword(this.password);
+    const response: any = await this.servicioUsuario.cambiarPassword(this.password);
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message);
 
-      //volver a loguear al usuario
-      let loguear = {
+      // volver a loguear al usuario
+      const loguear = {
         email: this.password.email,
         clave_acceso: this.password.clave_nueva,
       };
-      let login: any = this.servicioUsuario.iniciarSession(loguear);
+      const login: any = this.servicioUsuario.iniciarSession(loguear);
       this.obtenerUsuario();
 
     } else {
@@ -117,11 +134,11 @@ export class MiCuentaPage implements OnInit {
 
   async actualizarDatos() {
     this.cargandoBoton = await true;
-    let response: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.sub);
+    const response: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.sub);
 
     if (response.success) {
 
-      //se guarda el cliente
+      // se guarda el cliente
       this.cliente.id_usuario = this.usuario.sub;
       this.cliente.razon_social = this.usuario.nombre_completo;
       this.cliente.numero_documento = this.usuario.ruc;
@@ -132,9 +149,9 @@ export class MiCuentaPage implements OnInit {
 
       if (responseCliente.success) {
         this.servicioAlerta.dialogoExito(response.message);
-        //se guarda token con los nuevos datos del usuario
+        // se guarda token con los nuevos datos del usuario
         this.servicioUsuario.guardarToken(response.data.token);
-        //se obtiene los nuevos datos del usuario
+        // se obtiene los nuevos datos del usuario
         this.obtenerUsuario();
       } else {
         this.cargandoBoton = await false;
@@ -147,6 +164,43 @@ export class MiCuentaPage implements OnInit {
     }
 
     this.cargandoBoton = await false;
+  }
+
+  async obtenerTarjetas() {
+    this.cargando = false;
+    const response: any = await this.servicioUsuario.obtenerTarjetas();
+
+    if (response.success) {
+      this.tarjetas = response.data;
+    }
+
+    this.cargando = false;
+  }
+
+  async opcionesTarjeta(tarjeta) {
+    const actionSheet = await this.actionSheetController.create({
+      buttons: [{
+        icon: 'cancel',
+        text: 'Eliminar tarjeta',
+        handler: () => { this.eliminarTarjeta(tarjeta); }
+      }]
+    });
+
+    await actionSheet.present();
+  }
+
+  async eliminarTarjeta(tarjeta) {
+    this.cargando = false;
+    const response: any = await this.servicioUsuario.eliminarTarjeta(tarjeta.card_id);
+
+    if (response.success) {
+      this.servicioAlerta.dialogoExito('Tarjeta eliminada correctamente');
+      this.obtenerTarjetas();
+    } else {
+      this.servicioAlerta.dialogoError('No se pudo eliminar la tarjeta');
+    }
+
+    this.cargando = false;
   }
 
 }

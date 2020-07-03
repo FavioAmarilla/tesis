@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { MiCuentaPage } from './mi-cuenta.page';
 import { ModuloComponentes } from '../../componentes/componentes.module';
 import {MatTabsModule} from '@angular/material/tabs';
+import { MatMenuModule, MatIconModule } from '@angular/material';
 
 const routes: Routes = [
   {
@@ -23,7 +24,9 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ModuloComponentes,
-    MatTabsModule
+    MatTabsModule,
+    MatIconModule,
+    MatMenuModule
   ],
   declarations: [MiCuentaPage]
 })

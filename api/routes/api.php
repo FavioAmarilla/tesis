@@ -25,6 +25,8 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('upload', ['as' => 'user.upload', 'uses' => 'UserController@upload']);
     Route::get('getImage/{filename}', ['as' => 'user.getImage', 'uses' => 'UserController@getImage']);
     Route::post('cambiarPassword', ['as' => 'user.cambiarPassword', 'uses' => 'UserController@cambiarPassword']);
+    Route::post('{userId}/tarjetas', ['as' => 'user.tarjetas', 'uses' => 'BancardController@getCards']);
+    Route::post('{userId}/tarjeta/{cardId}', ['as' => 'user.eliminar.tarjeta', 'uses' => 'BancardController@deleteCard']);
 });
 Route::resource('rol', 'RolController');
 Route::resource('permiso', 'RolController');

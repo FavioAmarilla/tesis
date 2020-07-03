@@ -30,10 +30,10 @@ export class UsuarioService {
 
     return new Promise(resolve => {
       this.http.post(`${API}user`, usuario, { headers })
-        .subscribe(
-          (response: any) => resolve(response),
-          (error: any) => resolve(error.error)
-        );
+      .subscribe(
+        (response: any) => resolve(response),
+        (error: any) => resolve(error.error)
+      );
     });
   }
 
@@ -42,10 +42,10 @@ export class UsuarioService {
 
     return new Promise(resolve => {
       this.http.put(`${API}user/${id}`, usuario, { headers })
-        .subscribe(
-          (response: any) => resolve(response),
-          (error: any) => resolve(error.error)
-        );
+      .subscribe(
+        (response: any) => resolve(response),
+        (error: any) => resolve(error.error)
+      );
     });
   }
 
@@ -54,32 +54,32 @@ export class UsuarioService {
 
     return new Promise(resolve => {
       this.http.post(`${API}user/signIn`, usuario, { headers })
-        .subscribe(
-          async (response: any) => {
-            if (response.success) {
+      .subscribe(
+        async (response: any) => {
+          if (response.success) {
 
-              // se guarda el token en el Storage
-              await this.guardarToken(response.data);
+            // se guarda el token en el Storage
+            await this.guardarToken(response.data);
 
-              //se valida el token y que tenga el rol nulo
-              //rol nulo = usuario cliente
-              const valido = await this.validarToken();
-              if (!valido) {
-                this.token = null;
-                this.usuario = null;
-                this.storage.remove('token');
-              }
-
-              this.loginEmitter.emit(this.usuario);
-              resolve({ success: valido });
+            // se valida el token y que tenga el rol nulo
+            // rol nulo = usuario cliente
+            const valido = await this.validarToken();
+            if (!valido) {
+              this.token = null;
+              this.usuario = null;
+              this.storage.remove('token');
             }
-          },
-          (error) => {
-            this.token = null;
-            this.storage.remove('token');
-            resolve({ success: false, error });
+
+            this.loginEmitter.emit(this.usuario);
+            resolve({ success: valido });
           }
-        );
+        },
+        (error) => {
+          this.token = null;
+          this.storage.remove('token');
+          resolve({ success: false, error });
+        }
+      );
     });
   }
 
@@ -103,24 +103,52 @@ export class UsuarioService {
       return Promise.resolve(false);
     }
 
-    const data = {
-      Authorization: this.token
-    };
-
     return new Promise<boolean>(resolve => {
-      const headers = new HttpHeaders().set('Content-Type', 'application/json');
-      this.http.post(`${API}user/checkToken`, data, { headers })
-        .subscribe(
-          (response: any) => {
-            if (response.success) {
-              this.usuario = response.data;
-              resolve(this.usuario.rol == null);
-            } else {
-              resolve(false);
-            }
-          },
-          (error) => resolve(false)
-        );
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .append('Authorization', this.token);
+      this.http.post(`${API}user/checkToken`, {}, { headers })
+      .subscribe(
+        (response: any) => {
+          if (response.success) {
+            this.usuario = response.data;
+            resolve(this.usuario.rol == null);
+          } else {
+            resolve(false);
+          }
+        },
+        (error) => resolve(false)
+      );
+    });
+  }
+
+  async obtenerTarjetas() {
+    return new Promise<boolean>(resolve => {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .append('Authorization', this.token);
+      this.http.get(`${API}user/${this.usuario.sub}/tarjetas`, { headers })
+      .subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        (error) => resolve(error)
+      );
+    });
+  }
+
+  async eliminarTarjeta(cardId) {
+    return new Promise<boolean>(resolve => {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .append('Authorization', this.token);
+      this.http.delete(`${API}user/${this.usuario.sub}/tarjeta/${cardId}`, { headers })
+      .subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        (error) => resolve(error)
+      );
     });
   }
 

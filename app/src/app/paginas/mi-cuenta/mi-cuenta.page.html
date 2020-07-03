@@ -22,8 +22,7 @@
                   <hr class="border-top mt-0">
                   <div class="form-group">
                     <label for="Nombre completo">Nombre completo</label>
-                    <input type="text" class="form-control" name="nombre_completo"
-                      [(ngModel)]="usuario.nombre_completo">
+                    <input type="text" class="form-control" name="nombre_completo" [(ngModel)]="usuario.nombre_completo">
                   </div>
                   <div class="form-group">
                     <label for="Email">Email</label>
@@ -31,8 +30,7 @@
                   </div>
                   <div class="form-group">
                     <label for="Fecha de nacimiento">Fecha de nacimiento</label>
-                    <input type="date" class="form-control" name="fecha_nacimiento"
-                      [(ngModel)]="usuario.fecha_nacimiento">
+                    <input type="date" class="form-control" name="fecha_nacimiento" [(ngModel)]="usuario.fecha_nacimiento">
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -68,8 +66,7 @@
               <br>
               <div class="form-group">
                 <a class="btn btn-primary py-2 px-4" (click)="actualizarDatos()">
-                  <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status"
-                    aria-hidden="true"></span>
+                  <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status" aria-hidden="true"></span>
                   Aceptar
                 </a>
               </div>
@@ -91,12 +88,52 @@
               </div>
               <div class="form-group">
                 <a class="btn btn-primary py-2 px-4" (click)="cambiarPassword()">
-                  <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status"
-                    aria-hidden="true"></span>
+                  <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status" aria-hidden="true"></span>
                   Aceptar
                 </a>
               </div>
             </form>
+          </mat-tab>
+          <mat-tab label="Mis Tarjetas" class="cards">
+            <div class="row">
+              <div class="col-md-4" *ngFor="let tarjeta of tarjetas">
+                <ion-card class="credit-card">
+                  <ion-item color="primary">
+                    <ion-label>{{ (tarjeta.card_type == 'credit') ? 'Tarjeta de Crédito' : 'Tarjeta de Débito' }}</ion-label>
+                    
+                    <ion-button slot="end" fill="clear" *ngIf="!escritorio" (click)="opcionesTarjeta(tarjeta)">
+                      <ion-icon name="more" slot="icon-only" color="light"></ion-icon>
+                    </ion-button>
+                    
+                    <ion-button slot="end" fill="clear" *ngIf="escritorio" [matMenuTriggerFor]="opciones">
+                      <ion-icon name="more" slot="icon-only" color="light"></ion-icon>
+                    </ion-button>
+                    <mat-menu #opciones="matMenu" xPosition="before">                    
+                      <button mat-menu-item (click)="eliminarTarjeta(tarjeta)">
+                        <mat-icon>cancel</mat-icon>
+                        <span>Eliminar tarjeta</span>
+                      </button>
+                    </mat-menu>
+
+                  </ion-item>
+                  <ion-card-content>
+                    <div class="card-number">
+                      <label>Nº tarjeta</label>
+                      <p>{{ tarjeta.card_masked_number.split('').join(' ') }}</p>
+                    </div>
+
+                    <div class="expiration-date">
+                      <label>Fecha expiración</label>
+                      <p>{{ tarjeta.expiration_date }}</p>
+                    </div>
+
+                    <ion-img *ngIf="tarjeta.card_brand.toLowerCase().indexOf('mastercard') != -1" class="mastercard" src="/assets/icon/mastercard.svg"></ion-img>
+                    <ion-img *ngIf="tarjeta.card_brand.toLowerCase().indexOf('visa') != -1" class="visa" src="/assets/icon/visa.svg"></ion-img>
+                    <ion-img *ngIf="tarjeta.card_brand.toLowerCase().indexOf('bancard') != -1" class="infonet" src="/assets/icon/infonet.svg"></ion-img>
+                  </ion-card-content>
+                </ion-card>
+              </div>
+            </div>
           </mat-tab>
         </mat-tab-group>
       </ion-col>

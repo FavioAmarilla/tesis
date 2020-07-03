@@ -1,0 +1,29 @@
+:host ::ng-deep .mat-tab-body-content {
+    overflow: initial !important;
+}
+
+.credit-card {
+    .card-number, .expiration-date {
+        label {
+            font-size: 13px;
+            font-weight: 300;
+        }
+    
+        p {
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgb(230, 230, 230);
+        }
+    
+    }
+    
+    ion-img {
+        width: 48px;
+        position: absolute;
+        bottom: 5px;
+        right: 15px;
+    }
+
+    ion-img.infonet {
+        width: 64px;
+    }
+}

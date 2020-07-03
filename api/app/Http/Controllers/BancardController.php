@@ -265,11 +265,105 @@ class BancardController extends BaseController
             )
         ));
 
+        $respuesta = $this->requestHTTP($url, $data);
+
+        if ($respuesta->status == 'success') {
+        }
+
     }
 
-    public function requestHTTP($url, $data) {
+    /**
+     * Obtiene las tarjetas del usuario
+     * 
+     * @param  int $userId
+     * @return \Illuminate\Http\Response
+    */
+    public function getCards($userId) {
+
+        $token = md5($this->private_key.$userId."request_user_cards");
+
+        $url = "$this->api/users/$userId/cards";
+        $data = json_encode(array(
+            "public_key" => $this->public_key,
+            "operation" => array(
+                "token" => $token
+            )
+        ));
+
+        $respuesta = $this->requestHTTP($url, $data);
+
+        if ($respuesta->status == 'success') {
+            $confirmation = $this->getPublicData($respuesta);
+
+            return $this->sendResponse(true, 'Tarjetas obtenidas correctamente', $confirmation->cards, 200);
+        }
+
+        return $this->sendResponse(false, 'No se encontraron tarjetas para el usuario', null, 404);
+    }
+
+    /**
+     * Elimina una de las tarjetas del usuario
+     * 
+     * @param  int $userId
+     * @param  int $cardId
+     * @return \Illuminate\Http\Response
+    */
+    public function deleteCard($userId, $cardId) {
+
+        $userId = intval($userId);
+        $cardId = intval($cardId);
+
+        $token = md5($this->private_key.$userId."request_user_cards");
+
+        $url = "$this->api/users/$userId/cards";
+        $data = json_encode(array(
+            "public_key" => $this->public_key,
+            "operation" => array(
+                "token" => $token
+            )
+        ));
+
+        $respuesta = $this->requestHTTP($url, $data);
+
+        if ($respuesta->status == 'success') {
+
+            $alias_token;
+            foreach ($respuesta->cards as $card) {
+                if ($card->card_id == $cardId) {
+                    $alias_token = $card->alias_token;
+                    break;
+                }
+            }
+
+            if ($alias_token) {
+                $token = md5($this->private_key."delete_card".$userId.$alias_token);
+                $data = json_encode(array(
+                    "public_key" => $this->public_key,
+                    "operation" => array(
+                        "token" => $token,
+                        "alias_token" => $alias_token
+                    )
+                ));
+
+                $respuesta = $this->requestHTTP($url, $data, 'delete');
+
+                if ($respuesta->status == 'success') {
+                    return $this->sendResponse(true, 'La tarjeta ha sido removida correctamente', null, 200);
+                }
+
+                return $this->sendResponse(false, 'Ha ocurrido un problema al intentar eliminar la tarjeta', null, 400);
+            }
+
+            return $this->sendResponse(false, 'No se encontro la tarjeta', null, 404);
+        }
+
+        return $this->sendResponse(false, 'Ha ocurrido un problema al intentar eliminar la tarjeta', null, 400);
+    }
+
+    public function requestHTTP($url, $data, $method = "post") {
         $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, 1);
+        if ($method == 'post') { curl_setopt($ch, CURLOPT_POST, 1); }
+        else if ($method == 'delete') { curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE"); }
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -280,9 +374,19 @@ class BancardController extends BaseController
     }
 
     public function getPublicData($datos) {
-        unset($datos['token']);
-        unset($datos['security_information']);
-        unset($datos['extended_response_description']);
+        if (is_array($datos)) {
+            if (isset($datos['token']))                         unset($datos['token']);
+            if (isset($datos['security_information']))          unset($datos['security_information']);
+            if (isset($datos['extended_response_description'])) unset($datos['extended_response_description']);
+        }
+
+        if (is_object($datos)) {
+            if (isset($datos->cards)) {
+                foreach ($datos->cards as $card) {
+                    unset($card->alias_token);
+                }
+            }
+        }
 
         return $datos;
     }

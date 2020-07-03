@@ -241,7 +241,7 @@ class UserController extends BaseController {
     }
 
     public function checkToken(Request $request) {
-        $token = $request->get('Authorization');
+        $token = $request->header('Authorization');
         $jwt = new \JwtAuth();
         $usuario = $jwt->checkToken($token);
 
