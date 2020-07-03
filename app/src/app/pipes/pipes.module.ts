@@ -7,6 +7,8 @@ import { LineaProductoImagePipe } from './linea-producto-image.pipe';
 import { TruncateTextPipe } from './truncate-text.pipe';
 import { NumberFormatPipe } from './number-format.pipe';
 import { UnidadMedidaPipe } from './unidad-medida.pipe';
+import { SpaceBetweenLettersPipe } from './space-between-letters.pipe';
+import { CardBrandPipe } from './card-brand.pipe';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { UnidadMedidaPipe } from './unidad-medida.pipe';
     LineaProductoImagePipe,
     TruncateTextPipe,
     NumberFormatPipe,
-    UnidadMedidaPipe
+    UnidadMedidaPipe,
+    CardBrandPipe,
+    SpaceBetweenLettersPipe
   ],
   exports: [
     UrlSanitizerPipe,
@@ -25,7 +29,9 @@ import { UnidadMedidaPipe } from './unidad-medida.pipe';
     LineaProductoImagePipe,
     TruncateTextPipe,
     NumberFormatPipe,
-    UnidadMedidaPipe
+    UnidadMedidaPipe,
+    CardBrandPipe,
+    SpaceBetweenLettersPipe
   ],
   imports: [
     CommonModule

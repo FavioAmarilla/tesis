@@ -35,6 +35,7 @@ class JwtAuth extends BaseController
                 'celular'           => $user->celular,
                 'imagen'            => $user->imagen,
                 'rol'               => $user->rol,
+                'tiene_tarjetas'               => $user->tiene_tarjetas,
                 'iat'               =>  time(),
                 'exp'               =>  time() + (7 * 24 * 60 * 60)
             );

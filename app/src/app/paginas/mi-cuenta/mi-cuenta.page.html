@@ -119,7 +119,7 @@
                   <ion-card-content>
                     <div class="card-number">
                       <label>Nº tarjeta</label>
-                      <p>{{ tarjeta.card_masked_number.split('').join(' ') }}</p>
+                      <p>{{ tarjeta.card_masked_number | spaceBetweenLetters }}</p>
                     </div>
 
                     <div class="expiration-date">
@@ -127,9 +127,7 @@
                       <p>{{ tarjeta.expiration_date }}</p>
                     </div>
 
-                    <ion-img *ngIf="tarjeta.card_brand.toLowerCase().indexOf('mastercard') != -1" class="mastercard" src="/assets/icon/mastercard.svg"></ion-img>
-                    <ion-img *ngIf="tarjeta.card_brand.toLowerCase().indexOf('visa') != -1" class="visa" src="/assets/icon/visa.svg"></ion-img>
-                    <ion-img *ngIf="tarjeta.card_brand.toLowerCase().indexOf('bancard') != -1" class="infonet" src="/assets/icon/infonet.svg"></ion-img>
+                    <ion-img [class]="tarjeta.card_brand | cardBrand:'class'" [src]="tarjeta.card_brand | cardBrand:'icon'"></ion-img>
                   </ion-card-content>
                 </ion-card>
               </div>

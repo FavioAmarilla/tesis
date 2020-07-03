@@ -123,36 +123,62 @@
   
                   <mat-accordion>
                     <ion-radio-group formControlName="tipo">
-                      <mat-expansion-panel class="mat-elevation-z0">
-                        <mat-expansion-panel-header (click)="checkTipoPago(agregarTarjeta)">
-                          <mat-panel-title>
-                            <ion-radio value="ATCD" #agregarTarjeta></ion-radio>
-                          </mat-panel-title>
-                          <mat-panel-description>
-                            Agregar nueva tarjeta
-                          </mat-panel-description>
-                        </mat-expansion-panel-header>
 
-                        <div class="new-card-info">
-                          <p>A continuación usted pasará por única vez por un proceso de validación con preguntas de seguridad. Para iniciar favor tener en cuenta las siguientes recomendaciones:</p>
-                          <ul>
-                            <li>Verifique su número de cédula de identidad</li>
-                            <li>Tenga a mano sus tarjetas de crédito y débito activas</li>
-                            <li>Verifique el monto y lugar de sus últimas compras en comercios o extracciones en cajeros</li>
-                          </ul>
-                        </div>
-                      </mat-expansion-panel>
-  
-                      <mat-expansion-panel class="mat-elevation-z0">
-                        <mat-expansion-panel-header (click)="checkTipoPago(pagoOnline)">
-                          <mat-panel-title>
-                            <ion-radio value="PO" #pagoOnline></ion-radio>
-                          </mat-panel-title>
-                          <mat-panel-description>
-                            Pagar online ahora
-                          </mat-panel-description>
+                      <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                          <mat-panel-title></mat-panel-title>
+                          <mat-panel-description>Pagar online ahora</mat-panel-description>
                         </mat-expansion-panel-header>
+                        
+                        <mat-expansion-panel class="mat-elevation-z0">
+                          <mat-expansion-panel-header (click)="checkTipoPago(agregarTarjeta)">
+                            <mat-panel-title>
+                              <ion-radio value="ATCD" #agregarTarjeta></ion-radio>
+                            </mat-panel-title>
+                            <mat-panel-description>
+                              Agregar nueva tarjeta
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
   
+                          <div class="new-card-info">
+                            <p>A continuación usted pasará por única vez por un proceso de validación con preguntas de seguridad. Para iniciar favor tener en cuenta las siguientes recomendaciones:</p>
+                            <ul>
+                              <li>Verifique su número de cédula de identidad</li>
+                              <li>Tenga a mano sus tarjetas de crédito y débito activas</li>
+                              <li>Verifique el monto y lugar de sus últimas compras en comercios o extracciones en cajeros</li>
+                            </ul>
+                          </div>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel class="mat-elevation-z0" *ngIf="usuario && usuario.tiene_tarjetas">
+                          <mat-expansion-panel-header (click)="checkTipoPago(pagarUsandoToken)">
+                            <mat-panel-title>
+                              <ion-radio value="PWTK" #pagarUsandoToken></ion-radio>
+                            </mat-panel-title>
+                            <mat-panel-description>Seleccionar Tarjeta</mat-panel-description>
+                          </mat-expansion-panel-header>
+
+                          <div class="row" *ngFor="let tarjeta of tarjetas">
+                            <div class="col-md-12">
+                              <ion-card class="credit-card" (click)="seleccionarTarjeta(tarjeta.card_id)" [ngClass]="{'bg-primary text-white': datosPago.value.card_id == tarjeta.card_id}">
+                                <ion-label>{{ tarjeta.card_brand | truncateText:10}} {{ tarjeta.card_masked_number | spaceBetweenLetters }}</ion-label>
+
+                                <ion-img [class]="tarjeta.card_brand | cardBrand:'class'" [src]="tarjeta.card_brand | cardBrand:'icon'"></ion-img>
+                              </ion-card>
+                            </div>
+                          </div>
+
+                        </mat-expansion-panel>
+    
+                        <mat-expansion-panel disabled class="mat-elevation-z0">
+                          <mat-expansion-panel-header (click)="checkTipoPago(pagoOnline)">
+                            <mat-panel-title>
+                              <ion-radio value="PO" #pagoOnline></ion-radio>
+                            </mat-panel-title>
+                            <mat-panel-description>Pago único</mat-panel-description>
+                          </mat-expansion-panel-header>
+                        </mat-expansion-panel>
+
                         <img src="assets/images/pago-seguro.jpg">
                       </mat-expansion-panel>
   

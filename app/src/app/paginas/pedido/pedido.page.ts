@@ -51,6 +51,7 @@ export class PedidoPage implements OnInit {
   public listaBarrios: Barrio;
   public carrito: any;
   public usuario: any;
+  public tarjetas: any = [];
 
   public parametros: EcParametro
   public paramCiudades: EcParamCiudad
@@ -94,6 +95,8 @@ export class PedidoPage implements OnInit {
   }
 
   async ngOnInit() {
+    this.obtenerUsuario();
+
     await this.servicioGeneral.agregarScriptBancard();
     await this.obtenerParametrosEcommerce();
     await this.obtenerTotales();
@@ -108,6 +111,17 @@ export class PedidoPage implements OnInit {
     });
 
     if (comprobarTotales) { this.comprobarTotales(); }
+
+    this.cargando = false;
+  }
+
+  async obtenerTarjetas() {
+    this.cargando = false;
+    const response: any = await this.servicioUsuario.obtenerTarjetas();
+
+    if (response.success) {
+      this.tarjetas = response.data;
+    }
 
     this.cargando = false;
   }
@@ -182,10 +196,12 @@ export class PedidoPage implements OnInit {
   inicializarDatosPago() {
     this.datosPago = this.formBuilder.group({
       tipo:    ['', Validators.required],
+      card_id: [''],
       importe: ['']
     }, {
       validators: [
-        this.requiredValidator('tipo', '==', 'PERC', 'importe')
+        this.requiredValidator('tipo', '==', 'PERC', 'importe'),
+        this.requiredValidator('tipo', '==', 'PWTK', 'card_id')
       ]
     });
   }
@@ -381,6 +397,9 @@ export class PedidoPage implements OnInit {
 
     if (response) {
       this.usuario = response;
+      if (this.usuario && this.usuario.tiene_tarjetas) {
+        this.obtenerTarjetas();
+      }
     } else {
       this.servicioAlerta.dialogoError('Debe estar Logueado para confirmar la operacion');
       this.router.navigate(['/login']);
@@ -390,9 +409,6 @@ export class PedidoPage implements OnInit {
   }
 
   async procesarPedido() {
-    if (await this.obtenerUsuario() == false) {
-      return;
-    }
 
     this.cargando = true;
 
@@ -429,21 +445,10 @@ export class PedidoPage implements OnInit {
 
   async registrarPedido() {
     const response: any = await this.servicioPedido.registrar(this.pedido);
+    console.log(response);
 
     if (response.success) {
-      switch (this.pedido.pago.tipo) {
-        case 'ATCD':
-          this.catastrarTajeta(response.data.process_id);
-          break;
-        case 'PO':
-          this.pagoOnlineBancard(response.data.process_id);
-          break;
-        default:
-          this.servicioCarrito.removeStorage('carrito');
-          this.servicioCarrito.obtenerCantidad('carrito');
-          this.router.navigate(['/pedido/finalizado'], { queryParams: { status: this.datosPago.value.tipo } });
-          break;
-      }
+      this.finalizarPedido(response);
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }
@@ -455,19 +460,7 @@ export class PedidoPage implements OnInit {
     const response: any = await this.servicioPedido.actualizar(this.pedido, this.pedido.identificador);
 
     if (response.success) {
-      switch (this.pedido.pago.tipo) {
-        case 'ATCD':
-          this.catastrarTajeta(response.data.process_id);
-          break;
-        case 'PO':
-          this.pagoOnlineBancard(response.data.process_id);
-          break;
-        default:
-          this.servicioCarrito.removeStorage('carrito');
-          this.servicioCarrito.obtenerCantidad('carrito');
-          this.router.navigate(['/pedido/finalizado'], { queryParams: { status: this.datosPago.value.tipo } });
-          break;
-      }
+      this.finalizarPedido(response);
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }
@@ -514,9 +507,33 @@ export class PedidoPage implements OnInit {
 
   }
 
+  finalizarPedido(response) {
+    switch (this.pedido.pago.tipo) {
+      case 'ATCD':
+        this.catastrarTajeta(response.data.process_id);
+        break;
+      case 'PWTK':
+        this.servicioCarrito.removeStorage('carrito');
+        this.servicioCarrito.obtenerCantidad('carrito');
+        this.router.navigate(['/pedido/finalizado'], { queryParams: { status: 'payment_success' } });
+        break;
+      case 'PO':
+        this.pagoOnlineBancard(response.data.process_id);
+        break;
+      default:
+        this.servicioCarrito.removeStorage('carrito');
+        this.servicioCarrito.obtenerCantidad('carrito');
+        this.router.navigate(['/pedido/finalizado'], { queryParams: { status: this.datosPago.value.tipo } });
+        break;
+    }
+  }
+
   checkTipoPago(radio) {
     this.datosPago.controls.tipo.setValue(radio.value);
   }
 
+  seleccionarTarjeta(cardId) {
+    this.datosPago.controls.card_id.setValue(cardId);
+  }
 
 }

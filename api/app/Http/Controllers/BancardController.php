@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\BaseController as BaseController;
 
+use App\User;
 use App\Pedido;
 use App\PedidoPagos;
 
@@ -37,7 +38,7 @@ class BancardController extends BaseController
         $amount = $request->input("amount");
         $shop_process_id = $request->input("shop_process_id");
         
-        $amount = str_replace(",", "", number_format($amount, 2)); 
+        $amount = str_replace(",", "", number_format($amount, 2));
 
         $token = md5($this->private_key.$shop_process_id.$amount.$currency);
 
@@ -236,6 +237,10 @@ class BancardController extends BaseController
 
         if ($respuesta->status == 'success') {
 
+            $usuario = User::find($user_id);
+            $usuario->tiene_tarjetas = 1;
+            $usuario->save();
+
             return $this->sendResponse(true, 'Datos de la solicitud', $respuesta, 200);
         }
 
@@ -248,28 +253,81 @@ class BancardController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
     */
-    public function payWithToken(Request $requset) {
+    public function payWithToken(Request $request) {
 
-        $token = md5($this->private_key.$shop_process_id."charge".$amount.$currency.$alias_token);
+        $currency = "PYG";
+        $userId = $request->get('user_id');
+        $cardId = $request->get('card_id');
+        $amount = $request->get('amount');
+        $shop_process_id = $request->get('shop_process_id');
 
-        $url = "$this->api/charge";
+        $amount = str_replace(",", "", number_format($amount, 2)); 
+
+        $token = md5($this->private_key.$userId."request_user_cards");
+
+        $url = "$this->api/users/$userId/cards";
         $data = json_encode(array(
             "public_key" => $this->public_key,
             "operation" => array(
-                "token" => $token,
-                "shop_process_id" => $shop_process_id,
-                "amount" => $amount,
-                "number_of_payments" => 1,
-                "currency" => "PYG",
-                "alias_token" => $alias_token
+                "token" => $token
             )
         ));
 
         $respuesta = $this->requestHTTP($url, $data);
 
         if ($respuesta->status == 'success') {
-        }
 
+            $alias_token = null;
+            foreach ($respuesta->cards as $card) {
+                if ($card->card_id == $cardId) {
+                    $alias_token = $card->alias_token;
+                    break;
+                }
+            }
+
+            if ($alias_token) {
+                $token = md5($this->private_key.$shop_process_id."charge".$amount.$currency.$alias_token);
+
+                $url = "$this->api/charge";
+                $data = json_encode(array(
+                    "public_key" => $this->public_key,
+                    "operation" => array(
+                        "token" => $token,
+                        "shop_process_id" => $shop_process_id,
+                        "amount" => $amount,
+                        "number_of_payments" => 1,
+                        "currency" => "PYG",
+                        "alias_token" => $alias_token,
+                        "additional_data" => "",
+                        "description" => "Pago de pedido $shop_process_id"
+                    )
+                ));
+
+                $respuesta = $this->requestHTTP($url, $data);
+                
+                if ($respuesta->status == 'success') {
+                    $confirmation = $respuesta->confirmation;
+
+                    // Actualizar pago del pedido
+                    $pago = PedidoPagos::where('referencia', '=', $confirmation->shop_process_id)->first();
+
+                    if ($pago) {
+                        $pago->estado = 'PAGADO';
+                        $pago->process_id = NULL;
+
+                        if ($pago->save()) {
+                            return $this->sendResponse(true, 'Pago procesado correctamente', null, 200);
+                        }
+
+                        return $this->sendResponse(false, 'Ha ocurrido un problema al intentar actualizar el pago del pedido', null, 400);
+                    }
+
+                    return $this->sendResponse(true, 'Pago procesado correctamente', null, 200);
+                }
+            }
+        }
+    
+        return $this->sendResponse(false, 'No se ha encontrado la tarjeta solicitada para proceder con el pago', null, 404);
     }
 
     /**
@@ -310,9 +368,6 @@ class BancardController extends BaseController
     */
     public function deleteCard($userId, $cardId) {
 
-        $userId = intval($userId);
-        $cardId = intval($cardId);
-
         $token = md5($this->private_key.$userId."request_user_cards");
 
         $url = "$this->api/users/$userId/cards";
@@ -327,7 +382,7 @@ class BancardController extends BaseController
 
         if ($respuesta->status == 'success') {
 
-            $alias_token;
+            $alias_token = null;
             foreach ($respuesta->cards as $card) {
                 if ($card->card_id == $cardId) {
                     $alias_token = $card->alias_token;
@@ -348,6 +403,11 @@ class BancardController extends BaseController
                 $respuesta = $this->requestHTTP($url, $data, 'delete');
 
                 if ($respuesta->status == 'success') {
+
+                    $usuario = User::find($userId);
+                    $usuario->tiene_tarjetas = (count($respuesta->cards) - 1 < 1) ? 0 : 1;
+                    $usuario->save();
+
                     return $this->sendResponse(true, 'La tarjeta ha sido removida correctamente', null, 200);
                 }
 

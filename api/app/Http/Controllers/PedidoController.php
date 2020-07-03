@@ -134,6 +134,7 @@ class PedidoController extends BaseController
         $estado = $request->input("estado");
         $productos = $request->input("productos");
         $pago = $request->input("pago");
+        $tarjeta = $request->input("card_id");
         
         $validator = Validator::make($request->all(), [
             'id_usuario'  => 'required',
@@ -247,7 +248,19 @@ class PedidoController extends BaseController
                                 return $bancard->newCard($request);
                             }
 
-                            return $response = $this->sendResponse(false, 'Ha ocurrido un problema al intentar registrar la tarjeta', null, 500);
+                            return $this->sendResponse(false, 'Ha ocurrido un problema al intentar registrar la tarjeta', null, 500);
+                        case 'PWTK':
+                            $usuario = $request->usuario;
+
+                            $request->request->add([
+                                'user_id' => $usuario->sub,
+                                'card_id' => $pago['card_id'],
+                                'amount' => $total,
+                                'shop_process_id' => $pagoIt->referencia
+                            ]);
+
+                            $bancard = new BancardController();
+                            return $bancard->payWithToken($request);
                         case 'PO':
                             $request->request->add([
                                 'amount' => $total,
@@ -423,6 +436,18 @@ class PedidoController extends BaseController
                                 }
 
                                 return $this->sendResponse(false, 'Ha ocurrido un problema al intentar registrar la tarjeta', null, 500);
+                            case 'PWTK':
+                                $usuario = $request->usuario;
+
+                                $request->request->add([
+                                    'user_id' => $usuario->sub,
+                                    'card_id' => $pago['card_id'],
+                                    'amount' => $total,
+                                    'shop_process_id' => $pagoIt->referencia
+                                ]);
+
+                                $bancard = new BancardController();
+                                return $bancard->payWithToken($request);
                             case 'PO':
                                 $request->request->add([
                                     'amount' => $total,
