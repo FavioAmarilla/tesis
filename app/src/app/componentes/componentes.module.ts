@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatTableModule, MatBadgeModule } from '@angular/material';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -15,6 +16,7 @@ import { ProductoComponent } from './producto/producto.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { LineasModalComponent } from './lineas-modal/lineas-modal.component';
 import { DetallePedidoModalComponent } from './detalle-pedido-modal/detalle-pedido-modal.component';
+import { PaginacionComponent } from './paginacion/paginacion.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { DetallePedidoModalComponent } from './detalle-pedido-modal/detalle-pedi
     FiltrosComponent,
     ProductoComponent,
     LineasModalComponent,
-    DetallePedidoModalComponent
+    DetallePedidoModalComponent,
+    PaginacionComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +40,8 @@ import { DetallePedidoModalComponent } from './detalle-pedido-modal/detalle-pedi
     MatToolbarModule,
     MatMenuModule,
     MatButtonModule,
-    MatTableModule
+    MatTableModule,
+    NgxPaginationModule
   ],
   exports: [
     HeaderComponent,
@@ -46,6 +50,7 @@ import { DetallePedidoModalComponent } from './detalle-pedido-modal/detalle-pedi
     ProductoComponent,
     LineasModalComponent,
     DetallePedidoModalComponent,
+    PaginacionComponent
   ],
   entryComponents: [
     UbicacionPage,

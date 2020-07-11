@@ -31,6 +31,10 @@ export class PaginaInicio implements OnInit {
 
   public buscarProductoDescripcion: string = '';
 
+  public paginaActual = 1;
+  public porPagina;
+  public total;
+
   public slideImgUrl: string;
   @ViewChild(IonSlides, { static: true }) slider: IonSlides;
   public slideOptions = {
@@ -100,7 +104,7 @@ export class PaginaInicio implements OnInit {
       delete parametros.id_linea;
     }
     this.idLineaProducto = await value;
-    await this.obtenerProductos(parametros);
+    await this.obtenerProductos(null, parametros);
   }
 
 
@@ -132,7 +136,7 @@ export class PaginaInicio implements OnInit {
     };
 
     await this.servicioCarrito.setStorage('sucursal', value);
-    await this.obtenerProductos(parametros);
+    await this.obtenerProductos(null, parametros);
   }
 
 
@@ -145,22 +149,40 @@ export class PaginaInicio implements OnInit {
         descripcion: this.buscarProductoDescripcion
       };
 
-      await this.obtenerProductos(parametros);
+      await this.obtenerProductos(null, parametros);
     }
   }
 
+  async obtenerProductos(pagina?, parametrosFiltro?) {
+    this.cargando = true;
 
-  async obtenerProductos(parametros?) {
+    this.paginaActual = (pagina) ? pagina : this.paginaActual;
+
+    let parametros: any = { paginar: true, page: this.paginaActual };
+
+    if (parametrosFiltro) {
+      for (var param in parametrosFiltro) {
+        if (parametrosFiltro.hasOwnProperty(param)) {
+          parametros[param] = parametrosFiltro[param];
+        }
+      }
+    }
+
+    console.log(parametros);
+
     const response: any = await this.servicioProducto.obtenerProducto(null, parametros);
-
     if (response.success) {
       this.listaProductos = response.data;
+      this.porPagina = response.per_page;
+      this.total = response.total;
     } else {
       this.cargando = false;
       this.servicioAlerta.dialogoError(response.message);
     }
+
     this.cargando = false;
   }
+
 
   async modalLineas() {
     const modal = await this.modalController.create({

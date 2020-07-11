@@ -787,3 +787,15 @@ table tbody tr td.image-prod .img {
 .mat-horizontal-stepper-header .mat-step-icon {
   color: #fff !important;
 }
+
+/* estilos para botones de paginacion */
+
+.ngx-pagination .current {
+  background-color: var(--green) !important;
+}
+
+.ngx-pagination .current:hover {
+  cursor: pointer;
+  background-color: var(--teal) !important;
+  border-color: var(--teal) !important;
+}

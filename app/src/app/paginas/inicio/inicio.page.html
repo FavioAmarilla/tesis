@@ -41,12 +41,16 @@
           <h5 class="mb-4 h5">Lineas de Producto</h5>
 
           <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center" (click)="seleccionarLineaProducto(0)" [ngClass]="{'active': idLineaProducto == null || idLineaProducto == 0 }">TODOS
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+              (click)="seleccionarLineaProducto(0)"
+              [ngClass]="{'active': idLineaProducto == null || idLineaProducto == 0 }">TODOS
               <span class="">
                 <ion-icon name="ios-arrow-forward"></ion-icon>
               </span>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let linea of listaLineas" (click)="seleccionarLineaProducto(linea.identificador)" [ngClass]="{'active': linea.identificador == idLineaProducto }">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let linea of listaLineas" (click)="seleccionarLineaProducto(linea.identificador)"
+              [ngClass]="{'active': linea.identificador == idLineaProducto }">
               {{ linea.descripcion }}
               <span class="">
                 <ion-icon name="ios-arrow-forward"></ion-icon>
@@ -60,7 +64,9 @@
           <div class="row">
             <div class="col-md-9">
               <div class="form-group input-group">
-                <input type="text" class="form-control" placeholder="Buscá tu producto..." aria-label="Buscá tu producto..." aria-describedby="basic-addon2" [(ngModel)]="buscarProductoDescripcion" (keyup.enter)="buscarProductoPorDescripcion()">
+                <input type="text" class="form-control" placeholder="Buscá tu producto..."
+                  aria-label="Buscá tu producto..." aria-describedby="basic-addon2"
+                  [(ngModel)]="buscarProductoDescripcion" (keyup.enter)="buscarProductoPorDescripcion()">
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2" (click)="buscarProductoPorDescripcion()">
                     <ion-icon name="md-search"></ion-icon>
@@ -81,10 +87,16 @@
           </div>
 
           <div class="row" *ngIf="listaProductos.length">
-            <div class="col-sm-6 col-lg-3" *ngFor="let producto of listaProductos">
+            <div class="col-sm-6 col-lg-3"
+              *ngFor="let producto of listaProductos | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
               <cp-producto [producto]="producto"></cp-producto>
             </div>
+            <br><br>
+            <div class="col-md-12 mt-3">
+              <app-paginacion (actualizarPagina)="obtenerProductos($event)"></app-paginacion>
+            </div>
           </div>
+
 
           <div class="row text-center" *ngIf="!listaProductos.length && !cargando">
             <div class="col-md-12">
