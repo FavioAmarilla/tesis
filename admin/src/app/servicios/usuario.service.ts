@@ -132,13 +132,12 @@ export class ServicioUsuario {
       return Promise.resolve(false);
     }
 
-    const data = {
-      Authorization: this.token
-    };
-
     return new Promise<boolean>(resolve => {
-      const headers = new HttpHeaders().set('Content-Type', 'application/json');
-      this.http.post(`${API}/user/checkToken`, data, { headers })
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .append('Authorization', this.token);
+
+      this.http.post(`${API}/user/checkToken`, {}, { headers })
         .subscribe(
           (response: any) => {
             if (response.success) {
