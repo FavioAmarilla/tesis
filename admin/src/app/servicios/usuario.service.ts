@@ -119,6 +119,14 @@ export class ServicioUsuario {
     this.token = await localStorage.getItem('user-admin-token') || null;
   }
 
+  async obtenerToken() {
+    this.token = localStorage.getItem('user-admin-token') || null;
+
+    return new Promise<string>(resolve => {
+      resolve(this.token);
+    });
+  }
+
   async guardarToken(token: string) {
     this.token = token;
     await localStorage.setItem('user-admin-token', token);

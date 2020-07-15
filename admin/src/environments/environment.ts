@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   // api: 'http://api.ecommercesy.com/api',
-  api: 'http://127.0.0.1:8000/api',
+  // api: 'http://127.0.0.1:8000/api',
+  api: 'http://api.ecommerce.devel/api',
   mapbox: {
     apiKey: 'pk.eyJ1IjoibWF0aWFzYmFlejI1IiwiYSI6ImNrODd0aW1tODAwMWEzbGtmb2t0amNnMzYifQ.TGRXCPLfAzvmp0-cEpeiDA',
     defaultCoords: {

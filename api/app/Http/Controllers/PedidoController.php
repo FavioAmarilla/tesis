@@ -13,6 +13,8 @@ use App\PedidoItems;
 use App\PedidoPagos;
 use App\CuponDescuento;
 use App\UserTarjetas;
+use App\Empresa;
+use PDF;
 
 class PedidoController extends BaseController
 {
@@ -23,7 +25,7 @@ class PedidoController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Pedido::with(['detalles', 'sucursal', 'cupon', 'pais', 'ciudad', 'barrio', 'pagos']);
+        $query = Pedido::with(['detalles', 'usuario.cliente', 'sucursal', 'cupon', 'pais', 'ciudad', 'barrio', 'pagos']);
 
         $identificador = $request->query('identificador');
         if ($identificador) {
@@ -560,7 +562,7 @@ class PedidoController extends BaseController
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
 
-        $data = $query->orderBy('created_at', 'desc')->$listar();
+        $data = $query->orderBy('created_at', 'asc')->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
@@ -572,5 +574,58 @@ class PedidoController extends BaseController
         if (!$pago) $pago = PedidoPagos::where('referencia', '!=', 0)->latest()->first();
 
         return (is_object($pago)) ? $pago->referencia + 1 : 1000;
+    }
+
+    public function generarOrdenPedido($id) {
+        $pedido = Pedido::with(['detalles.producto', 'usuario.cliente', 'sucursal', 'cupon', 'pais', 'ciudad', 'barrio', 'pagos'])->find($id);
+        $empresa = Empresa::first();
+
+        if ($pedido) {
+            $datos =  [
+                'pedido' => $pedido,
+                'empresa' => $empresa
+            ];
+            
+            
+            $pdf = PDF::loadView('pedido.orden', $datos)->setPaper('A4', 'portrait');  
+            return $pdf->stream();
+
+        }
+
+        return view('pedido.orden', $datos);
+
+        return $this->sendResponse(false, 'No se encontro el pedido', null, 404);
+    }
+
+    public function cambiarEstado(Request $request, $id)
+    {
+        $estado = $request->input("estado");
+        $mensaje = '';
+
+        $validator = Validator::make($request->all(), [
+            'estado'  => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
+        }
+
+        $pedido = Pedido::find($id);
+        if ($pedido) {
+            $pedido->estado = $estado;
+    
+            if ($pedido->save()) {
+                if ($estado == "ENTREGADO") {
+                    $mensaje = "Pedido Finalizado";
+                } else if ($estado == "EN CAMINO") {
+                    $mensaje = "Orden generada";
+                }
+                return $this->sendResponse(true, $mensaje, $pedido, 200);
+            }
+            
+            return $this->sendResponse(false, 'Pedido no finalizado', null, 400);
+        }
+        
+        return $this->sendResponse(false, 'No se encontro el Pedido', null, 404);
     }
 }

@@ -38,6 +38,7 @@ import { RolesComponent } from 'app/paginas/roles/roles.component';
 import { EcParametrosComponent  } from 'app/paginas/ec-parametros/ec-parametros.component';
 import { TimbradoComponent } from 'app/paginas/timbrado/timbrado.component';
 import { ClienteComponent } from 'app/paginas/cliente/cliente.component';
+import { PedidosComponent } from 'app/paginas/pedidos/pedidos.component';
 
 @NgModule({
   imports: [
@@ -76,7 +77,8 @@ import { ClienteComponent } from 'app/paginas/cliente/cliente.component';
     RolesComponent,
     EcParametrosComponent,
     TimbradoComponent,
-    ClienteComponent
+    ClienteComponent,
+    PedidosComponent
   ]
 })
 

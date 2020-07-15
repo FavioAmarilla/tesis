@@ -73,7 +73,13 @@ Route::resource('ecParametro', 'EcParametrosController');
 Route::resource('ecParamCiudad', 'EcParamCiudadesController');
 Route::resource('ecParamSucursal', 'EcParamSucursalesController');
 Route::resource('marca', 'MarcaController');
+
 Route::resource('pedido', 'PedidoController', ['middleware' => 'api.auth']);
+Route::group(['prefix' => 'pedido'], function () {
+    Route::get('{id}/pdf', [ 'as' => 'pedido.pdf', 'uses' => 'PedidoController@generarOrdenPedido']);
+    Route::post('{id}/estado', [ 'as' => 'pedido.estado', 'uses' => 'PedidoController@cambiarEstado']);
+});
+
 Route::group(['prefix' => 'pedidoItems'], function () {
     Route::get('/', ['as' => 'pedido.items', 'uses' => 'PedidoController@items']);
 });

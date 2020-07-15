@@ -36,6 +36,10 @@ class Pedido extends Model
     public function sucursal(){
         return $this->hasOne('App\Sucursal', 'identificador', 'id_sucursal');
     }
+    
+    public function usuario(){
+        return $this->hasOne('App\User', 'identificador', 'id_usuario');
+    }
 
     public function cupon(){
         return $this->hasOne('App\CuponDescuento', 'identificador', 'id_cupon_descuento');
@@ -56,4 +60,5 @@ class Pedido extends Model
     public function pagos(){
         return $this->hasOne('App\PedidoPagos', 'id_pedido', 'identificador');
     }
+
 }

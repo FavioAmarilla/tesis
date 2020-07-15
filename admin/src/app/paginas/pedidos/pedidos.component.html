@@ -1,0 +1,85 @@
+<div class="main-panel">
+    <div class="content">
+
+        <app-breadcrumb></app-breadcrumb>
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card" *ngIf="!form">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                    <th>Fecha</th>
+                                    <th>Tipo Pedido</th>
+                                    <th>Cliente</th>
+                                    <th>RUC/CI</th>
+                                    <th>Estado Pedido</th>
+                                    <th>Estado Pago</th>
+                                    <th class="text-right">Opciones</th>
+                                </thead>
+                                <tbody>
+                                    <!-- <tr>
+                                        <td>
+                                            <input type="date" name="nombre" class="form-control" placeholder="Nombre"
+                                                [(ngModel)]="filtrosTabla.nombre" (keyup.enter)="filtrarTabla($event)">
+                                        </td>
+                                        <td class="text-right">
+                                            <button class="btn btn-round btn-sm btn-danger"
+                                                (click)="filtrarTabla(null)"><i class="fas fa-times"></i></button>
+                                            &nbsp;
+                                        </td>
+                                    </tr> -->
+                                    <tr
+                                        *ngFor="let row of listaPedidos | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
+                                        <td>{{ row.fecha | date: 'dd/MM/yyyy'}}</td>
+                                        <td>
+                                            <div *ngIf="row.tipo_envio == 'DE'"> DELIVERY </div>
+                                            <div *ngIf="row.tipo_envio == 'RT'"> RETIRO EN TIENDA</div>
+                                        </td>
+                                        <td>{{ row.usuario.cliente.razon_social }}</td>
+                                        <td>{{ row.usuario.cliente.numero_documento }}</td>
+                                        <td>{{ row.estado }}</td>
+                                        <td>{{ row.pagos.estado }}</td>
+
+                                        <td class="text-right">
+                                            <button class="btn btn-round btn-sm btn-info"
+                                                (click)="ver(row.identificador)"> <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-round btn-sm btn-default"
+                                                (click)="cambiarEstado(row.identificador, 'EN CAMINO')"
+                                                *ngIf="row.estado == 'PENDIENTE' && row.pagos.estado == 'PAGADO'"> <i
+                                                    class="fas fa-paper-plane"></i>
+                                            </button>
+                                            <button class="btn btn-round btn-sm btn-primary"
+                                                (click)="cambiarEstado(row.identificador, 'ENTREGADO')"
+                                                *ngIf="row.estado == 'EN CAMINO' && row.pagos.estado == 'PAGADO'"> <i
+                                                    class="fas fa-check"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div *ngIf="!cargando && !form && accion == 'LST'">
+                                <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="pais"
+                                    [porPagina]="porPagina" [total]="total"></app-paginacion>
+                            </div>
+                            <div class="row justify-content-center align-items-center col-md-12">
+                                <span *ngIf="cargando && !form && accion == 'LST'"
+                                    class="spinner-border spinner-border-lg spinner-table" role="status"
+                                    aria-hidden="true"></span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <footer-cmp></footer-cmp>
+</div>

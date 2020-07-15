@@ -32,6 +32,7 @@ export const ROUTES: RouteInfo[] = [
             { url: '/dashboard/ventas/punto-emision', titulo: 'Puntos de emision', icono: 'fas fa-list-ol' },
             { url: '/dashboard/ventas/timbrado', titulo: 'Timbrados', icono: 'fas fa-list-ol' },
             { url: '/dashboard/ventas/cliente', titulo: 'Clientes', icono: 'fas fa-user-friends' },
+            { url: '/dashboard/ventas/pedido', titulo: 'Pedidos', icono: 'fas fa-cart' },
         ]
     },
     {

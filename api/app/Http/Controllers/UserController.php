@@ -16,7 +16,7 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
-        $query = User::with(['rol']);
+        $query = User::with(['rol', 'cliente']);
 
         $nombre_completo = $request->query('nombre_completo');
         if ($nombre_completo) {
