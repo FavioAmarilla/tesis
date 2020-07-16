@@ -15,6 +15,9 @@ class PedidoItems extends Model
         'id_producto',
         'cantidad',
         'precio_venta',
+        'importe_exento',
+        'importe_iva5',
+        'importe_iva10',
         'activo'
     ];
 

@@ -24,6 +24,9 @@ class Pedido extends Model
         'longitud',
         'costo_envio',
         'total',
+        'total_exento',
+        'total_iva5',
+        'total_iva10',
         'observacion',
         'tipo_envio',
         'estado'	

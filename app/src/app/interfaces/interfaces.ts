@@ -28,6 +28,7 @@ export interface Producto {
     imagen?: string;
     slug?: string;
     length?: number;
+    tipo_impuesto?: TipoImpuesto
 }
 
 export interface Banner {
@@ -103,35 +104,35 @@ export interface Marca {
 }
 
 export interface Pedido {
-  identificador?: number;
-  id_cupon_descuento?: number;
-  id_usuario?: number;
-  id_sucursal?: number;
-  fecha?: string;
-  id_pais?: number;
-  id_ciudad?: number;
-  id_barrio?: number;
-  direccion?: string;
-  latitud?: string;
-  longitud?: string;
-  costo_envio?: number;
-  total?: number;
-  observacion?: string;
-  persona?: any;
-  nro_documento?: any;
-  tipo_envio?: string;
-  estado?: string;
-  created_at?: string;
-  updated_at?: string;
-  sucursal?: Sucursal;
-  cupon?: any;
-  pais?: Pais;
-  ciudad?: Ciudad;
-  barrio?: Barrio;
-  pagos?: any;
-  length?: number;
-  productos?: Producto[];
-  pago?: any;
+    identificador?: number;
+    id_cupon_descuento?: number;
+    id_usuario?: number;
+    id_sucursal?: number;
+    fecha?: string;
+    id_pais?: number;
+    id_ciudad?: number;
+    id_barrio?: number;
+    direccion?: string;
+    latitud?: string;
+    longitud?: string;
+    costo_envio?: number;
+    total?: number;
+    observacion?: string;
+    persona?: any;
+    nro_documento?: any;
+    tipo_envio?: string;
+    estado?: string;
+    created_at?: string;
+    updated_at?: string;
+    sucursal?: Sucursal;
+    cupon?: any;
+    pais?: Pais;
+    ciudad?: Ciudad;
+    barrio?: Barrio;
+    pagos?: any;
+    length?: number;
+    productos?: Producto[];
+    pago?: any;
 }
 
 export interface Cliente {
@@ -146,4 +147,10 @@ export interface Cliente {
 export interface Rol {
     identificador: number,
     nombre: string,
+}
+
+export interface TipoImpuesto {
+    identificador: number,
+    descipcion: string,
+    valor: number
 }

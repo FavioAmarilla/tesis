@@ -151,9 +151,24 @@ class PedidoController extends BaseController
             return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
+        //obtener totales
         $total = 0;
+        $total_exento = 0;
+        $total_iva5 = 0;
+        $total_iva10 = 0;
         foreach ($productos as $producto) {
             $total += $producto['precio_venta'] * $producto['cantidad'];
+            switch ($producto['tipo_impuesto']['valor']) {
+                case 0:
+                    $total_exento += $producto['precio_venta'] * $producto['cantidad'];
+                    break;
+                case 5:
+                    $total_iva5 += $producto['precio_venta'] * $producto['cantidad'];
+                    break;
+                case 10:
+                    $total_iva10 += $producto['precio_venta'] * $producto['cantidad'];
+                    break;
+            }
         }
         $total += $costo_envio;
 
@@ -183,6 +198,9 @@ class PedidoController extends BaseController
         $pedido->tipo_envio = $tipo_envio;
         $pedido->estado = $estado;
         $pedido->total = $total;
+        $pedido->total_exento = $total_exento;
+        $pedido->total_iva5 = $total_iva5;
+        $pedido->total_iva10 = $total_iva10;
 
         //validar que llegaron productos
         if (count($productos) <= 0) {
@@ -202,6 +220,20 @@ class PedidoController extends BaseController
                 $item->id_pedido = $pedido->identificador;
                 $item->id_producto = $producto['identificador'];
                 $item->precio_venta = $producto['precio_venta'];
+                switch ($producto['tipo_impuesto']['valor']) {
+                    case 0:
+                        $item->importe_exento = $producto['precio_venta'];
+                        break;
+                    case 5:
+                        $item->importe_iva5 = $producto['precio_venta'];
+                        break;
+                    case 10:
+                        $item->importe_iva10 = $producto['precio_venta'];
+                        break;
+                    default:
+                        $item->importe_exento = 1;
+                        break;
+                }
                 $item->cantidad = $producto['cantidad'];
                 $item->activo = 'S';
                 $total += ($producto['precio_venta'] * $producto['cantidad']);

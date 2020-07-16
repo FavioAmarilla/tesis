@@ -43,6 +43,7 @@ export class CarritoService {
   }
 
   agregarAlCarrito(producto, accion = 'add') {
+    console.log(producto);
     return new Promise(async resolve => {
       const productos = await this.obtenerCarrito() || [];
       const existe = productos.find(elemento => elemento.identificador == producto.identificador);
