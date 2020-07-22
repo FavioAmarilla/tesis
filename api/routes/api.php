@@ -95,3 +95,5 @@ Route::resource('cliente', 'ClienteController');
 Route::group(['prefix' => 'cliente'], function () {
     Route::get('usuario/{slug}', ['as' => 'cliente.usuario', 'uses' => 'ClienteController@showByUsuario']);
 });
+
+Route::resource('comprobante', 'ComprobanteController');

@@ -11,4 +11,20 @@ const API = environment.api;
 export class ServicioBarrio extends BaseService {
 
   recurso = 'barrio';
+
+  public async registrar(data) {
+    this.token = await this.servicioUsuario.obtenerToken();
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return new Promise(resolve => {
+      this.http.post(`${API}/${this.recurso}`, data, { headers: headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error.error);
+        }
+      );
+    });
+  }
 }

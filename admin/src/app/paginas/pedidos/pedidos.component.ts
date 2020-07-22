@@ -3,6 +3,7 @@ import { Pedido } from '../../modelos/pedido';
 import { PedidoService } from 'app/servicios/pedido.service';
 import { ServicioAlertas } from 'app/servicios/alertas.service';
 import { environment } from '../../../environments/environment';
+import { ComprobanteService } from 'app/servicios/comprobante.service';
 
 @Component({
   selector: 'app-pedidos',
@@ -26,6 +27,7 @@ export class PedidosComponent implements OnInit {
 
   constructor(
     private servicioPedido: PedidoService,
+    private servicioComprobante: ComprobanteService,
     private servicioAlerta: ServicioAlertas
   ) {
     this.inicializarFiltros();
@@ -73,6 +75,7 @@ export class PedidosComponent implements OnInit {
       this.listaPedidos = response.data;
       this.porPagina = response.per_page;
       this.total = response.total;
+      console.log(this.listaPedidos);
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }
@@ -133,20 +136,44 @@ export class PedidosComponent implements OnInit {
     window.open(`${environment.api}/pedido/${idFactura}/pdf`, '_blank');
   }
 
-  async cambiarEstado(idFactura, estado) {
-    console.log(estado);
-    const response: any = await this.servicioPedido.cambiarEstado(estado, idFactura);
+  async generarComprobante(id_pedido) {
+    let pedido = {
+      id_pedido: id_pedido
+    }
+    let response: any = await this.servicioComprobante.registrar(pedido);
+
+    if (response.success) {
+      const responseEstado: any = await this.servicioPedido.cambiarEstado('EN CAMINO', id_pedido);
+
+      if (responseEstado.success) {
+        this.paginacion();
+        this.servicioAlerta.dialogoExito(response.message);
+
+        setTimeout(() => {
+          window.open(`${environment.api}/pedido/${id_pedido}/pdf`, '_blank');
+        }, 1550);
+
+      } else {
+        this.servicioAlerta.dialogoError(response.message);
+      }
+    } else {
+      this.servicioAlerta.dialogoError(response.message);
+    }
+
+
+  }
+
+  async terminarPedido(id_pedido) {
+    const response: any = await this.servicioPedido.cambiarEstado('ENTREGADO', id_pedido);
 
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
 
       this.servicioAlerta.dialogoExito(response.message);
-      if (estado === 'EN CAMINO') {
-        setTimeout(() => {
-          window.open(`${environment.api}/pedido/${idFactura}/pdf`, '_blank');
-        }, 1000);
-      }
+      setTimeout(() => {
+        window.open(`${environment.api}/pedido/${id_pedido}/pdf`, '_blank');
+      }, 1000);
 
     } else {
       this.servicioAlerta.dialogoError(response.message);

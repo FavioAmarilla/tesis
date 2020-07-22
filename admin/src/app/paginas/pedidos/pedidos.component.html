@@ -48,12 +48,12 @@
                                                 (click)="ver(row.identificador)"> <i class="fas fa-eye"></i>
                                             </button>
                                             <button class="btn btn-round btn-sm btn-default"
-                                                (click)="cambiarEstado(row.identificador, 'EN CAMINO')"
+                                                (click)="generarComprobante(row.identificador)"
                                                 *ngIf="row.estado == 'PENDIENTE' && row.pagos.estado == 'PAGADO'"> <i
                                                     class="fas fa-paper-plane"></i>
                                             </button>
                                             <button class="btn btn-round btn-sm btn-primary"
-                                                (click)="cambiarEstado(row.identificador, 'ENTREGADO')"
+                                                (click)="terminarPedido(row.identificador)"
                                                 *ngIf="row.estado == 'EN CAMINO' && row.pagos.estado == 'PAGADO'"> <i
                                                     class="fas fa-check"></i>
                                             </button>

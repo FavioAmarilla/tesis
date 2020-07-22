@@ -14,8 +14,8 @@ Primero se debe descargar el instalador de nodejs desde su [página oficial](htt
 
 Luego instalar La interfaz de línea de comando para Angular v7 y Ionic v4
 ```
-$ npm install -g @angular/cli@7
-$ npm install -g ionic@4
+$ npm install -g @angular
+$ npm install -g ionic
 ```
 
 ### Api
