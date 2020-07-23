@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CarritoService } from 'src/app/servicios/carrito.service';
+import { PedidoService } from 'src/app/servicios/pedido.service';
 
 @Component({
   selector: 'app-pedido-finalizado',
@@ -11,12 +12,16 @@ export class PedidoFinalizadoPage implements OnInit {
 
   public success = false;
   public description;
+  public idPedido;
+  public cargando = true;
 
   constructor(
     private router: ActivatedRoute,
-    private servicioCarrito: CarritoService
+    private servicioCarrito: CarritoService,
+    private servicioPedido: PedidoService
   ) {
     this.router.queryParams.subscribe(params => {
+      if (params.pedido) { this.idPedido = params.pedido; }
       if (params.status) {
         this.verificarEstado(params.status);
       }
@@ -31,9 +36,13 @@ export class PedidoFinalizadoPage implements OnInit {
 
   verificarEstado(estado) {
     switch (estado) {
+      case 'PERC':
+      case 'PCTCD':
       case 'payment_success':
-      case 'add_new_card_success':
         this.success = true;
+        break;
+      case 'add_new_card_success':
+        this.procesarPedido();
         break;
       case 'payment_error':
       case 'add_new_card_fail':
@@ -41,6 +50,16 @@ export class PedidoFinalizadoPage implements OnInit {
         this.success = false;
         break;
     }
+    this.cargando = true;
   }
 
+  async procesarPedido() {
+    this.cargando = true;
+    if (this.idPedido) {
+      const response: any = await this.servicioPedido.pagarConTarjetaAgregada(this.idPedido);
+
+      this.success = response.success;
+    }
+    this.cargando = false;
+  }
 }

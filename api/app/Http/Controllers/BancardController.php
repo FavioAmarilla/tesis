@@ -9,6 +9,7 @@ use App\Http\Controllers\BaseController as BaseController;
 use App\User;
 use App\Pedido;
 use App\PedidoPagos;
+use App\UserTarjetas;
 
 class BancardController extends BaseController
 {
@@ -216,9 +217,10 @@ class BancardController extends BaseController
         $front = env('FRONT_URL');
         $user_id = $request->get('user_id');
         $card_id = $request->get('card_id');
+        $pedido = $request->get('pedido');
 
         $token = md5($this->private_key.$card_id.$user_id."request_new_card");
-        $return_url = $front.'pedido/finalizado';
+        $return_url = $front.'pedido/finalizado?pedido='.$pedido;
 
         $url = "$this->api/cards/new";
         $data = json_encode(array(
@@ -408,7 +410,11 @@ class BancardController extends BaseController
                     $usuario->tiene_tarjetas = (count($respuesta->cards) - 1 < 1) ? 0 : 1;
                     $usuario->save();
 
-                    return $this->sendResponse(true, 'La tarjeta ha sido removida correctamente', null, 200);
+                    $tarjeta = UserTarjetas::find($cardId);
+                    if ($tarjeta->delete()) {
+                        return $this->sendResponse(true, 'La tarjeta ha sido removida correctamente', null, 200);
+                    }
+
                 }
 
                 return $this->sendResponse(false, 'Ha ocurrido un problema al intentar eliminar la tarjeta', null, 400);

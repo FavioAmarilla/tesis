@@ -197,11 +197,12 @@ export class PedidoPage implements OnInit {
     this.datosPago = this.formBuilder.group({
       tipo:    ['', Validators.required],
       card_id: [''],
-      importe: ['']
+      importe: ['', Validators.min(this.pedido.total)]
     }, {
       validators: [
         this.requiredValidator('tipo', '==', 'PERC', 'importe'),
-        this.requiredValidator('tipo', '==', 'PWTK', 'card_id')
+        this.requiredValidator('tipo', '==', 'PWTK', 'card_id'),
+        this.minValueValidator('tipo', '==', 'PERC', 'importe', this.pedido.total)
       ]
     });
   }
@@ -289,6 +290,18 @@ export class PedidoPage implements OnInit {
       const slaveControl = group.controls[slaveControlLabel];
       if (eval(`'${masterControl.value}' ${operator} '${conditionalValue}'`) || !masterControl.value) {
         return Validators.required(slaveControl);
+      }
+      slaveControl.setErrors(null);
+      return null;
+    }
+  }
+
+  minValueValidator(masterControlLabel: string, operator: string, conditionalValue: any, slaveControlLabel: string, minValue: number) {
+    return (group: FormGroup): { [key: string]: any } => {
+      const masterControl = group.controls[masterControlLabel];
+      const slaveControl = group.controls[slaveControlLabel];
+      if (eval(`'${masterControl.value}' ${operator} '${conditionalValue}'`)) {
+        return Validators.min(minValue);
       }
       slaveControl.setErrors(null);
       return null;

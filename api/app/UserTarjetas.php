@@ -10,8 +10,6 @@ class UserTarjetas extends Model
     protected $primaryKey = 'identificador';
     protected $perPage = 10;
 
-    public $timestamps = false;
-
     /**
      * The attributes that are mass assignable.
      *

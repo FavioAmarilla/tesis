@@ -7,6 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class PaginacionComponent implements OnInit {
 
+  paginaActual = 1;
   @Output() actualizarPagina = new EventEmitter();
 
   constructor() { }

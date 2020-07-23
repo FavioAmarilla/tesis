@@ -79,6 +79,7 @@ Route::resource('pedido', 'PedidoController', ['middleware' => 'api.auth']);
 Route::group(['prefix' => 'pedido'], function () {
     Route::get('{id}/pdf', [ 'as' => 'pedido.pdf', 'uses' => 'PedidoController@generarOrdenPedido']);
     Route::post('{id}/estado', [ 'as' => 'pedido.estado', 'uses' => 'PedidoController@cambiarEstado']);
+    Route::post('{id}/ultimatarjeta', [ 'as' => 'pedido.ultimatarjeta', 'middleware' => 'api.auth', 'uses' => 'PedidoController@pagarConTarjetaAgregada']);
 });
 
 Route::group(['prefix' => 'pedidoItems'], function () {

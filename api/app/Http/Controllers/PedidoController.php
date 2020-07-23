@@ -272,10 +272,11 @@ class PedidoController extends BaseController
 
                             if ($tarjeta->save()) {
                                 $request->request->add([
-                                    'user_id' => $usuario->sub,
-                                    'card_id' => $tarjeta->identificador,
-                                    'email' => $usuario->email,
-                                    'celular' => $usuario->celular
+                                    'pedido'    => $pedido->identificador,
+                                    'user_id'   => $usuario->sub,
+                                    'card_id'   => $tarjeta->identificador,
+                                    'email'     => $usuario->email,
+                                    'celular'   => $usuario->celular
                                 ]);
     
                                 $bancard = new BancardController();
@@ -287,6 +288,7 @@ class PedidoController extends BaseController
                             $usuario = $request->usuario;
 
                             $request->request->add([
+                                'pedido'    => $pedido->identificador,
                                 'user_id' => $usuario->sub,
                                 'card_id' => $pago['card_id'],
                                 'amount' => $total,
@@ -622,9 +624,8 @@ class PedidoController extends BaseController
             $pdf = PDF::loadView('pedido.orden', $datos)->setPaper('A4', 'portrait');  
             return $pdf->stream();
 
+            return view('pedido.orden', $datos);
         }
-
-        return view('pedido.orden', $datos);
 
         return $this->sendResponse(false, 'No se encontro el pedido', null, 404);
     }
@@ -659,5 +660,44 @@ class PedidoController extends BaseController
         }
         
         return $this->sendResponse(false, 'No se encontro el Pedido', null, 404);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function pagarConTarjetaAgregada(Request $request, $id) {
+        $pedido = Pedido::find($id);
+        return response()->json($request);
+        if ($pedido) {
+
+            $pago = PedidoPagos::where('id_pedido', '=', $id)->first();
+
+            if ($pago) {
+                if ($pago->estado != 'PAGADO') {
+                    $usuario = $request->usuario;
+                    $tarjeta = UserTarjetas::where('id_usuario', '=', $usuario->sub)->last();
+        
+                    if ($tarjeta) {
+                        $request->request->add([
+                            'user_id' => $usuario->sub,
+                            'card_id' => $tarjeta->identificador,
+                            'amount' => $pago->total,
+                            'shop_process_id' => $pago->referencia
+                        ]);
+        
+                        $bancard = new BancardController();
+                        return $bancard->payWithToken($request);
+                    }
+                }
+                return $this->sendResponse(true, 'Pedido procesado correctamente', null, 200);
+            }
+
+            return $this->sendResponse(false, 'El usuario no tiene ninguna tarjeta asociada', null, 404);
+
+        }
+
+        return $this->sendResponse(false, 'No se ha encontrado el pedido solicitado', null, 404);
     }
 }

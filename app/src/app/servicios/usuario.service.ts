@@ -127,7 +127,7 @@ export class UsuarioService {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json')
         .append('Authorization', this.token);
-      this.http.get(`${API}user/${this.usuario.sub}/tarjetas`, { headers })
+      this.http.post(`${API}user/${this.usuario.sub}/tarjetas`, { headers })
       .subscribe(
         (response: any) => {
           resolve(response);

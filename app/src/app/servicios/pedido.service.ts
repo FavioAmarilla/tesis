@@ -108,4 +108,18 @@ export class PedidoService {
       );
     });
   }
+
+  async pagarConTarjetaAgregada(id) {
+    const token = await this.storage.get('token');
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Authorization', token);
+
+    return new Promise(resolve => {
+      this.http.post(`${API}pedido/${id}/ultimatarjeta`, {}, { headers }).subscribe(
+        (response: any) => { resolve(response); },
+        error => { resolve(error.error); }
+      );
+    });
+  }
 }
