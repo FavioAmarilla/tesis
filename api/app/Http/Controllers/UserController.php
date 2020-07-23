@@ -8,6 +8,7 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 use App\User;
+use App\Rol;
 
 class UserController extends BaseController {
     /**
@@ -330,5 +331,20 @@ class UserController extends BaseController {
         }
         
         return $this->sendResponse(false, 'No se encontro el Usuario', null, 404);
+    }
+    
+    public function permisos(Request $request){
+        $rol = $request->input('rol');
+
+        $rol = Rol::with(['permisos.permiso'])->find($rol)->first();
+        if (!$rol) return $this->sendResponse(false, 'No se encontro el rol del usuario', null, 404);
+        if (!$rol->permisos) return $this->sendResponse(false, 'No se encontraron permisos para el rol', null, 404);
+
+        $permisos = array();
+        foreach ($rol->permisos as $row) {
+            array_push($permisos, $row->permiso->nombre);
+        }
+
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $permisos, 200);
     }
 }

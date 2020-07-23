@@ -27,6 +27,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('cambiarPassword', ['as' => 'user.cambiarPassword', 'uses' => 'UserController@cambiarPassword']);
     Route::post('{userId}/tarjetas', ['as' => 'user.tarjetas', 'uses' => 'BancardController@getCards']);
     Route::post('{userId}/tarjeta/{cardId}', ['as' => 'user.eliminar.tarjeta', 'uses' => 'BancardController@deleteCard']);
+    Route::post('permisos', ['as' => 'user.permisos', 'uses' => 'UserController@permisos']);
 });
 Route::resource('rol', 'RolController');
 Route::resource('permiso', 'RolController');
