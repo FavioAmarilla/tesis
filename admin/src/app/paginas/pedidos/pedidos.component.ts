@@ -114,29 +114,19 @@ export class PedidosComponent implements OnInit {
     }
   }
 
-  async alternarEstado(pais) {
-    const accion = (pais.activo == 'S') ? 'desactivar' : 'activar';
-    const titulo = `¿Estas seguro de ${accion} el pais?`;
-    const mensaje = '';
-    const preConfirm = { servicio: 'servicioPais', callback: 'eliminar', data: pais.identificador };
-    const response: any = await this.servicioAlerta.dialogoConfirmacion(titulo, mensaje, accion, preConfirm);
-
-    if (response) {
-      if (response.success) {
-        this.servicioAlerta.dialogoExito(response.message);
-        this.paginacion();
-        this.mostrarFormulario(false, 'LST');
-      } else {
-        this.servicioAlerta.dialogoError(response.message);
-      }
-    }
-  }
-
   ver(idFactura) {
+    this.accion = 'LST';
+    this.cargando = true;
+
     window.open(`${environment.api}/pedido/${idFactura}/pdf`, '_blank');
+
+    this.cargando = false;
   }
 
   async generarComprobante(id_pedido) {
+    this.accion = 'LST';
+    this.cargando = true;
+
     let pedido = {
       id_pedido: id_pedido
     }
@@ -146,7 +136,7 @@ export class PedidosComponent implements OnInit {
       const responseEstado: any = await this.servicioPedido.cambiarEstado('EN CAMINO', id_pedido);
 
       if (responseEstado.success) {
-        this.paginacion();
+        await this.paginacion();
         this.servicioAlerta.dialogoExito(response.message);
 
         setTimeout(() => {
@@ -160,24 +150,31 @@ export class PedidosComponent implements OnInit {
       this.servicioAlerta.dialogoError(response.message);
     }
 
+    this.cargando = false;
+
 
   }
 
   async terminarPedido(id_pedido) {
+    this.accion = 'LST';
+    this.cargando = true;
+
     const response: any = await this.servicioPedido.cambiarEstado('ENTREGADO', id_pedido);
 
     if (response.success) {
+      await this.paginacion();
       this.servicioAlerta.dialogoExito(response.message);
-      this.paginacion();
 
       this.servicioAlerta.dialogoExito(response.message);
-      setTimeout(() => {
-        window.open(`${environment.api}/pedido/${id_pedido}/pdf`, '_blank');
-      }, 1000);
+      // setTimeout(() => {
+      //   window.open(`${environment.api}/pedido/${id_pedido}/pdf`, '_blank');
+      // }, 1000);
 
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }
+
+    this.cargando = false;
   }
 
 }

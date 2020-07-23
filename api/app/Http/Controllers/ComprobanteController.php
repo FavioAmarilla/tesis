@@ -139,6 +139,13 @@ class ComprobanteController extends BaseController
 
             if (!$comprobanteItems->save()) return $this->sendResponse(false, 'Error al registrar item de comprobante', null, 400);
         } 
+
+        //actualizar el ultimo numero usado
+        $asignacion_comp = AsignacionComprobante::where([['id_timbrado', '=', $timbrado->identificador], ['id_punto_emision', '=', $punto_emision->identificador]])->first();
+        if (!$asignacion_comp) return $this->sendResponse(false, 'No se encontro asignacion de comprobante para el punto de emision', null, 404);  
+        $asignacion_comp->ult_usado = $ult_usado;
+        if (!$asignacion_comp->save()) return $this->sendResponse(false, 'Ultimo numero usado no actualizado', $asignacion_comp, 400);
+        
         
         return $this->sendResponse(true, 'Comprobante registrado', $comprobante, 200);
     }
