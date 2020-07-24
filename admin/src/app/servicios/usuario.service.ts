@@ -150,7 +150,20 @@ export class ServicioUsuario {
           (response: any) => {
             if (response.success) {
               this.usuario = response.data;
-              resolve(true);
+
+              //obtener permisos
+              this.http.post(`${API}/user/permisos`, { rol: response.data.rol }, { headers })
+                .subscribe(
+                  (responseP: any) => {
+                    if (responseP.success) {
+                      this.guardarPermisos(responseP.data);
+                      resolve(true);
+                    } else {
+                      resolve(false);
+                    }
+                  }
+                );
+
             } else {
               resolve(false);
             }
@@ -200,5 +213,17 @@ export class ServicioUsuario {
     });
   }
 
+  async guardarPermisos(permisos: string) {
+    await localStorage.setItem('user-admin-permisos', permisos);
+  }
 
+  async validarPermiso(permiso) {
+    return new Promise(async resolve => {
+      let permisos: any = {};
+      permisos = await localStorage.getItem('user-admin-permisos') || null;
+      const existe = permisos.indexOf(permiso);
+      
+      resolve(existe !== -1);
+    });
+  }
 }

@@ -55,9 +55,11 @@ export class UsuariosComponent implements OnInit {
     this.inicializarFiltros();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.obtenerRoles();
     this.paginacion(this.paginaActual);
+    const val = await this.servicioUsuario.validarPermiso('EMPRESA.AGREGAR');
+    console.log(val);
   }
 
   async inicializarFiltros() {

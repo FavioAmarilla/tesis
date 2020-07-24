@@ -20,7 +20,7 @@ class RolController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Rol::with(['rolPermisos']);
+        $query = Rol::with(['permisos']);
 
         $nombre = $request->query('nombre');
         if ($nombre) {
