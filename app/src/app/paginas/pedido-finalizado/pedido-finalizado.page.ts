@@ -50,7 +50,7 @@ export class PedidoFinalizadoPage implements OnInit {
         this.success = false;
         break;
     }
-    this.cargando = true;
+    this.cargando = false;
   }
 
   async procesarPedido() {

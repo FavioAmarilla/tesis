@@ -5,7 +5,7 @@
   <div class="container d-flex align-items-center justify-content-center" style="height: 60vh;">
     <div *ngIf="success">
       <h1>¡Su pedido ha sido procesado!</h1>
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque, dicta!</p>
+      <p>Gracias por su preferencia</p>
   
       <div class="text-right">
         <a [routerLink]="['/home']" class="btn btn-primary">Finalizar</a>
@@ -14,7 +14,7 @@
   
     <div *ngIf="!success">
       <h1>¡Pedido cancelado!</h1>
-      <p>{{ (description) ? description : 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque, dicta!' }}</p>
+      <p>{{ (description) ? description : 'Su pedido ha sido cancelado' }}</p>
     
       <div class="text-right">
         <a [routerLink]="['/home']" class="btn btn-primary">Finalizar</a>
