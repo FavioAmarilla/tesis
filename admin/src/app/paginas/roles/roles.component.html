@@ -108,13 +108,13 @@
                     </tr>
                   </tbody>
                 </table>
-                <div *ngIf="!cargandoPermisos && !form && accion == 'LST'">
-                  <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="pais" [porPagina]="porPagina"
+                <div>
+                  <app-paginacion (actualizarPagina)="obtenerPermisos($event)" [datos]="pais" [porPagina]="porPagina"
                     [total]="total"></app-paginacion>
 
-                  <div class="row justify-content-center align-items-center col-md-12">
-                    <span *ngIf="cargandoPermisos && !form && accion == 'LST'"
-                      class="spinner-border spinner-border-lg spinner-table" role="status" aria-hidden="true"></span>
+                  <div *ngIf="cargandoPermisos" class="row justify-content-center align-items-center col-md-12">
+                    <span class="spinner-border spinner-border-lg spinner-table" role="status"
+                      aria-hidden="true"></span>
                   </div>
                 </div>
 

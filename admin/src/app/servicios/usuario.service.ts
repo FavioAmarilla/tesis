@@ -147,22 +147,15 @@ export class ServicioUsuario {
 
       this.http.post(`${API}/user/checkToken`, {}, { headers })
         .subscribe(
-          (response: any) => {
+          async (response: any) => {
             if (response.success) {
               this.usuario = response.data;
 
-              //obtener permisos
-              this.http.post(`${API}/user/permisos`, { rol: response.data.rol }, { headers })
-                .subscribe(
-                  (responseP: any) => {
-                    if (responseP.success) {
-                      this.guardarPermisos(responseP.data);
-                      resolve(true);
-                    } else {
-                      resolve(false);
-                    }
-                  }
-                );
+              //guardat permisos
+              let permisos = await this.obtenerPermisos(response.data.rol);
+              await this.guardarPermisos(permisos);
+
+              resolve(true);
 
             } else {
               resolve(false);
@@ -192,6 +185,7 @@ export class ServicioUsuario {
     this.token = null;
     this.usuario = null;
     localStorage.removeItem('user-admin-token');
+    localStorage.removeItem('user-admin-permisos');
     this.logoutEmitter.emit(true);
     this.router.navigate(['/login']);
   }
@@ -213,7 +207,23 @@ export class ServicioUsuario {
     });
   }
 
-  async guardarPermisos(permisos: string) {
+  async obtenerPermisos(rol) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return new Promise(resolve => {
+      this.http.post(`${API}/user/permisos`, { rol }, { headers })
+        .subscribe(
+          (response: any) => {
+            resolve(response.data);
+          },
+          error => {
+            resolve(error.error);
+          }
+        );
+    });
+  }
+
+  async guardarPermisos(permisos: any) {
     await localStorage.setItem('user-admin-permisos', permisos);
   }
 
@@ -222,7 +232,7 @@ export class ServicioUsuario {
       let permisos: any = {};
       permisos = await localStorage.getItem('user-admin-permisos') || null;
       const existe = permisos.indexOf(permiso);
-      
+
       resolve(existe !== -1);
     });
   }

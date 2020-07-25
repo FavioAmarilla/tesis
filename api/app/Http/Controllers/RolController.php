@@ -98,7 +98,7 @@ class RolController extends BaseController
      */
     public function show($id)
     {
-        $rol = Rol::find($id)->load('rolPermisos.permiso');
+        $rol = Rol::find($id)->load('permisos.permiso');
 
         if (is_object($rol)) {
             return $this->sendResponse(true, 'Listado obtenido exitosamente', $rol, 200);

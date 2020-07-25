@@ -19,6 +19,7 @@ export class RolesComponent implements OnInit {
   public rol: Rol;
   public listaRoles: Rol;
   public listaPermisos: Permiso;
+  public listadoPermiso: Permiso;
   public listaPermisosTmp = [];
 
   public parametros: any = {};
@@ -49,6 +50,7 @@ export class RolesComponent implements OnInit {
   }
 
   async mostrarFormulario(flag, accion, limpiarError?) {
+    this.inicializarFiltros();
     this.form = flag
     this.accion = accion;
 
@@ -84,6 +86,20 @@ export class RolesComponent implements OnInit {
       this.listaPermisos = response.data;
       this.porPagina = response.per_page;
       this.total = response.total;
+      // this.seleccionarPermisos();
+    } else {
+      this.cargandoPermisos = false;
+      this.servicioAlerta.dialogoError(response.message);
+    }
+
+    this.cargandoPermisos = false;
+  }
+
+  async listadoPermisos() {
+    const response: any = await this.servicioPermiso.obtener(null, null);
+
+    if (response.success) {
+      this.listadoPermiso = response.data;
       this.seleccionarPermisos();
     } else {
       this.cargandoPermisos = false;
@@ -113,7 +129,7 @@ export class RolesComponent implements OnInit {
     }
 
     const response: any = await this.servicioRol.obtener(null, this.parametros);
-
+    
     if (response.success) {
       this.listaRoles = response.data;
       this.porPagina = response.per_page;
@@ -132,6 +148,8 @@ export class RolesComponent implements OnInit {
 
     if (response.success) {
       this.rol = response.data;
+      this.rol.rol_permisos = response.data.permisos
+      await this.listadoPermisos();
       await this.obtenerPermisos();
       this.mostrarFormulario(true, 'UPD');
     } else {
@@ -148,6 +166,7 @@ export class RolesComponent implements OnInit {
 
     this.cargando = false;
     if (response.success) {
+      this.paginaActual = 1;
       this.listaPermisosTmp = [];
       this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
@@ -164,6 +183,7 @@ export class RolesComponent implements OnInit {
 
     this.cargando = false;
     if (response.success) {
+      this.paginaActual = 1;
       this.listaPermisosTmp = [];
       this.servicioAlerta.dialogoExito(response.message);
       this.paginacion();
@@ -200,14 +220,15 @@ export class RolesComponent implements OnInit {
   }
 
   seleccionarPermisos() {
-    if (this.accion != 'INS') {
-      for (let i = 0; i < this.listaPermisos.length; i++) {
-        const permisoId = this.listaPermisos[i].identificador;
+    if (this.accion != 'INS') {;
+      for (let i = 0; i < this.listadoPermiso.length; i++) {
+        const permisoId = this.listadoPermiso[i].identificador;
         const index = this.rol.rol_permisos.findIndex(permiso => permiso.id_permiso == permisoId);
 
         if (index != -1) this.listaPermisosTmp.push(permisoId);
       }
     }
+    console.log(this.listaPermisosTmp);
   }
 
   permisosSeleccionados(permisoId, event) {
