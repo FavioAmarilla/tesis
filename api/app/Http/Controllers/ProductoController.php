@@ -77,7 +77,7 @@ class ProductoController extends BaseController
         }
 
         $paginar = $request->query('paginar');
-        $listar = (boolval($paginar)) ? 'paginate' : 'get';
+        $listar = (filter_var($paginar, FILTER_VALIDATE_BOOLEAN)) ? 'paginate' : 'get';
 
         $data = $query->orderBy('descripcion', 'asc')->$listar()->toArray();
 
