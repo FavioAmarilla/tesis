@@ -112,6 +112,8 @@ export class PedidoPage implements OnInit {
 
     if (comprobarTotales) { this.comprobarTotales(); }
 
+    this.inicializarDatosPago();
+
     this.cargando = false;
   }
 
@@ -197,12 +199,12 @@ export class PedidoPage implements OnInit {
     this.datosPago = this.formBuilder.group({
       tipo:    ['', Validators.required],
       card_id: [''],
-      importe: ['', Validators.min(this.pedido.total)]
+      importe: ['', Validators.min(this.totales.total)]
     }, {
       validators: [
         this.requiredValidator('tipo', '==', 'PERC', 'importe'),
         this.requiredValidator('tipo', '==', 'PWTK', 'card_id'),
-        this.minValueValidator('tipo', '==', 'PERC', 'importe', this.pedido.total)
+        this.minValueValidator('tipo', '==', 'PERC', 'importe', this.totales.total)
       ]
     });
   }
