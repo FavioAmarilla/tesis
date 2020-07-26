@@ -79,14 +79,15 @@ class ProductoController extends BaseController
         $paginar = $request->query('paginar');
         $listar = (boolval($paginar)) ? 'paginate' : 'get';
 
-        $data = $query->orderBy('descripcion', 'asc')->$listar();
+        $data = $query->orderBy('descripcion', 'asc')->$listar()->toArray();
 
         $resultados = [];
-        foreach ($data as $element) {
-            if ($element->stock) array_push($resultados, $element);
+        $elements = ($listar == 'paginate') ? $data['data'] : $data;
+        foreach ($elements as $element) {
+            if ($element['stock']) array_push($resultados, $element);
         }
 
-        $data->data = $resultados;
+        $data['data'] = $resultados;
 
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
