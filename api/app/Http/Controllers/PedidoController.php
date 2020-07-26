@@ -151,7 +151,7 @@ class PedidoController extends BaseController
             return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
-        //obtener totales
+        // obtener totales
         $total = 0;
         $total_exento = 0;
         $total_iva5 = 0;
@@ -171,6 +171,9 @@ class PedidoController extends BaseController
             }
         }
         $total += $costo_envio;
+        $total_exento += $costo_envio;
+        $total_iva5 += $costo_envio;
+        $total_iva10 += $costo_envio;
 
         if ($id_cupon_descuento) {
             $descuento = CuponDescuento::where('identificador', '=', $id_cupon_descuento);
@@ -244,7 +247,12 @@ class PedidoController extends BaseController
                 }
             }
 
-            //actualizar total
+            $total += $costo_envio;
+            $total_exento += $costo_envio;
+            $total_iva5 += $costo_envio;
+            $total_iva10 += $costo_envio;
+
+            // actualizar total
             $totalPedido = Pedido::find($pedido->identificador);
             $totalPedido->total = $total;
             if (!$totalPedido->save()) {
@@ -432,6 +440,11 @@ class PedidoController extends BaseController
                         break;
                     }
                 }
+
+                $total += $costo_envio;
+                $total_exento += $costo_envio;
+                $total_iva5 += $costo_envio;
+                $total_iva10 += $costo_envio;
 
                 // actualizar total
                 $totalPedido = Pedido::find($pedido->identificador);

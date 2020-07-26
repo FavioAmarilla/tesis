@@ -312,6 +312,10 @@ export class PedidoPage implements OnInit {
 
   datosEnvioSelect(value, select) {
 
+    if (select === 'tipo_envio') {
+      this.totales.delivery = (value == 'DE') ? this.parametros.costo_delivery : 0;
+    }
+
     if (select === 'pais') {
       this.cargando = true;
       this.obtenerParamCiudades(this.parametros.identificador);
@@ -460,7 +464,6 @@ export class PedidoPage implements OnInit {
 
   async registrarPedido() {
     const response: any = await this.servicioPedido.registrar(this.pedido);
-    console.log(response);
 
     if (response.success) {
       this.finalizarPedido(response);
