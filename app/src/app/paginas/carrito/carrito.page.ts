@@ -121,8 +121,11 @@ export class PaginaCarrito implements OnInit {
     this.redireccionar('/pedido');
   }
 
-  asignarCantidad(accion, producto) {
-    this.valor = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida);
+  asignarCantidad(inputCantidad, accion, producto) {
+    const config: any = this.servicioGeneral.unidadMedida(producto.vr_unidad_medida, 'ambos');
+    inputCantidad.setAttribute('min', config.minimo);
+    this.valor = config.valor;
+    this.minimo = config.minimo;
     if (accion == 'DI') {
       producto.cantidad = (producto.cantidad > this.minimo) ? producto.cantidad - this.valor : this.minimo;
     }

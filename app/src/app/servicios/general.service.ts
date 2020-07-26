@@ -36,7 +36,7 @@ export class GeneralService {
         break;
     }
 
-    return (tipo === 'medida') ? valor : minimo;
+    return (tipo === 'ambos') ? {minimo, valor} : (tipo === 'medida') ? valor : minimo;
   }
 
   public agregarScriptBancard() {

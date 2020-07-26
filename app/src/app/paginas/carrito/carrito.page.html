@@ -36,14 +36,13 @@
                 <ion-col size-lg="3" size-md="3" size-sm="9" size-xs="9" class="cart-item quantity">
                   <div class="form-group input-group d-flex">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad('DI', producto)">
+                      <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad(cantidad, 'DI', producto)">
                         <ion-icon name="remove"></ion-icon>
                       </span>
                     </div>
-                    <input type="text" name="cantidad" class="form-control text-center" min="1" max="100"
-                      [(ngModel)]="producto.cantidad" disabled>
+                    <input type="text" name="cantidad" class="form-control text-center" min="1" max="100" [(ngModel)]="producto.cantidad" disabled #cantidad>
                     <div class="input-group-append">
-                      <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad('AU', producto)">
+                      <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad(cantidad, 'AU', producto)">
                         <ion-icon name="add"></ion-icon>
                       </span>
                     </div>

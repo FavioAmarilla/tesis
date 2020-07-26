@@ -29,8 +29,8 @@ export class CarritoService {
 
   async obtenerCantidad(key) {
     const data = await this.storage.get(key) || [];
-    if (key == 'carrito') this.carrito.emit(data.length);
-    if (key == 'favorito') this.favorito.emit(data.length);
+    if (key == 'carrito') { this.carrito.emit(data.length); }
+    if (key == 'favorito') { this.favorito.emit(data.length); }
   }
 
   // ---------
@@ -43,13 +43,12 @@ export class CarritoService {
   }
 
   agregarAlCarrito(producto, accion = 'add') {
-    console.log(producto);
     return new Promise(async resolve => {
       const productos = await this.obtenerCarrito() || [];
       const existe = productos.find(elemento => elemento.identificador == producto.identificador);
       if (existe) {
-        if (accion == 'add') existe.cantidad += producto.cantidad;
-        else existe.cantidad = producto.cantidad;
+        if (accion == 'add') { existe.cantidad += producto.cantidad; }
+        else { existe.cantidad = producto.cantidad; }
       } else {
         productos.push(producto);
       }
