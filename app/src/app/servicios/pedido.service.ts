@@ -17,11 +17,8 @@ export class PedidoService {
 
   async obtenerPedido(id?, parametros?) {
     const url = (id) ? `pedido/${id}` : `pedido`;
-    const token = await this.storage.get('token');
 
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .append('Authorization', token);
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     const params = new HttpParams({ fromObject: parametros });
 
     return new Promise(resolve => {
@@ -37,10 +34,7 @@ export class PedidoService {
   }
 
   async obtenerItems(parametros?) {
-    const token = await this.storage.get('token');
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .append('Authorization', token);
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     const params = new HttpParams({ fromObject: parametros });
 
     return new Promise(resolve => {
@@ -56,13 +50,8 @@ export class PedidoService {
   }
 
   async registrar(pedido) {
-    const token = await this.storage.get('token');
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Authorization', token);
-
     return new Promise(resolve => {
-      this.http.post(`${API}pedido`, pedido, { headers }).subscribe(
+      this.http.post(`${API}pedido`, pedido).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -74,13 +63,8 @@ export class PedidoService {
   }
 
   async actualizar(pedido, id) {
-    const token = await this.storage.get('token');
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Authorization', token);
-
     return new Promise(resolve => {
-      this.http.put(`${API}pedido/${id}`, pedido, { headers }).subscribe(
+      this.http.put(`${API}pedido/${id}`, pedido).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -92,13 +76,8 @@ export class PedidoService {
   }
 
   async cancelar(id) {
-    const token = await this.storage.get('token');
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Authorization', token);
-
     return new Promise(resolve => {
-      this.http.delete(`${API}pedido/${id}`, { headers }).subscribe(
+      this.http.delete(`${API}pedido/${id}`).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -110,13 +89,8 @@ export class PedidoService {
   }
 
   async pagarConTarjetaAgregada(id) {
-    const token = await this.storage.get('token');
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Authorization', token);
-
     return new Promise(resolve => {
-      this.http.post(`${API}pedido/${id}/ultimatarjeta`, {}, { headers }).subscribe(
+      this.http.post(`${API}pedido/${id}/ultimatarjeta`, {}).subscribe(
         (response: any) => { resolve(response); },
         error => { resolve(error.error); }
       );

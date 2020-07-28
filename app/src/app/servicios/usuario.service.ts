@@ -26,10 +26,8 @@ export class UsuarioService {
   ) { }
 
   async registro(usuario: Usuario) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
     return new Promise(resolve => {
-      this.http.post(`${API}user`, usuario, { headers })
+      this.http.post(`${API}user`, usuario)
       .subscribe(
         (response: any) => resolve(response),
         (error: any) => resolve(error.error)
@@ -38,10 +36,8 @@ export class UsuarioService {
   }
 
   async actualizar(usuario: Usuario, id: any) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
     return new Promise(resolve => {
-      this.http.put(`${API}user/${id}`, usuario, { headers })
+      this.http.put(`${API}user/${id}`, usuario)
       .subscribe(
         (response: any) => resolve(response),
         (error: any) => resolve(error.error)
@@ -50,10 +46,8 @@ export class UsuarioService {
   }
 
   iniciarSession(usuario: any) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
     return new Promise(resolve => {
-      this.http.post(`${API}user/signIn`, usuario, { headers })
+      this.http.post(`${API}user/signIn`, usuario)
       .subscribe(
         async (response: any) => {
           if (response.success) {
@@ -104,15 +98,12 @@ export class UsuarioService {
     }
 
     return new Promise<boolean>(resolve => {
-      const headers = new HttpHeaders()
-        .set('Content-Type', 'application/json')
-        .append('Authorization', this.token);
-      this.http.post(`${API}user/checkToken`, {}, { headers })
+      this.http.post(`${API}user/checkToken`, {})
       .subscribe(
         (response: any) => {
           if (response.success) {
-            this.usuario = response.data;
-            resolve(this.usuario.rol == null);
+            this.usuario = response.data.usuario;
+            resolve(true);
           } else {
             resolve(false);
           }
@@ -124,10 +115,7 @@ export class UsuarioService {
 
   async obtenerTarjetas() {
     return new Promise<boolean>(resolve => {
-      const headers = new HttpHeaders()
-        .set('Content-Type', 'application/json')
-        .append('Authorization', this.token);
-      this.http.post(`${API}user/${this.usuario.sub}/tarjetas`, { headers })
+      this.http.post(`${API}user/${this.usuario.sub}/tarjetas`, {})
       .subscribe(
         (response: any) => {
           resolve(response);
@@ -139,10 +127,7 @@ export class UsuarioService {
 
   async eliminarTarjeta(cardId) {
     return new Promise<boolean>(resolve => {
-      const headers = new HttpHeaders()
-        .set('Content-Type', 'application/json')
-        .append('Authorization', this.token);
-      this.http.delete(`${API}user/${this.usuario.sub}/tarjeta/${cardId}`, { headers })
+      this.http.delete(`${API}user/${this.usuario.sub}/tarjeta/${cardId}`)
       .subscribe(
         (response: any) => {
           resolve(response);
@@ -161,10 +146,8 @@ export class UsuarioService {
   }
 
   async cambiarPassword(usuario: any) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
     return new Promise(resolve => {
-      this.http.post(`${API}user/cambiarPassword`, usuario, { headers })
+      this.http.post(`${API}user/cambiarPassword`, usuario)
         .subscribe(
           (response: any) => resolve(response),
           (error: any) => resolve(error.error)

@@ -23,10 +23,8 @@ export class ServicioUsuario {
   ) { }
 
   iniciarSession(usuario: any) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
     return new Promise(resolve => {
-      this.http.post(`${API}/user/signIn`, usuario, { headers })
+      this.http.post(`${API}/user/signIn`, usuario)
         .subscribe(
           async (response: any) => {
             if (response.success) {
@@ -48,10 +46,8 @@ export class ServicioUsuario {
   }
 
   async registrar(user) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
     return new Promise(resolve => {
-      this.http.post(`${API}/user`, user, { headers: headers }).subscribe(
+      this.http.post(`${API}/user`, user).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -81,10 +77,8 @@ export class ServicioUsuario {
   }
 
   async actualizar(user, id) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
     return new Promise(resolve => {
-      this.http.put(`${API}/user/${id}`, user, { headers: headers }).subscribe(
+      this.http.put(`${API}/user/${id}`, user).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -96,10 +90,8 @@ export class ServicioUsuario {
   }
 
   activarDesactivarUsuario(id, accion) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
     return new Promise(resolve => {
-      this.http.delete(`${API}/user/${id}`, { headers: headers }).subscribe(
+      this.http.delete(`${API}/user/${id}`).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -141,19 +133,14 @@ export class ServicioUsuario {
     }
 
     return new Promise<boolean>(resolve => {
-      const headers = new HttpHeaders()
-        .set('Content-Type', 'application/json')
-        .append('Authorization', this.token);
-
-      this.http.post(`${API}/user/checkToken`, {}, { headers })
+      this.http.post(`${API}/user/checkToken`, {})
         .subscribe(
           async (response: any) => {
             if (response.success) {
-              this.usuario = response.data;
+              this.usuario = response.data.usuario;
 
-              //guardat permisos
-              let permisos = await this.obtenerPermisos(response.data.rol);
-              await this.guardarPermisos(permisos);
+              // guardar permisos
+              await this.guardarPermisos(this.usuario.rol.permisos);
 
               resolve(true);
 
@@ -166,10 +153,8 @@ export class ServicioUsuario {
   }
 
   validarEmail(id, email) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
     return new Promise<boolean>(resolve => {
-      this.http.post(`${API}/user/validarEmail`, { id, email }, { headers })
+      this.http.post(`${API}/user/validarEmail`, { id, email })
         .subscribe(
           (response: any) => {
             resolve(true);
@@ -192,10 +177,8 @@ export class ServicioUsuario {
 
 
   async cambiarPassword(usuario: any) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
     return new Promise(resolve => {
-      this.http.post(`${API}/user/cambiarPassword`, usuario, { headers })
+      this.http.post(`${API}/user/cambiarPassword`, usuario)
         .subscribe(
           (response: any) => {
             resolve(response);
@@ -208,10 +191,8 @@ export class ServicioUsuario {
   }
 
   async obtenerPermisos(rol) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
     return new Promise(resolve => {
-      this.http.post(`${API}/user/permisos`, { rol }, { headers })
+      this.http.post(`${API}/user/permisos`, { rol })
         .subscribe(
           (response: any) => {
             resolve(response.data);

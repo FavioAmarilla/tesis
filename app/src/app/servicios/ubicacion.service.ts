@@ -25,7 +25,7 @@ export class ServicioUbicacion {
           console.log('Error: ', error);
           return resolve(false);
         }
-      )
+      );
     });
   }
 }

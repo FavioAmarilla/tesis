@@ -18,7 +18,7 @@ export class GeneralService {
     return this.http.get<any>('/assets/menu.json');
   }
 
-  public unidadMedida(medida, tipo = 'medida') {
+  public unidadMedida(medida, tipo = 'medida'): any {
     let valor = 1;
     let minimo = 1;
 
@@ -36,7 +36,8 @@ export class GeneralService {
         break;
     }
 
-    return (tipo === 'ambos') ? {minimo, valor} : (tipo === 'medida') ? valor : minimo;
+    const aux = (tipo === 'ambos') ? { minimo, valor } : (tipo === 'medida') ? valor : minimo;
+    return aux;
   }
 
   public agregarScriptBancard() {

@@ -22,9 +22,7 @@ export class BaseService {
   public async obtener(id?, parametros?) {
     const url = (id) ? `${API}/${this.recurso}/${id}` : `${API}/${this.recurso}`;
 
-    this.token = await this.servicioUsuario.obtenerToken();
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-      .append('Authorization', this.token);
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     const params = new HttpParams({ fromObject: parametros });
 
     return new Promise(resolve => {
@@ -40,12 +38,8 @@ export class BaseService {
   }
 
   public async registrar(data) {
-    this.token = await this.servicioUsuario.obtenerToken();
-    const headers = new HttpHeaders().set('Content-Type', 'application/json')
-      .append('Authorization', this.token);;
-
     return new Promise(resolve => {
-      this.http.post(`${API}/${this.recurso}`, data, { headers: headers }).subscribe(
+      this.http.post(`${API}/${this.recurso}`, data).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -57,12 +51,8 @@ export class BaseService {
   }
 
   public async actualizar(data, id) {
-    this.token = await this.servicioUsuario.obtenerToken();
-    const headers = new HttpHeaders().set('Content-Type', 'application/json')
-      .append('Authorization', this.token);;
-
     return new Promise(resolve => {
-      this.http.put(`${API}/${this.recurso}/${id}`, data, { headers: headers }).subscribe(
+      this.http.put(`${API}/${this.recurso}/${id}`, data).subscribe(
         (response: any) => {
           resolve(response);
         },
@@ -74,12 +64,8 @@ export class BaseService {
   }
 
   async eliminar(id) {
-    this.token = await this.servicioUsuario.obtenerToken();
-    const headers = new HttpHeaders().set('Content-Type', 'application/json')
-      .append('Authorization', this.token);;
-
     return new Promise(resolve => {
-      this.http.delete(`${API}/${this.recurso}/${id}`, { headers: headers }).subscribe(
+      this.http.delete(`${API}/${this.recurso}/${id}`).subscribe(
         (response: any) => {
           resolve(response);
         },
