@@ -16,26 +16,24 @@ class JwtAuth extends BaseController
         $this->key = 'api-ecommerce-sy';
     }
 
-    public function signIn($email, $clave_acceso, $getToken = null)
+    public function signIn($device, $email, $clave_acceso, $getToken = null)
     {
-        $user = User::with(['rol'])->where([
+        $user = User::with(['rol', 'rol.permisos'])->where([
             'email'     =>  $email,
             'clave_acceso'  =>  $clave_acceso,
             'activo' => 'S'
         ])->first();
 
         $signIn = is_object($user);
-        if ($signIn) {
+        $roles = ['ADMINISTRADOR', 'CLIENTE'];
+        if ($device == 'admin-website') {
+            $roles = ['ADMINISTRADOR', 'PEDIDO', 'CARGA', 'PRODUCTOS'];
+        }
+        
+        if ($signIn && $user->authorizeRoles($roles)) {
             $token = array(
                 'sub'               => $user->identificador,
-                'email'             => $user->email,
-                'nombre_completo'   => $user->nombre_completo,
-                'fecha_nacimiento'  => $user->fecha_nacimiento,
-                'telefono'          => $user->telefono,
-                'celular'           => $user->celular,
-                'imagen'            => $user->imagen,
-                'rol'               => $user->rol,
-                'tiene_tarjetas'               => $user->tiene_tarjetas,
+                'usuario'           => $user,
                 'iat'               =>  time(),
                 'exp'               =>  time() + (7 * 24 * 60 * 60)
             );
@@ -50,7 +48,7 @@ class JwtAuth extends BaseController
             return $this->sendResponse(true, 'Autenticacion', $decoded, 200);
         }
         
-        return $this->sendResponse(false, 'Acceso denegado', null, 400);
+        return $this->sendResponse(false, 'Acceso denegado', null, 403);
     }
 
     public function checkToken($jwt){

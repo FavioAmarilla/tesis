@@ -30,7 +30,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'clave_acceso', 'password', 'remember_token',
     ];
 
     /**
@@ -48,5 +48,34 @@ class User extends Authenticatable
 
     public function cliente(){
         return $this->hasOne('App\Cliente', 'id_usuario', 'identificador');
+    }
+
+    public function authorizeRoles($roles) {
+        if ($this->hasAnyRole($roles)) {
+            return true;
+        }
+        abort(401, 'Esta acción no está autorizada.');
+    }
+
+    public function hasAnyRole($roles) {
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                if ($this->hasRole($role)) {
+                    return true;
+                }
+            }
+        } else {
+            if ($this->hasRole($roles)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasRole($role) {
+        if ($this->rol()->where('nombre', $role)->first()) {
+            return true;
+        }
+        return false;
     }
 }

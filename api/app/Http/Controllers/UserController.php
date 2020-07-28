@@ -79,6 +79,7 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+        $device = $request->header('Device-origin');
         $nombre_completo = $request->input("nombre_completo");
         $email = $request->input("email");
         $clave_acceso = hash('sha256', $request->input("clave_acceso"));
@@ -98,6 +99,19 @@ class UserController extends BaseController {
 
         if ($validator->fails()) {
             return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
+        }
+
+        if ($id_rol) {
+            $rol;
+            switch ($device) {
+                case 'admin-website':
+                    $rol = Rol::where('nombre', '=', 'PRODUCTOS')->first();
+                    break;
+                default: // mobile-app
+                    $rol = Rol::where('nombre', '=', 'CLIENTE')->first();
+                    break;
+            }
+            $id_rol = ($rol) ? $rol->identificador : null;
         }
 
         $usuario = new User();
@@ -151,6 +165,7 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
+        $device = $request->header('Device-origin');
         $nombre_completo = $request->input("nombre_completo");
         $email = $request->input("email");
         $imagen = $request->input('imagen');
@@ -178,11 +193,11 @@ class UserController extends BaseController {
             $usuario->fecha_nacimiento = $fecha_nacimiento;
             $usuario->telefono = $telefono;
             $usuario->celular = $celular;
-            $usuario->id_rol = $id_rol;
+            $usuario->id_rol = ($id_rol) ? $id_rol : $usuario->id_rol;
     
             if ($usuario->save()) {
                 $jwtAuth = new \JwtAuth();
-                $data = $jwtAuth->signIn($email, $usuario->clave_acceso);
+                $data = $jwtAuth->signIn($device, $email, $usuario->clave_acceso);
                 $respuesta = ['token' => $data->original['data'], 'usuario' => $usuario];
                 return $this->sendResponse(true, 'Usuario actualizado', $respuesta, 200);
             }
@@ -218,7 +233,7 @@ class UserController extends BaseController {
 
     public function signIn(Request $request) {
         $jwtAuth = new \JwtAuth();
-        
+        $device = $request->header('Device-origin');
         $email = $request->input("email");
         $clave_acceso = hash('sha256', $request->input("clave_acceso"));
         $getToken = $request->input("getToken");
@@ -230,11 +245,11 @@ class UserController extends BaseController {
 
         if ($validator->fails()) {
             return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
-        }else{
+        } else {
             if (!empty($getToken)) {
-                $data = $jwtAuth->signIn($email, $clave_acceso, true);
-            }else{
-                $data = $jwtAuth->signIn($email, $clave_acceso);
+                $data = $jwtAuth->signIn($device, $email, $clave_acceso, true);
+            } else {
+                $data = $jwtAuth->signIn($device, $email, $clave_acceso);
             }
         }
 
@@ -297,6 +312,7 @@ class UserController extends BaseController {
     }
 
     public function cambiarPassword(Request $request) {
+        $device = $request->header('Device-origin');
         $id = $request->input("id");
         $email = hash('sha256', $request->input("email"));
         $clave_actual = hash('sha256', $request->input("clave_actual"));
@@ -322,7 +338,7 @@ class UserController extends BaseController {
             $usuario->clave_acceso = $clave_nueva;    
             if ($usuario->save()) {
                 $jwtAuth = new \JwtAuth();
-                $data = $jwtAuth->signIn($email, $clave_nueva);
+                $data = $jwtAuth->signIn($device, $email, $clave_nueva);
                 $respuesta = ['token' => $data->original['data'], 'usuario' => $usuario];
                 return $this->sendResponse(true, 'Contraseña actualizada', $respuesta, 200);
             }
@@ -336,7 +352,7 @@ class UserController extends BaseController {
     public function permisos(Request $request){
         $rol = $request->input('rol');
 
-        $rol = Rol::with(['permisos.permiso'])->find($rol)->first();
+        $rol = Rol::with(['permisos.permiso'])->find($rol);
         if (!$rol) return $this->sendResponse(false, 'No se encontro el rol del usuario', null, 404);
         if (!$rol->permisos) return $this->sendResponse(false, 'No se encontraron permisos para el rol', null, 404);
 

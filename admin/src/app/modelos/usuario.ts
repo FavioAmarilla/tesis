@@ -11,5 +11,6 @@ export class Usuario {
         public estado?: number,
         public sub?: number,
         public id_rol?: number,
+        public rol?: any
     ) {}
 }
