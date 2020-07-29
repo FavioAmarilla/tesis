@@ -42,11 +42,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function rol(){
+    public function rol() {
         return $this->belongsTo('App\Rol', 'id_rol');
     }
 
-    public function cliente(){
+    public function cliente() {
         return $this->hasOne('App\Cliente', 'id_usuario', 'identificador');
     }
 

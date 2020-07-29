@@ -15,13 +15,12 @@ export const ROUTES: RouteInfo[] = [
         icono: 'fa fa-home',
     },
     {
-        url: '/dashboard/configuracion',
         titulo: 'Configuración',
         icono: 'fa fa-laptop',
         children: [
-            { url: '/dashboard/configuracion/empresas', titulo: 'Empresa', icono: 'fas fa-building' },
+            { url: '/dashboard/configuracion/empresas', titulo: 'Empresas', icono: 'fas fa-building' },
             { url: '/dashboard/configuracion/sucursal', titulo: 'Sucursales', icono: 'fas fa-building' },
-            { url: '/dashboard/configuracion/slides', titulo: 'Banners', icono: 'far fa-window-restore' },
+            { url: '/dashboard/configuracion/banners', titulo: 'Banners', icono: 'far fa-window-restore' },
             { url: '/dashboard/configuracion/parametro-ec', titulo: 'Parametros Ec.', icono: 'far fa-window-restore' },
         ]
     },
@@ -88,6 +87,7 @@ export class SidebarComponent implements OnInit {
         this.servicioUsuario.loginEmitter
         .subscribe(response => {
             this.usuario = response;
+            if (this.usuario) { this.comprobarPermisos(); }
             // console.log('loginEmitter: ', this.usuario);
         });
 
@@ -100,6 +100,36 @@ export class SidebarComponent implements OnInit {
 
     async obtenerUsuario() {
         this.usuario = await this.servicioUsuario.obtenerUsuario();
+        this.comprobarPermisos();
+    }
+
+    comprobarPermisos() {
+        const permisos = this.usuario.rol.permisos || [];
+        permisos.map(permiso => {
+            this.comprobar(permiso, this.menuItems);
+        });
+    }
+
+    comprobar(permiso, items) {
+        items.map(item => {
+            if (item.url) {
+                if (item.url == '/dashboard') {
+                    item['autorizado'] = true;
+                } else {
+                    const array = item.url.split('/');
+                    const last = array[array.length - 1];
+                    const normalizado = last.toUpperCase().replace(' ', '-').replace('.', '');
+                    if (`${normalizado}.LISTAR` == permiso.nombre) { item['autorizado'] = true; }
+                }
+            }
+
+            if (item.children) {
+                this.comprobar(permiso, item.children);
+                const aux = item.children.find(child => child.autorizado == true);
+                item['autorizado'] = !!aux;
+            }
+
+        });
     }
 
     cerrarSession() {

@@ -18,7 +18,7 @@ class JwtAuth extends BaseController
 
     public function signIn($device, $email, $clave_acceso, $getToken = null)
     {
-        $user = User::with(['rol', 'rol.permisos'])->where([
+        $user = User::with(['rol', 'rol.permisos.permiso'])->where([
             'email'     =>  $email,
             'clave_acceso'  =>  $clave_acceso,
             'activo' => 'S'
@@ -31,6 +31,11 @@ class JwtAuth extends BaseController
         }
         
         if ($signIn && $user->authorizeRoles($roles)) {
+
+            foreach ($user->rol->permisos as $key=>$element) {
+                $user->rol->permisos[$key] = $element->permiso;
+            }
+
             $token = array(
                 'sub'               => $user->identificador,
                 'usuario'           => $user,

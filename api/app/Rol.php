@@ -14,8 +14,9 @@ class Rol extends Model
         'identificador', 'nombre',
     ];
 
-    //obtener permisos
+    // obtener permisos
     public function permisos() {
         return $this->hasMany('App\RolPermisos', 'id_rol', 'identificador');
     }
+
 }

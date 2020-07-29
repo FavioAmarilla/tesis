@@ -205,7 +205,7 @@ export class ServicioUsuario {
   }
 
   async guardarPermisos(permisos: any) {
-    await localStorage.setItem('user-admin-permisos', permisos);
+    await localStorage.setItem('user-admin-permisos', JSON.stringify(permisos));
   }
 
   async validarPermiso(permiso) {

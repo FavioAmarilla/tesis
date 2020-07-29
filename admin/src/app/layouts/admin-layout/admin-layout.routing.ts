@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { UserGuard } from '../../guards/user.guard';
+import { PermisosGuard } from 'app/guards/permisos.guard';
 
 import { BaseComponent } from '../../paginas/base/base.component';
 import { DashboardComponent } from '../../paginas/dashboard/dashboard.component';
@@ -38,17 +39,19 @@ export const AdminLayoutRoutes: Routes = [
             {
                 path: 'configuracion',
                 data: { breadcrumb: 'Configuración' },
+                canActivateChild: [PermisosGuard],
                 children: [
                     { path: '', redirectTo: 'empresas' },
                     { path: 'empresas', component: EmpresaComponent, data: { breadcrumb: 'Empresas' } },
                     { path: 'sucursal', component: SucursalComponent, data: { breadcrumb: 'Sucursal' } },
-                    { path: 'slides', component: CarruselComponent, data: { breadcrumb: 'Carrusel' } },
-                    { path: 'parametro-ec', component: EcParametrosComponent, data: { breadcrumb: 'Parametros Ec.' } },
+                    { path: 'banners', component: CarruselComponent, data: { breadcrumb: 'Carrusel' } },
+                    { path: 'parametros-ec', component: EcParametrosComponent, data: { breadcrumb: 'Parametros Ec.' } },
                 ]
             },
             {
                 path: 'ventas',
                 data: { breadcrumb: 'Ventas' },
+                canActivateChild: [PermisosGuard],
                 children: [
                     { path: '', redirectTo: 'punto-emision' },
                     { path: 'punto-emision', component: PuntosEmisionComponent, data: { breadcrumb: 'Punto de Emisión' } },
@@ -60,6 +63,7 @@ export const AdminLayoutRoutes: Routes = [
             {
                 path: 'productos',
                 data: { breadcrumb: 'Productos' },
+                canActivateChild: [PermisosGuard],
                 children: [
                     { path: '', component: ProductoComponent, data: { breadcrumb: 'Todos los productos' } },
                     { path: 'marcas', component: MarcaComponent, data: { breadcrumb: 'Marcas' } },
@@ -70,6 +74,7 @@ export const AdminLayoutRoutes: Routes = [
             {
                 path: 'geografia',
                 data: { breadcrumb: 'Geografía' },
+                canActivateChild: [PermisosGuard],
                 children: [
                     { path: '', redirectTo: 'pais' },
                     { path: 'pais', component: PaisComponent, data: { breadcrumb: 'Paises' } },
@@ -80,6 +85,7 @@ export const AdminLayoutRoutes: Routes = [
             {
                 path: 'acceso',
                 data: { breadcrumb: 'Acceso' },
+                canActivateChild: [PermisosGuard],
                 children: [
                     { path: '', redirectTo: 'usuarios' },
                     { path: 'usuarios', component: UsuariosComponent, data: { breadcrumb: 'Usuarios' } },
