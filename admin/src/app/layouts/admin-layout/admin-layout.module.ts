@@ -9,6 +9,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AdminLayoutRoutes } from './admin-layout.routing';
 
 import { ComponentesModule } from 'app/componentes/componentes.module';
+import { FooterModule } from 'app/shared/footer/footer.module';
+import { NavbarModule } from 'app/shared/navbar/navbar.module';
+import { SidebarModule } from 'app/sidebar/sidebar.module';
 
 import { DashboardComponent } from '../../paginas/dashboard/dashboard.component';
 
@@ -30,9 +33,6 @@ import { MarcaComponent } from '../../paginas/marca/marca.component';
 
 import { PaginacionComponent } from '../../shared/paginacion/paginacion.component';
 import { SucursalComponent } from 'app/paginas/sucursal/sucursal.component';
-import { NavbarComponent } from 'app/shared/navbar/navbar.component';
-import { SidebarComponent } from 'app/sidebar/sidebar.component';
-import { FooterComponent } from 'app/shared/footer/footer.component';
 import { CambiarClaveComponent } from 'app/paginas/cambiar-clave/cambiar-clave.component';
 import { RolesComponent } from 'app/paginas/roles/roles.component';
 import { EcParametrosComponent  } from 'app/paginas/ec-parametros/ec-parametros.component';
@@ -49,13 +49,13 @@ import { PedidosComponent } from 'app/paginas/pedidos/pedidos.component';
     NgbModule,
     AngularFileUploaderModule,
     NgxPaginationModule,
-    ComponentesModule
+    ComponentesModule,
+    FooterModule,
+    NavbarModule,
+    SidebarModule
   ],
   declarations: [
     BaseComponent,
-    NavbarComponent,
-    SidebarComponent,
-    FooterComponent,
     DashboardComponent,
     LoginComponent,
     TiposImpuestoComponent,
