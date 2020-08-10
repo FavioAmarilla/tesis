@@ -33,7 +33,7 @@ class JwtAuth extends BaseController
         if ($signIn && $user->authorizeRoles($roles)) {
 
             foreach ($user->rol->permisos as $key=>$element) {
-                $user->rol->permisos[$key] = $element->permiso;
+                $user->rol->permisos[$key] = $element->permiso->nombre;
             }
 
             $token = array(

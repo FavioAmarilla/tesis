@@ -22,7 +22,7 @@ export class PermisosGuard implements CanActivateChild {
     const normalizado = last.toUpperCase().replace(' ', '-').replace('.', '');
 
     permisos.map(permiso => {
-      if (`${normalizado}.LISTAR` == permiso.nombre) { autorizado = true; }
+      if (`${normalizado}.LISTAR` == permiso) { autorizado = true; }
     });
 
     if (!autorizado) {

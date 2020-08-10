@@ -119,7 +119,7 @@ export class SidebarComponent implements OnInit {
                     const array = item.url.split('/');
                     const last = array[array.length - 1];
                     const normalizado = last.toUpperCase().replace(' ', '-').replace('.', '');
-                    if (`${normalizado}.LISTAR` == permiso.nombre) { item['autorizado'] = true; }
+                    if (`${normalizado}.LISTAR` == permiso) { item['autorizado'] = true; }
                 }
             }
 
