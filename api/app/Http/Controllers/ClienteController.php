@@ -196,4 +196,13 @@ class ClienteController extends BaseController
     public function destroy($id)
     {
     }
+
+    
+    public function validarDocumento($numero) {
+        $cliente = Cliente::where('numero_documento', '=', $numero)->first();
+
+        if ($cliente) return $this->sendResponse(false, 'Ya existe otro cliente con este documento', null, 400);
+
+        return $this->sendResponse(true, 'Documento disponible', null, 200);
+    }
 }

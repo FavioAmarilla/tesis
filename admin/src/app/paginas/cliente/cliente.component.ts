@@ -141,6 +141,12 @@ export class ClienteComponent implements OnInit {
   }
 
   async registrar() {
+    const documento: any = await this.servicioCliente.documento(this.clienteUsuario.numero_documento);
+    if (!documento.success) {
+      this.servicioAlerta.dialogoError("Ya existe otro cliente con este documento");
+      return
+    }
+
     this.cargando = true;
 
     //seguarda el usuario
