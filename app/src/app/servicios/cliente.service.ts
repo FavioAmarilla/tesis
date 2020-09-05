@@ -73,5 +73,22 @@ export class ClienteService {
     });
   }
 
+  async documento(numero) {
+    const url = `cliente/documento/${numero}`;
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return new Promise(resolve => {
+      this.http.get(`${API}${url}`, { headers }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error.error);
+        }
+      );
+    });
+  }
+
 
 }

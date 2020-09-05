@@ -4,6 +4,7 @@ import { UsuarioService } from '../../servicios/usuario.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 import { Router } from '@angular/router';
 import { ClienteService } from 'src/app/servicios/cliente.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-signup',
@@ -38,7 +39,7 @@ export class SignupPage implements OnInit {
   };
 
   constructor(
-    private UsuarioService: UsuarioService,
+    private usuarioService: UsuarioService,
     private clienteService: ClienteService,
     private servicioAlerta: AlertaService,
     private router: Router
@@ -48,11 +49,22 @@ export class SignupPage implements OnInit {
   }
 
   async registro() {
+    if (!this.esMayorDeEdad(this.usuario.fecha_nacimiento)) {
+      this.servicioAlerta.dialogoError('Debe ser mayor de edad para registrarse');
+      return;
+    }
+
+    const documento: any = await this.clienteService.documento(this.usuario.ruc);
+    if (!documento.success) {
+      this.servicioAlerta.dialogoError("Ya existe otro cliente con este documento");
+      return
+    }
+
     this.cargandoBoton = true;
 
     //se guarda el usuario
-    const response: any = await this.UsuarioService.registro(this.usuario);
-    
+    const response: any = await this.usuarioService.registro(this.usuario);
+
     this.cargandoBoton = false;
     if (response.success) {
 
@@ -64,10 +76,18 @@ export class SignupPage implements OnInit {
       this.cliente.telefono = this.usuario.telefono;
 
       const responseCliente: any = await this.clienteService.registro(this.cliente);
-      
+
       if (responseCliente.success) {
-        this.servicioAlerta.dialogoExito(responseCliente.message);
-        this.router.navigate(['/']);
+
+        //se loguea al usuario registrado
+        this.servicioAlerta.dialogoExito("Registro completado con exito");
+        const login: any = await this.usuarioService.iniciarSession(this.usuario);
+        if (login.success) {
+          this.router.navigate(['/']);
+        } else {
+          this.servicioAlerta.dialogoError('Error al iniciar sesion');
+        }
+
       } else {
         this.servicioAlerta.dialogoError(responseCliente.message);
       }
@@ -75,6 +95,12 @@ export class SignupPage implements OnInit {
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }
+  }
+
+  esMayorDeEdad(fecha) {
+    let anho = moment().diff(moment(fecha, "YYYY-MM-DD"), "years");
+    
+    return anho > 17;
   }
 
 
