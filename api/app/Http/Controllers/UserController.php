@@ -101,7 +101,7 @@ class UserController extends BaseController {
             return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
-        if ($id_rol) {
+        if (!$id_rol) {
             $rol;
             switch ($device) {
                 case 'admin-website':
