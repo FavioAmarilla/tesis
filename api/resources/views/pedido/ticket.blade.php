@@ -25,11 +25,11 @@
         }
 
         .border-top {
-            border-top: 1px dashed black;
+            border-top: 1px dashed black !important;
         }
 
         .border-bottom {
-            border-bottom: 1px dashed black;
+            border-bottom: 1px dashed black !important;
         }
 
     </style>
@@ -105,9 +105,10 @@
         </div>
 
 
-        <div class="row border-top">
+        <br><br>
+        <div class="row">
             <table>
-                <tbody>
+                <tbody class="border-top">
                     <tr>
                         <td>TOTAL: {{ number_format($pedido->comprobante->monto_total, 0, ',', '.') }}</td>
 
@@ -122,15 +123,16 @@
         </div>
 
 
-        <div class="row border-top">
+        <br><br>
+        <div class="row">
             <table>
-                <tbody>
+                <tbody class="border-top">
                     <tr>
                         @if ($pedido->comprobante->monto_iva5 > 0))
                             <td>GRAVADA 5%: {{ number_format($pedido->comprobante->monto_iva5, 0, ',', '.') }}</td>
                         @endif
                         @if ($pedido->comprobante->monto_iva10 > 0))
-                            <td>GRAVADA 12%: {{ number_format($pedido->comprobante->monto_iva10, 0, ',', '.') }}</td>
+                            <td>GRAVADA 10%: {{ number_format($pedido->comprobante->monto_iva10, 0, ',', '.') }}</td>
                         @endif
                         @if ($pedido->comprobante->monto_exento > 0))
                             <td>EXENTO: {{ number_format($pedido->comprobante->monto_exento, 0, ',', '.') }}</td>
@@ -140,16 +142,17 @@
             </table>
         </div>
 
-        <div class="row border-top">
+        <br><br>
+        <div class="row">
             <table>
-                <tbody>
+                <tbody class="border-top">
                     <tr>
                         @if ($pedido->comprobante->monto_iva5 > 0))
                             <td>IVA 5%:
                                 {{ number_format(intval($pedido->comprobante->monto_iva5 / 21.0), 0, ',', '.') }}</td>
                         @endif
                         @if ($pedido->comprobante->monto_iva10 > 0))
-                            <td>IVA 12%: {{ number_format($pedido->comprobante->monto_iva10 / 11.0, 0, ',', '.') }}</td>
+                            <td>IVA 10%: {{ number_format($pedido->comprobante->monto_iva10 / 11.0, 0, ',', '.') }}</td>
                         @endif
                         @if ($pedido->comprobante->monto_exento > 0))
                             <td>EXENTO: {{ number_format($pedido->comprobante->monto_exento, 0, ',', '.') }}</td>
@@ -159,23 +162,29 @@
             </table>
         </div>
 
-        <div class="row sub-cabezera border-top">
+        <br><br>
+        <div class="row">
             <table>
-                <tbody>
+                <tbody class="border-top">
                     <tr>
                         <td>CLIENTE: {{ $pedido->usuario->cliente->razon_social }}
                         </td>
+                    </tr>
+                    <tr>
                         <td>RUC / CI: {{ $pedido->usuario->cliente->numero_documento }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
+        <br><br>
         <div class="row border-top">
             <table>
-                <tbody>
+                <tbody class="border-top">
                     <tr>
                         <td>ARTICULOS: {{ count($pedido->detalles) }} </td>
+                    </tr>
+                    <tr>
                         <td>TOTAL: {{ number_format($pedido->comprobante->monto_total, 0, ',', '.') }}</td>
                     </tr>
                 </tbody>
