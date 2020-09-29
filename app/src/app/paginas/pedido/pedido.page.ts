@@ -436,7 +436,7 @@ export class PedidoPage implements OnInit {
     const ubicacion = this.datosEnvio.value.ubicacion.split(',');
 
     this.pedido.id_cupon_descuento = this.cuponDescuento.identificador;
-    this.pedido.id_usuario = this.usuario.sub;
+    this.pedido.id_usuario = this.usuario.identificador;
     this.pedido.id_sucursal = sucursal;
     this.pedido.fecha = fecha;
     this.pedido.latitud = ubicacion[0];
