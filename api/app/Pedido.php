@@ -64,4 +64,8 @@ class Pedido extends Model
         return $this->hasOne('App\PedidoPagos', 'id_pedido', 'identificador');
     }
 
+    public function comprobante(){
+        return $this->hasOne('App\Comprobante', 'id_pedido', 'identificador');
+    }
+
 }
