@@ -79,7 +79,7 @@ export class UsuarioService {
 
   async obtenerUsuario() {
     if (!this.usuario) { await this.validarToken(); }
-    return await (this.usuario) ? { ...this.usuario } : null;
+    return (this.usuario) ? { ...this.usuario } : null;
   }
 
   async cargarToken() {
@@ -115,7 +115,7 @@ export class UsuarioService {
 
   async obtenerTarjetas() {
     return new Promise<boolean>(resolve => {
-      this.http.post(`${API}user/${this.usuario.sub}/tarjetas`, {})
+      this.http.post(`${API}user/${this.usuario.identificador}/tarjetas`, {})
       .subscribe(
         (response: any) => {
           resolve(response);
@@ -127,7 +127,7 @@ export class UsuarioService {
 
   async eliminarTarjeta(cardId) {
     return new Promise<boolean>(resolve => {
-      this.http.delete(`${API}user/${this.usuario.sub}/tarjeta/${cardId}`)
+      this.http.delete(`${API}user/${this.usuario.identificador}/tarjeta/${cardId}`)
       .subscribe(
         (response: any) => {
           resolve(response);

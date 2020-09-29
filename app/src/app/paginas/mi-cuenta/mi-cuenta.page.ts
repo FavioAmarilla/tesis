@@ -81,7 +81,7 @@ export class MiCuentaPage implements OnInit {
     if (logueado) {
       this.usuario = logueado;
 
-      const response: any = await this.clienteService.obtenerClienteUsuario(this.usuario.sub);
+      const response: any = await this.clienteService.obtenerClienteUsuario(this.usuario.identificador);
       if (response.success) {
         this.cliente = response.data;
         this.usuario.ruc = this.cliente.numero_documento;
@@ -134,12 +134,12 @@ export class MiCuentaPage implements OnInit {
 
   async actualizarDatos() {
     this.cargandoBoton = await true;
-    const response: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.sub);
+    const response: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.identificador);
 
     if (response.success) {
 
       // se guarda el cliente
-      this.cliente.id_usuario = this.usuario.sub;
+      this.cliente.id_usuario = this.usuario.identificador;
       this.cliente.razon_social = this.usuario.nombre_completo;
       this.cliente.numero_documento = this.usuario.ruc;
       this.cliente.celular = this.usuario.celular;
