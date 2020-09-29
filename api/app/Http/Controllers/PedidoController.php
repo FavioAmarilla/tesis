@@ -713,4 +713,26 @@ class PedidoController extends BaseController
 
         return $this->sendResponse(false, 'No se ha encontrado el pedido solicitado', null, 404);
     }
+
+    public function generarTicket($id) {
+        $pedido = Pedido::with(['detalles.producto', 'usuario.cliente', 'sucursal', 'cupon', 'pais', 'ciudad', 'barrio', 'pagos', 'comprobante.timbrado', 'comprobante.puntoEmision', 'comprobante.usrProceso'])->find($id);
+        $empresa = Empresa::first();
+
+       //return $this->sendResponse(false, 'No se encontro el pedido', $pedido, 200);
+
+        if ($pedido) {
+            $datos =  [
+                'pedido' => $pedido,
+                'empresa' => $empresa
+            ];
+            
+            
+            $pdf = PDF::loadView('pedido.ticket', $datos)->setPaper('A4', 'portrait');  
+            return $pdf->stream();
+
+            return view('pedido.orden', $datos);
+        }
+
+        return $this->sendResponse(false, 'No se encontro el pedido', null, 404);
+    }
 }

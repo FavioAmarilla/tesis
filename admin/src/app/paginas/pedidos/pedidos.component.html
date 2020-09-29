@@ -20,17 +20,6 @@
                                     <th class="text-right">Opciones</th>
                                 </thead>
                                 <tbody>
-                                    <!-- <tr>
-                                        <td>
-                                            <input type="date" name="nombre" class="form-control" placeholder="Nombre"
-                                                [(ngModel)]="filtrosTabla.nombre" (keyup.enter)="filtrarTabla($event)">
-                                        </td>
-                                        <td class="text-right">
-                                            <button class="btn btn-round btn-sm btn-danger"
-                                                (click)="filtrarTabla(null)"><i class="fas fa-times"></i></button>
-                                            &nbsp;
-                                        </td>
-                                    </tr> -->
                                     <tr
                                         *ngFor="let row of listaPedidos | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
                                         <td>{{ row.fecha | date: 'dd/MM/yyyy'}}</td>
@@ -48,13 +37,11 @@
                                                 (click)="ver(row.identificador)"> <i class="fas fa-eye"></i>
                                             </button>
                                             <button class="btn btn-round btn-sm btn-default"
-                                                (click)="generarComprobante(row.identificador)"
-                                                *ngIf="row.estado == 'PENDIENTE' && row.pagos.estado == 'PAGADO'"> <i
+                                                (click)="generarComprobante(row.identificador)"> <i
                                                     class="fas fa-paper-plane"></i>
                                             </button>
                                             <button class="btn btn-round btn-sm btn-primary"
-                                                (click)="terminarPedido(row.identificador)"
-                                                *ngIf="row.estado == 'EN CAMINO' && row.pagos.estado == 'PAGADO'"> <i
+                                                (click)="terminarPedido(row.identificador)"> <i
                                                     class="fas fa-check"></i>
                                             </button>
                                         </td>

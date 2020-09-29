@@ -78,6 +78,7 @@ Route::resource('marca', 'MarcaController');
 Route::resource('pedido', 'PedidoController', ['middleware' => 'api.auth']);
 Route::group(['prefix' => 'pedido'], function () {
     Route::get('{id}/pdf', [ 'as' => 'pedido.pdf', 'uses' => 'PedidoController@generarOrdenPedido']);
+    Route::get('{id}/ticket', [ 'as' => 'pedido.ticket', 'uses' => 'PedidoController@generarTicket']);
     Route::post('{id}/estado', [ 'as' => 'pedido.estado', 'uses' => 'PedidoController@cambiarEstado']);
     Route::post('{id}/ultimatarjeta', [ 'as' => 'pedido.ultimatarjeta', 'middleware' => 'api.auth', 'uses' => 'PedidoController@pagarConTarjetaAgregada']);
 });
@@ -96,6 +97,7 @@ Route::group(['prefix' => 'payment'], function() {
 Route::resource('cliente', 'ClienteController');
 Route::group(['prefix' => 'cliente'], function () {
     Route::get('usuario/{slug}', ['as' => 'cliente.usuario', 'uses' => 'ClienteController@showByUsuario']);
+    Route::get('documento/{numero}', ['as' => 'cliente.validarDocumento', 'uses' => 'ClienteController@validarDocumento']);
 });
 
 Route::resource('comprobante', 'ComprobanteController');
