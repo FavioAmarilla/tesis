@@ -94,17 +94,17 @@ export class MiCuentaPage implements OnInit {
   }
 
   async cambiarPassword() {
-    this.cargandoBoton = await true;
+    this.cargandoBoton = true;
 
     const logueado: any = await this.servicioUsuario.obtenerUsuario();
     if (!logueado) {
-      this.cargandoBoton = await false;
+      this.cargandoBoton = false;
       this.servicioAlerta.dialogoError('Debe estar logueado');
       this.router.navigate(['/login']);
       return;
     }
     if (this.password.clave_nueva != this.password.repita) {
-      this.cargandoBoton = await false;
+      this.cargandoBoton = false;
       this.servicioAlerta.dialogoError('Las contraseñas no coinciden');
       return;
     }
@@ -125,15 +125,15 @@ export class MiCuentaPage implements OnInit {
       this.obtenerUsuario();
 
     } else {
-      this.cargandoBoton = await false;
+      this.cargandoBoton = false;
       this.servicioAlerta.dialogoError(response.message);
     }
 
-    this.cargandoBoton = await false;
+    this.cargandoBoton = false;
   }
 
   async actualizarDatos() {
-    this.cargandoBoton = await true;
+    this.cargandoBoton = true;
     const response: any = await this.servicioUsuario.actualizar(this.usuario, this.usuario.identificador);
 
     if (response.success) {

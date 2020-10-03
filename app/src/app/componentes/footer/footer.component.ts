@@ -9,6 +9,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 })
 export class FooterComponent implements OnInit {
 
+  @Input() bgLight = true;
+
   constructor(
     private router: Router,
     private iab: InAppBrowser

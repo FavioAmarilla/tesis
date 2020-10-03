@@ -56,19 +56,19 @@ export class SignupPage implements OnInit {
 
     const documento: any = await this.clienteService.documento(this.usuario.ruc);
     if (!documento.success) {
-      this.servicioAlerta.dialogoError("Ya existe otro cliente con este documento");
-      return
+      this.servicioAlerta.dialogoError('Ya existe otro cliente con este documento');
+      return;
     }
 
     this.cargandoBoton = true;
 
-    //se guarda el usuario
+    // se guarda el usuario
     const response: any = await this.usuarioService.registro(this.usuario);
 
     this.cargandoBoton = false;
     if (response.success) {
 
-      //se guarda el cliente
+      // se guarda el cliente
       this.cliente.id_usuario = response.data.identificador;
       this.cliente.razon_social = this.usuario.nombre_completo;
       this.cliente.numero_documento = this.usuario.ruc;
@@ -79,8 +79,8 @@ export class SignupPage implements OnInit {
 
       if (responseCliente.success) {
 
-        //se loguea al usuario registrado
-        this.servicioAlerta.dialogoExito("Registro completado con exito");
+        // se loguea al usuario registrado
+        this.servicioAlerta.dialogoExito('Registro completado con exito');
         const login: any = await this.usuarioService.iniciarSession(this.usuario);
         if (login.success) {
           this.router.navigate(['/']);
@@ -98,8 +98,8 @@ export class SignupPage implements OnInit {
   }
 
   esMayorDeEdad(fecha) {
-    let anho = moment().diff(moment(fecha, "YYYY-MM-DD"), "years");
-    
+    const anho = moment().diff(moment(fecha, 'YYYY-MM-DD'), 'years');
+
     return anho > 17;
   }
 
