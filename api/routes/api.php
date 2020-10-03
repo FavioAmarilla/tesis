@@ -29,6 +29,17 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('{userId}/tarjeta/{cardId}', ['as' => 'user.eliminar.tarjeta', 'uses' => 'BancardController@deleteCard']);
     Route::post('permisos', ['as' => 'user.permisos', 'uses' => 'UserController@permisos']);
 });
+
+Route::group([    
+    'namespace' => 'Auth',    
+    'middleware' => 'api',    
+    'prefix' => 'contrasenha'
+], function () {    
+    Route::post('crear-token', 'RecuperarContrasenhaController@crearToken');
+    Route::get('buscar-token/{token}', 'RecuperarContrasenhaController@buscarToken');
+    Route::post('reestablecer', 'RecuperarContrasenhaController@reestablecer');
+});
+
 Route::resource('rol', 'RolController');
 Route::resource('permiso', 'RolController');
 Route::group(['prefix' => 'permiso'], function () {

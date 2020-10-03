@@ -1,0 +1,53 @@
+<ion-content>
+  <app-header [cargando]="cargando"></app-header>
+
+  <div class="wrapper fadeInDown bg-light p-4" *ngIf="!token">
+    <form class="form-signin p-4" (ngSubmit)="onSubmit()" [formGroup]="angForm">
+      <img src="assets/images/icon.png" alt="" width="72" height="72">
+      <h5 class="h5 mb-3 font-weight-normal">Recuperar contraseña</h5>
+      <p>Ingresa el email de tu cuenta y te enviaremos un enlace para restaurarlo</p>
+      
+      <div class="form-group">
+        <input type="email" class="form-control" name="email" placeholder="Email" formControlName="email">
+      </div>
+
+      <ion-button type="submit" class="btn btn-primary w-100" expand="block" fill="clear" shape="round" [disabled]="angForm.invalid || cargando">
+        <span *ngIf="cargando" class="spinner-border spinner-border-sm spinner-table" role="status" aria-hidden="true"></span>
+        Enviar
+      </ion-button>
+      
+      <div class="form-group d-flex mt-2 mb-0">
+        <p class="m-0 mr-1">Ya tienes una cuenta? </p><a [routerLink]="['/login']" routerLinkActive="router-link-active">Iniciar Sessión</a>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="wrapper fadeInDown bg-light p-4" *ngIf="token">
+    <form class="form-signin p-4" (ngSubmit)="reestablecerContrasenha()" [formGroup]="angForm" *ngIf="tokenValido">
+      <img src="assets/images/icon.png" alt="" width="72" height="72">
+      <h5 class="h5 mb-3 font-weight-normal">Reestablecer contraseña</h5>
+      <p>Ingrese la nueva contraseña</p>
+
+      <div class="form-group">
+        <input type="password" class="form-control" name="password" placeholder="Contraseña" formControlName="password">
+      </div>
+
+      <div class="form-group">
+        <input type="password" class="form-control" name="password_confirmation" placeholder="Confirmar contraseña" formControlName="password_confirmation">
+      </div>
+  
+      <ion-button type="submit" class="btn btn-primary w-100" expand="block" fill="clear" shape="round" [disabled]="angForm.invalid || cargando">
+        <span *ngIf="cargando" class="spinner-border spinner-border-sm spinner-table" role="status" aria-hidden="true"></span>
+        Finalizar
+      </ion-button>
+  
+    </form>
+
+    <div class="alert alert-danger" *ngIf="!tokenValido && !cargando">
+      <h3>El token no es valido o ha caducado</h3>
+    </div>
+  </div>
+  <app-footer [bgLight]="false"></app-footer>
+
+</ion-content>

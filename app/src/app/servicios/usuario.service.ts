@@ -137,7 +137,37 @@ export class UsuarioService {
     });
   }
 
-  async cerrarSession() {
+  recuperarContrasenha(form) {
+    return new Promise(resolve => {
+      this.http.post(`${API}contrasenha/crear-token`, form)
+      .subscribe(
+        (response: any) => resolve(response),
+        (error: any) => resolve(error.error)
+      );
+    });
+  }
+
+  buscarTokenContrasenha(token) {
+    return new Promise(resolve => {
+      this.http.get(`${API}contrasenha/buscar-token/${token}`)
+      .subscribe(
+        (response: any) => resolve(response),
+        (error: any) => resolve(error.error)
+      );
+    });
+  }
+
+  reestablecerContrasenha(form) {
+    return new Promise(resolve => {
+      this.http.post(`${API}contrasenha/reestablecer`, form)
+      .subscribe(
+        (response: any) => resolve(response),
+        (error: any) => resolve(error.error)
+      );
+    });
+  }
+
+  cerrarSession() {
     this.token = null;
     this.usuario = null;
     this.storage.remove('token');
@@ -145,13 +175,13 @@ export class UsuarioService {
     this.router.navigate(['/']);
   }
 
-  async cambiarPassword(usuario: any) {
+  cambiarPassword(usuario: any) {
     return new Promise(resolve => {
       this.http.post(`${API}user/cambiarPassword`, usuario)
-        .subscribe(
-          (response: any) => resolve(response),
-          (error: any) => resolve(error.error)
-        );
+      .subscribe(
+        (response: any) => resolve(response),
+        (error: any) => resolve(error.error)
+      );
     });
   }
 }
