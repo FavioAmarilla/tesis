@@ -1,198 +1,262 @@
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <title>Pedido</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pedido</title>
 
-    <style>
-        * {
-            font-size: 11px;
-        }
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                font-size: 11px;
+                color: #1E209E;
+            }
 
-        .ticket {
-            width: 250px;
-            min-width: 250px;
-            max-width: 250px;
-        }
+            body {
+                padding: 10pt;
+            }
 
-        table {
-            padding: 0px;
-            margin: 0px;
-            border: 0px;
-        }
+            .row {
+                display: block;
+                width: 100%;
+            }
 
-        .border-top {
-            border-top: 1px dashed black !important;
-        }
+            .ticket {
+                display: block;
+                width: 100%;
+                min-width: 250px;
+                max-width: 300px;
+            }
 
-        .border-bottom {
-            border-bottom: 1px dashed black !important;
-        }
+            table, tbody, tr, td {
+                width: 100%;
+            }
 
-    </style>
-</head>
+            table {
+                padding: 0px;
+                margin: 0px;
+                border: 0px;
+            }
 
-<body>
-    <div class="ticket">
+            .border-top {
+                border-top: 1px dashed #1E209E !important;
+            }
 
-        <div class="row cabezera">
-            <table>
-                <tbody>
-                    <tr style="text-align: center;">
-                        <td>{{ $empresa->nombre }}</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <td>RUC.: {{ $empresa->numero_documento }} TEL.: {{ $pedido->sucursal->telefono }}</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <td>{{ $pedido->sucursal->direccion }}</td>
-                    </tr>
-                    <tr>
-                        <td>TIMBRADO NRO.: {{ $pedido->comprobante->timbrado->numero }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            .border-bottom {
+                border-bottom: 1px dashed #1E209E !important;
+            }
 
-        <br><br>
-        <div class="row sub-cabezera">
-            <table>
-                <tbody>
-                    <tr>
-                        <td>LOCAL: {{ $pedido->sucursal->nombre }}</td>
-                    </tr>
-                    <tr>
-                        <td>CAJA: {{ $pedido->comprobante->puntoEmision->nombre }}</td>
-                    </tr>
-                    <tr>
-                        <td>CAJERO: {{ $pedido->comprobante->usrProceso->nombre_completo }}</td>
-                    </tr>
-                    <tr>
-                        <td>FACTURA: {{ $pedido->comprobante->numero }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            .sub-cabecera, .productos, .totales {
+                margin-top: 15px;
+            }
 
-        <br><br>
-        <div class="row productos">
-            <table>
-                <thead class="border-top border-bottom">
-                    <tr>
-                        <th>Descripcion</th>
-                        <th style="text-align: right">Cantidad</th>
-                        <th style="text-align: right">Precio</th>
-                        <th style="text-align: right">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($pedido->detalles as $detalle)
-                        <tr>
-                            <td>{{ $detalle->producto->descripcion }}</td>
-                            <td style="text-align: right">{{ $detalle->cantidad }}</td>
-                            <td style="text-align: right">
-                                {{ number_format(intval($detalle->precio_venta), 0, ',', '.') }}</td>
-                            <td style="text-align: right">
-                                {{ number_format(intval($detalle->cantidad * $detalle->precio_venta), 0, ',', '.') }}
+            .totales, .datos-gravadas, .datos-iva, .datos-cliente, .articulos, .formas-pago {
+                padding: 5px 0;
+            }
+
+            .footer {
+                padding-top: 20px;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div class="ticket">
+
+            <div class="row cabezera">
+                <table>
+                    <tbody>
+                        <tr style="text-align: center; text-transform: uppercase;">
+                            <td>{{ $empresa->nombre }}</td>
+                        </tr>
+                        <tr style="text-align: left;">
+                            <td>
+                                <span style="margin-right: 8px;">RUC.: {{ $empresa->numero_documento }}</span>
+                                <span>TEL.: {{ $pedido->sucursal->telefono }}</span>
                             </td>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-
-
-        <br><br>
-        <div class="row">
-            <table>
-                <tbody class="border-top">
-                    <tr>
-                        <td>TOTAL: {{ number_format($pedido->comprobante->monto_total, 0, ',', '.') }}</td>
-
-                    </tr>
-                    @if ($pedido->tipo_envio === 'DE'))
-                        <tr>
-                            <td>DELIVERY: {{ number_format($pedido->costo_envio, 0, ',', '.') }}</td>
+                        <tr style="text-align: left;">
+                            <td>{{ $pedido->sucursal->direccion }}</td>
                         </tr>
-                    @endif
-                </tbody>
-            </table>
+                        <tr style="text-align: left;">
+                            <td>TIMBRADO NRO.: {{ $pedido->comprobante->timbrado->numero }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row sub-cabecera">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>LOCAL: {{ $pedido->sucursal->nombre }}</td>
+                        </tr>
+                        <tr>
+                            <td>CAJA: {{ $pedido->comprobante->puntoEmision->nombre }}</td>
+                        </tr>
+                        <tr>
+                            <td>CAJERO: {{ $pedido->comprobante->usrProceso->nombre_completo }}</td>
+                        </tr>
+                        <tr>
+                            <td>FACTURA: {{ $pedido->comprobante->numero }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row productos">
+                <table>
+                    <thead class="border-top border-bottom">
+                        <tr>
+                            <th style="text-align: left">Descripcion</th>
+                            <th style="text-align: right">Cantidad</th>
+                            <th style="text-align: right">Precio</th>
+                            <th style="text-align: right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($pedido->detalles as $detalle)
+                            <tr>
+                                <td>{{ $detalle->producto->descripcion }}</td>
+                                <td style="text-align: right">{{ $detalle->cantidad }}</td>
+                                <td style="text-align: right">{{ number_format(intval($detalle->precio_venta), 0, ',', '.') }}</td>
+                                <td style="text-align: right">
+                                    {{ number_format(intval($detalle->cantidad * $detalle->precio_venta), 0, ',', '.') }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row totales border-top">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">TOTAL:</td>
+                            <td colspan="1" style="text-align: right;">{{ number_format($pedido->comprobante->monto_total, 0, ',', '.') }}</td>
+                        </tr>
+                        @if ($pedido->tipo_envio === 'DE'))
+                            <tr>
+                                <td colspan="3">DELIVERY:</td>
+                                <td colspan="1" style="text-align: right;">{{ number_format($pedido->costo_envio, 0, ',', '.') }}</td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row datos-gravadas border-top">
+                <table>
+                    <tbody>
+                        <tr>
+                            @if ($pedido->comprobante->monto_iva5 > 0))
+                                <td colspan="3">GRAVADA 5%:</td>
+                                <td colspan="1" style="text-align: right;">{{ number_format($pedido->comprobante->monto_iva5, 0, ',', '.') }}</td>
+                            @endif
+                            @if ($pedido->comprobante->monto_iva10 > 0))
+                                <td colspan="3">GRAVADA 10%:</td>
+                                <td colspan="1" style="text-align: right;">{{ number_format($pedido->comprobante->monto_iva10, 0, ',', '.') }}</td>
+                            @endif
+                            @if ($pedido->comprobante->monto_exento > 0))
+                                <td colspan="3">EXENTO:</td>
+                                <td colspan="1" style="text-align: right;">{{ number_format($pedido->comprobante->monto_exento, 0, ',', '.') }}</td>
+                            @endif
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        
+            <div class="row datos-iva border-top">
+                <table>
+                    <tbody>
+                        <tr>
+                            @if ($pedido->comprobante->monto_iva5 > 0))
+                                <td colspan="3">IVA 5%:</td>
+                                <td colspan="1" style="text-align: right;">{{ number_format(intval($pedido->comprobante->monto_iva5 / 21.0), 0, ',', '.') }}</td>
+                            @endif
+                            @if ($pedido->comprobante->monto_iva10 > 0))
+                                <td colspan="3">IVA 10%:</td>
+                                <td colspan="1" style="text-align: right;">{{ number_format($pedido->comprobante->monto_iva10 / 11.0, 0, ',', '.') }}</td>
+                            @endif
+                            @if ($pedido->comprobante->monto_exento > 0))
+                                <td colspan="3">EXENTO:</td>
+                                <td colspan="1" style="text-align: right;">{{ number_format($pedido->comprobante->monto_exento, 0, ',', '.') }}</td>
+                            @endif
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row datos-cliente border-top">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">RUC / CI:</td>
+                            <td colspan="1" style="text-align: right;">{{ $pedido->usuario->cliente->numero_documento }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">CLIENTE:</td>
+                            <td colspan="1" style="text-align: right;">{{ $pedido->usuario->cliente->razon_social }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row articulos border-top">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">ARTICULOS:</td>
+                            <td colspan="1" style="text-align: right;">{{ count($pedido->detalles) }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">TOTAL:</td>
+                            <td colspan="1" style="text-align: right;">{{ number_format($pedido->comprobante->monto_total, 0, ',', '.') }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row formas-pago border-top">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td colspan="4">FORMAS DE PAGOS</td>
+                        </tr>
+                        <tr>
+                            @if ($pedido->pagos->vr_tipo == 'PWTK' || $pedido->pagos->vr_tipo == 'PO' || $pedido->pagos->vr_tipo == 'PCTCD')
+                                <td colspan="3">TARJETAS:</td>
+                            @elseif ($pedido->pagos->vr_tipo == 'PERC')
+                                <td colspan="3">EFECTIVO:</td>
+                            @endif
+                            <td colspan="1" style="text-align: right;">{{ number_format($pedido->pagos->importe, 0, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">VUELTO:</td>
+                            <td colspan="1" style="text-align: right;">{{ number_format($pedido->pagos->vuelto, 0, ',', '.') }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="row footer border-top">
+                <table>
+                    <tbody>
+                        <tr style="text-align: center;">
+                            <td>---GRACIAS POR SU PREFERENCIA---</td>
+                        </tr>
+                        <tr style="text-align: center;">
+                            <td>ORIGINAL CLIENTE</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
+    </body>
 
-
-        <br><br>
-        <div class="row">
-            <table>
-                <tbody class="border-top">
-                    <tr>
-                        @if ($pedido->comprobante->monto_iva5 > 0))
-                            <td>GRAVADA 5%: {{ number_format($pedido->comprobante->monto_iva5, 0, ',', '.') }}</td>
-                        @endif
-                        @if ($pedido->comprobante->monto_iva10 > 0))
-                            <td>GRAVADA 10%: {{ number_format($pedido->comprobante->monto_iva10, 0, ',', '.') }}</td>
-                        @endif
-                        @if ($pedido->comprobante->monto_exento > 0))
-                            <td>EXENTO: {{ number_format($pedido->comprobante->monto_exento, 0, ',', '.') }}</td>
-                        @endif
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <br><br>
-        <div class="row">
-            <table>
-                <tbody class="border-top">
-                    <tr>
-                        @if ($pedido->comprobante->monto_iva5 > 0))
-                            <td>IVA 5%:
-                                {{ number_format(intval($pedido->comprobante->monto_iva5 / 21.0), 0, ',', '.') }}</td>
-                        @endif
-                        @if ($pedido->comprobante->monto_iva10 > 0))
-                            <td>IVA 10%: {{ number_format($pedido->comprobante->monto_iva10 / 11.0, 0, ',', '.') }}</td>
-                        @endif
-                        @if ($pedido->comprobante->monto_exento > 0))
-                            <td>EXENTO: {{ number_format($pedido->comprobante->monto_exento, 0, ',', '.') }}</td>
-                        @endif
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <br><br>
-        <div class="row">
-            <table>
-                <tbody class="border-top">
-                    <tr>
-                        <td>CLIENTE: {{ $pedido->usuario->cliente->razon_social }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>RUC / CI: {{ $pedido->usuario->cliente->numero_documento }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <br><br>
-        <div class="row border-top">
-            <table>
-                <tbody class="border-top">
-                    <tr>
-                        <td>ARTICULOS: {{ count($pedido->detalles) }} </td>
-                    </tr>
-                    <tr>
-                        <td>TOTAL: {{ number_format($pedido->comprobante->monto_total, 0, ',', '.') }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-
-    </div>
-</body>
-
-</html>
+    </html>
