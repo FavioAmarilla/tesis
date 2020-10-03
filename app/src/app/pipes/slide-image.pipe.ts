@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../environments/environment';
 
-const IMAGE_API = environment.slideImageUrl;
+const IMAGE_API = environment.api + environment.slideImageUrl;
 
 
 @Pipe({

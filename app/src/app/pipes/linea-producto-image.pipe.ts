@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../environments/environment';
 
-const IMAGE_API = environment.lineaProdImageUrl;
+const IMAGE_API = environment.api + environment.lineaProdImageUrl;
 
 @Pipe({
   name: 'lineaProductoImage'

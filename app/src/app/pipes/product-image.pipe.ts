@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { environment } from '../../environments/environment';
 
-const IMAGE_API = environment.productImageUrl;
+const IMAGE_API = environment.api + environment.productImageUrl;
 
 @Pipe({
   name: 'productImage'
