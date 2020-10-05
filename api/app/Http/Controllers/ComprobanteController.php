@@ -67,9 +67,11 @@ class ComprobanteController extends BaseController
     {
         $date = date('Y-m-d');
         $id_pedido = $request->input("id_pedido");
+        $usr_proceso = $request->input("usr_proceso");
 
         $validator = Validator::make($request->all(), [
-            'id_pedido'  => 'required'
+            'id_pedido'  => 'required',
+            'usr_proceso'  => 'required'
         ]);
         if ($validator->fails()) return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         
@@ -117,6 +119,7 @@ class ComprobanteController extends BaseController
         $comprobante->monto_exento = $pedido->total_exento;
         $comprobante->monto_iva5 = $pedido->total_iva5;
         $comprobante->monto_iva10 = $pedido->total_iva10;
+        $comprobante->usr_proceso = $usr_proceso;
         $comprobante->descuento= 0;
 
         if (!$comprobante->save()) return $this->sendResponse(false, 'Comprobante no registrado', $comprobante, 400);

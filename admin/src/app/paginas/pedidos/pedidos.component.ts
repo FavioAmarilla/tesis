@@ -4,6 +4,8 @@ import { PedidoService } from 'app/servicios/pedido.service';
 import { ServicioAlertas } from 'app/servicios/alertas.service';
 import { environment } from '../../../environments/environment';
 import { ComprobanteService } from 'app/servicios/comprobante.service';
+import { Usuario } from 'app/modelos/usuario';
+import { ServicioUsuario } from 'app/servicios/usuario.service';
 
 @Component({
   selector: 'app-pedidos',
@@ -17,6 +19,7 @@ export class PedidosComponent implements OnInit {
   public form = false;
   public accion: string = 'LST';
   public pedido: Pedido;
+  public usuario: Usuario;
   public listaPedidos: Pedido;
   public parametros: any = {};
   public filtrosTabla: any = {};
@@ -28,13 +31,15 @@ export class PedidosComponent implements OnInit {
   constructor(
     private servicioPedido: PedidoService,
     private servicioComprobante: ComprobanteService,
+    private servicioUsuario: ServicioUsuario,
     private servicioAlerta: ServicioAlertas
   ) {
     this.inicializarFiltros();
   }
 
-  ngOnInit() {
-    this.paginacion(this.paginaActual);
+  async ngOnInit() {
+    await this.obtenerUsuario();
+    await this.paginacion(this.paginaActual);
   }
 
   async inicializarFiltros() {
@@ -75,7 +80,6 @@ export class PedidosComponent implements OnInit {
       this.listaPedidos = response.data;
       this.porPagina = response.per_page;
       this.total = response.total;
-      console.log(this.listaPedidos);
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }
@@ -114,11 +118,20 @@ export class PedidosComponent implements OnInit {
     }
   }
 
-  ver(idFactura) {
+  ver(idPedido) {
     this.accion = 'LST';
     this.cargando = true;
 
-    window.open(`${environment.api}/pedido/${idFactura}/pdf`, '_blank');
+    window.open(`${environment.api}/pedido/${idPedido}/pdf`, '_blank');
+
+    this.cargando = false;
+  }
+
+  ticket(idPedido) {
+    this.accion = 'LST';
+    this.cargando = true;
+
+    window.open(`${environment.api}/pedido/${idPedido}/ticket`, '_blank');
 
     this.cargando = false;
   }
@@ -126,9 +139,11 @@ export class PedidosComponent implements OnInit {
   async generarComprobante(id_pedido) {
     this.accion = 'LST';
     this.cargando = true;
+    console.log(this.usuario);
 
     let pedido = {
-      id_pedido: id_pedido
+      id_pedido: id_pedido,
+      usr_proceso: this.usuario.identificador
     }
     let response: any = await this.servicioComprobante.registrar(pedido);
 
@@ -165,7 +180,6 @@ export class PedidosComponent implements OnInit {
       await this.paginacion();
       this.servicioAlerta.dialogoExito(response.message);
 
-      this.servicioAlerta.dialogoExito(response.message);
       // setTimeout(() => {
       //   window.open(`${environment.api}/pedido/${id_pedido}/pdf`, '_blank');
       // }, 1000);
@@ -175,6 +189,11 @@ export class PedidosComponent implements OnInit {
     }
 
     this.cargando = false;
+  }
+
+  async obtenerUsuario() {
+    this.usuario = await this.servicioUsuario.obtenerUsuario();
+    console.log(this.usuario);
   }
 
 }
