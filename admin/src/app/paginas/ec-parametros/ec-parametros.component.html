@@ -8,8 +8,8 @@
 
                 <div class="card" *ngIf="!form">
                     <div class="card-header">
-                        <button *ngIf="total == 0" class="btn btn-round btn-primary pull-right"
-                            (click)="mostrarFormulario(true, 'INS')">
+                        <button *ngIf="total == 0" class="btn btn-primary pull-right"
+                            (click)="mostrarFormulario(true, 'INS')" [disabled]="cargando">
                             <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm"
                                 role="status" aria-hidden="true"></span>
                             Agregar
@@ -55,7 +55,7 @@
                                                 (keyup.enter)="filtrarTabla('paginacion', $event)">
                                         </td>
                                         <td class="text-right">
-                                            <button class="btn btn-round btn-sm btn-danger"
+                                            <button class="btn btn-sm btn-danger"
                                                 (click)="filtrarTabla('paginacion', null)"><i
                                                     class="fas fa-times"></i></button>
                                             &nbsp;
@@ -74,7 +74,7 @@
                                             {{ row.costo_delivery }}
                                         </td>
                                         <td class="text-right">
-                                            <button class="btn btn-round btn-sm btn-warning"
+                                            <button class="btn btn-sm btn-warning"
                                                 (click)="obtenerParametro(row.identificador)"><i
                                                     class="fas fa-edit"></i></button> &nbsp;
                                         </td>
@@ -160,7 +160,7 @@
                                                     (keyup.enter)="filtrarTabla('obtenerSucursales', $event)">
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-round btn-sm btn-danger"
+                                                <button type="button" class="btn btn-sm btn-danger"
                                                     (click)="filtrarTabla('obtenerSucursales', null)"><i
                                                         class="fas fa-times"></i></button>
                                             </td>
@@ -209,7 +209,7 @@
                                                     (keyup.enter)="filtrarTabla('obtenerCiudades', $event)">
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-round btn-sm btn-danger"
+                                                <button type="button" class="btn btn-sm btn-danger"
                                                     (click)="filtrarTabla('obtenerCiudades', null)"><i
                                                         class="fas fa-times"></i></button>
                                             </td>
@@ -244,13 +244,13 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="float-left">
-                                        <button type="button" class="btn btn-round btn-default" (click)="atras()"
+                                        <button type="button" class="btn btn-default" (click)="atras()"
                                             *ngIf="seccion != 'general'">
                                             Atras
                                         </button>
                                     </div>
                                     <div class="float-right">
-                                        <button type="button" class="btn btn-round btn-primary" (click)="registrar()"
+                                        <button type="button" class="btn btn-primary" (click)="registrar()"
                                             *ngIf="accion == 'INS' && seccion == 'ciudad'"
                                             [disabled]="formulario.invalid || listaSucursalesTmp.length == 0 || listaCiudadesTmp.length == 0">
                                             <span *ngIf="cargando && accion == 'INS'"
@@ -258,7 +258,7 @@
                                                 aria-hidden="true"></span>
                                             Guardar
                                         </button>
-                                        <button type="button" class="btn btn-round btn-primary" (click)="actualizar()"
+                                        <button type="button" class="btn btn-primary" (click)="actualizar()"
                                             *ngIf="accion == 'UPD' && seccion == 'ciudad'"
                                             [disabled]="formulario.invalid || listaSucursalesTmp.length == 0 || listaCiudadesTmp.length == 0">
                                             <span *ngIf="cargando && accion == 'UPD'"
@@ -266,11 +266,11 @@
                                                 aria-hidden="true"></span>
                                             Actualizar
                                         </button>
-                                        <button type="button" class="btn btn-round btn-danger"
+                                        <button type="button" class="btn btn-danger"
                                             (click)="mostrarFormulario(false, 'LST')">
                                             Cancelar
                                         </button>
-                                        <button type="button" class="btn btn-round btn-warning" (click)="siguiente()"
+                                        <button type="button" class="btn btn-warning" (click)="siguiente()"
                                             *ngIf="seccion != 'ciudad'">
                                             Siguiente
                                         </button>

@@ -8,8 +8,8 @@
 
                 <div class="card" *ngIf="!form">
                     <div class="card-header">
-                        <button class="btn btn-round btn-primary pull-right"
-                            (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
+                        <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)"
+                            [disabled]="cargando">Agregar</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -41,8 +41,8 @@
                                             </select>
                                         </td>
                                         <td class="text-right">
-                                            <button class="btn btn-round btn-sm btn-danger"
-                                                (click)="filtrarTabla(null)"><i class="fas fa-times"></i></button>
+                                            <button class="btn btn-sm btn-danger" (click)="filtrarTabla(null)"><i
+                                                    class="fas fa-times"></i></button>
                                             &nbsp;
                                         </td>
                                     </tr>
@@ -53,10 +53,10 @@
                                         <td *ngIf="row.rol">{{ row.rol.nombre }}</td>
                                         <td *ngIf="!row.rol"></td>
                                         <td class="text-right">
-                                            <button class="btn btn-round btn-sm btn-warning"
+                                            <button class="btn btn-sm btn-warning"
                                                 (click)="obtenerUsuario(row.identificador)"><i
                                                     class="fas fa-edit"></i></button>&nbsp;
-                                            <button class="btn btn-round btn-sm" (click)="activarDesactivarUsuario(row)"
+                                            <button class="btn btn-sm" (click)="activarDesactivarUsuario(row)"
                                                 [ngClass]="{'btn-danger': row.activo == 'S', 'btn-primary': row.activo == 'N'}"
                                                 [title]="(row.activo == 'S') ? 'Desactivar Usuario' : 'Activar Usuario'">
                                                 <i class="fas"
@@ -153,19 +153,19 @@
                                         obligatorio</span>
                                 </div>
                                 <div class="form-group">
-                                    <button type="button" class="btn btn-round btn-primary" (click)="registrar()"
+                                    <button type="button" class="btn btn-primary" (click)="registrar()"
                                         *ngIf="accion == 'INS'" [disabled]="formulario.invalid">
                                         <span *ngIf="cargando && accion == 'INS'"
                                             class="spinner-border  spinner-border-sm" role="status"
                                             aria-hidden="true"></span> Guardar
                                     </button>
-                                    <button type="button" class="btn btn-round btn-primary" (click)="actualizar()"
+                                    <button type="button" class="btn btn-primary" (click)="actualizar()"
                                         *ngIf="accion == 'UPD'" [disabled]="formulario.invalid">
                                         <span *ngIf="cargando && accion == 'UPD'"
                                             class="spinner-border  spinner-border-sm" role="status"
                                             aria-hidden="true"></span> Actualizar
                                     </button>
-                                    <button type="button" class="btn btn-round btn-danger"
+                                    <button type="button" class="btn btn-danger"
                                         (click)="mostrarFormulario(false, 'LST')">Cancelar</button>
                                 </div>
                             </form>

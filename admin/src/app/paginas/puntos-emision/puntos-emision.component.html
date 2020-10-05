@@ -8,8 +8,8 @@
 
         <div class="card" *ngIf="!form">
           <div class="card-header">
-            <button class="btn btn-round btn-primary pull-right"
-              (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
+            <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)"
+              [disabled]="cargando">Agregar</button>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -60,7 +60,7 @@
                       </select>
                     </td>
                     <td class="text-right">
-                      <button class="btn btn-round btn-sm btn-danger" (click)="filtrarTabla(null)"><i
+                      <button class="btn btn-sm btn-danger" (click)="filtrarTabla(null)"><i
                           class="fas fa-times"></i></button> &nbsp;
                     </td>
                   </tr>
@@ -81,7 +81,7 @@
                       <div *ngIf="puntoEmision.vr_tipo == 'AI'">AUTO IMPRESO</div>
                     </td>
                     <td class="text-right">
-                      <button class="btn btn-round btn-sm btn-warning"
+                      <button class="btn btn-sm btn-warning"
                         (click)="obtenerPuntoEmision(puntoEmision.identificador)"><i class="fas fa-edit"></i></button>
                       &nbsp;
                     </td>
@@ -145,19 +145,19 @@
                     campo es obligatorio</span>
                 </div>
                 <div class="form-group">
-                  <button type="button" class="btn btn-round btn-primary" (click)="registrar()"
-                    *ngIf="accion == 'INS'" [disabled]="formulario.invalid">
+                  <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'"
+                    [disabled]="formulario.invalid">
                     <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm" role="status"
                       aria-hidden="true"></span>
                     Guardar
                   </button>
-                  <button type="button" class="btn btn-round btn-primary" (click)="actualizar()"
-                    *ngIf="accion == 'UPD'" [disabled]="formulario.invalid">
+                  <button type="button" class="btn btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'"
+                    [disabled]="formulario.invalid">
                     <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm" role="status"
                       aria-hidden="true"></span>
                     Actualizar
                   </button>
-                  <button type="button" class="btn btn-round btn-danger" (click)="mostrarFormulario(false, 'LST')">
+                  <button type="button" class="btn btn-danger" (click)="mostrarFormulario(false, 'LST')">
                     Cancelar
                   </button>
                 </div>

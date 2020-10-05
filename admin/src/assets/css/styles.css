@@ -30,3 +30,7 @@ tr:nth-child(even) {
 .wrapper{
 	background-color: #f4f3ef !important;
 }
+
+body, input, button {
+    font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif !important;
+}
