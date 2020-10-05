@@ -8,7 +8,7 @@
 
         <div class="card" *ngIf="!form">
           <div class="card-header">
-            <button class="btn btn-round btn-primary pull-right"
+            <button class="btn btn-primary pull-right"
               (click)="mostrarFormulario(true, 'INS')">Agregar</button>
           </div>
           <div class="card-body">
@@ -29,7 +29,7 @@
                         [(ngModel)]="filtrosTabla.nombre" (keyup.enter)="filtrarTabla('paginacion', $event)">
                     </td>
                     <td class="text-right">
-                      <button class="btn btn-round btn-sm btn-danger" (click)="filtrarTabla('paginacion', null)"><i
+                      <button class="btn btn-sm btn-danger" (click)="filtrarTabla('paginacion', null)"><i
                           class="fas fa-times"></i></button>
                       &nbsp;
                     </td>
@@ -41,7 +41,7 @@
                       {{ row.nombre }}
                     </td>
                     <td class="text-right">
-                      <button class="btn btn-round btn-sm btn-warning" (click)="obtenerRol(row.identificador)"><i
+                      <button class="btn btn-sm btn-warning" (click)="obtenerRol(row.identificador)"><i
                           class="fas fa-edit"></i></button> &nbsp;
                     </td>
                   </tr>
@@ -90,7 +90,7 @@
                           [(ngModel)]="filtrosTabla.nombre" (keyup.enter)="filtrarTabla('obtenerPermisos', $event)">
                       </td>
                       <td class="text-center">
-                        <button type="button" class="btn btn-round btn-sm btn-danger"
+                        <button type="button" class="btn btn-sm btn-danger"
                           (click)="filtrarTabla('obtenerPermisos', null)"><i class="fas fa-times"></i></button>
                       </td>
                     </tr>
@@ -119,19 +119,19 @@
                 </div>
 
                 <div class="form-group">
-                  <button type="button" class="btn btn-round btn-primary" (click)="registrar()" *ngIf="accion == 'INS'"
+                  <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'"
                     [disabled]="formulario.invalid || listaPermisosTmp.length == 0">
                     <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm" role="status"
                       aria-hidden="true"></span>
                     Guardar
                   </button>
-                  <button type="button" class="btn btn-round btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'"
+                  <button type="button" class="btn btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'"
                     [disabled]="formulario.invalid || listaPermisosTmp.length == 0">
                     <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm" role="status"
                       aria-hidden="true"></span>
                     Actualizar
                   </button>
-                  <button type="button" class="btn btn-round btn-danger" (click)="mostrarFormulario(false, 'LST')">
+                  <button type="button" class="btn btn-danger" (click)="mostrarFormulario(false, 'LST')">
                     Cancelar
                   </button>
                 </div>

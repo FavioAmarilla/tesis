@@ -8,7 +8,7 @@
 
         <div class="card" *ngIf="!form">
           <div class="card-header">
-            <button class="btn btn-round btn-primary pull-right"
+            <button class="btn btn-primary pull-right"
               (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
           </div>
           <div class="card-body">
@@ -40,7 +40,7 @@
                       <input type="date" class="form-control" name="fecha_hasta" placeholder="Fecha Hasta" [(ngModel)]="filtrosTabla.fecha_hasta" (change)="filtrarTabla($event)">
                     </td>
                     <td class="text-right">
-                      <button class="btn btn-round btn-sm btn-danger" (click)="filtrarTabla(null)"><i class="fas fa-times"></i></button> &nbsp;
+                      <button class="btn btn-sm btn-danger" (click)="filtrarTabla(null)"><i class="fas fa-times"></i></button> &nbsp;
                     </td>
                   </tr>
                   <tr *ngFor="let row of listaTimbrado | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
@@ -50,7 +50,7 @@
                     <td>{{ row.fecha_desde | date: 'dd/MM/yyyy' }}</td>
                     <td>{{ row.fecha_hasta | date: 'dd/MM/yyyy' }}</td>
                     <td class="text-right">
-                      <button class="btn btn-round btn-sm btn-warning" (click)="obtenerTimbrado(row.identificador)"> <i class="fas fa-edit"></i> </button> &nbsp;
+                      <button class="btn btn-sm btn-warning" (click)="obtenerTimbrado(row.identificador)"> <i class="fas fa-edit"></i> </button> &nbsp;
                     </td>
                   </tr>
                 </tbody>
@@ -98,13 +98,13 @@
                   <span class="invalid-feedback d-block" *ngIf="!fecha_hasta.valid && fecha_hasta.touched">Este campo es obligatorio</span>
                 </div>
                 <div class="form-group">
-                  <button type="button" class="btn btn-round btn-primary" (click)="registrar()" *ngIf="accion == 'INS'" [disabled]="formulario.invalid">
+                  <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'" [disabled]="formulario.invalid">
                     <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span> Guardar
                   </button>
-                  <button type="button" class="btn btn-round btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'" [disabled]="formulario.invalid">
+                  <button type="button" class="btn btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'" [disabled]="formulario.invalid">
                     <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm" role="status" aria-hidden="true"></span> Actualizar
                   </button>
-                  <button type="button" class="btn btn-round btn-danger" (click)="mostrarFormulario(false, 'LST')">Cancelar</button>
+                  <button type="button" class="btn btn-danger" (click)="mostrarFormulario(false, 'LST')">Cancelar</button>
                 </div>
               </form>
             </div>
