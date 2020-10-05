@@ -20,7 +20,7 @@
                 <ul class="nav">
                     <li *ngFor="let sub of menuItem.children" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                         <a [routerLink]="[sub.url]" *ngIf="sub.autorizado">
-                            <span class="sidebar-mini-icon fa fa-minus mr-1"></span>
+                            <span class="sidebar-mini-icon fa fa-circle mr-1" style="font-size: 7px;"></span>
                             <span class="sidebar-normal">{{sub.titulo}}</span>
                         </a>
                     </li>
