@@ -50,7 +50,7 @@ export class PedidoListadoPage implements OnInit {
     const usuario: any = await this.servicioUsuario.obtenerUsuario();
     if (usuario) {
       const parametros = {
-        id_usuario: usuario.sub
+        id_usuario: usuario.identificador
       };
 
       const response: any = await this.servicioPedido.obtenerPedido(null, parametros);
