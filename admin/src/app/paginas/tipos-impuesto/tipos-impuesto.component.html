@@ -8,8 +8,8 @@
 
         <div class="card" *ngIf="!form">
           <div class="card-header">
-            <button class="btn btn-primary pull-right"
-              (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
+            <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)"
+              [disabled]="cargando">Agregar</button>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -87,14 +87,14 @@
                     obligatorio</span>
                 </div>
                 <div class="form-group">
-                  <button type="button" class="btn btn-primary" (click)="registrar()"
-                    *ngIf="accion == 'INS'" [disabled]="formulario.invalid">
+                  <button type="button" class="btn btn-primary" (click)="registrar()" *ngIf="accion == 'INS'"
+                    [disabled]="formulario.invalid">
                     <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm" role="status"
                       aria-hidden="true"></span>
                     Guardar
                   </button>
-                  <button type="button" class="btn btn-primary" (click)="actualizar()"
-                    *ngIf="accion == 'UPD'" [disabled]="formulario.invalid">
+                  <button type="button" class="btn btn-primary" (click)="actualizar()" *ngIf="accion == 'UPD'"
+                    [disabled]="formulario.invalid">
                     <span *ngIf="cargando && accion == 'UPD'" class="spinner-border  spinner-border-sm" role="status"
                       aria-hidden="true"></span>
                     Actualizar

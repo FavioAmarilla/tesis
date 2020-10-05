@@ -8,8 +8,8 @@
 
         <div class="card" *ngIf="!form">
           <div class="card-header">
-            <button class="btn btn-primary pull-right"
-              (click)="mostrarFormulario(true, 'INS')">Agregar</button>
+            <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS')"
+              [disabled]="cargando">Agregar</button>
           </div>
           <div class="card-body">
             <div class="table-responsive">

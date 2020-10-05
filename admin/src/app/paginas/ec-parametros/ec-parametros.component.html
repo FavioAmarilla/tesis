@@ -9,7 +9,7 @@
                 <div class="card" *ngIf="!form">
                     <div class="card-header">
                         <button *ngIf="total == 0" class="btn btn-primary pull-right"
-                            (click)="mostrarFormulario(true, 'INS')">
+                            (click)="mostrarFormulario(true, 'INS')" [disabled]="cargando">
                             <span *ngIf="cargando && accion == 'INS'" class="spinner-border  spinner-border-sm"
                                 role="status" aria-hidden="true"></span>
                             Agregar

@@ -8,8 +8,8 @@
 
                 <div class="card" *ngIf="!form">
                     <div class="card-header">
-                        <button class="btn btn-primary pull-right"
-                            (click)="mostrarFormulario(true, 'INS', true)">Agregar</button>
+                        <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)"
+                            [disabled]="cargando">Agregar</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -31,7 +31,7 @@
                                         </td>
                                         <td class="text-right">
                                             <button class="btn btn-sm btn-danger" (click)="filtrarTabla(null)"><i
-                                                class="fas fa-times"></i></button> &nbsp;
+                                                    class="fas fa-times"></i></button> &nbsp;
                                         </td>
                                     </tr>
                                     <tr
@@ -67,9 +67,8 @@
                             <form #formulario="ngForm">
                                 <div class="form-group">
                                     <label for="descripcion">Descripcion</label>
-                                    <input type="text" class="form-control" placeholder="Descripcion"
-                                        name="descripcion" [(ngModel)]="lineaProducto.descripcion" required
-                                        #descripcion="ngModel">
+                                    <input type="text" class="form-control" placeholder="Descripcion" name="descripcion"
+                                        [(ngModel)]="lineaProducto.descripcion" required #descripcion="ngModel">
                                     <span class="invalid-feedback d-block"
                                         *ngIf="!descripcion.valid && descripcion.touched">Este campo es
                                         obligatorio</span>
