@@ -72,7 +72,7 @@
                         <span>Finalizar pedido</span>
                       </button>
   
-                      <button mat-menu-item *ngIf="pedido.estado == 'PENDIENTE'" (click)="cancelarPedido(pedido.identificador)" *ngIf="!pedido.pagos || (pedido.pagos && pedido.pagos.estado == 'PENDIENTE' && pedido.pagos.vr_tipo != 'PO' && pedido.pagos.vr_tipo != 'ATCD')">
+                      <button mat-menu-item (click)="cancelarPedido(pedido.identificador)" *ngIf="!pedido.pagos || (pedido.pagos && pedido.pagos.estado == 'PENDIENTE' && pedido.pagos.vr_tipo != 'PO' && pedido.pagos.vr_tipo != 'ATCD')">
                         <mat-icon>cancel</mat-icon>
                         <span>Cancelar pedido</span>
                       </button>
