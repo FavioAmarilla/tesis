@@ -1,12 +1,11 @@
 .navbar {
     margin: 0px;
     padding: 0px;
-    background-color: #079A4A !important;
+    background-color: #079a4a !important;
 }
 
-
-.navbar ul li:hover{
-    background-color: #333131;
+.navbar ul li:hover {
+    background-color: #056933;
     color: white;
 }
 
@@ -18,4 +17,7 @@
     color: grey;
 }
 
- 
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+    background-color: #056933;
+}
