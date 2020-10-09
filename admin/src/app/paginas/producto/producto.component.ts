@@ -218,7 +218,10 @@ export class ProductoComponent implements OnInit {
     const buffer = new Array();
     const random = uuid(null, buffer, 0).join('').slice(0, 13);
     this.producto.codigo_barras = random;
-    JsBarcode('#barcode', random);
+    JsBarcode('#barcode', random, {
+      format: "EAN13",
+      textMargin: 0
+    });
   }
 
   async filtrarTabla(event?) {
