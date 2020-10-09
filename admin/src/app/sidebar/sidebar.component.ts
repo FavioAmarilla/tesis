@@ -50,7 +50,7 @@ export const ROUTES: RouteInfo[] = [
         children: [
             { url: '/dashboard/geografia/pais', titulo: 'Paises', icono: 'fas fa-globe' },
             { url: '/dashboard/geografia/ciudad', titulo: 'Ciudades', icono: 'fas fa-city' },
-            { url: '/dashboard/geografia/barrio', titulo: 'Barrio', icono: 'fas fa-map-marker-alt' },
+            { url: '/dashboard/geografia/barrio', titulo: 'Barrios', icono: 'fas fa-map-marker-alt' },
         ]
     },
     {

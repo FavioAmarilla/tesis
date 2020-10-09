@@ -16,6 +16,9 @@ span.sidebar-mini-icon {
   padding-left: 10px;
   border-left: 4px solid transparent;
   display: block;
+  text-transform: capitalize !important;
+  font-size: 13px;
+  color: #b8c7ce;
 }
 
 .nav .menu-class.active a.menu-item {
@@ -36,7 +39,9 @@ span.sidebar-mini-icon {
 }
 
 .nav .menu-class .collapse .nav li a {
+  text-transform: capitalize !important;
   color: #859297 !important;
+  font-size: 13px;
 }
 
 .nav .menu-class .collapse .nav li:hover a {
