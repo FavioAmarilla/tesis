@@ -1,7 +1,7 @@
 <div class="product">
   <div class="m-2">
     <a [routerLink]="['/producto', producto.slug]" class="img-prod">
-      <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="230" style="width: 100%;">
+      <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="210" style="width: 100%;">
       <!-- <span class="status">30%</span> -->
       <div class="overlay"></div>
     </a>
