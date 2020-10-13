@@ -87,10 +87,10 @@ class PaisController extends BaseController
         $pais = Pais::find($id);
 
         if (is_object($pais)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $pais);
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $pais, 200);
         }
 
-        return $this->sendResponse(false, 'No se encontro la Pais', null);
+        return $this->sendResponse(false, 'No se encontro la Pais', null, 404);
     }
 
     /**
