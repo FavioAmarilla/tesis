@@ -18,8 +18,9 @@
     <div class="collapse navbar-collapse justify-content-end" id="collapseExample" [ngbCollapse]="isCollapsed">
       <ul class="navbar-nav usuario" *ngIf="usuario">
         <li class="nav-item btn-rotate" ngbDropdown placement="bottom-left">
-          <a class="nav-link" ngbDropdownToggle id="navbarDropdownMenuLink" style="color: white;">
-            <img src="{{ url + '/user/getImage/' + usuario.imagen }}" class="img-fluid img-thumbnail" width="35" height="35">
+          <a class="d-flex align-items-center justify-content-between nav-link" ngbDropdownToggle id="navbarDropdownMenuLink" style="color: white;">
+            <img *ngIf="usuario.imagen" src="{{ url + '/user/getImage/' + usuario.imagen }}" class="img-fluid img-thumbnail" width="35" height="35">
+            <ngx-avatar *ngIf="!usuario.imagen" class="mr-2" [name]="usuario.nombre_completo" [round]="true" [bgColor]="'#FFF'" [fgColor]="'#079a4a'" size="35" textSizeRatio="2"></ngx-avatar>
             {{ usuario.nombre_completo}} &nbsp;
           </a>
           <div ngbDropdownMenu aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu dropdown-menu-right">

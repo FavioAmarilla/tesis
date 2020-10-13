@@ -4,8 +4,10 @@ import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './navbar.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { AvatarModule } from 'ngx-avatar';
+
 @NgModule({
-    imports: [ RouterModule, CommonModule, NgbModule ],
+    imports: [ RouterModule, CommonModule, NgbModule, AvatarModule ],
     declarations: [ NavbarComponent ],
     exports: [ NavbarComponent ]
 })
