@@ -21,7 +21,7 @@ class ApiAuthMiddleware extends BaseController
         $logueado = $jwt->checkToken($token);
 
         if ($logueado) {
-            $request->request->add(['usuario' => $logueado]);
+            $request->request->add(['token' => $logueado]);
             return $next($request);
         } else {
             return $this->sendResponse(false, 'Usuario no logueado', null, 400);

@@ -273,15 +273,16 @@ class PedidoController extends BaseController
                 if ($pagoIt->save()) {
                     switch ($pago['tipo']) {
                         case 'ATCD':
-                            $usuario = $request->usuario;
+                            $token = $request->token;
+                            $usuario = $token->usuario;
 
                             $tarjeta = new UserTarjetas();
-                            $tarjeta->id_usuario = $usuario->sub;
+                            $tarjeta->id_usuario = $usuario->identificador;
 
                             if ($tarjeta->save()) {
                                 $request->request->add([
                                     'pedido'    => $pedido->identificador,
-                                    'user_id'   => $usuario->sub,
+                                    'user_id'   => $usuario->identificador,
                                     'card_id'   => $tarjeta->identificador,
                                     'email'     => $usuario->email,
                                     'celular'   => $usuario->celular
@@ -293,11 +294,12 @@ class PedidoController extends BaseController
 
                             return $this->sendResponse(false, 'Ha ocurrido un problema al intentar registrar la tarjeta', null, 500);
                         case 'PWTK':
-                            $usuario = $request->usuario;
+                            $token = $request->token;
+                            $usuario = $token->usuario;
 
                             $request->request->add([
                                 'pedido'    => $pedido->identificador,
-                                'user_id' => $usuario->sub,
+                                'user_id' => $usuario->identificador,
                                 'card_id' => $pago['card_id'],
                                 'amount' => $total,
                                 'shop_process_id' => $pagoIt->referencia
@@ -467,14 +469,15 @@ class PedidoController extends BaseController
                     if ($pagoIt->save()) {
                         switch ($pago['tipo']) {
                             case 'ATCD':
-                                $usuario = $request->usuario;
+                                $token = $request->token;
+                                $usuario = $token->usuario;
 
                                 $tarjeta = new UserTarjetas();
-                                $tarjeta->id_usuario = $usuario->sub;
+                                $tarjeta->id_usuario = $usuario->identificador;
 
                                 if ($tarjeta->save()) {
                                     $request->request->add([
-                                        'user_id' => $usuario->sub,
+                                        'user_id' => $usuario->identificador,
                                         'card_id' => $tarjeta->identificador,
                                         'email' => $usuario->email,
                                         'celular' => $usuario->celular
@@ -486,10 +489,11 @@ class PedidoController extends BaseController
 
                                 return $this->sendResponse(false, 'Ha ocurrido un problema al intentar registrar la tarjeta', null, 500);
                             case 'PWTK':
-                                $usuario = $request->usuario;
+                                $token = $request->token;
+                                $usuario = $token->usuario;
 
                                 $request->request->add([
-                                    'user_id' => $usuario->sub,
+                                    'user_id' => $usuario->identificador,
                                     'card_id' => $pago['card_id'],
                                     'amount' => $total,
                                     'shop_process_id' => $pagoIt->referencia
@@ -689,12 +693,14 @@ class PedidoController extends BaseController
 
             if ($pago) {
                 if ($pago->estado != 'PAGADO') {
-                    $usuario = $request->usuario;
-                    $tarjeta = UserTarjetas::where('id_usuario', '=', $usuario->sub)->last();
+                    $token = $request->token;
+                    $usuario = $token->usuario;
+
+                    $tarjeta = UserTarjetas::where('id_usuario', '=', $usuario->identificador)->last();
         
                     if ($tarjeta) {
                         $request->request->add([
-                            'user_id' => $usuario->sub,
+                            'user_id' => $usuario->identificador,
                             'card_id' => $tarjeta->identificador,
                             'amount' => $pago->total,
                             'shop_process_id' => $pago->referencia
