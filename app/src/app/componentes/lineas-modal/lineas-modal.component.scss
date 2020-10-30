@@ -1,3 +1,28 @@
 .modal-content {
     border: none !important;
 }
+
+.list-group-item {
+    cursor: pointer !important;
+    border: 0px;
+    border-radius: 0px;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    border: 1px solid #f0f0f0;
+    margin: 3px;
+    border-radius: 15px;
+  }
+  
+  .list-group-item:focus,
+  .list-group-item:hover {
+    background-color: #079a4a !important;
+    border-color: #079a4a !important;
+    color: white !important;
+    border-radius: 15px;
+  }
+  
+  .list-group-item.active {
+    background-color: #079a4a !important;
+    border-color: #079a4a !important;
+    border-radius: 15px;
+  }

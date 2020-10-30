@@ -17,7 +17,7 @@ export class SlideImagePipe implements PipeTransform {
   transform(img: any): any {
     if (!img) return 'https://via.placeholder.com/150';
 
-    const style = `background-image: url('${IMAGE_API}${img}')`;
+    const style = `background-image: url('${IMAGE_API}${img}');background-repeat: no-repeat;background-size: cover;`;
 
     return this.domSanitizer.bypassSecurityTrustStyle(style);
   }
