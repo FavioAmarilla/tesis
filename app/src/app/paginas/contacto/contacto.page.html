@@ -1,11 +1,21 @@
 <app-header [cargando]="cargando"></app-header>
 
 <ion-content>
-  <section class="ftco-section contact-section" style="padding-top: 40px;">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<div class="container d-flex">
+				<li class="breadcrumb-item"><a [routerLink]="['/']">INICIO</a></li>
+				<li class="breadcrumb-item active" aria-current="page">CONTACTO</li>
+			</div>
+		</ol>
+	</nav>
+
+
+  <section class="ftco-section contact-section">
     <div class="container">
 
       <div class="row">
-        <div class="col-sm-12 col-md-6 bg-light pt-5 pb-5 pl-5 pr-0">
+        <div class="col-sm-12 col-md-6 bg-light pt-5 pb-5 pl-5 pr-0 form">
           <form action="#" class="bg-white p-5">
             <div class="form-group">
               <input type="text" class="form-control" placeholder="Nombre">
@@ -25,7 +35,7 @@
           </form>
         </div>
 
-        <div class="col-sm-12 col-md-6 bg-light pt-5 pb-5 pl-5 pr-5">
+        <div class="col-sm-12 col-md-6 bg-light pt-5 pb-5 pl-5 pr-5 map">
           <div id='mapa'></div>
         </div>
 

@@ -1,13 +1,16 @@
 <app-header [cargando]="cargando"></app-header>
 
 <ion-content>
+  <nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<div class="container d-flex">
+				<li class="breadcrumb-item"><a [routerLink]="['/']">INICIO</a></li>
+				<li class="breadcrumb-item active" aria-current="page">CARRITO DE COMPRAS</li>
+			</div>
+		</ol>
+	</nav>
 
   <ion-grid class="container">
-    <ion-row>
-      <ion-col size="12" class="border-bottom">
-        <ion-title color="primary">Carrito</ion-title>
-      </ion-col>
-    </ion-row>
     <ion-row *ngIf="listaCarrito && listaCarrito.length">
       <ion-col size="12">
         <div class="cart-list">
@@ -76,12 +79,13 @@
 
     <ion-row *ngIf="!listaCarrito || !listaCarrito.length" class="text-center">
       <ion-col size="12" class="text-center">
-        <h5>No se encontraron productos en el carrito</h5>
+        <img src="assets/images/sin-datos.png" width="150" height="150">
+        <h4>No se encontraron productos en el carrito</h4>
       </ion-col>
     </ion-row>
 
 
-    <ion-row>
+    <ion-row *ngIf="listaCarrito && listaCarrito.length">
       <ion-col size="12">
         <span class="float-right">
           <p (click)="(listaCarrito && listaCarrito.length) ? pedido() : false;">

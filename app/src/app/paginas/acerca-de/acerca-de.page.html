@@ -1,10 +1,19 @@
 <app-header [cargando]="cargando"></app-header>
 
 <ion-content>
-	<section class="ftco-section" style="padding-top: 40px;">
-		<section class="container ftco-no-pb ftco-no-pt bg-light">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<div class="container d-flex">
+				<li class="breadcrumb-item"><a [routerLink]="['/']">INICIO</a></li>
+				<li class="breadcrumb-item active" aria-current="page">ACERCA DE</li>
+			</div>
+		</ol>
+	</nav>
+
+	<section class="ftco-section">
+		<section class="container ftco-no-pb ftco-no-pt bg-light" style="border-radius: 15px;">
 			<div class="row">
-				<div class="text-justify">
+				<div class="text-justify" style="padding: 40px;">
 					<p>El Supermercado Ypacaraí está ubicado en la ciudad de Ypacaraí es una unidad
 						operativa
 						del grupo Trade Group S.A., es un establecimiento comercial de venta al por menor
@@ -26,6 +35,7 @@
 			</div>
 		</section>
 	</section>
+	<br><br>
 
 	<app-footer></app-footer>
 </ion-content>
