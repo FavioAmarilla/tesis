@@ -154,3 +154,9 @@ export interface TipoImpuesto {
     descipcion: string,
     valor: number
 }
+
+export interface PreguntaFrecuente {
+    identificador?: number;
+    pregunta?: number;
+    respuesta?: string;
+}

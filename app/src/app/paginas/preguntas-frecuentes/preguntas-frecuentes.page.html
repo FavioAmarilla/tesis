@@ -1,0 +1,30 @@
+<app-header [cargando]="cargando"></app-header>
+
+<ion-content>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <div class="container d-flex">
+        <li class="breadcrumb-item"><a [routerLink]="['/']">INICIO</a></li>
+        <li class="breadcrumb-item active" aria-current="page">PREGUNTAS FRECUENTES</li>
+      </div>
+    </ol>
+  </nav>
+
+  <section class="ftco-section">
+    <section class="container ftco-no-pb ftco-no-pt bg-light" style="border-radius: 15px;">
+      <div class="row">
+        <div class="text-justify" style="padding: 40px;">
+          <div class="row">
+            <div class="col-md-12" *ngFor="let pregunta of preguntas">
+              <strong>{{ pregunta.pregunta }}</strong>
+              <p>{{ pregunta.respuesta }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+  <br><br>
+
+  <app-footer></app-footer>
+</ion-content>

@@ -28,6 +28,7 @@ const routes: Routes = [
       { path: 'mi-cuenta', loadChildren: () => import('../mi-cuenta/mi-cuenta.module').then(m => m.MiCuentaPageModule), canActivate: [AuthGuard]},
       { path: 'recuperar-contrasenha', loadChildren: () => import('../recuperar-contrasenha/recuperar-contrasenha.module').then(m => m.RecuperarContrasenhaPageModule) },
       { path: 'recuperar-contrasenha/:token', loadChildren: () => import('../recuperar-contrasenha/recuperar-contrasenha.module').then(m => m.RecuperarContrasenhaPageModule) },
+      { path: 'preguntas-frecuentes', loadChildren: () => import('../preguntas-frecuentes/preguntas-frecuentes.module').then(m => m.PreguntasFrecuentesPageModule) }
     ]
   }
 ];
