@@ -1,0 +1,170 @@
+<div class="main-panel">
+    <div class="content">
+
+        <app-breadcrumb></app-breadcrumb>
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card" *ngIf="!form">
+                    <div class="card-header">
+                        <button class="btn btn-primary pull-right" (click)="mostrarFormulario(true, 'INS', true)"
+                            [disabled]="cargando">Agregar</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                    <th>Descripción</th>
+                                    <th>Código</th>
+                                    <th>Descuento (%)</th>
+                                    <th>Fecha Desde</th>
+                                    <th>Fecha Hasta</th>
+                                    <th>Usado</th>
+                                    <th class="text-right">Opciones</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" name="descripcion"
+                                                placeholder="Descripción" [(ngModel)]="filtrosTabla.descripcion"
+                                                (keyup.enter)="filtrarTabla($event)">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="codigo"
+                                                placeholder="Código" [(ngModel)]="filtrosTabla.codigo"
+                                                (keyup.enter)="filtrarTabla($event)">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="porc_descuento"
+                                                placeholder="Descuento (%)" [(ngModel)]="filtrosTabla.porc_descuento"
+                                                (keyup.enter)="filtrarTabla($event)">
+                                        </td>
+                                        <td>
+                                            <input type="date" class="form-control" name="fecha_desde"
+                                                placeholder="Fecha Desde" [(ngModel)]="filtrosTabla.fecha_desde"
+                                                (change)="filtrarTabla($event)">
+                                        </td>
+                                        <td>
+                                            <input type="date" class="form-control" name="fecha_hasta"
+                                                placeholder="Fecha Hasta" [(ngModel)]="filtrosTabla.fecha_hasta"
+                                                (change)="filtrarTabla($event)">
+                                        </td>
+                                        <td>
+                                            <select name="usado" class="form-control" [(ngModel)]="filtrosTabla.usado"
+                                                (change)="filtrarTabla($event)">
+                                                <option value="null">-- SELECCIONAR --</option>
+                                                <option value="S">SI</option>
+                                                <option value="N">NO</option>
+                                            </select>
+                                        </td>
+                                        <td class="text-right">
+                                            <button class="btn btn-sm btn-danger" (click)="filtrarTabla(null)"><i
+                                                    class="fas fa-times"></i></button> &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr
+                                        *ngFor="let row of listaCupones | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
+                                        <td>{{ row.descripcion }}</td>
+                                        <td>{{ row.codigo }}</td>
+                                        <td>{{ row.porc_desc }}</td>
+                                        <td>{{ row.fecha_desde | date: 'dd/MM/yyyy' }}</td>
+                                        <td>{{ row.fecha_hasta | date: 'dd/MM/yyyy' }}</td>
+                                        <td>{{ row.usado }}</td>
+                                        <td class="text-right">
+                                            <button class="btn btn-sm btn-warning"
+                                                (click)="obtenerCupon(row.identificador)"> <i
+                                                    class="fas fa-edit"></i> </button> &nbsp;
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div *ngIf="!cargando && !form && accion == 'LST'">
+                                <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="listaCupones"
+                                    [porPagina]="porPagina" [total]="total"></app-paginacion>
+                            </div>
+                            <div class="row justify-content-center align-items-center col-md-12">
+                                <span *ngIf="cargando && !form && accion == 'LST'"
+                                    class="spinner-border spinner-border-lg spinner-table" role="status"
+                                    aria-hidden="true"></span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <!-- SECCION FORMULARIO -->
+                <div class="card" *ngIf="form">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <form #formulario="ngForm">
+                                <div class="form-group">
+                                    <label for="descripcion">Descripción</label>
+                                    <input type="text" class="form-control" placeholder="Descripción" name="descripcion"
+                                        [(ngModel)]="cupon.descripcion" required #descripcion="ngModel">
+                                    <span class="invalid-feedback d-block"
+                                        *ngIf="!descripcion.valid && descripcion.touched">Este
+                                        campo es
+                                        obligatorio</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="codigo">Código</label>
+                                    <input type="text" class="form-control" placeholder="Código" name="codigo"
+                                        [(ngModel)]="cupon.codigo" required #codigo="ngModel">
+                                    <span class="invalid-feedback d-block" *ngIf="!codigo.valid && codigo.touched">Este
+                                        campo
+                                        es obligatorio</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="porc_desc">Descuento (%)</label>
+                                    <input type="text" class="form-control" placeholder="Descuento (%)" name="porc_desc"
+                                        [(ngModel)]="cupon.porc_desc" required #porc_desc="ngModel">
+                                    <span class="invalid-feedback d-block"
+                                        *ngIf="!porc_desc.valid && porc_desc.touched">Este campo
+                                        es obligatorio</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Fecha Desde">Fecha Desde</label>
+                                    <input type="date" class="form-control" placeholder="Fecha Desde" name="fecha_desde"
+                                        [(ngModel)]="cupon.fecha_desde" required #fecha_desde="ngModel">
+                                    <span class="invalid-feedback d-block"
+                                        *ngIf="!fecha_desde.valid && fecha_desde.touched">Este campo es
+                                        obligatorio</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Fecha Hasta">Fecha Hasta</label>
+                                    <input type="date" class="form-control" placeholder="Fecha Hasta" name="fecha_hasta"
+                                        [(ngModel)]="cupon.fecha_hasta" required #fecha_hasta="ngModel">
+                                    <span class="invalid-feedback d-block"
+                                        *ngIf="!fecha_hasta.valid && fecha_hasta.touched">Este campo es
+                                        obligatorio</span>
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" (click)="registrar()"
+                                        *ngIf="accion == 'INS'" [disabled]="formulario.invalid">
+                                        <span *ngIf="cargando && accion == 'INS'"
+                                            class="spinner-border  spinner-border-sm" role="status"
+                                            aria-hidden="true"></span> Guardar
+                                    </button>
+                                    <button type="button" class="btn btn-primary" (click)="actualizar()"
+                                        *ngIf="accion == 'UPD'" [disabled]="formulario.invalid">
+                                        <span *ngIf="cargando && accion == 'UPD'"
+                                            class="spinner-border  spinner-border-sm" role="status"
+                                            aria-hidden="true"></span> Actualizar
+                                    </button>
+                                    <button type="button" class="btn btn-danger"
+                                        (click)="mostrarFormulario(false, 'LST')">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <footer-cmp></footer-cmp>
+</div>

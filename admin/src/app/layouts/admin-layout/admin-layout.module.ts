@@ -39,6 +39,7 @@ import { EcParametrosComponent  } from 'app/paginas/ec-parametros/ec-parametros.
 import { TimbradoComponent } from 'app/paginas/timbrado/timbrado.component';
 import { ClienteComponent } from 'app/paginas/cliente/cliente.component';
 import { PedidosComponent } from 'app/paginas/pedidos/pedidos.component';
+import { CuponDescuentoComponent } from 'app/paginas/cupon-descuento/cupon-descuento.component';
 
 @NgModule({
   imports: [
@@ -78,7 +79,8 @@ import { PedidosComponent } from 'app/paginas/pedidos/pedidos.component';
     EcParametrosComponent,
     TimbradoComponent,
     ClienteComponent,
-    PedidosComponent
+    PedidosComponent,
+    CuponDescuentoComponent
   ]
 })
 

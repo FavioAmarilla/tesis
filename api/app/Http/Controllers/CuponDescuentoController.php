@@ -30,9 +30,9 @@ class CuponDescuentoController extends BaseController
             $query->where('codigo', '=', $codigo);
         }
 
-        $porc_descuento = $request->query('porc_descuento');
-        if ($porc_descuento) {
-            $query->where('porc_descuento', '=', $porc_descuento);
+        $porc_desc = $request->query('porc_desc');
+        if ($porc_desc) {
+            $query->where('porc_desc', '=', $porc_desc);
         }
 
         $fecha_desde = $request->query('fecha_desde');
@@ -77,14 +77,14 @@ class CuponDescuentoController extends BaseController
     public function store(Request $request)
     {
         $descripcion = $request->input("descripcion");
-        $porc_descuento = $request->input("porc_descuento");
+        $porc_desc = $request->input("porc_desc");
         $codigo = $request->input("codigo");
         $fecha_desde = $request->input("fecha_desde");
         $fecha_hasta = $request->input("fecha_hasta");
 
         $validator = Validator::make($request->all(), [
             'descripcion'=> 'required',
-            'porc_descuento'=> 'required',
+            'porc_desc'=> 'required',
             'codigo'=> 'required',
             'fecha_desde'=> 'required',
             'fecha_hasta'=> 'required'
@@ -96,7 +96,7 @@ class CuponDescuentoController extends BaseController
 
         $cupon = new CuponDescuento();
         $cupon->descripcion = $descripcion;
-        $cupon->porc_descuento = $porc_descuento;
+        $cupon->porc_desc = $porc_desc;
         $cupon->codigo = $codigo;
         $cupon->fecha_desde = $fecha_desde;
         $cupon->fecha_hasta = $fecha_hasta;
@@ -116,10 +116,10 @@ class CuponDescuentoController extends BaseController
      */
     public function show($id)
     {
-        $pais = Pais::find($id);
+        $cupon = CuponDescuento::find($id);
 
-        if (is_object($pais)) {
-            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $pais, 200);
+        if (is_object($cupon)) {
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $cupon, 200);
         }
         
         return $this->sendResponse(false, 'No se encontro el Cupon de Descuento', null, 404);
@@ -145,11 +145,15 @@ class CuponDescuentoController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $nombre = $request->input("nombre");
+        $descripcion = $request->input("descripcion");
+        $porc_desc = $request->input("porc_desc");
+        $codigo = $request->input("codigo");
+        $fecha_desde = $request->input("fecha_desde");
+        $fecha_hasta = $request->input("fecha_hasta");
 
         $validator = Validator::make($request->all(), [
             'descripcion'=> 'required',
-            'porc_descuento'=> 'required',
+            'porc_desc'=> 'required',
             'codigo'=> 'required',
             'fecha_desde'=> 'required',
             'fecha_hasta'=> 'required'
@@ -160,14 +164,14 @@ class CuponDescuentoController extends BaseController
         }
 
         $cupon = new CuponDescuento();
-        if ($pais) {
+        if ($cupon) {
             $cupon->descripcion = $descripcion;
-            $cupon->porc_descuento = $porc_descuento;
+            $cupon->porc_desc = $porc_desc;
             $cupon->codigo = $codigo;
             $cupon->fecha_desde = $fecha_desde;
             $cupon->fecha_hasta = $fecha_hasta;
 
-            if ($pais->save()) {
+            if ($cupon->save()) {
                 return $this->sendResponse(true, 'Cupon de Descuento actualizado', $cupon, 200);
             }
             

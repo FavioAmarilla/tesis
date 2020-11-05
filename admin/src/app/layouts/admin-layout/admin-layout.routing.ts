@@ -25,6 +25,7 @@ import { EcParametrosComponent } from 'app/paginas/ec-parametros/ec-parametros.c
 import { TimbradoComponent } from 'app/paginas/timbrado/timbrado.component';
 import { ClienteComponent } from 'app/paginas/cliente/cliente.component';
 import { PedidosComponent } from 'app/paginas/pedidos/pedidos.component';
+import { CuponDescuentoComponent } from 'app/paginas/cupon-descuento/cupon-descuento.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -41,10 +42,10 @@ export const AdminLayoutRoutes: Routes = [
                 data: { breadcrumb: 'Configuración' },
                 canActivateChild: [PermisosGuard],
                 children: [
-                    { path: '', redirectTo: 'empresas' },
-                    { path: 'empresas', component: EmpresaComponent, data: { breadcrumb: 'Empresas' } },
+                    { path: '', redirectTo: 'empresa' },
+                    { path: 'empresa', component: EmpresaComponent, data: { breadcrumb: 'Empresas' } },
                     { path: 'sucursal', component: SucursalComponent, data: { breadcrumb: 'Sucursal' } },
-                    { path: 'banners', component: CarruselComponent, data: { breadcrumb: 'Carrusel' } },
+                    { path: 'banner', component: CarruselComponent, data: { breadcrumb: 'Carrusel' } },
                     { path: 'parametros-ec', component: EcParametrosComponent, data: { breadcrumb: 'Parametros Ec.' } },
                 ]
             },
@@ -57,7 +58,8 @@ export const AdminLayoutRoutes: Routes = [
                     { path: 'punto-emision', component: PuntosEmisionComponent, data: { breadcrumb: 'Punto de Emisión' } },
                     { path: 'timbrado', component: TimbradoComponent, data: { breadcrumb: 'Timbrados' } },
                     { path: 'cliente', component: ClienteComponent, data: { breadcrumb: 'Clientes' } },
-                    { path: 'pedido', component: PedidosComponent, data: { breadcrumb: 'Pedidos' } }
+                    { path: 'pedido', component: PedidosComponent, data: { breadcrumb: 'Pedidos' } },
+                    { path: 'cupon-descuento', component: CuponDescuentoComponent, data: { breadcrumb: 'Cupones de Descuento' } }
                 ]
             },
             {
@@ -66,9 +68,9 @@ export const AdminLayoutRoutes: Routes = [
                 canActivateChild: [PermisosGuard],
                 children: [
                     { path: '', component: ProductoComponent, data: { breadcrumb: 'Todos los productos' } },
-                    { path: 'marcas', component: MarcaComponent, data: { breadcrumb: 'Marcas' } },
+                    { path: 'marca', component: MarcaComponent, data: { breadcrumb: 'Marcas' } },
                     { path: 'linea-producto', component: LineaProductoComponent, data: { breadcrumb: 'Lineas de producto' } },
-                    { path: 'tipos-impuesto', component: TiposImpuestoComponent, data: { breadcrumb: 'Tipos de impuesto' } },
+                    { path: 'tipo-impuesto', component: TiposImpuestoComponent, data: { breadcrumb: 'Tipos de impuesto' } },
                 ]
             },
             {
@@ -87,9 +89,9 @@ export const AdminLayoutRoutes: Routes = [
                 data: { breadcrumb: 'Acceso' },
                 canActivateChild: [PermisosGuard],
                 children: [
-                    { path: '', redirectTo: 'usuarios' },
-                    { path: 'usuarios', component: UsuariosComponent, data: { breadcrumb: 'Usuarios' } },
-                    { path: 'roles', component: RolesComponent, data: { breadcrumb: 'Roles' } }
+                    { path: '', redirectTo: 'usuario' },
+                    { path: 'usuario', component: UsuariosComponent, data: { breadcrumb: 'Usuarios' } },
+                    { path: 'rol', component: RolesComponent, data: { breadcrumb: 'Roles' } }
                 ]
             },
             {

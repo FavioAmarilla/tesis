@@ -18,9 +18,9 @@ export const ROUTES: RouteInfo[] = [
         titulo: 'Configuración',
         icono: 'fa fa-laptop',
         children: [
-            { url: '/dashboard/configuracion/empresas', titulo: 'Empresas', icono: 'fas fa-building' },
+            { url: '/dashboard/configuracion/empresa', titulo: 'Empresas', icono: 'fas fa-building' },
             { url: '/dashboard/configuracion/sucursal', titulo: 'Sucursales', icono: 'fas fa-building' },
-            { url: '/dashboard/configuracion/banners', titulo: 'Banners', icono: 'far fa-window-restore' },
+            { url: '/dashboard/configuracion/banner', titulo: 'Banners', icono: 'far fa-window-restore' },
             { url: '/dashboard/configuracion/parametro-ec', titulo: 'Parametros Ec.', icono: 'far fa-window-restore' },
         ]
     },
@@ -32,15 +32,16 @@ export const ROUTES: RouteInfo[] = [
             { url: '/dashboard/ventas/timbrado', titulo: 'Timbrados', icono: 'fas fa-list-ol' },
             { url: '/dashboard/ventas/cliente', titulo: 'Clientes', icono: 'fas fa-user-friends' },
             { url: '/dashboard/ventas/pedido', titulo: 'Pedidos', icono: 'fas fa-cart' },
+            { url: '/dashboard/ventas/cupon-descuento', titulo: 'Cupon de Descuentos', icono: 'fas fa-tag' },
         ]
     },
     {
         titulo: 'Productos',
         icono: 'fa fa-barcode',
         children: [
-            { url: '/dashboard/productos', titulo: 'Todos los productos', icono: 'fas fa-barcode' },
-            { url: '/dashboard/productos/marcas', titulo: 'Marcas', icono: 'fas fa-tags' },
-            { url: '/dashboard/productos/tipos-impuesto', titulo: 'Tipos de impuesto', icono: 'fas fa-percent' },
+            { url: '/dashboard/producto', titulo: 'Todos los productos', icono: 'fas fa-barcode' },
+            { url: '/dashboard/productos/marca', titulo: 'Marcas', icono: 'fas fa-tags' },
+            { url: '/dashboard/productos/tipo-impuesto', titulo: 'Tipos de impuesto', icono: 'fas fa-percent' },
             { url: '/dashboard/productos/linea-producto', titulo: 'Lineas de productos', icono: 'fas fa-th-list' },
         ]
     },
@@ -57,8 +58,8 @@ export const ROUTES: RouteInfo[] = [
         titulo: 'Acceso',
         icono: 'fa fa-folder',
         children: [
-            { url: '/dashboard/acceso/usuarios', titulo: 'Usuarios', icono: 'fas fa-users' },
-            { url: '/dashboard/acceso/roles', titulo: 'Roles', icono: 'fas fa-key' },
+            { url: '/dashboard/acceso/usuario', titulo: 'Usuarios', icono: 'fas fa-users' },
+            { url: '/dashboard/acceso/rol', titulo: 'Roles', icono: 'fas fa-key' },
         ]
     }
 ];
@@ -85,17 +86,17 @@ export class SidebarComponent implements OnInit {
         this.obtenerUsuario();
 
         this.servicioUsuario.loginEmitter
-        .subscribe(response => {
-            this.usuario = response;
-            if (this.usuario) { this.comprobarPermisos(); }
-            // console.log('loginEmitter: ', this.usuario);
-        });
+            .subscribe(response => {
+                this.usuario = response;
+                if (this.usuario) { this.comprobarPermisos(); }
+                // console.log('loginEmitter: ', this.usuario);
+            });
 
         this.servicioUsuario.logoutEmitter
-        .subscribe(event => {
-            this.obtenerUsuario();
-            // console.log('logoutEmitter: ', this.usuario);
-        });
+            .subscribe(event => {
+                this.obtenerUsuario();
+                // console.log('logoutEmitter: ', this.usuario);
+            });
     }
 
     async obtenerUsuario() {

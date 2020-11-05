@@ -13,7 +13,7 @@ class CuponDescuento extends Model
     protected $fillable =[
         'identificador',
         'descripcion',
-        'porc_descuento',
+        'porc_desc',
         'codigo',
         'fecha_desde',
         'fecha_hasta',
