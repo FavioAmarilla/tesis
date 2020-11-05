@@ -40,6 +40,7 @@ import { TimbradoComponent } from 'app/paginas/timbrado/timbrado.component';
 import { ClienteComponent } from 'app/paginas/cliente/cliente.component';
 import { PedidosComponent } from 'app/paginas/pedidos/pedidos.component';
 import { CuponDescuentoComponent } from 'app/paginas/cupon-descuento/cupon-descuento.component';
+import { PreguntasComponent } from 'app/paginas/preguntas/preguntas.component';
 
 @NgModule({
   imports: [
@@ -80,7 +81,8 @@ import { CuponDescuentoComponent } from 'app/paginas/cupon-descuento/cupon-descu
     TimbradoComponent,
     ClienteComponent,
     PedidosComponent,
-    CuponDescuentoComponent
+    CuponDescuentoComponent,
+    PreguntasComponent
   ]
 })
 

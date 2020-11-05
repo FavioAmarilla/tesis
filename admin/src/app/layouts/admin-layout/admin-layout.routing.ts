@@ -26,6 +26,7 @@ import { TimbradoComponent } from 'app/paginas/timbrado/timbrado.component';
 import { ClienteComponent } from 'app/paginas/cliente/cliente.component';
 import { PedidosComponent } from 'app/paginas/pedidos/pedidos.component';
 import { CuponDescuentoComponent } from 'app/paginas/cupon-descuento/cupon-descuento.component';
+import { PreguntasComponent } from 'app/paginas/preguntas/preguntas.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -47,6 +48,7 @@ export const AdminLayoutRoutes: Routes = [
                     { path: 'sucursal', component: SucursalComponent, data: { breadcrumb: 'Sucursal' } },
                     { path: 'banner', component: CarruselComponent, data: { breadcrumb: 'Carrusel' } },
                     { path: 'parametros-ec', component: EcParametrosComponent, data: { breadcrumb: 'Parametros Ec.' } },
+                    { path: 'pregunta', component: PreguntasComponent, data: { breadcrumb: 'Preguntas Frecuentes' } },
                 ]
             },
             {

@@ -22,6 +22,7 @@ export const ROUTES: RouteInfo[] = [
             { url: '/dashboard/configuracion/sucursal', titulo: 'Sucursales', icono: 'fas fa-building' },
             { url: '/dashboard/configuracion/banner', titulo: 'Banners', icono: 'far fa-window-restore' },
             { url: '/dashboard/configuracion/parametro-ec', titulo: 'Parametros Ec.', icono: 'far fa-window-restore' },
+            { url: '/dashboard/configuracion/pregunta', titulo: 'Preguntas Frecuentes', icono: 'fas fa-question-circle' },
         ]
     },
     {

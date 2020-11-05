@@ -112,3 +112,4 @@ Route::group(['prefix' => 'cliente'], function () {
 });
 
 Route::resource('comprobante', 'ComprobanteController');
+Route::resource('pregunta', 'EcPreguntaController');
