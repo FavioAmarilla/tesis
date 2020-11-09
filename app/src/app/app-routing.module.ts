@@ -4,7 +4,8 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   // { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '', loadChildren: './paginas/mobile-menu/mobile-menu.module#MobileMenuPageModule' },
-  { path: '**', redirectTo: ''},
+  { path: '**', redirectTo: ''},  { path: 'condicion-uso', loadChildren: './paginas/condicion-uso/condicion-uso.module#CondicionUsoPageModule' },
+
 
 ];
 
