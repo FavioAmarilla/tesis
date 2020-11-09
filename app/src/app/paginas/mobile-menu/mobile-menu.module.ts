@@ -24,12 +24,14 @@ const routes: Routes = [
       { path: 'producto/:slug', loadChildren: () => import('../producto/producto.module').then(m => m.ModuloPaginaProducto) },
       { path: 'pedido', loadChildren: () => import('../pedido/pedido.module').then(m => m.PedidoPageModule) },
       { path: 'pedido/finalizado', loadChildren: () => import('../pedido-finalizado/pedido-finalizado.module').then(m => m.PedidoFinalizadoPageModule) },
-      { path: 'pedido-lista', loadChildren: () => import('../pedido-listado/pedido-listado.module').then(m => m.PedidoListadoPageModule), canActivate: [AuthGuard]},
-      { path: 'mi-cuenta', loadChildren: () => import('../mi-cuenta/mi-cuenta.module').then(m => m.MiCuentaPageModule), canActivate: [AuthGuard]},
+      { path: 'pedido-lista', loadChildren: () => import('../pedido-listado/pedido-listado.module').then(m => m.PedidoListadoPageModule), canActivate: [AuthGuard] },
+      { path: 'mi-cuenta', loadChildren: () => import('../mi-cuenta/mi-cuenta.module').then(m => m.MiCuentaPageModule), canActivate: [AuthGuard] },
       { path: 'recuperar-contrasenha', loadChildren: () => import('../recuperar-contrasenha/recuperar-contrasenha.module').then(m => m.RecuperarContrasenhaPageModule) },
       { path: 'recuperar-contrasenha/:token', loadChildren: () => import('../recuperar-contrasenha/recuperar-contrasenha.module').then(m => m.RecuperarContrasenhaPageModule) },
       { path: 'preguntas-frecuentes', loadChildren: () => import('../preguntas-frecuentes/preguntas-frecuentes.module').then(m => m.PreguntasFrecuentesPageModule) },
-      { path: 'condicion-uso', loadChildren: () => import('../condicion-uso/condicion-uso.module').then(m => m.CondicionUsoPageModule) }
+      { path: 'condicion-uso', loadChildren: () => import('../condicion-uso/condicion-uso.module').then(m => m.CondicionUsoPageModule) },
+      { path: 'medio-pago', loadChildren: () => import('../medio-pago/medio-pago.module').then(m => m.MedioPagoPageModule) },
+      { path: 'area-cobertura', loadChildren: () => import('../area-cobertura/area-cobertura.module').then(m => m.AreaCoberturaPageModule) }
     ]
   }
 ];
@@ -43,4 +45,4 @@ const routes: Routes = [
   ],
   declarations: [MobileMenuPage]
 })
-export class MobileMenuPageModule {}
+export class MobileMenuPageModule { }

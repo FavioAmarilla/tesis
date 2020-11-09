@@ -1,21 +1,16 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { environment } from 'src/environments/environment';
-
-import * as MapboxDraw from '@mapbox/mapbox-gl-draw';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import * as turf from '@turf/turf';
-import { AlertaService } from 'src/app/servicios/alerta.service';
+import { environment } from 'src/environments/environment';
 
 var mapa: any, marker, coordenadas;
 
 @Component({
-  selector: 'app-ubicacion',
-  templateUrl: './ubicacion.page.html',
-  styleUrls: ['./ubicacion.page.scss'],
+  selector: 'app-area-cobertura',
+  templateUrl: './area-cobertura.page.html',
+  styleUrls: ['./area-cobertura.page.scss'],
 })
-export class UbicacionPage implements OnInit {
+export class AreaCoberturaPage implements OnInit {
 
   public longitud = 0;
   public latitud = 0;
@@ -23,9 +18,7 @@ export class UbicacionPage implements OnInit {
   @ViewChild('map', { static: true }) map;
   @Input() coordenadas;
 
-  constructor(
-    private modalCtrl: ModalController
-  ) { }
+  constructor() { }
 
   ngOnInit() {
     if (this.coordenadas) {
@@ -101,16 +94,6 @@ export class UbicacionPage implements OnInit {
 
       coordenadas.marcador = null;
     }
-  }
-
-  cerrarModal() {
-    this.modalCtrl.dismiss({
-      coordenadas
-    });
-  }
-
-  asignarCoordenadas() {
-    this.cerrarModal();
   }
 
 }

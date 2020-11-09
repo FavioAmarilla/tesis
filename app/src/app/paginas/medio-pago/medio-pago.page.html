@@ -1,0 +1,48 @@
+<app-header [cargando]="cargando"></app-header>
+
+<ion-content>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<div class="container d-flex">
+				<li class="breadcrumb-item"><a [routerLink]="['/']">INICIO</a></li>
+				<li class="breadcrumb-item active" aria-current="page">MEDIOS DE PAGO</li>
+			</div>
+		</ol>
+	</nav>
+
+	<section class="ftco-section">
+		<section class="container ftco-no-pb ftco-no-pt bg-light" style="border-radius: 15px;">
+			<div class="row">
+				<div class="text-justify" style="padding: 40px;">
+					<div class="row">
+						<strong class="col-md-12">PAGO ONLINE</strong>
+						<p class="col-md-12">Si querés pagar con tarjeta de crédito a través de Internet tu pago será
+							manejado por
+							Bancard.
+							Una
+							entidad segura, confiable y reconocida en la administración y procesamiento de pagos a
+							través de
+							tarjetas de crédito.</p>
+						<img src="assets/images/pago-seguro.jpg" alt="">
+					</div>
+					<br><br>
+					<div class="row mt-3">
+						<strong class="col-md-12">CONTRA ENTREGA</strong>
+						<div class="col-md-6">
+							<p>Podés pagar al recibir tu compra con cualquiera de estas tarjetas.</p>
+							<img src="assets/images/tarjetas.png" alt="">
+						</div>
+						<div class="col-md-6">
+							<p>Podés pagar en efectivo al momento de la entrega.</p>
+							<img src="assets/images/billete.jpg" alt="">
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</section>
+	</section>
+	<br><br>
+
+	<app-footer></app-footer>
+</ion-content>
