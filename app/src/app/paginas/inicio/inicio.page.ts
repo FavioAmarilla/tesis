@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { ProductoService } from '../../servicios/producto.service';
-import { Producto, Banner, LineaProducto, Sucursal } from '../../interfaces/interfaces';
+import { Producto, Banner, LineaProducto, Sucursal, Marca } from '../../interfaces/interfaces';
 import { Router } from '@angular/router';
 import { CarruselService } from 'src/app/servicios/carrusel.service';
 import { environment } from '../../../environments/environment';
@@ -11,6 +11,7 @@ import { GeneralService } from 'src/app/servicios/general.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 import { SucursalService } from 'src/app/servicios/sucursal.service';
 import { LineasModalComponent } from 'src/app/componentes/lineas-modal/lineas-modal.component';
+import { MarcaService } from 'src/app/servicios/marca.service';
 
 @Component({
   selector: 'app-inicio',
@@ -28,12 +29,17 @@ export class PaginaInicio implements OnInit {
   public listaLineas: LineaProducto;
   public idLineaProducto: any = 0;
   public lineasProducto: LineaProducto;
+  public listaMarcas: Marca;
 
   public buscarProductoDescripcion: string = '';
 
   public paginaActual = 1;
   public porPagina;
   public total;
+
+  public idsCategorias: any[] = [];
+  public idsMarcas: any[] = [];
+  public parametrosTabla: any = []
 
   public slideImgUrl: string;
   @ViewChild(IonSlides, { static: true }) slider: IonSlides;
@@ -53,6 +59,7 @@ export class PaginaInicio implements OnInit {
     private servicioCarrusel: CarruselService,
     private servicioSucursal: SucursalService,
     private servicioLineaProd: LineasProductoService,
+    private servicioMarca: MarcaService,
     private servicioGeneral: GeneralService,
     private servicioAlerta: AlertaService,
     private modalController: ModalController,
@@ -65,6 +72,7 @@ export class PaginaInicio implements OnInit {
   async ngOnInit() {
     await this.obtenerCarrusel();
     await this.obtenerLineaProducto();
+    await this.obtenerMarca();
     await this.obtenerSucursales();
   }
 
@@ -88,6 +96,16 @@ export class PaginaInicio implements OnInit {
 
     if (response.success) {
       this.listaLineas = response.data;
+    } else {
+      this.servicioAlerta.dialogoError(response.message);
+    }
+  }
+
+  async obtenerMarca() {
+    const response: any = await this.servicioMarca.obtenerMarca();
+
+    if (response.success) {
+      this.listaMarcas = response.data;
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }
@@ -131,25 +149,23 @@ export class PaginaInicio implements OnInit {
   async seleccionarSucursal(value) {
     this.cargando = true;
 
-    const parametros = {
-      id_sucursal: value
-    };
+    let key = 'sucursal';
+    this.parametrosTabla.push({ key, value });
 
     await this.servicioCarrito.setStorage('sucursal', value);
-    await this.obtenerProductos(null, parametros);
+    this.obtenerProductos(null, this.parametrosTabla);
   }
-
 
 
   async buscarProductoPorDescripcion() {
     if (this.buscarProductoDescripcion != '' && this.buscarProductoDescripcion != null) {
       this.cargando = true;
 
-      const parametros = {
-        descripcion: this.buscarProductoDescripcion
-      };
+      let key = 'descripcion';
+      let value = this.buscarProductoDescripcion;
 
-      await this.obtenerProductos(null, parametros);
+      this.parametrosTabla.push({ key, value });
+      this.obtenerProductos(null, this.parametrosTabla);
     }
   }
 
@@ -158,19 +174,19 @@ export class PaginaInicio implements OnInit {
 
     this.paginaActual = (pagina) ? pagina : this.paginaActual;
 
-    let parametros: any = { paginar: true, page: this.paginaActual };
+    let parametros = {};
+    parametros = {
+      paginar: true,
+      page: this.paginaActual
+    };
 
     if (parametrosFiltro) {
-      for (var param in parametrosFiltro) {
-        if (parametrosFiltro.hasOwnProperty(param)) {
-          parametros[param] = parametrosFiltro[param];
-        }
-      }
+      this.parametrosTabla.forEach(element => {
+        parametros[element.key] = element.value;
+      });
     }
-
     console.log(parametros);
-
-    const response: any = await this.servicioProducto.obtenerProducto(null, parametros);
+    const response: any = await this.servicioProducto.shop(null, parametros);
     if (response.success) {
       this.listaProductos = response.data;
       this.porPagina = response.per_page;
@@ -198,6 +214,41 @@ export class PaginaInicio implements OnInit {
     const { data } = await modal.onWillDismiss();
 
     if (data) { this.seleccionarLineaProducto(data.idLineaProducto); }
+  }
+
+  seleccionarCategoria(id: number, event) {
+    const add = event.target.checked;
+    if (add) {
+      this.idsCategorias.push(id);
+    } else {
+      var index = this.idsCategorias.indexOf(id);
+      if (index >= 0) {
+        this.idsCategorias.splice(index, 1);
+      }
+    }
+
+    let key = 'lineas';
+    let value = this.idsCategorias;
+    this.parametrosTabla.push({ key, value });
+    this.obtenerProductos(null, this.parametrosTabla);
+  }
+
+  seleccionarMarca(id: number, event) {
+    const add = event.target.checked;
+
+    if (add) {
+      this.idsMarcas.push(id);
+    } else {
+      var index = this.idsMarcas.indexOf(id);
+      if (index >= 0) {
+        this.idsMarcas.splice(index, 1);
+      }
+    }
+
+    let key = 'marcas';
+    let value = this.idsMarcas;
+    this.parametrosTabla.push({ key, value });
+    this.obtenerProductos(null, this.parametrosTabla);
   }
 
 }
