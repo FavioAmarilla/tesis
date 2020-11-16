@@ -54,6 +54,11 @@ Route::group(['prefix' => 'producto'], function () {
     Route::get('getImage/{filename}', ['as' => 'producto.getImage', 'uses' => 'ProductoController@getImage']);
 });
 
+Route::get('shop', ['as' => 'producto.shop', 'uses' => 'ProductoController@shop']);
+Route::group(['prefix' => 'shop'], function () {
+    Route::get('producto', ['as' => 'producto.producto', 'uses' => 'ProductoController@shop']);
+});
+
 Route::resource('slide', 'SlideController');
 Route::group(['prefix' => 'slide'], function () {
     Route::post('upload', ['as' => 'slide.upload', 'uses' => 'SlideController@upload']);
