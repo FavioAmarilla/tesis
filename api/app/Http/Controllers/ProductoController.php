@@ -335,4 +335,52 @@ class ProductoController extends BaseController
         return $this->sendResponse(false, 'La imagen no existe', null, 404);
     }
     
+       /**
+     * Display a listing of the shop.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function shop(Request $request)
+    {
+        $sucursal = $request->query('sucursal');
+        $query = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca', 
+        'stock'=> function($q) use ($sucursal) {
+            if ($sucursal) {
+                $q->where('pr_stock.id_sucursal', '=', $sucursal);
+                $q->where('pr_stock.stock', '>', 0);
+            }
+        }]);
+
+        $descripcion = $request->query('descripcion');
+        if ($descripcion) {
+            $query->where('descripcion', 'LIKE', '%'.$descripcion.'%');
+        }
+
+        $lineas = $request->query('lineas');
+        if ($lineas) {
+            $query->whereIn('id_linea', explode(',', $lineas));
+        }
+
+        $marcas = $request->query('marcas');
+        if ($marcas) {
+            $query->whereIn('id_marca', explode(',', $marcas));
+        }
+        
+        $order = $request->query('order');
+        if (!$order) {
+            $order = 'created_at';
+        }
+        
+        $data = $query->orderBy($order, 'desc')->paginate()->toArray();
+
+        $resultados = [];
+        $elements = $data['data'];
+        foreach ($elements as $element) {
+            if ($element['stock']) array_push($resultados, $element);
+        }
+
+        $data['data'] = $resultados;
+
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
+    }
 }

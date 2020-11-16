@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
+import {MatSliderModule} from '@angular/material/slider';
 ;
 import { PaginaInicio } from './inicio.page';
 import { ModuloComponentes } from '../../componentes/componentes.module';
@@ -24,7 +25,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ModuloComponentes,
     PipesModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    MatSliderModule
   ],
   declarations: [PaginaInicio]
 })
