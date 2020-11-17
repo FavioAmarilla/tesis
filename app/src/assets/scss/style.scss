@@ -1,8 +1,8 @@
 // @import 'bootstrap/bootstrap';
 @import 'bootstrap/variables';
 
-$font-primary: 'Poppins',Arial, sans-serif;
-$font-secondary: 'Lora',Georgia, serif;
+$font-primary: 'Roboto', 'Poppins', Arial, sans-serif;
+$font-secondary: 'Lora', Georgia, serif;
 $font-tertiary: 'Amatic SC',cursive;
 
 $white: #fff;
@@ -31,6 +31,10 @@ $color-4: #dcd691;
     -webkit-transition: all $transition ease;
     -ms-transition: 		all $transition ease;
     transition:         all $transition ease;
+}
+
+:root {
+	--ion-font-family: 'Roboto', 'Poppins', Arial, sans-serif !important;
 }
 
 html {
