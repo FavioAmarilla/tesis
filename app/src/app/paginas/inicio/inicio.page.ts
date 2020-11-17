@@ -111,20 +111,6 @@ export class PaginaInicio implements OnInit {
     }
   }
 
-  async seleccionarLineaProducto(value) {
-    this.cargando = true;
-
-    const parametros = {
-      id_linea: value
-    };
-
-    if (value <= 0) {
-      delete parametros.id_linea;
-    }
-    this.idLineaProducto = await value;
-    await this.obtenerProductos(null, parametros);
-  }
-
 
   async obtenerSucursales() {
     const parametros = {
@@ -185,7 +171,7 @@ export class PaginaInicio implements OnInit {
         parametros[element.key] = element.value;
       });
     }
-    console.log(parametros);
+
     const response: any = await this.servicioProducto.shop(null, parametros);
     if (response.success) {
       this.listaProductos = response.data;
@@ -205,15 +191,29 @@ export class PaginaInicio implements OnInit {
       component: LineasModalComponent,
       componentProps: {
         listaLineas: this.listaLineas,
-        idLineaProducto: this.idLineaProducto
+        idsCategorias: this.idsCategorias,
+        listaMarcas: this.listaMarcas,
+        idsMarcas: this.idsMarcas,
       }
     });
 
     await modal.present();
 
     const { data } = await modal.onWillDismiss();
+    
+    if (data) {
+      let key = 'lineas';
+      let value =  data.idsCategorias;
+      this.idsCategorias = value;
+      this.parametrosTabla.push({ key, value });
 
-    if (data) { this.seleccionarLineaProducto(data.idLineaProducto); }
+      key = 'marcas';
+      value = this.idsMarcas;
+      this.idsMarcas = value;
+      this.parametrosTabla.push({ key, value });
+
+      this.obtenerProductos(null, this.parametrosTabla);
+    }
   }
 
   seleccionarCategoria(id: number, event) {
