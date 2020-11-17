@@ -744,6 +744,8 @@ table tbody tr td.image-prod .img {
 
 .filter-items {
     margin-top: 1rem;
+    height: 100vh;
+    overflow-x: scroll;
 }
 
 .filter-items .form-check-label {
