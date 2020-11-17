@@ -37,8 +37,8 @@ export class PaginaInicio implements OnInit {
   public porPagina;
   public total;
 
-  public idsCategorias: any[] = [];
-  public idsMarcas: any[] = [];
+  public idsCategorias: string = "";
+  public idsMarcas: string = "";
   public parametrosTabla: any = []
 
   public slideImgUrl: string;
@@ -200,10 +200,10 @@ export class PaginaInicio implements OnInit {
     await modal.present();
 
     const { data } = await modal.onWillDismiss();
-    
+
     if (data) {
       let key = 'lineas';
-      let value =  data.idsCategorias;
+      let value = data.idsCategorias;
       this.idsCategorias = value;
       this.parametrosTabla.push({ key, value });
 
@@ -216,15 +216,13 @@ export class PaginaInicio implements OnInit {
     }
   }
 
-  seleccionarCategoria(id: number, event) {
+  seleccionarCategoria(id: string, event) {
     const add = event.target.checked;
+
     if (add) {
-      this.idsCategorias.push(id);
+      this.idsCategorias += id + ',';
     } else {
-      var index = this.idsCategorias.indexOf(id);
-      if (index >= 0) {
-        this.idsCategorias.splice(index, 1);
-      }
+      this.idsCategorias = this.idsCategorias.replace(id, '');
     }
 
     let key = 'lineas';
@@ -233,16 +231,13 @@ export class PaginaInicio implements OnInit {
     this.obtenerProductos(null, this.parametrosTabla);
   }
 
-  seleccionarMarca(id: number, event) {
+  seleccionarMarca(id: string, event) {
     const add = event.target.checked;
 
     if (add) {
-      this.idsMarcas.push(id);
+      this.idsMarcas += id + ',';
     } else {
-      var index = this.idsMarcas.indexOf(id);
-      if (index >= 0) {
-        this.idsMarcas.splice(index, 1);
-      }
+      this.idsMarcas = this.idsMarcas.replace(id, '');
     }
 
     let key = 'marcas';
