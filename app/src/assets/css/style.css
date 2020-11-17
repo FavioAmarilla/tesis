@@ -195,7 +195,7 @@ hr {
     -ms-transition: all 0.3s ease;
     transition: all 0.3s ease;
     border: 1px solid #f0f0f0;
-    border-radius: 15px;
+    box-shadow: 2px 3px 5px -4px #000000;
 }
 
 @media (max-width: 991.98px) {
@@ -315,6 +315,7 @@ hr {
 
 .product .text .bottom-area {
     margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .product .text .bottom-area a {
