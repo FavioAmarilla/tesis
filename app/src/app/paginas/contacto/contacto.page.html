@@ -10,39 +10,53 @@
 		</ol>
 	</nav>
 
+  <header class="ftco-header container">
+    <h1 class="m-0">Contactános</h1>
+    <h6 class="m-0">Para consultas o sugerencias puede contactarnos directamente a traves del correo electronico y/o whatsapp</h6>
+  </header>
 
   <section class="ftco-section contact-section">
     <div class="container">
 
-      <div class="row">
-        <div class="col-sm-12 col-md-6 bg-light pt-5 pb-5 pl-5 pr-0 form">
-          <form action="#" class="bg-white p-5">
+      <div class="row bg-light">
+
+        <div class="col-sm-12 col-md-6 map">
+          <h5 class="section-title">Nuestras oficinas</h5>
+          <div id='mapa'></div>
+        </div>
+
+        <div class="col-sm-12 col-md-6 form mt-sm-4 mt-md-0">
+          <h5 class="section-title">Escribinos</h5>
+          <form [formGroup]="angForm" class="bg-white">
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="Nombre">
+              <input type="text" class="form-control" placeholder="Nombre" formControlName="nombre">
             </div>
             <div class="form-group">
-              <input type="email" class="form-control" placeholder="Email">
+              <input type="email" class="form-control" placeholder="Email" formControlName="email">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="Asunto">
+              <input type="text" class="form-control" placeholder="Asunto" formControlName="asunto">
             </div>
             <div class="form-group">
-              <textarea cols="30" rows="4" class="form-control" placeholder="Mensage"></textarea>
+              <textarea cols="30" rows="4" class="form-control" placeholder="Mensage" formControlName="mensaje"></textarea>
             </div>
             <div class="form-group">
-              <input type="submit" value="Enviar" class="btn btn-primary py-3 px-5">
+              <input type="submit" value="Enviar" class="btn btn-primary btn-block" [disabled]="cargando || angForm.invalid">
             </div>
           </form>
         </div>
 
-        <div class="col-sm-12 col-md-6 bg-light pt-5 pb-5 pl-5 pr-5 map">
-          <div id='mapa'></div>
-        </div>
-
       </div>
     </div>
-  </section>
 
+  </section>
+  
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button href="whatsapp://phone=+595991336680">
+      <ion-icon name="logo-whatsapp">
+      </ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
   <app-footer></app-footer>
 </ion-content>

@@ -18,35 +18,49 @@
   <a class="navbar-brand" [routerLink]="['/']"> <img src="assets/images/logo-super.png" width="150" height="45"></a>
 
   <div class="spacer"></div>
-
-  <a mat-button [routerLink]="['/']">Inicio</a>
-
-  <button mat-button [matMenuTriggerFor]="tienda">
-    Tienda
-    <mat-icon>arrow_drop_down</mat-icon>
-  </button>
-  <mat-menu #tienda="matMenu" >
-    <a mat-menu-item [routerLink]="['/favoritos']">Lista de Deseos</a>
-    <a mat-menu-item [routerLink]="['/carrito']">Carrito</a>
-    <a mat-menu-item [routerLink]="['/pedido-lista']" *ngIf="usuario">Pedidos</a>
-  </mat-menu>
-
+  
   <a mat-button [routerLink]="['/acerca-de']">Acerca de</a>
   <a mat-button [routerLink]="['/contacto']">Contacto</a>
-  <a mat-button [routerLink]="['/carrito']">
+  <a mat-button class="p-0" [routerLink]="['/favoritos']"><mat-icon>favorite_border</mat-icon></a>
+  <a mat-button class="p-0" [routerLink]="['/carrito']">
     <mat-icon class="mr-2" [matBadge]="carrito" matBadgeColor="warn" [matBadgeHidden]="!carrito">shopping_cart</mat-icon>
   </a>
-
-  <a mat-button [routerLink]="['/login']" *ngIf="!usuario" >Login</a>
-  <a mat-button [routerLink]="['/signup']" *ngIf="!usuario" >Registrate</a>
-
+  
+  <div class="login-register-header d-flex justify-content-center" *ngIf="!usuario">
+    <span mat-button [routerLink]="['/login']"><mat-icon>person</mat-icon></span>
+    <div class="options d-flex flex-column justify-content-center">
+      <a mat-button [routerLink]="['/login']">Ingresar</a>
+      <a mat-button [routerLink]="['/signup']">Registrarse</a>
+    </div>
+  </div>
+  
   <button mat-button [matMenuTriggerFor]="cuenta" *ngIf="usuario">
+    <mat-icon>person</mat-icon>
     {{ usuario.nombre_completo }}
     <mat-icon>arrow_drop_down</mat-icon>
   </button>
+
   <mat-menu #cuenta="matMenu">
-    <a mat-menu-item class="dropdown-item" [routerLink]="['/mi-cuenta']">Mi Cuenta</a>
-    <button mat-menu-item class="dropdown-item" (click)="cerrarSession()">Cerrar sesion</button>
+    <a mat-menu-item class="dropdown-item" [routerLink]="['/mi-cuenta']">
+      <mat-icon>portrait</mat-icon>
+      <span>Mi Cuenta</span>
+    </a>
+    <a mat-menu-item class="dropdown-item" [routerLink]="['/favoritos']">
+      <mat-icon>favorite_border</mat-icon>
+      <span>Mi lista de deseos</span>
+    </a>
+    <a mat-menu-item class="dropdown-item" [routerLink]="['/carrito']">
+      <mat-icon>shopping_cart</mat-icon>
+      <span>Mi carrito</span>
+    </a>
+    <a mat-menu-item [routerLink]="['/pedido-lista']" *ngIf="usuario">
+      <mat-icon>shopping_basket</mat-icon>
+      <span>Pedidos</span>
+    </a>
+    <button mat-menu-item class="dropdown-item" (click)="cerrarSession()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>Cerrar sesion</span>
+    </button>
   </mat-menu>
 
 </mat-toolbar>

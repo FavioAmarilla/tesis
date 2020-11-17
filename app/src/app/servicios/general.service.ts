@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { environment } from 'src/environments/environment';
 
+const API = environment.api;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +18,16 @@ export class GeneralService {
 
   public obtenerMenuItems() {
     return this.http.get<any>('/assets/menu.json');
+  }
+
+  public contactar(data) {
+    return new Promise(resolve => {
+      this.http.post(`${API}/contactar`, data)
+      .subscribe(
+        response => resolve(response),
+        error => resolve(error)
+      );
+    });
   }
 
   public unidadMedida(medida, tipo = 'medida'): any {

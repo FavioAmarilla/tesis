@@ -14,11 +14,22 @@
   font-size: 14px;
   margin-bottom: 0px;
   cursor: pointer;
+
+  ion-icon {
+    font-size: 18px;
+    margin-right: 5px;
+  }
+
+  a, span, ion-icon {
+    line-height: 18px;
+  }
 }
 
-.ftco-section .ftco-footer-widget ul li:hover {
-    font-size: 16px;
-  }
+.ftco-section .ftco-footer-widget ul li:hover > span,
+.ftco-section .ftco-footer-widget ul li:hover > ion-icon,
+.ftco-section .ftco-footer-widget ul li:hover > a {
+  color: var(--ion-color-primary);
+}
 
 .ftco-section .ftco-footer-widget ul li a {
   color: #000000;

@@ -11,6 +11,23 @@ mat-toolbar a:hover, button:hover {
     flex: 1 1 auto;
 }
 
+.login-register-header {
+
+    span {
+        line-height: 20px;
+        
+        mat-icon {
+            font-size: 32px;
+        }
+    }
+
+    .options a {
+        font-size: 13px;
+        line-height: 13px;
+        width: auto;
+    }
+}
+
 #overlay {
     position: fixed;
     display: block;
