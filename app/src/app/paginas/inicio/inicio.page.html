@@ -19,23 +19,27 @@
                 <div class="col-md-3 shop-filters">
                     <div class="col-md-12 filter-items" *ngIf="listaLineas">
                         <h5>CATEGORIAS</h5>
-                        <div class="form-check" *ngFor="let categoria of listaLineas">
-                            <input class="form-check-input" type="checkbox" [id]="categoria.identificador"
-                                [value]="categoria.identificador + categoria.descripcion"
-                                (change)="seleccionarCategoria(categoria.identificador, $event)">
-                            <label class="form-check-label"
-                                [for]="categoria.identificador">{{ categoria.descripcion }}</label>
+                        <div class="filter-content">
+                            <div class="form-check" *ngFor="let categoria of listaLineas">
+                                <input class="form-check-input" type="checkbox" [id]="categoria.identificador"
+                                    [value]="categoria.identificador + categoria.descripcion"
+                                    (change)="seleccionarCategoria(categoria.identificador, $event)">
+                                <label class="form-check-label"
+                                    [for]="categoria.identificador">{{ categoria.descripcion }}</label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-md-12 filter-items" *ngIf="listaMarcas">
                         <h5>MARCAS</h5>
-                        <div class="form-check" *ngFor="let marca of listaMarcas">
-                            <input class="form-check-input" type="checkbox" [id]="marca.identificador"
-                                [value]="marca.identificador + marca.nombre"
-                                (change)="seleccionarMarca(marca.identificador, $event)">
-                            <label class="form-check-label"
-                                [for]="marca.identificador + marca.nombre">{{ marca.nombre }}</label>
+                        <div class="filter-content">
+                            <div class="form-check" *ngFor="let marca of listaMarcas">
+                                <input class="form-check-input" type="checkbox" [id]="marca.identificador"
+                                    [value]="marca.identificador + marca.nombre"
+                                    (change)="seleccionarMarca(marca.identificador, $event)">
+                                <label class="form-check-label"
+                                    [for]="marca.identificador + marca.nombre">{{ marca.nombre }}</label>
+                            </div>
                         </div>
                     </div>
                 </div>
