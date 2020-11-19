@@ -12,94 +12,39 @@
     </button>
 
     <section class="ftco-section">
-        <div class="container-fluid">
+        <ion-grid class="container-fluid">
             <!-- productos -->
-            <div class="row">
+            <ion-row class="row">
 
-                <div class="col-md-3 shop-filters">
-                    <div class="col-md-12 filter-items" *ngIf="listaLineas">
-                        <h5>CATEGORIAS</h5>
-                        <div class="filter-content">
-                            <div class="form-check" *ngFor="let categoria of listaLineas">
-                                <input class="form-check-input" type="checkbox" [id]="categoria.identificador"
-                                    [value]="categoria.identificador + categoria.descripcion"
-                                    (change)="seleccionarCategoria(categoria.identificador, $event)">
-                                <label class="form-check-label"
-                                    [for]="categoria.identificador">{{ categoria.descripcion }}</label>
-                            </div>
-                        </div>
-                    </div>
+                <ion-col size="12">
+                    <ion-row class="row" *ngIf="listaProductos.length">
+                        <h3 class="w-100 mt-0 mb-5 text-primary text-center">Productos destacados del mes</h3>
+                        <ion-slides #slides mode="ios" [options]="productSlideOpts" [pager]="true">
+                            <ion-slide *ngFor="let producto of listaProductos">
+                                <cp-producto [producto]="producto"></cp-producto>
+                            </ion-slide>
+                        </ion-slides>
 
-                    <div class="col-md-12 filter-items" *ngIf="listaMarcas">
-                        <h5>MARCAS</h5>
-                        <div class="filter-content">
-                            <div class="form-check" *ngFor="let marca of listaMarcas">
-                                <input class="form-check-input" type="checkbox" [id]="marca.identificador"
-                                    [value]="marca.identificador + marca.nombre"
-                                    (change)="seleccionarMarca(marca.identificador, $event)">
-                                <label class="form-check-label"
-                                    [for]="marca.identificador + marca.nombre">{{ marca.nombre }}</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-9">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <div class="form-group input-group">
-                                <input type="text" class="form-control" placeholder="Buscá tu producto..."
-                                    aria-label="Buscá tu producto..." aria-describedby="basic-addon2"
-                                    [(ngModel)]="buscarProductoDescripcion"
-                                    (keyup.enter)="buscarProductoPorDescripcion()">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2"
-                                        (click)="buscarProductoPorDescripcion()">
-                                        <ion-icon name="md-search"></ion-icon>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <select class="form-control" name="sucursal"
-                                    (change)="seleccionarSucursal($event.target.value)">
-                                    <option *ngFor="let sucursal of listaSucursales" [value]="sucursal.identificador">
-                                        {{ sucursal.nombre }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <hr class="border-top">
-                    </div>
-
-                    <div class="row" *ngIf="listaProductos.length">
-                        <div class="col-sm-6 col-lg-3"
-                            *ngFor="let producto of listaProductos | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
-                            <cp-producto [producto]="producto"></cp-producto>
-                        </div>
-                        <br><br>
-                        <div class="col-md-12 mt-3 text-center">
-                            <app-paginacion (actualizarPagina)="obtenerProductos($event)"></app-paginacion>
-                        </div>
-                    </div>
+                        <div class="swiper-button-prev" (click)="slides.slidePrev()"></div>
+                        <div class="swiper-button-next" (click)="slides.slideNext()"></div>
+                    </ion-row>
 
 
-                    <div class="row text-center" *ngIf="!listaProductos.length && !cargando">
-                        <div class="col-md-12 text-center">
+                    <ion-row class="row text-center" *ngIf="!listaProductos.length && !cargando">
+                        <ion-col class="col-md-12 text-center">
                             <img src="assets/images/sin-datos.png" width="150" height="150">
                             <h4>No se encontraron productos</h4>
-                        </div>
-                    </div>
-                </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
 
-            </div>
-
-            <br><br>
+            </ion-row>
 
             <br><br>
 
-        </div>
+            <br><br>
+
+        </ion-grid>
     </section>
 
 

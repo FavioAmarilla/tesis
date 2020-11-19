@@ -1,5 +1,45 @@
 
-.product-image {
-    width: 100%;
-    object-fit: cover;
+
+.product {
+    .product-image {
+        width: 100%;
+        object-fit: cover;
+    }
+    
+    .bottom-area {
+        opacity: 0;
+        visibility: hidden;
+
+        a {
+            background: transparent;
+
+            ion-icon {
+                color: var(--ion-color-primary);
+                font-size: 24px;
+            }
+        }
+    }
+
+    &:hover > .details .bottom-area{
+        background-color: #fff;
+        opacity: 1;
+        visibility: visible;
+        transition: visibility .25s ease, opacity .25s ease;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .product {
+
+        border-top: none;
+        border-left: none;
+        border-bottom: none;
+        border-right: 1px 0 0 solid #dadada;
+        box-shadow: none;
+
+        .bottom-area {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
 }

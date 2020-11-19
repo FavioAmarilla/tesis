@@ -53,6 +53,36 @@ export class PaginaInicio implements OnInit {
     }
   };
 
+  productSlideOpts = {
+    loop: true,
+    slidesPerView: 6,
+    allowSlidePrev: true,
+    allowSlideNext: true,
+    autoplay: {
+      delay: 3000
+    },
+    breakpoints: {
+      0: {
+        slidesPerView: 2,
+      },
+      320: {
+        slidesPerView: 2,
+      },
+      480: {
+        slidesPerView: 2,
+      },
+      640: {
+        slidesPerView: 3,
+      },
+      767: {
+        slidesPerView: 3,
+      },
+      1024: {
+        slidesPerView: 6,
+      }
+    }
+  };
+
   constructor(
     private servicioCarrito: CarritoService,
     private servicioProducto: ProductoService,

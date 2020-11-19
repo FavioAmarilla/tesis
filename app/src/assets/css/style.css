@@ -209,15 +209,15 @@ hr {
 .product {
     display: block;
     width: 100%;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
     position: relative;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     -webkit-transition: all 0.3s ease;
     -ms-transition: all 0.3s ease;
     transition: all 0.3s ease;
-    border: 1px solid #f0f0f0;
-    box-shadow: 2px 3px 5px -4px #000000;
+    /* border: 1px solid #f0f0f0;
+    box-shadow: 2px 3px 5px -4px #000000; */
 }
 
 @media (max-width: 991.98px) {
@@ -302,6 +302,7 @@ hr {
 .product .text h3 {
     font-size: 13px;
     margin-bottom: 2px;
+    margin-top: 2px;
     font-weight: 300;
     text-transform: uppercase;
     font-family: "Poppins", Arial, sans-serif;
@@ -336,8 +337,13 @@ hr {
 }
 
 .product .text .bottom-area {
-    margin-top: 20px;
-    margin-bottom: 10px;
+    /* margin-top: 10px;
+    margin-bottom: 10px; */
+    padding: 10px 0;
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    top: -50px;
 }
 
 .product .text .bottom-area a {
@@ -792,4 +798,17 @@ table tbody tr td.image-prod .img {
 
 .ftco-header h6 {
     color: #5c5c5c;
+}
+
+div.swiper-button-prev {
+    background: url('/assets/svg/left-arrow.svg');
+}
+div.swiper-button-next {
+    background: url('/assets/svg/right-arrow.svg');
+}
+
+div.swiper-button-prev,
+div.swiper-button-next {
+    background-repeat: no-repeat;
+    background-position: center;
 }
