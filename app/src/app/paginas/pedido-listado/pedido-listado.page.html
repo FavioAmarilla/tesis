@@ -1,6 +1,18 @@
 <app-header [cargando]="cargando"></app-header>
 
 <ion-content>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <div class="container d-flex">
+        <li class="breadcrumb-item"><a [routerLink]="['/']">INICIO</a></li>
+        <li class="breadcrumb-item active" aria-current="page">PEDIDOS</li>
+      </div>
+    </ol>
+  </nav>
+
+  <header class="ftco-header container">
+    <h1 class="m-0">Mis Pedidos</h1>
+  </header>
 
   <section class="ftco-section ftco-cart" style="padding-top: 20px;">
     <div class="container">
@@ -49,7 +61,9 @@
                     <div *ngIf="pedido.tipo_envio == 'RT'">RETIRO EN TIENDA</div>
                   </td>
                   <td>
-                    <div>{{ (pedido.pagos) ? pedido.pagos.estado : (pedido.estado == 'CANCELADO') ? pedido.estado : 'PENDIENTE' }}</div>
+                    <div>
+                      {{ (pedido.pagos) ? pedido.pagos.estado : (pedido.estado == 'CANCELADO') ? pedido.estado : 'PENDIENTE' }}
+                    </div>
                   </td>
                   <td>
                     <ion-icon class="text-warning" *ngIf="pedido.estado == 'PENDIENTE'" name="clock"></ion-icon>
@@ -58,7 +72,8 @@
                     <mat-icon class="text-danger" *ngIf="pedido.estado == 'CANCELADO'">remove_shopping_cart</mat-icon>
                   </td>
                   <td class="text-center">
-                    <a mat-button [matMenuTriggerFor]="opciones" class="btn btn-primary d-flex justify-content-center align-items-center">
+                    <a mat-button [matMenuTriggerFor]="opciones"
+                      class="btn btn-primary d-flex justify-content-center align-items-center">
                       <ion-icon name="menu"></ion-icon>
                     </a>
                     <mat-menu #opciones="matMenu" xPosition="before">
@@ -66,13 +81,15 @@
                         <mat-icon>remove_red_eye</mat-icon>
                         <span>Ver productos</span>
                       </button>
-  
-                      <button mat-menu-item (click)="finalizarPedido(pedido.identificador)" *ngIf="!pedido.pagos || (pedido.pagos && pedido.pagos.estado == 'PENDIENTE' && pedido.pagos.vr_tipo == 'PO' && pedido.pagos.process_id)">
+
+                      <button mat-menu-item (click)="finalizarPedido(pedido.identificador)"
+                        *ngIf="!pedido.pagos || (pedido.pagos && pedido.pagos.estado == 'PENDIENTE' && pedido.pagos.vr_tipo == 'PO' && pedido.pagos.process_id)">
                         <mat-icon>credit_card</mat-icon>
                         <span>Finalizar pedido</span>
                       </button>
-  
-                      <button mat-menu-item (click)="cancelarPedido(pedido.identificador)" *ngIf="!pedido.pagos || (pedido.pagos && pedido.pagos.estado == 'PENDIENTE' && pedido.pagos.vr_tipo != 'PO' && pedido.pagos.vr_tipo != 'ATCD')">
+
+                      <button mat-menu-item (click)="cancelarPedido(pedido.identificador)"
+                        *ngIf="!pedido.pagos || (pedido.pagos && pedido.pagos.estado == 'PENDIENTE' && pedido.pagos.vr_tipo != 'PO' && pedido.pagos.vr_tipo != 'ATCD')">
                         <mat-icon>cancel</mat-icon>
                         <span>Cancelar pedido</span>
                       </button>
@@ -99,10 +116,10 @@
               Descripción
             </mat-panel-description> -->
           </mat-expansion-panel-header>
-      
+
           <mat-label>Sucursal: <span>{{ pedido.sucursal.nombre }}</span></mat-label>
           <mat-label>
-            Tipo de Envio: 
+            Tipo de Envio:
             <span *ngIf="pedido.tipo_envio == 'DE'">DELIVERY</span>
             <span *ngIf="pedido.tipo_envio == 'RT'">RETIRO EN TIENDA</span>
           </mat-label>

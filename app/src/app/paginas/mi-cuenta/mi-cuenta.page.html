@@ -1,19 +1,25 @@
 <app-header [cargando]="cargando"></app-header>
 
 <ion-content>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <div class="container d-flex">
+        <li class="breadcrumb-item"><a [routerLink]="['/']">INICIO</a></li>
+        <li class="breadcrumb-item active" aria-current="page">MI CUENTA</li>
+      </div>
+    </ol>
+  </nav>
+
+  <header class="ftco-header container">
+    <h1 class="m-0">Mi Cuenta</h1>
+  </header>
+
   <ion-grid class="container">
-
-    <ion-row>
-      <ion-col size="12" class="border-bottom">
-        <ion-title color="primary">Mi Cuenta</ion-title>
-      </ion-col>
-    </ion-row>
-
     <ion-row>
       <ion-col size="12">
         <mat-tab-group mat-align-tabs="start">
           <mat-tab label="Informacion General">
-            <form class="col-md-12">
+            <form class="col-md-12 mt-3">
               <div class="row">
                 <div class="col-md-6">
                   <h3>
@@ -22,7 +28,8 @@
                   <hr class="border-top mt-0">
                   <div class="form-group">
                     <label for="Nombre completo">Nombre completo</label>
-                    <input type="text" class="form-control" name="nombre_completo" [(ngModel)]="usuario.nombre_completo">
+                    <input type="text" class="form-control" name="nombre_completo"
+                      [(ngModel)]="usuario.nombre_completo">
                   </div>
                   <div class="form-group">
                     <label for="Email">Email</label>
@@ -30,7 +37,8 @@
                   </div>
                   <div class="form-group">
                     <label for="Fecha de nacimiento">Fecha de nacimiento</label>
-                    <input type="date" class="form-control" name="fecha_nacimiento" [(ngModel)]="usuario.fecha_nacimiento">
+                    <input type="date" class="form-control" name="fecha_nacimiento"
+                      [(ngModel)]="usuario.fecha_nacimiento">
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -66,14 +74,15 @@
               <br>
               <div class="form-group">
                 <a class="btn btn-primary py-2 px-4" (click)="actualizarDatos()">
-                  <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status" aria-hidden="true"></span>
+                  <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status"
+                    aria-hidden="true"></span>
                   Aceptar
                 </a>
               </div>
             </form>
           </mat-tab>
           <mat-tab label="Cambiar contraseña">
-            <form class="col-md-5">
+            <form class="col-md-5 mt-3">
               <div class="form-group">
                 <label for="Contraseña actual">Contraseña actual</label>
                 <input type="password" class="form-control" name="clave_actual" [(ngModel)]="usuario.clave_actual">
@@ -88,27 +97,29 @@
               </div>
               <div class="form-group">
                 <a class="btn btn-primary py-2 px-4" (click)="cambiarPassword()">
-                  <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status" aria-hidden="true"></span>
+                  <span *ngIf="cargandoBoton" class="spinner-border spinner-border-sm spinner-table" role="status"
+                    aria-hidden="true"></span>
                   Aceptar
                 </a>
               </div>
             </form>
           </mat-tab>
           <mat-tab label="Mis Tarjetas" class="cards">
-            <div class="row">
+            <div class="row mt-3">
               <div class="col-md-4" *ngFor="let tarjeta of tarjetas">
                 <ion-card class="credit-card">
                   <ion-item color="primary">
-                    <ion-label>{{ (tarjeta.card_type == 'credit') ? 'Tarjeta de Crédito' : 'Tarjeta de Débito' }}</ion-label>
-                    
+                    <ion-label>{{ (tarjeta.card_type == 'credit') ? 'Tarjeta de Crédito' : 'Tarjeta de Débito' }}
+                    </ion-label>
+
                     <ion-button slot="end" fill="clear" *ngIf="!escritorio" (click)="opcionesTarjeta(tarjeta)">
                       <ion-icon name="more" slot="icon-only" color="light"></ion-icon>
                     </ion-button>
-                    
+
                     <ion-button slot="end" fill="clear" *ngIf="escritorio" [matMenuTriggerFor]="opciones">
                       <ion-icon name="more" slot="icon-only" color="light"></ion-icon>
                     </ion-button>
-                    <mat-menu #opciones="matMenu" xPosition="before">                    
+                    <mat-menu #opciones="matMenu" xPosition="before">
                       <button mat-menu-item (click)="eliminarTarjeta(tarjeta)">
                         <mat-icon>cancel</mat-icon>
                         <span>Eliminar tarjeta</span>
@@ -127,7 +138,8 @@
                       <p>{{ tarjeta.expiration_date }}</p>
                     </div>
 
-                    <ion-img [class]="tarjeta.card_brand | cardBrand:'class'" [src]="tarjeta.card_brand | cardBrand:'icon'"></ion-img>
+                    <ion-img [class]="tarjeta.card_brand | cardBrand:'class'"
+                      [src]="tarjeta.card_brand | cardBrand:'icon'"></ion-img>
                   </ion-card-content>
                 </ion-card>
               </div>
