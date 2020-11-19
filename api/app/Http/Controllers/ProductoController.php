@@ -369,9 +369,26 @@ class ProductoController extends BaseController
         $order = $request->query('order');
         if (!$order) {
             $order = 'created_at';
+            $dir = 'desc';
+        }
+        if ($order == 'created_at') {
+            $order = 'created_at';
+            $dir = 'desc';
+        }
+        if ($order == 'descripcion') {
+            $order = 'descripcion';
+            $dir = 'asc';
+        }
+        if ($order == 'precio_asc') {
+            $order = 'precio_venta';
+            $dir = 'asc';
+        }
+        if ($order == 'precio_desc') {
+            $order = 'precio_venta';
+            $dir = 'desc';
         }
         
-        $data = $query->orderBy($order, 'desc')->paginate()->toArray();
+        $data = $query->orderBy($order, $dir)->paginate()->toArray();
 
         $resultados = [];
         $elements = $data['data'];

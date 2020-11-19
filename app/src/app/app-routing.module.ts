@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: '**', redirectTo: ''},  { path: 'condicion-uso', loadChildren: './paginas/condicion-uso/condicion-uso.module#CondicionUsoPageModule' },
   { path: 'medio-pago', loadChildren: './paginas/medio-pago/medio-pago.module#MedioPagoPageModule' },
   { path: 'area-cobertura', loadChildren: './paginas/area-cobertura/area-cobertura.module#AreaCoberturaPageModule' },
+  { path: 'productos', loadChildren: './paginas/productos/productos.module#ProductosPageModule' },
 
 
 ];

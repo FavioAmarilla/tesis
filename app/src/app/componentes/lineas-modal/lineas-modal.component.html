@@ -3,8 +3,18 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body">
-
         <div class="col-md-3 shop-filters-mobile">
+          <div class="col-md-12 filter-items">
+            <h5>ORDENAR POR</h5>
+            <div class="form-group">
+              <select class="form-control" name="order" (change)="ordenar($event.target.value)" [value]="order">
+                <option value="created_at"> Recientes </option>
+                <option value="descripcion"> Nombre </option>
+                <option value="precio_asc"> Precio mas bajo </option>
+                <option value="precio_desc"> Precio mas alto </option>
+              </select>
+            </div>
+          </div>
           <div class="col-md-12 filter-items" *ngIf="listaLineas">
             <h5>CATEGORIAS</h5>
             <div class="filter-content">
@@ -30,7 +40,9 @@
             </div>
           </div>
         </div>
+      </div>
 
+      <div class="modal-footer">
         <div class="col-md-12 filter-items">
           <ion-button type="button" class="btn btn-primary w-100" expand="block" fill="clear" shape="round"
             (click)="filtrar()">
@@ -41,7 +53,6 @@
             Cerrar
           </ion-button>
         </div>
-
       </div>
     </div>
   </div>

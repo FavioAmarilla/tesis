@@ -12,10 +12,17 @@ export class LineasModalComponent implements OnInit {
   @Input() idsCategorias = [];
   @Input() listaMarcas;
   @Input() idsMarcas = [];
+  @Input() listaSucursales;
+  private order: string = '';
+
 
   constructor(
     private modalController: ModalController
-  ) { }
+  ) {
+    if (!this.order) {
+      this.order = 'created_at';
+    }
+  }
 
   ngOnInit() { }
 
@@ -23,6 +30,7 @@ export class LineasModalComponent implements OnInit {
     this.modalController.dismiss({
       idsCategorias: this.idsCategorias,
       idsMarcas: this.idsMarcas,
+      order: this.order
     });
   }
 
@@ -71,6 +79,11 @@ export class LineasModalComponent implements OnInit {
         this.idsMarcas.splice(index, 1);
       }
     }
+  }
+
+
+  async ordenar(value) {
+    this.order = value;
   }
 
 }

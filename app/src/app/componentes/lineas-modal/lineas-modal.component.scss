@@ -1,3 +1,17 @@
 .modal-content {
     border: none !important;
 }
+.modal{
+    display: block !important; 
+}
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    height: 75vh;
+    overflow-y: auto;
+}
+
+.modal-footer{
+    height: 25vh;
+}

@@ -21,6 +21,7 @@ const routes: Routes = [
       { path: 'contacto', loadChildren: () => import('../contacto/contacto.module').then(m => m.ModuloPaginaContacto) },
       { path: 'login', loadChildren: () => import('../login/login.module').then(m => m.LoginPageModule) },
       { path: 'signup', loadChildren: () => import('../signup/signup.module').then(m => m.SignupPageModule) },
+      { path: 'producto', loadChildren: () => import('../productos/productos.module').then(m => m.ProductosPageModule) },
       { path: 'producto/:slug', loadChildren: () => import('../producto/producto.module').then(m => m.ModuloPaginaProducto) },
       { path: 'pedido', loadChildren: () => import('../pedido/pedido.module').then(m => m.PedidoPageModule) },
       { path: 'pedido/finalizado', loadChildren: () => import('../pedido-finalizado/pedido-finalizado.module').then(m => m.PedidoFinalizadoPageModule) },

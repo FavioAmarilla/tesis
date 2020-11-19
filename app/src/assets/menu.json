@@ -7,6 +7,12 @@
         "soloLogueados": false
     },
     {
+        "icono": "basket",
+        "titulo": "Productos",
+        "url": "/producto",
+        "soloLogueados": false
+    },
+    {
         "titulo": "Tienda",
         "children": [
             {

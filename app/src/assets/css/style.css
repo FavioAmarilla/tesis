@@ -40,7 +40,6 @@
     border-radius: 4px;
 }
 
-
 *, *::before, *::after {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -96,6 +95,11 @@ hr {
 
 .bg-primary {
     background: var(--green) !important;
+}
+
+.btn-default {
+    border: 1px solid #ced4da;
+    background-color: #e9ecef;
 }
 
 .navbar {
@@ -761,7 +765,7 @@ table tbody tr td.image-prod .img {
 /* estilos para filtros de productos*/
 
 .filter-items {
-    margin-top: 1rem;
+    margin-top: 2rem;
 }
 
 .filter-items .filter-content {
@@ -776,5 +780,4 @@ table tbody tr td.image-prod .img {
 
 .filter-items h5 {
     border-bottom: 1px solid #f0f0f0 !important;
-    margin-bottom: 1rem;
 }
