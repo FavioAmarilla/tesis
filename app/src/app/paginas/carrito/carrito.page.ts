@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { CarritoService } from 'src/app/servicios/carrito.service';
-import { Producto, Sucursal, EcParametro } from 'src/app/interfaces/interfaces';
-import { AlertController } from '@ionic/angular';
-import { SucursalService } from 'src/app/servicios/sucursal.service';
+import { AlertController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { AlertaService } from 'src/app/servicios/alerta.service';
+
 import { EcParametrosService } from 'src/app/servicios/ec-parametros.service';
+import { SucursalService } from 'src/app/servicios/sucursal.service';
+import { CarritoService } from 'src/app/servicios/carrito.service';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
 import { GeneralService } from 'src/app/servicios/general.service';
+import { AlertaService } from 'src/app/servicios/alerta.service';
+
+import { Producto, Sucursal, EcParametro } from 'src/app/interfaces/interfaces';
 
 @Component({
   selector: 'app-carrito',
@@ -22,12 +24,15 @@ export class PaginaCarrito implements OnInit {
 
   public parametros: EcParametro;
   public total: any = 0;
+  public subtotal: any = 0;
+  public descuento: any = 0;
   public cantidad: number = 1;
   public minimo = 1;
   public valor = 1;
 
   constructor(
     private router: Router,
+    private platform: Platform,
     private servicioCarrito: CarritoService,
     private servicioUsuario: UsuarioService,
     private servicioSucursal: SucursalService,
@@ -37,16 +42,39 @@ export class PaginaCarrito implements OnInit {
     private servicioGeneral: GeneralService
   ) { }
 
-  async ngOnInit() { }
+  async ngOnInit() {
+    this.platform.resize
+    .subscribe(() => {
+      const width = this.platform.width();
+
+      if (width < 997) {
+        const subtotales = document.querySelector('.subtotales') as HTMLElement;
+        if (subtotales) {
+          subtotales.style.transform = 'none';
+        }
+      }
+    });
+  }
 
   async ionViewWillEnter() {
     await this.obtenerParametrosEcommerce();
     await this.obtenerSucursalesEcommerce();
-    await this.obtenerCarrito();  
+    await this.obtenerCarrito();
   }
 
-  redireccionar(url) {
-    this.router.navigate([url]);
+  onScroll(event: CustomEvent) {
+    const width = this.platform.width();
+
+    if (width >= 996) {
+      const cartList = document.querySelector('.cart-list') as HTMLElement;
+      const subtotales = document.querySelector('.subtotales') as HTMLElement;
+
+      if (cartList && subtotales) {
+        if (event.detail.scrollTop < cartList.offsetHeight - subtotales.offsetHeight) {
+          subtotales.style.transform = `translate3d(0px, ${ event.detail.scrollTop }px, 0px)`;
+        }
+      }
+    }
   }
 
   async obtenerCarrito() {
@@ -61,9 +89,11 @@ export class PaginaCarrito implements OnInit {
   actualizarTotal() {
     // obtener total
     this.total = 0;
+    this.subtotal = 0;
     this.listaCarrito.forEach(element => {
-      this.total += element.precio_venta * element.cantidad;
+      this.subtotal += element.precio_venta * element.cantidad;
     });
+    this.total = this.subtotal - this.descuento;
   }
 
   async confirmarParaEliminarDelCarrito(product) {
@@ -108,7 +138,7 @@ export class PaginaCarrito implements OnInit {
     // validar que usuario este logueado
     const usuario: any = await this.servicioUsuario.obtenerUsuario();
     if (!usuario) {
-      this.redireccionar('/login');
+      this.router.navigate(['/login'], {queryParams: { redirect: 'pedido'}});
       return;
     }
 
@@ -118,7 +148,7 @@ export class PaginaCarrito implements OnInit {
       return;
     }
 
-    this.redireccionar('/pedido');
+    this.router.navigate(['/pedido']);
   }
 
   asignarCantidad(inputCantidad, accion, producto) {

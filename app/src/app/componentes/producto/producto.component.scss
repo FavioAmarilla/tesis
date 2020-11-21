@@ -9,6 +9,7 @@
     .bottom-area {
         opacity: 0;
         visibility: hidden;
+        z-index: 2;
 
         a {
             background: transparent;

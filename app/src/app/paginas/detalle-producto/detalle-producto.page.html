@@ -3,7 +3,7 @@
 <ion-content>
   <nav aria-label="breadcrumb" *ngIf="producto">
     <ol class="breadcrumb">
-      <div class="container d-flex">
+      <div class="container d-flex flex-wrap">
         <li class="breadcrumb-item"><a [routerLink]="['/']">INICIO</a></li>
         <li class="breadcrumb-item"><a [routerLink]="['/producto/linea',  producto.linea_producto.slug]">{{ producto.linea_producto.descripcion }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ producto.descripcion }} </li>
@@ -12,44 +12,49 @@
   </nav>
 
   <section class="ftco-section" *ngIf="producto">
-    <div class="container">
-      <div class="row">
+    <ion-grid class="container">
+      <ion-row class="row">
 
-        <div class="col-md-6">
+        <ion-col size="6" size-xs="12">
           <div class="panel panel-default product-image border">
             <img *ngIf="producto" class="img-fluid" [src]="producto.imagen | productImage | urlSanitizer">
           </div>
-        </div>
+        </ion-col>
 
-        <div class="col-md-6">
+        <ion-col size="6" size-xs="12">
           <div class="panel panel-default product-details border">
             <h5 class="h5">{{ producto.descripcion }}</h5>
             <p class="mb-0">Código de barras: {{ producto.codigo_barras }}</p>
             <span class="price"> {{ producto.precio_venta | numberFormat}} <span class="gs">Gs</span> </span>
             <hr>
 
-            <div class="row mt-4">
-              <div class="w-100"></div>
-              <div class="form-group input-group col-md-6 d-flex mb-3">
+            <ion-row class="row mt-4">
+              <ion-col class="form-group input-group col-md-6 d-flex mb-3">
+                
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad('DI')">
                     <ion-icon name="remove"></ion-icon>
                   </span>
                 </div>
+                
                 <input type="text" name="cantidad" class="form-control" min="1" max="100" [(ngModel)]="cantidad" disabled>
+                
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad('AU')">
                     <ion-icon name="add"></ion-icon>
                   </span>
                 </div>
-              </div>
-              <div class="w-100"></div>
-            </div>
-            <p><a [routerLink]="null" class="btn btn-primary py-2 px-3" (click)="agregarAlCarrito()">Añadir al Carrito</a></p>
+
+              </ion-col>
+            </ion-row>
+
+            <ion-col>
+              <a [routerLink]="null" class="btn btn-primary py-2 px-3 d-block" (click)="agregarAlCarrito()">Añadir al Carrito</a>
+            </ion-col>
           </div>
-        </div>
-      </div>
-    </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </section>
 
   <section class="ftco-section" *ngIf="!producto && !cargando">

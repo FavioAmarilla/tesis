@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { PaginaCarrito } from './carrito.page';
 import { ModuloComponentes } from '../../componentes/componentes.module';
@@ -23,7 +24,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ModuloComponentes,
-    PipesModule
+    PipesModule,
+    ScrollingModule
   ],
   declarations: [PaginaCarrito]
 })

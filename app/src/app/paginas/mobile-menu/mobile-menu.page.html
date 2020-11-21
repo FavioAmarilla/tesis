@@ -7,27 +7,25 @@
   <ion-content>
     <div *ngFor="let item of menuItems | async">
 
-      <ion-menu-toggle autoHide="false" *ngIf="item.url" [ngClass]="{'hidden': item.soloLogueados && !logueado}">
-        <ion-item [routerLink]="item.url" routerDirection="root" routerLinkActive="active">
+      <ion-menu-toggle autoHide="false" *ngIf="item.url" [ngClass]="{'hidden': item.soloLogueados && !logueado}" mode="md">
+        <ion-item [routerLink]="item.url" routerDirection="root" routerLinkActive="active" lines="none">
           <ion-icon slot="start" [name]="item.icono" color="primary"></ion-icon>
           <ion-label>{{ item.titulo }}</ion-label>
         </ion-item>
       </ion-menu-toggle>
 
-      <ion-item *ngIf="item.children?.length" (click)="item.open = !item.open" [ngClass]="{'active-parent': item.open}">
-        <ion-icon slot="start" name="arrow-forward" mode="ios" color="primary" *ngIf="!item.open"></ion-icon>
-        <ion-icon slot="start" name="arrow-down" mode="ios" color="primary" *ngIf="item.open"></ion-icon>
-        <ion-label>{{ item.titulo }}</ion-label>
-      </ion-item>
-
-      <ion-list *ngIf="item.open">
-        <ion-menu-toggle autoHide="false">
-          <ion-item *ngFor="let sub of item.children" (click)="(sub.icono == 'exit') ? logout() : false;" class="sub-item" [routerLink]="sub.url" routerDirection="root" routerLinkActive="active" [ngClass]="{'hidden': (sub.soloLogueados && !logueado) || (sub.ocultarLogueados && logueado)}">
-            <ion-icon slot="start" [name]="sub.icono" color="primary"></ion-icon>
-            <ion-label>{{ sub.titulo }}</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-      </ion-list>
+      <ion-item-group>
+        <ion-item-divider *ngIf="item.children?.length" mode="md" [sticky]="true">
+          <ion-label>{{ item.titulo }}</ion-label>
+        </ion-item-divider>
+        
+          <ion-menu-toggle autoHide="false"> 
+            <ion-item *ngFor="let sub of item.children" (click)="(sub.icono == 'exit') ? logout() : false;" [routerLink]="sub.url" routerDirection="root" routerLinkActive="active" [ngClass]="{'hidden': (sub.soloLogueados && !logueado) || (sub.ocultarLogueados && logueado)}" lines="none" mode="md">
+              <ion-icon slot="start" [name]="sub.icono" color="primary"></ion-icon>
+              <ion-label>{{ sub.titulo }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+      </ion-item-group>
 
     </div>
   </ion-content>

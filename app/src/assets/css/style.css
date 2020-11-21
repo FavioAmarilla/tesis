@@ -159,10 +159,17 @@ hr {
 
 .btn {
     cursor: pointer;
-    -webkit-border-radius: 30px;
+}
+
+.btn.remove-product {
+    /* -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
     -ms-border-radius: 30px;
-    border-radius: 30px;
+    border-radius: 30px; */
+    width: 36px;
+    height: 28px;
+    font-size: 1em;
+    padding: 0;
 }
 
 .btn:hover, .btn:active, .btn:focus {
@@ -803,12 +810,28 @@ table tbody tr td.image-prod .img {
 div.swiper-button-prev {
     background: url('/assets/svg/left-arrow.svg');
 }
+
 div.swiper-button-next {
     background: url('/assets/svg/right-arrow.svg');
 }
 
-div.swiper-button-prev,
-div.swiper-button-next {
+div.swiper-button-prev, div.swiper-button-next {
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.mark {
+    display: inline-flex;
+    background-color: var(--ion-color-primary);
+    width: 12px;
+    height: 12px;
+    justify-content: center;
+    margin-right: 9px;
+    margin-left: 5px;
+    border-radius: 50%;
+    color: var(--ion-color-primary);
+    font-size: 2rem;
+    align-items: center;
+    box-sizing: border-box;
+    font-weight: 600;
 }

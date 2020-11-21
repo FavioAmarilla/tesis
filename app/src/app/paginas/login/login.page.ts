@@ -1,7 +1,7 @@
 import { UsuarioService } from 'src/app/servicios/usuario.service';
 import { Usuario } from '../../interfaces/interfaces';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -18,14 +18,19 @@ export class LoginPage implements OnInit {
   public token;
 
   angForm: FormGroup;
+  queryParams: any;
 
   constructor(
     private usuarioService: UsuarioService,
     private servicioAlerta: AlertaService,
     private formBuilder: FormBuilder,
+    private activeRoute: ActivatedRoute,
     private router: Router
   ) {
     this.createForm();
+    this.activeRoute.queryParams.subscribe(params => {
+      this.queryParams = params;
+    });
   }
 
   ngOnInit() { }
@@ -44,7 +49,8 @@ export class LoginPage implements OnInit {
     const response: any = await this.usuarioService.iniciarSession(this.angForm.value);
 
     if (response.success) {
-      this.router.navigate(['/']);
+      const redirect = this.queryParams.redirect ? this.queryParams.redirect : '/';
+      this.router.navigate([redirect]);
     } else {
       this.servicioAlerta.dialogoError('Usuario y/o Contraseña no validos');
     }

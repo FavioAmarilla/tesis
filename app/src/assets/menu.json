@@ -7,14 +7,14 @@
         "soloLogueados": false
     },
     {
-        "icono": "basket",
-        "titulo": "Productos",
-        "url": "/producto",
-        "soloLogueados": false
-    },
-    {
         "titulo": "Tienda",
         "children": [
+            {
+                "icono": "basket",
+                "titulo": "Productos",
+                "url": "/productos",
+                "soloLogueados": false
+            },
             {
                 "icono": "cart",
                 "titulo": "Carrito",
@@ -32,18 +32,6 @@
                 "soloLogueados": true
             }
         ]
-    },
-    {
-        "icono": "information-circle-outline",
-        "titulo": "Acerca de",
-        "url": "/acerca-de",
-        "soloLogueados": false
-    },
-    {
-        "icono": "contacts",
-        "titulo": "Contacto",
-        "url": "/contacto",
-        "soloLogueados": false
     },
     {
         "titulo": "Cuenta",
@@ -72,6 +60,23 @@
                 "icono": "exit",
                 "titulo": "Cerrar Sessión",
                 "soloLogueados": true
+            }
+        ]
+    },
+    {
+        "titulo": "La Empresa",
+        "children": [
+            {
+                "icono": "information-circle-outline",
+                "titulo": "Acerca de",
+                "url": "/acerca-de",
+                "soloLogueados": false
+            },
+            {
+                "icono": "contacts",
+                "titulo": "Contacto",
+                "url": "/contacto",
+                "soloLogueados": false
             }
         ]
     }

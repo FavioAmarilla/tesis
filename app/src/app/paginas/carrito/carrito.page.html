@@ -1,6 +1,6 @@
 <app-header [cargando]="cargando"></app-header>
 
-<ion-content>
+<ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<div class="container d-flex">
@@ -11,14 +11,43 @@
 	</nav>
 
 	<header class="ftco-header container">
-		<h1 class="m-0">Mi carrito de Compras</h1>
+		<h1 class="m-0">Carrito de Compras</h1>
 	</header>
 
   <ion-grid class="container">
     <ion-row *ngIf="listaCarrito && listaCarrito.length">
-      <ion-col size="12">
+      <ion-col size="12" size-md="12" size-lg="9">
         <div class="cart-list">
-          <ion-row *ngFor="let producto of listaCarrito">
+
+          <!-- INICIO CABECERA DE PRODUCTOS -->
+          <ion-row class="header bg-light text-primary">
+            
+            <ion-col size-lg="2" size-md="2" size-sm="4" size-xs="4">
+              <h6 class="ml-2">Producto</h6>
+            </ion-col>
+
+            <ion-col size-lg="10" size-md="10" size-sm="8" size-xs="8">
+              <ion-row>
+                
+                <ion-col size-lg="5" size-md="5" size-sm="9" size-xs="10"></ion-col>
+                
+                <ion-col size-lg="3" size-md="3" size-sm="9" size-xs="9">
+                  <h6 class="text-center">Cantidad</h6>
+                </ion-col>
+                
+                <ion-col size-lg="3" size-md="2" size-sm="9" size-xs="9">
+                  <h6 class="text-center">Subtotal</h6>
+                </ion-col>
+
+              </ion-row>
+            </ion-col>
+
+          </ion-row>
+          <!-- FIN CABECERA DE PRODUCTOS -->
+
+          <!-- INICIO LISTADO DE PRODUCTOS -->
+          <ion-row *ngFor="let producto of listaCarrito" class="border-bottom">
+            
             <ion-col size-lg="2" size-md="2" size-sm="4" size-xs="4" class="picture-col">
               <div class="product-picture text-center">
                 <a [routerLink]="['/producto', producto.slug]" class="miniCart_prod_title">
@@ -27,9 +56,11 @@
                 <div class="oferta"></div>
               </div>
             </ion-col>
+
             <ion-col size-lg="10" size-md="10" size-sm="8" size-xs="8" class="desc-col">
-              <ion-row>
-                <ion-col size-lg="5" size-md="5" size-sm="9" size-xs="10" class="cart-item">
+              <ion-row class="h-100">
+
+                <ion-col size-lg="5" size-md="5" size-sm="9" size-xs="10" class="cart-item d-flex align-items-center">
                   <div class="productdata">
                     <a class="miniCart_prod_title" [routerLink]="['/producto', producto.slug]" title="Ver detalles">
                       {{ producto.descripcion }}
@@ -40,63 +71,93 @@
                   </div>
                 </ion-col>
 
-                <ion-col size-lg="3" size-md="3" size-sm="9" size-xs="9" class="cart-item quantity">
-                  <div class="form-group input-group d-flex">
+                <ion-col size-lg="3" size-md="3" size-sm="9" size-xs="9" class="cart-item quantity d-flex align-items-center">
+                  <div class="form-group input-group d-flex m-0">
+                    
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad(cantidad, 'DI', producto)">
                         <ion-icon name="remove"></ion-icon>
                       </span>
                     </div>
+
                     <input type="text" name="cantidad" class="form-control text-center" min="1" max="100" [(ngModel)]="producto.cantidad" disabled #cantidad>
+                    
                     <div class="input-group-append">
                       <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad(cantidad, 'AU', producto)">
                         <ion-icon name="add"></ion-icon>
                       </span>
                     </div>
+
                   </div>
                 </ion-col>
-                <ion-col size-lg="3" size-md="2" size-sm="9" size-xs="9" class="cart-item price">
-                  <div class="ion-text-sm-left ion-text-md-center">
-                    <!-- <p style="margin-bottom: 0;">Total:</p> -->
+
+                <ion-col size-lg="3" size-md="2" size-sm="9" size-xs="9" class="cart-item price d-flex align-items-center justify-content-sm-start justify-content-md-center justify-content-md">
+                  <div class="prices-content">
                     <span class="gs">Gs. </span>
                     <span class="productPrice"> {{producto.precio_venta * producto.cantidad | numberFormat}}</span>
                   </div>
                 </ion-col>
-                <ion-col size="1">
-                  <a (click)="confirmarParaEliminarDelCarrito(producto)"
-                    class="btn btn-primary d-flex justify-content-center remove-product">
-                    <ion-icon name="close"></ion-icon>
-                  </a>
-                </ion-col>
+
+                <span (click)="confirmarParaEliminarDelCarrito(producto)" class="btn btn-primary d-flex justify-content-center align-items-center remove-product">
+                  <ion-icon name="trash" mode="ios"></ion-icon>
+                </span>
+
               </ion-row>
             </ion-col>
           </ion-row>
-          <ion-row class="border-top">
-            <ion-col size="12" class="text-right">
-              <h5>Total Gs.: {{ total | numberFormat }} </h5>
-            </ion-col>
-          </ion-row>
-          <div class="clear"></div>
+          <!-- FIN LISTADO DE PRODUCTOS -->
+
         </div>
       </ion-col>
+
+      <!-- INICIO TOTALES DEL PEDIDO -->
+      <ion-col size="12" size-sm="12" size-md="12" size-lg="3" class="">
+        
+        <ion-row class="subtotales">
+        
+          <ion-col size="12" class="subtotal d-flex ion-justify-content-between ion-align-items-center py-3">
+            <h6 class="m-0">Subtotal </h6>
+            <span>Gs. {{ subtotal | numberFormat }}</span>
+          </ion-col>
+        
+          <ion-col size="12" class="d-flex ion-justify-content-between ion-align-items-center py-3 border-top">
+            <h5 class="m-0">Total del pedido </h5>
+            <h5>Gs. {{ total | numberFormat }}</h5>
+          </ion-col>
+        
+          <ion-col size="12" class="border-top">
+            <h5>Aplicar código de descuento</h5>
+            <form class="form-inline">
+        
+              <label class="sr-only" for="inlineFormInputGroup">Cupón de descuento</label>
+        
+              <div class="input-group mb-2">
+                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Cupón de descuento">
+                <div class="input-group-prepend">
+                  <button class="btn btn-primary btn-border" type="submit">Aplicar</button>
+                </div>
+              </div>
+        
+            </form>
+          </ion-col>
+        
+          <ion-col size="12">
+            <span class="float-right w-100" (click)="(listaCarrito && listaCarrito.length) ? pedido() : false;">
+              <a class="btn btn-primary btn-block py-2 px-4" [ngClass]="{'disabled': !listaCarrito || listaCarrito.length == 0}">Pagar</a>
+            </span>
+          </ion-col>
+        
+        </ion-row>
+
+      </ion-col>
+      <!-- FIN TOTALES DEL PEDIDO -->
+
     </ion-row>
 
     <ion-row *ngIf="!listaCarrito || !listaCarrito.length" class="text-center">
       <ion-col size="12" class="text-center">
         <img src="assets/images/sin-datos.png" width="150" height="150">
         <h4>No se encontraron productos en el carrito</h4>
-      </ion-col>
-    </ion-row>
-
-
-    <ion-row *ngIf="listaCarrito && listaCarrito.length">
-      <ion-col size="12">
-        <span class="float-right">
-          <p (click)="(listaCarrito && listaCarrito.length) ? pedido() : false;">
-            <a class="btn btn-primary py-2 px-4"
-              [ngClass]="{'disabled': !listaCarrito || listaCarrito.length == 0}">Pagar</a>
-          </p>
-        </span>
       </ion-col>
     </ion-row>
 

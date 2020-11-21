@@ -23,20 +23,41 @@ ion-title {
     border-bottom: 1px solid #efefef;
 }
 
+.remove-product {
+    position: absolute;
+    right: 10px;
+    top: 15px;
+}
+
+.subtotales {
+    // position: fixed;
+    // right: 5%;
+}
+
 @media screen and (max-width: 767px) {
+    .cart-list .header {
+        display: none;
+    }
+
     .remove-product {
         position: absolute;
-        top: -112px;
+        top: 8px;
         right: -20px;
         padding: 0.2em;
         background-color: transparent !important;
         color: #06803D !important;
     }
+
+    .subtotales {
+        position: initial;
+    }
 }
 
 @media screen and (max-width: 500px) {
     .remove-product {
-        top: -140px;
-        right: -30px;
+        top: 16px;
+        right: 0px;
+        font-size: 24px;
+        border: none !important;
     }
 }

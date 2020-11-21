@@ -7,11 +7,11 @@ import { GeneralService } from 'src/app/servicios/general.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 
 @Component({
-  selector: 'app-producto',
-  templateUrl: './producto.page.html',
-  styleUrls: ['./producto.page.scss'],
+  selector: 'app-detalle-producto',
+  templateUrl: './detalle-producto.page.html',
+  styleUrls: ['./detalle-producto.page.scss'],
 })
-export class PaginaProducto implements OnInit {
+export class PaginaDetalleProducto implements OnInit {
 
   public slug: string;
   public cargando = true;
