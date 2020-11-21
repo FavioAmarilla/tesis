@@ -30,7 +30,8 @@
                             <div class="form-check" *ngFor="let categoria of listaLineas">
                                 <input class="form-check-input" type="checkbox" [id]="categoria.identificador"
                                     [value]="categoria.identificador + categoria.descripcion"
-                                    (change)="seleccionarCategoria(categoria.identificador, $event)">
+                                    (change)="seleccionarCategoria(categoria.identificador, $event)"
+                                    [checked]="verificarCheck('categoria', categoria.identificador)">
                                 <label class="form-check-label"
                                     [for]="categoria.identificador">{{ categoria.descripcion }}</label>
                             </div>
@@ -43,7 +44,8 @@
                             <div class="form-check" *ngFor="let marca of listaMarcas">
                                 <input class="form-check-input" type="checkbox" [id]="marca.identificador"
                                     [value]="marca.identificador + marca.nombre"
-                                    (change)="seleccionarMarca(marca.identificador, $event)">
+                                    (change)="seleccionarMarca(marca.identificador, $event)"
+                                    [checked]="verificarCheck('marca', marca.identificador)">
                                 <label class="form-check-label"
                                     [for]="marca.identificador + marca.nombre">{{ marca.nombre }}</label>
                             </div>
@@ -57,11 +59,9 @@
                             <div class="form-group input-group">
                                 <input type="text" class="form-control" placeholder="Buscá tu producto..."
                                     aria-label="Buscá tu producto..." aria-describedby="basic-addon2"
-                                    [(ngModel)]="buscarProductoDescripcion"
-                                    (keyup.enter)="buscarProductoPorDescripcion()">
+                                    [(ngModel)]="buscarProductoDescripcion" (keyup.enter)="redirect()">
                                 <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2"
-                                        (click)="buscarProductoPorDescripcion()">
+                                    <span class="input-group-text" id="basic-addon2" (click)="redirect()">
                                         <ion-icon name="md-search"></ion-icon>
                                     </span>
                                 </div>
@@ -70,7 +70,7 @@
                         <div class="col-md-3" *ngIf="listaSucursales">
                             <div class="form-group">
                                 <select class="form-control" name="sucursal"
-                                    (change)="seleccionarSucursal($event.target.value)">
+                                    (change)="seleccionarSucursal($event.target.value, true)">
                                     <option *ngFor="let sucursal of listaSucursales" [value]="sucursal.identificador">
                                         {{ sucursal.nombre }}
                                     </option>

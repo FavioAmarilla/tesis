@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { CarritoService } from 'src/app/servicios/carrito.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
+import { SucursalService } from 'src/app/servicios/sucursal.service';
 
 @Component({
   selector: 'app-header',
@@ -16,13 +17,15 @@ export class HeaderComponent implements OnInit, OnChanges {
   public usuario: any = null;
   public carrito: any;
   public mostrarMobileMenu = true;
+  public sucursal: number = 0;
 
   constructor(
-    private router: Router,
     private platform: Platform,
     private servicioUsuario: UsuarioService,
     private servicioCarrito: CarritoService,
-    private servicioAlerta: AlertaService
+    private servicioAlerta: AlertaService,
+    private servicioSucursal: SucursalService,
+    private router: Router
   ) {
     this.carrito = 0;
     this.verificarResolucion();
@@ -31,21 +34,22 @@ export class HeaderComponent implements OnInit, OnChanges {
   async ngOnInit() {
     await this.obtenerUsuario();
     this.servicioUsuario.loginEmitter
-    .subscribe(response => {
-      this.usuario = response;
-    });
+      .subscribe(response => {
+        this.usuario = response;
+      });
 
     this.servicioUsuario.logoutEmitter
-    .subscribe(event => {
-      this.obtenerUsuario();
-    });
+      .subscribe(event => {
+        this.obtenerUsuario();
+      });
 
     this.platform.resize
-    .subscribe(() => {
-      this.verificarResolucion();
-    });
+      .subscribe(() => {
+        this.verificarResolucion();
+      });
 
     this.obtenerCantidadCarrito();
+    await this.obtenerSucursales();
   }
 
   async ngOnChanges() {
@@ -78,5 +82,26 @@ export class HeaderComponent implements OnInit, OnChanges {
     );
   }
 
+  async obtenerSucursales() {
+    const parametros = {
+      ecommerce: 'S'
+    };
+
+    const response: any = await this.servicioSucursal.obtenerSucursal(null, parametros);
+
+    if (response.success) {
+      const central = response.data.find(sucursal => sucursal.central == 'S');
+      if (central != null) {
+        this.sucursal = central.identificador;
+      }
+    } else {
+      this.cargando = false;
+      this.servicioAlerta.dialogoError(response.message);
+    }
+  }
+
+  redirectProducto() {
+    this.router.navigate(['/productos', { sucursal: this.sucursal, order: 'created_at' }]);
+  }
 
 }

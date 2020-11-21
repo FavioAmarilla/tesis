@@ -1,4 +1,6 @@
+import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -17,7 +19,8 @@ export class LineasModalComponent implements OnInit {
 
 
   constructor(
-    private modalController: ModalController
+    private modalController: ModalController,
+    private router: Router
   ) {
     if (!this.order) {
       this.order = 'created_at';
@@ -85,5 +88,6 @@ export class LineasModalComponent implements OnInit {
   async ordenar(value) {
     this.order = value;
   }
+
 
 }

@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductoService } from '../../servicios/producto.service';
 import { Producto, Banner, LineaProducto, Sucursal, Marca } from '../../interfaces/interfaces';
-import { Router } from '@angular/router';
+import { ActivatedRoute, ChildActivationStart, Router } from '@angular/router';
 import { CarruselService } from 'src/app/servicios/carrusel.service';
 import { environment } from '../../../environments/environment';
 import { LineasProductoService } from 'src/app/servicios/linea-producto.service';
 import { CarritoService } from 'src/app/servicios/carrito.service';
 import { IonSlides, ModalController } from '@ionic/angular';
-import { GeneralService } from 'src/app/servicios/general.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 import { SucursalService } from 'src/app/servicios/sucursal.service';
 import { LineasModalComponent } from 'src/app/componentes/lineas-modal/lineas-modal.component';
@@ -36,10 +35,10 @@ export class ProductosPage implements OnInit {
   public porPagina;
   public total;
 
-  public idsCategorias: string = "";
-  public idsMarcas: string = "";
-  public parametrosTabla: any = []
+  public idsCategorias = [];
+  public idsMarcas = [];
   public order = 'created_at';
+  public sucursal = 0;
 
   public slideImgUrl: string;
   @ViewChild(IonSlides, { static: true }) slider: IonSlides;
@@ -59,19 +58,72 @@ export class ProductosPage implements OnInit {
     private servicioSucursal: SucursalService,
     private servicioLineaProd: LineasProductoService,
     private servicioMarca: MarcaService,
-    private servicioGeneral: GeneralService,
     private servicioAlerta: AlertaService,
     private modalController: ModalController,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     this.API = environment.api;
     this.slideImgUrl = this.API + 'producto/getImage/';
+
+    this.activatedRoute.params.subscribe(
+      params => {
+        let key = null;
+        let value = null;
+        let filtros = []
+
+        if (params['sucursal']) {
+          key = 'sucursal';
+          value = params['sucursal'];
+          this.seleccionarSucursal(value);
+
+          this.sucursal = value;
+          filtros.push({ key, value });
+        }
+
+        if (params['order']) {
+          key = 'order';
+          value = params['order'];
+
+          this.order = value;
+          filtros.push({ key, value });
+        }
+
+        if (params['categoria']) {
+          key = 'lineas';
+          value = params['categoria'];
+
+          this.idsCategorias = value.split(',');
+          filtros.push({ key, value });
+        }
+
+        if (params['marca']) {
+          key = 'marcas';
+          value = params['marca'];
+
+          this.idsMarcas = value.split(',');
+          filtros.push({ key, value });
+        }
+
+        if (params['descripcion']) {
+          key = 'descripcion';
+          value = params['descripcion'];
+
+          this.buscarProductoDescripcion = value;
+          filtros.push({ key, value });
+        }
+
+        this.obtenerProductos(null, filtros);
+
+      }
+    );
   }
 
   async ngOnInit() {
     await this.obtenerSucursales();
     await this.obtenerLineaProducto();
     await this.obtenerMarca();
+    this.cargando = false;
   }
 
   redireccionar(url) {
@@ -99,47 +151,24 @@ export class ProductosPage implements OnInit {
     }
   }
 
-
   async obtenerSucursales() {
-    const parametros = {
-      ecommerce: 'S'
-    };
-
-    const response: any = await this.servicioSucursal.obtenerSucursal(null, parametros);
+    const response: any = await this.servicioSucursal.obtenerSucursal(null, { ecommerce: 'S' });
 
     if (response.success) {
       this.listaSucursales = response.data;
-      const central = response.data.find(sucursal => sucursal.central == 'S');
-      if (central) {
-        this.seleccionarSucursal(central.identificador)
-        await this.servicioCarrito.setStorage('sucursal', central.identificador);
-      }
     } else {
       this.cargando = false;
       this.servicioAlerta.dialogoError(response.message);
     }
   }
 
-  async seleccionarSucursal(value) {
+  async seleccionarSucursal(value, redirect?) {
     this.cargando = true;
-
-    let key = 'sucursal';
-    this.parametrosTabla.push({ key, value });
-
+    this.sucursal = value;
     await this.servicioCarrito.setStorage('sucursal', value);
-    this.obtenerProductos(null, this.parametrosTabla);
-  }
 
-
-  async buscarProductoPorDescripcion() {
-    if (this.buscarProductoDescripcion != '' && this.buscarProductoDescripcion != null) {
-      this.cargando = true;
-
-      let key = 'descripcion';
-      let value = this.buscarProductoDescripcion;
-
-      this.parametrosTabla.push({ key, value });
-      this.obtenerProductos(null, this.parametrosTabla);
+    if (redirect) {
+      this.redirect();
     }
   }
 
@@ -155,7 +184,7 @@ export class ProductosPage implements OnInit {
     };
 
     if (parametrosFiltro) {
-      this.parametrosTabla.forEach(element => {
+      parametrosFiltro.forEach(element => {
         parametros[element.key] = element.value;
       });
     }
@@ -169,8 +198,6 @@ export class ProductosPage implements OnInit {
       this.cargando = false;
       this.servicioAlerta.dialogoError(response.message);
     }
-
-    this.cargando = false;
   }
 
 
@@ -191,63 +218,90 @@ export class ProductosPage implements OnInit {
     const { data } = await modal.onWillDismiss();
 
     if (data) {
-      let key = 'lineas';
-      let value = data.idsCategorias;
-      this.idsCategorias = value;
-      this.parametrosTabla.push({ key, value });
+      this.idsCategorias = data.idsCategorias;
+      this.idsMarcas = data.idsMarcas;
+      this.order = data.order;
 
-      key = 'marcas';
-      value = data.idsMarcas;
-      this.idsMarcas = value;
-      this.parametrosTabla.push({ key, value });
-
-      key = 'order';
-      value = data.order;
-      this.order = value;
-      this.parametrosTabla.push({ key, value });
-
-      this.obtenerProductos(null, this.parametrosTabla);
+      this.redirect();
     }
   }
 
-  seleccionarCategoria(id: string, event) {
+  seleccionarCategoria(id, event) {
     const add = event.target.checked;
 
     if (add) {
-      this.idsCategorias += id + ',';
+      this.idsCategorias.push(id);
     } else {
-      this.idsCategorias = this.idsCategorias.replace(id, '');
+      var index = this.idsCategorias.indexOf(id.toString());
+      if (index >= 0) {
+        this.idsCategorias.splice(index, 1);
+      }
     }
 
-    let key = 'lineas';
-    let value = this.idsCategorias;
-    this.parametrosTabla.push({ key, value });
-    this.obtenerProductos(null, this.parametrosTabla);
+    console.log(this.idsCategorias);
+    this.redirect();
   }
 
-  seleccionarMarca(id: string, event) {
+  seleccionarMarca(id, event) {
     const add = event.target.checked;
 
     if (add) {
-      this.idsMarcas += id + ',';
+      this.idsMarcas.push(id)
     } else {
-      this.idsMarcas = this.idsMarcas.replace(id, '');
-      this.idsMarcas = this.idsMarcas.replace(',,', '');
+      var index = this.idsMarcas.indexOf(id.toString());
+      if (index >= 0) {
+        this.idsMarcas.splice(index, 1);
+      }
     }
 
-    let key = 'marcas';
-    let value = this.idsMarcas;
-    this.parametrosTabla.push({ key, value });
-    this.obtenerProductos(null, this.parametrosTabla);
+    this.redirect();
   }
 
   async ordenar(value) {
-    this.cargando = true;
-
-    let key = 'order';
-    this.parametrosTabla.push({ key, value });
-
     this.order = value;
-    this.obtenerProductos(null, this.parametrosTabla);
+    this.redirect();
+  }
+
+  redirect() {
+    let queryParams: any = {};
+
+    if (this.sucursal) {
+      queryParams.sucursal = this.sucursal;
+    }
+
+    if (this.order) {
+      queryParams.order = this.order;
+    }
+    if (this.buscarProductoDescripcion) {
+      queryParams.descripcion = this.buscarProductoDescripcion;
+    }
+
+    if (this.idsCategorias.length > 0) {
+      queryParams.categoria = this.idsCategorias.toString();
+    }
+
+    if (this.idsMarcas.length > 0) {
+      queryParams.marca = this.idsMarcas.toString();
+    }
+
+    this.router.navigate(['/productos', queryParams]);
+  }
+
+  verificarCheck(modelo, id): boolean {
+    let lista: any = {};
+    let index = 0;
+    let check = false;
+
+    if (modelo == 'categoria') {
+      lista = this.idsCategorias || [];
+      index = lista.findIndex(data => data == id);
+      check = (index != -1) ? true : false;
+    } else if (modelo == 'marca') {
+      lista = this.idsMarcas || [];
+      index = lista.findIndex(data => data == id);
+      check = (index != -1) ? true : false;
+    }
+
+    return check;
   }
 }
