@@ -101,7 +101,7 @@ export class HeaderComponent implements OnInit, OnChanges {
   }
 
   redirectProducto() {
-    this.router.navigate(['/productos', { sucursal: this.sucursal, order: 'created_at' }]);
+    this.router.navigate(['/productos'], { queryParams: { sucursal: this.sucursal, order: 'created_at' } });
   }
 
 }

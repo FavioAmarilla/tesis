@@ -66,7 +66,7 @@ export class ProductosPage implements OnInit {
     this.API = environment.api;
     this.slideImgUrl = this.API + 'producto/getImage/';
 
-    this.activatedRoute.params.subscribe(
+    this.activatedRoute.queryParams.subscribe(
       params => {
         let key = null;
         let value = null;
@@ -93,7 +93,7 @@ export class ProductosPage implements OnInit {
           key = 'lineas';
           value = params['categoria'];
 
-          this.idsCategorias = value.split(',');
+          this.idsCategorias.push(value);
           filtros.push({ key, value });
         }
 
@@ -101,7 +101,7 @@ export class ProductosPage implements OnInit {
           key = 'marcas';
           value = params['marca'];
 
-          this.idsMarcas = value.split(',');
+          this.idsMarcas = value;
           filtros.push({ key, value });
         }
 
@@ -195,9 +195,10 @@ export class ProductosPage implements OnInit {
       this.porPagina = response.per_page;
       this.total = response.total;
     } else {
-      this.cargando = false;
       this.servicioAlerta.dialogoError(response.message);
     }
+    
+    this.cargando = false;
   }
 
 
@@ -284,7 +285,7 @@ export class ProductosPage implements OnInit {
       queryParams.marca = this.idsMarcas.toString();
     }
 
-    this.router.navigate(['/productos', queryParams]);
+    this.router.navigate(['/productos'], { queryParams });
   }
 
   verificarCheck(modelo, id): boolean {
