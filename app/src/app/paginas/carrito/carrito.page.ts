@@ -63,18 +63,7 @@ export class PaginaCarrito implements OnInit {
   }
 
   onScroll(event: CustomEvent) {
-    const width = this.platform.width();
-
-    if (width >= 996) {
-      const cartList = document.querySelector('.cart-list') as HTMLElement;
-      const subtotales = document.querySelector('.subtotales') as HTMLElement;
-
-      if (cartList && subtotales) {
-        if (event.detail.scrollTop < cartList.offsetHeight - subtotales.offsetHeight) {
-          subtotales.style.transform = `translate3d(0px, ${ event.detail.scrollTop }px, 0px)`;
-        }
-      }
-    }
+    this.servicioGeneral.translateContainer(event, '.cart-list', '.subtotales');
   }
 
   async obtenerCarrito() {

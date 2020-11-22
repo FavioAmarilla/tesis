@@ -1,24 +1,26 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { trigger, style, animate, transition } from '@angular/animations';
+import { ModalController, Platform } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
+
+import { MatStepper } from '@angular/material/stepper';
 
 import { UbicacionPage } from '../../componentes/ubicacion/ubicacion.page';
 
-import { BarrioService } from 'src/app/servicios/barrio.service';
-import { AlertaService } from 'src/app/servicios/alerta.service';
-import { CarritoService } from 'src/app/servicios/carrito.service';
 import { CuponDescuentoService } from 'src/app/servicios/cupon-descuento.service';
 import { EcParametrosService } from 'src/app/servicios/ec-parametros.service';
 import { ServicioUbicacion } from 'src/app/servicios/ubicacion.service';
-import { PedidoService } from 'src/app/servicios/pedido.service';
+import { CarritoService } from 'src/app/servicios/carrito.service';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
 import { GeneralService } from 'src/app/servicios/general.service';
+import { BarrioService } from 'src/app/servicios/barrio.service';
+import { AlertaService } from 'src/app/servicios/alerta.service';
+import { PedidoService } from 'src/app/servicios/pedido.service';
 
 import { Barrio, CuponDescuento, EcParametro, EcParamCiudad, Pedido } from 'src/app/interfaces/interfaces';
-import { trigger, style, animate, transition, state } from '@angular/animations';
-import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
-import { MatFormFieldControl } from '@angular/material/form-field';
-import { MatStepper } from '@angular/material/stepper';
+
+import { addInputListeners } from 'src/assets/js/main';
 import * as moment from 'moment';
 
 declare var Bancard: any;
@@ -73,19 +75,20 @@ export class PedidoPage implements OnInit {
   @ViewChild('stepper', {static: false}) stepper: MatStepper;
 
   constructor(
-    private servicioPedido: PedidoService,
+    private servicioEcParametros: EcParametrosService,
+    private servicioCupon: CuponDescuentoService,
+    private servicioUbicacion: ServicioUbicacion,
     private servicioUsuario: UsuarioService,
+    private servicioCarrito: CarritoService,
+    private servicioGeneral: GeneralService,
+    private servicioPedido: PedidoService,
     private servicioBarrio: BarrioService,
     private servicioAlerta: AlertaService,
-    private servicioCarrito: CarritoService,
-    private servicioCupon: CuponDescuentoService,
-    private servicioEcParametros: EcParametrosService,
-    private servicioUbicacion: ServicioUbicacion,
-    private servicioGeneral: GeneralService,
     private modalCtrl: ModalController,
     private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private platform: Platform,
     private router: Router,
-    private route: ActivatedRoute
 
   ) {
     this.inicializarTotales();
@@ -95,6 +98,7 @@ export class PedidoPage implements OnInit {
   }
 
   async ngOnInit() {
+    addInputListeners();
     this.obtenerUsuario();
 
     await this.servicioGeneral.agregarScriptBancard();
@@ -110,11 +114,27 @@ export class PedidoPage implements OnInit {
       }
     });
 
+    this.platform.resize
+    .subscribe(() => {
+      const width = this.platform.width();
+
+      if (width < 997) {
+        const subtotales = document.querySelector('.subtotales') as HTMLElement;
+        if (subtotales) {
+          subtotales.style.transform = 'none';
+        }
+      }
+    });
+
     if (comprobarTotales) { this.comprobarTotales(); }
 
     this.inicializarDatosPago();
 
     this.cargando = false;
+  }
+
+  onScroll(event) {
+    this.servicioGeneral.translateContainer(event, '.details-container', '.cart-total');
   }
 
   async obtenerTarjetas() {

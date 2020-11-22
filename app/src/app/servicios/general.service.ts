@@ -1,6 +1,8 @@
 import { Injectable, RendererFactory2, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
+import { Platform } from '@ionic/angular';
+
 import { environment } from 'src/environments/environment';
 
 const API = environment.api;
@@ -13,7 +15,8 @@ export class GeneralService {
   constructor(
     private http: HttpClient,
     private rendererFactory: RendererFactory2,
-    @Inject(DOCUMENT) private document: any
+    @Inject(DOCUMENT) private document: any,
+    private platform: Platform,
   ) { }
 
   public obtenerMenuItems() {
@@ -79,5 +82,20 @@ export class GeneralService {
         return resolve();
       }, time);
     });
+  }
+
+  translateContainer(event, containerReference, containerToTranslateClass) {
+    const width = this.platform.width();
+
+    if (width >= 996) {
+      const containerControl = document.querySelector(containerReference) as HTMLElement;
+      const toTranslate = document.querySelector(containerToTranslateClass) as HTMLElement;
+
+      if (containerControl && toTranslate) {
+        if (event.detail.scrollTop < containerControl.offsetHeight - toTranslate.offsetHeight) {
+          toTranslate.style.transform = `translate3d(0px, ${event.detail.scrollTop}px, 0px)`;
+        }
+      }
+    }
   }
 }

@@ -45,6 +45,54 @@
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: 'AmpleSoft Pro';
+    src: url('/assets/fonts/amplesoftpro/AmpleSoftPro-Bold.eot');
+    src: local('AmpleSoftPro-Bold'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Bold.eot?#iefix') format('embedded-opentype'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Bold.woff2') format('woff2'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Bold.woff') format('woff'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AmpleSoft Pro';
+    src: url('/assets/fonts/amplesoftpro/AmpleSoftPro-Medium.eot');
+    src: local('/assets/fonts/amplesoftpro/AmpleSoftPro-Medium'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Medium.eot?#iefix') format('embedded-opentype'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Medium.woff2') format('woff2'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Medium.woff') format('woff'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AmpleSoft Pro';
+    src: url('/assets/fonts/amplesoftpro/AmpleSoftPro-Light.eot');
+    src: local('/assets/fonts/amplesoftpro/AmpleSoftPro-Light'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Light.eot?#iefix') format('embedded-opentype'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Light.woff2') format('woff2'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Light.woff') format('woff'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AmpleSoft Pro';
+    src: url('/assets/fonts/amplesoftpro/AmpleSoftPro-Thin.eot');
+    src: local('/assets/fonts/amplesoftpro/AmpleSoftPro-Thin'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Thin.eot?#iefix') format('embedded-opentype'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Thin.woff2') format('woff2'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Thin.woff') format('woff'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AmpleSoft Pro';
+    src: url('/assets/fonts/amplesoftpro/AmpleSoftPro-ExtraLight.eot');
+    src: local('AmpleSoftPro-ExtraLight'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-ExtraLight.eot?#iefix') format('embedded-opentype'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-ExtraLight.woff2') format('woff2'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-ExtraLight.woff') format('woff'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AmpleSoft Pro';
+    src: url('/assets/fonts/amplesoftpro/AmpleSoftPro-Regular.eot');
+    src: local('AmpleSoftPro-Regular'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Regular.eot?#iefix') format('embedded-opentype'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Regular.woff2') format('woff2'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Regular.woff') format('woff'), url('/assets/fonts/amplesoftpro/AmpleSoftPro-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html {
     font-family: sans-serif;
     line-height: 1.15;
@@ -820,18 +868,397 @@ div.swiper-button-prev, div.swiper-button-next {
     background-position: center;
 }
 
-.mark {
-    display: inline-flex;
-    background-color: var(--ion-color-primary);
-    width: 12px;
-    height: 12px;
-    justify-content: center;
-    margin-right: 9px;
-    margin-left: 5px;
+.d-sm-flex {
+    display: flex;
+}
+
+.group-title .mark {
+    border: 2px solid var(--ion-color-primary);
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
     border-radius: 50%;
     color: var(--ion-color-primary);
     font-size: 2rem;
+    -webkit-align-items: center;
+    -ms-align-items: center;
     align-items: center;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    background-color: #fff;
     box-sizing: border-box;
     font-weight: 600;
+    height: 40px;
+    justify-content: center;
+    margin-right: 14px;
+    margin-left: 5px;
+    width: 40px;
+}
+
+.field-row, .control {
+    -webkit-align-items: flex-start;
+    -ms-align-items: flex-start;
+    align-items: flex-start;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: space-between;
+}
+
+.field {
+    -webkit-align-items: stretch;
+    -ms-align-items: stretch;
+    align-items: stretch;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    margin: 5px;
+    width: 100%;
+    position: relative;
+}
+
+.control {
+    width: 100%;
+    position: relative;
+}
+
+.input-text, .select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: #fff;
+    background-clip: padding-box;
+    border-radius: 1px;
+    font-family: AmpleSoft Pro, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    height: 32px;
+    line-height: 1.42857143;
+    padding: 0 9px;
+    vertical-align: baseline;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #d8d8d8;
+    min-height: 44px;
+    box-shadow: none;
+    transition: .3s;
+    cursor: pointer;
+}
+
+.input-text:focus, .select:focus {
+    border-color: var(--green);
+    outline: 0;
+}
+
+.field._required>.control>.label:first-of-type>span:first-child:after,
+.field.required>.control>.label:first-of-type>span:first-child:after,
+.field._required>.label:first-of-type>span:first-of-type:after,
+.field.required>.label:first-of-type>span:first-of-type:after,
+.field._required>.label.short>span:first-of-type:after,
+.field.required>.label.short>span:first-of-type:after {
+    content: '*';
+    color: #e02b27;
+    font-size: 1.2rem;
+    margin: -2px 0 0 2px;
+}
+
+.fl-placeholder-state .label,
+.fl-label-state .label {
+    color: #838383;
+    -webkit-transition: .3s;
+    -moz-transition: .3s;
+    -ms-transition: .3s;
+    transition: .3s;
+    -webkit-align-items: center;
+    -ms-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    font-weight: 400;
+    height: 100%;
+    max-height: 44px;
+    pointer-events: none;
+    position: absolute;
+    width: calc(100% - 10px);
+    z-index: 1;
+    padding: 0;
+    padding-left: 10px;
+}
+
+.field.fl-label-state .label,
+.field.fl-label[data-value-specified='1'] .label {
+    font-size: 85%;
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.field.fl-label-state .input-text,
+.field.fl-label[data-value-specified='1'] .input-text,
+.field.fl-label-state .select,
+.field.fl-label[data-value-specified='1'] .select, .field.fl-label-state textarea,
+.field.fl-label[data-value-specified='1'] textarea {
+    padding-top: 15px;
+    outline: none;
+}
+
+.group-title .mark:after {
+    content: counter(group);
+    counter-increment: group;
+    font-size: 0.6em;
+}
+
+.group-title h1,
+.group-title h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-family: AmpleSoft Pro;
+    color: #333;
+}
+
+.payment-method {
+    -webkit-transition: .2s;
+    -moz-transition: .2s;
+    -ms-transition: .2s;
+    transition: .2s;
+    border-left: 1px solid #d8d8d8;
+    border-bottom: 1px solid #d8d8d8;
+    border-right: 1px solid #d8d8d8;
+    margin: auto;
+    max-width: 100%;
+    position: relative;
+    box-sizing: border-box;
+    font-family: AmpleSoft Pro;
+}
+
+.payment-method:first-of-type {
+    border-top: 1px solid #d8d8d8;
+    border-radius: 2px 2px 0 0;
+}
+
+.payment-method .field.choice {
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    font-size: 13px;
+    margin: 0;
+}
+
+.payment-method-title {
+    -webkit-transition: .3s;
+    -moz-transition: .3s;
+    -ms-transition: .3s;
+    transition: .3s;
+    background-color: #f8f8f8;
+    box-sizing: border-box;
+    padding: 25px 20px;
+    position: relative;
+}
+
+.payment-method-title input[type=radio].radio {
+    cursor: pointer;
+    display: block;
+    height: 100%;
+    left: 0;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.payment-method-title .label {
+    -webkit-align-items: center;
+    -ms-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    font-size: 14px;
+    cursor: pointer;
+    width: inherit;
+}
+
+.field>input[type=radio]+label {
+    position: relative;
+    padding-left: 25px;
+    margin: 0;
+    cursor: pointer;
+    font-weight: 400 !important;
+    line-height: 20px;
+}
+
+.payment-method._active:before {
+    background-color:var(--ion-color-primary);
+    content: '';
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 3px;
+}
+
+.payment-method input[type=radio]+label:before {
+    content: '';
+    width: 5px;
+    height: 10px;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: var(--ion-color-primary);
+}
+
+.payment-method ion-radio+label {
+    padding-left: 15px;
+}
+
+.payment-method ion-radio {
+    --color: var(--ion-color-primary);
+    top: 15px;
+}
+
+.payment-method-title input[type=radio]+label:before {
+    margin-left: 5px!important;
+    margin-top: -2px!important;
+}
+
+.payment-method._active .payment-method-title {
+    background-color: transparent;
+}
+
+.payment-method-content {
+    height: 0;
+    margin: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: .3s;
+    width: calc(100% - 110px);
+}
+
+.payment-method._active .payment-method-content {
+    height: inherit;
+    opacity: 1;
+    padding-bottom: 25px;
+    visibility: visible;
+}
+
+.field>input[type=checkbox]+label:before,
+.field>input[type=radio]+label:before {
+    border: none;
+}
+
+.payment-method-title.field.choice .label span,
+span.titulo-pago {
+    color: #666;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+span.descripcion-pago {
+    font-size: 13px !important;
+    font-weight: 200 !important;
+    color: #aeacac;
+    display: block;
+    margin: 5px 0;
+}
+
+.payment-method-title.field.choice,
+span.descripcion-pago, span.titulo-pago {
+    transition: all ease .5s;
+}
+
+.payment-method-title div.radio {
+    width: 95%;
+}
+
+figure.img-pago {
+    width: 95%;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.order-title ion-icon {
+    font-size: 24px;
+}
+
+.cart-total {
+    background-color: #f8f8f8;
+    border: 1px solid #d8d8d8;
+}
+
+.subtotales,
+.cart-total {
+    font-family: AmpleSoft Pro;
+}
+
+.cart-total .header .title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 20px;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.cart-total .header .subheader span {
+    display: flex;
+}
+
+.cart-total .header ion-icon {
+    font-size: 48px;
+    font-weight: 400;
+    left: 5px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.cart-total .total-price {
+    font-size: 150%;
+    font-weight: 600;
+}
+
+.cart-total .info {
+    color: #999;
+}
+
+@media only screen and (max-width: 639px) {
+    .group-title .mark {
+        background-color: var(--ion-color-primary);
+        width: 12px;
+        height: 12px;
+        justify-content: center;
+        margin-right: 9px;
+        margin-left: 5px;
+    }
+
+    .group-title .mark:after {
+        content: "";
+    }
+}
+
+@media (min-width: 1024px) {
+    .payment-method-title div.radio {
+        width: 65%;
+        display: inline-block;
+    }
+
+    figure.img-pago {
+        width: 32%;
+        margin: 15px 0;
+        text-align: right;
+        text-align: -webkit-right;
+        display: inline-block;
+    }
 }

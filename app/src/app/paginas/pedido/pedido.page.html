@@ -1,294 +1,423 @@
 <app-header [cargando]="cargando"></app-header>
 
-<ion-content>
+<ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">
 
-  <section class="ftco-section">
+  <ion-grid class="order-container px-md-5 px-xs-3">
 
-    <div class="row">
-      <div class="col-md-12 tab-principal">
+    <ion-row>
 
-        <!-- <h1 class="mb-4">Proceso de Pago</h1> -->
-        <div class="content">
-          <div class="row">
-            <mat-vertical-stepper linear #stepper class="col-lg-7">
-              <!-- datos de envio -->
-              <mat-step [stepControl]="datosEnvio" [editable]="stepperEditable">
-                <ng-template matStepLabel><h2 class="stepper-title">Datos de Envio</h2></ng-template>
-                  <form [formGroup]="datosEnvio">
-                  
-                    <div class="container">
-                      <div class="row">
-                        <div class="col-lg-6 col-sm-12 cart-wrap">
-                          <div class="cart-total mb-3">
-                            <h3>Tipo de envío (*)</h3>
-                          
-                            <div class="form-group">
-                              <select formControlName="tipo_envio" name="tipo_envio" class="form-control text-left px-3" placeholder="Tipo de Envio" (change)="datosEnvioSelect($event.target.value, 'tipo_envio')">
-                                <option value="0">-- SELECCIONE--</option>
-                                <option value="DE"> DELIVERY </option>
-                                <option value="RT"> RETIRO EN TIENDA </option>
-                              </select>
-                            </div>
-                    
-                            <!-- tipo de envio delivery -->
-                            <div *ngIf="datosEnvio.value.tipo_envio == 'DE'" [@enterAnimation]>
-                              <h3>Ingrese su destino para el envio</h3>
-                    
-                              <div class="form-group">
-                                <select formControlName="id_pais" name="pais" class="form-control text-left px-3" placeholder="Pais" (change)="datosEnvioSelect($event.target.value, 'pais')">
-                                  <option value="0">-- SELECCIONE--</option>
-                                  <option *ngFor="let pais of listaPaises" value="{{ pais.identificador }}"> {{ pais.nombre }}</option>
-                                </select>
-                              </div>
-                              <div class="form-group">
-                                <div *ngIf="!mostrarCiudades">
-                                  <input type="text" class="form-control" placeholder="Ciudad" readonly>
-                                </div>
-                                <div *ngIf="mostrarCiudades">
-                                  <select formControlName="id_ciudad" name="ciudad" class="form-control text-left px-3" placeholder="Ciudad" (change)="datosEnvioSelect($event.target.value, 'ciudad')">
-                                    <option value="0">-- SELECCIONE--</option>
-                                    <option *ngFor="let ciudad of listaCiudades" value="{{ ciudad.identificador }}">
-                                      {{ ciudad.nombre }}
-                                    </option>
-                                  </select>
-                                </div>
-                    
-                              </div>
-                              <div class="form-group">
-                                <div *ngIf="!mostrarBarrios">
-                                  <input type="text" class="form-control" placeholder="Barrio" readonly>
-                                </div>
-                                <div *ngIf="mostrarBarrios">
-                                  <select formControlName="id_barrio" name="barrio" class="form-control text-left px-3" placeholder="Barrio" (change)="datosEnvioSelect($event.target.value, 'barrio')">
-                                    <option value="0">-- SELECCIONE--</option>
-                                    <option *ngFor="let barrio of listaBarrios" value="{{ barrio.identificador }}">
-                                      {{ barrio.nombre }}
-                                    </option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div class="form-group">
-                                <input type="text" name="direccion" class="form-control text-left px-3" placeholder="Direccion" formControlName="direccion">
-                              </div>
-                              <div class="form-group">
-                                <div class="input-group mb-3">
-                                  <div class="input-group-prepend">
-                                    <div class="input-group-prepend" data-toggle="modal" data-target="#modalUbicacion" (click)="abrirModal()">
-                                      <span class=" input-group-text">
-                                        <ion-icon name="bookmark"></ion-icon>
-                                      </span>
-                                    </div>
-                                  </div>
-                    
-                                  <input type="text" name="ubicacion" class="form-control" placeholder="Ubicación" formControlName="ubicacion" readonly (click)="abrirModal()">
-                                </div>
-                              </div>
-                            </div>
-                    
-                            <!-- retirar en tienda -->
-                            <div *ngIf="datosEnvio.value.tipo_envio == 'RT'" [@enterAnimation]>
-                              <h3>Persona encargada a retirar</h3>
-                    
-                              <div class="form-group">
-                                <input type="text" class="form-control" name="persona" placeholder="Nombre" formControlName="persona">
-                              </div>
-                              <div class="form-group">
-                                <input type="text" class="form-control" name="nro_documento" placeholder="Nombre" placeholder="Numero de C.I." formControlName="nro_documento">
-                              </div>
-                              <div class="form-group text-info">
-                                <span>Para poder retirar su pedido debe presentar C.I</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-      
-                        <div class="col-lg-6 col-sm-12 cart-wrap">
-                          <div class="cart-total mb-3">
-                            <h3>Observación</h3>
-                            <div class="form-group">
-                              <textarea formControlName="observacion" class="form-control text-left px-3" cols="30" rows="5"></textarea>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                  </form>
-              </mat-step>
-    
-              <!-- datos de pago -->
-              <mat-step [stepControl]="datosPago" [editable]="stepperEditable">
-                <form [formGroup]="datosPago">
-                  <ng-template matStepLabel><h2 class="stepper-title">Medio de pago</h2></ng-template>
-  
-                  <mat-accordion>
-                    <ion-radio-group formControlName="tipo">
+      <ion-col size="12" class="order-title mt-md-4 mt-sm-0">
+        <div class="group-title d-sm-flex d-md-none align-items-center justify-content-center">
+          <ion-icon slot="start" name="cart" color="primary"></ion-icon>
+          <h1 class="text-center ml-2">Finalizar pedido</h1>
+        </div>
+      </ion-col>
 
-                      <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                          <mat-panel-title></mat-panel-title>
-                          <mat-panel-description>Pagar online ahora</mat-panel-description>
-                        </mat-expansion-panel-header>
-                        
-                        <mat-expansion-panel class="mat-elevation-z0">
-                          <mat-expansion-panel-header (click)="checkTipoPago(agregarTarjeta)">
-                            <mat-panel-title>
-                              <ion-radio value="ATCD" #agregarTarjeta></ion-radio>
-                            </mat-panel-title>
-                            <mat-panel-description>
-                              Agregar nueva tarjeta
-                            </mat-panel-description>
-                          </mat-expansion-panel-header>
-  
-                          <div class="new-card-info">
-                            <p>A continuación usted pasará por única vez por un proceso de validación con preguntas de seguridad. Para iniciar favor tener en cuenta las siguientes recomendaciones:</p>
-                            <ul>
-                              <li>Verifique su número de cédula de identidad</li>
-                              <li>Tenga a mano sus tarjetas de crédito y débito activas</li>
-                              <li>Verifique el monto y lugar de sus últimas compras en comercios o extracciones en cajeros</li>
-                            </ul>
-                          </div>
-                        </mat-expansion-panel>
+      <!-- INICIO SECCION IZQUIERDA -->
+      <ion-col size="12" size-md="8" class="details-container">
 
-                        <mat-expansion-panel class="mat-elevation-z0" *ngIf="usuario && usuario.tiene_tarjetas">
-                          <mat-expansion-panel-header (click)="checkTipoPago(pagarUsandoToken)">
-                            <mat-panel-title>
-                              <ion-radio value="PWTK" #pagarUsandoToken></ion-radio>
-                            </mat-panel-title>
-                            <mat-panel-description>Seleccionar Tarjeta</mat-panel-description>
-                          </mat-expansion-panel-header>
+        <ion-row>
+          <!-- INICIO DATOS ENVIO -->
+          <ion-col size="12">
+            <div class="group-title">
+              <h2 class="d-flex align-items-center mt-0">
+                <span class="mark"></span>
+                <span>Datos de envio</span>
+              </h2>
+            </div>
 
-                          <div class="row" *ngFor="let tarjeta of tarjetas">
-                            <div class="col-md-12">
-                              <ion-card class="credit-card" (click)="seleccionarTarjeta(tarjeta.card_id)" [ngClass]="{'bg-primary text-white': datosPago.value.card_id == tarjeta.card_id}">
-                                <ion-label>{{ tarjeta.card_brand | truncateText:10}} {{ tarjeta.card_masked_number | spaceBetweenLetters }}</ion-label>
-
-                                <ion-img [class]="tarjeta.card_brand | cardBrand:'class'" [src]="tarjeta.card_brand | cardBrand:'icon'"></ion-img>
-                              </ion-card>
-                            </div>
-                          </div>
-
-                        </mat-expansion-panel>
-    
-                        <mat-expansion-panel disabled class="mat-elevation-z0">
-                          <mat-expansion-panel-header (click)="checkTipoPago(pagoOnline)">
-                            <mat-panel-title>
-                              <ion-radio value="PO" #pagoOnline></ion-radio>
-                            </mat-panel-title>
-                            <mat-panel-description>Pago único</mat-panel-description>
-                          </mat-expansion-panel-header>
-                        </mat-expansion-panel>
-
-                        <img src="assets/images/pago-seguro.jpg">
-                      </mat-expansion-panel>
-  
-                      <mat-expansion-panel class="mat-elevation-z0">
-                        <mat-expansion-panel-header (click)="checkTipoPago(pagoEfectivo)">
-                          <mat-panel-title>
-                            <ion-radio value="PERC" #pagoEfectivo></ion-radio>
-                          </mat-panel-title>
-                          <mat-panel-description>
-                            Pagar en mi casa con Efectivo o Al retirar
-                          </mat-panel-description>
-                        </mat-expansion-panel-header>
-  
-                        <div class="form-group">
-                          <input type="text" class="form-control mb-2" formControlName="importe" placeholder="Importe en Gs.">
-                          <span class="text-secondary">* Por favor ingrese el monto en Gs. que utilizara para hacer el pago, para facilitarle el vuelto correspondiente</span>
-                        </div>
-                      </mat-expansion-panel>
-  
-                      <mat-expansion-panel disabled class="mat-elevation-z0">
-                        <mat-expansion-panel-header (click)="checkTipoPago(pagoTarjeta)">
-                          <mat-panel-title>
-                            <ion-radio value="PCTCD" #pagoTarjeta></ion-radio>
-                          </mat-panel-title>
-                          <mat-panel-description>
-                            Pagar en casa o al retirar con Tarjeta Crédito, Débito
-                          </mat-panel-description>
-                        </mat-expansion-panel-header>
-  
-                        <!-- Podés pagar al recibir tu compra con cualquiera de estas tarjetas. -->
-                      </mat-expansion-panel>
-                    </ion-radio-group>
-                  </mat-accordion>
-                </form>
-              </mat-step>
-    
-              <mat-step *ngIf="datosPago.value.tipo == 'PO'" linear>
-                <ng-template matStepLabel><h2 class="stepper-title">Finalizar Pago</h2></ng-template>
-
-                <div id="iframe-pago-unico"></div>
-              </mat-step>
-
-              <mat-step *ngIf="datosPago.value.tipo == 'ATCD'" linear>
-                <ng-template matStepLabel><h2 class="stepper-title" (click)="procesarPedido()">Catastrar tarjeta y finalizar</h2></ng-template>
-
-                <div id="iframe-catastro-tarjeta"></div>
-              </mat-step>
-
-            </mat-vertical-stepper>
-    
-            <div class="col-md-4 offset-md-1 cart-wrap order-resume">
-              <div class="cart-total mb-3">
-                <h2 class="title">Totales de carrito</h2>
-                <p class="d-flex">
-                  <span>Sub Total</span>
-                  <span style="text-align: right;">{{ totales.subtotal | numberFormat }} Gs.</span>
-                </p>
-                <p class="d-flex">
-                  <span>Delivery</span>
-                  <span style="text-align: right;">{{ totales.delivery | numberFormat }} Gs.</span>
-                </p>
-                <p class="d-flex">
-                  <span>Descuento</span>
-                  <span style="text-align: right;">{{ totales.descuento | numberFormat }} Gs.</span>
-                </p>
-                <hr style="border-top: 1px solid rgba(0,0,0,.05)">
-                <p class="d-flex total-price">
-                  <span><b>Total</b></span>
-                  <span style="text-align: right;"><b>{{ totales.total | numberFormat }} Gs.</b></span>
-                </p>
-            
-                <hr style="border-top: 1px solid rgba(0,0,0,.05)">
-                <div class="col-auto p-0" *ngIf="stepperEditable">
-                  <form (ngSubmit)="obtenerCupones()">
-                    <label class="sr-only" for="inlineFormInputGroup">Cupón de descuento</label>
-                    <div class="input-group mb-2">
-                      <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="cuponDescuento.codigo" [ngModelOptions]="{standalone: true}" placeholder="Cupón de descuento">
-                      <div class="input-group-prepend">
-                        <button class="btn btn-primary" type="submit">Aplicar</button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-            
-                <div class="form-group" *ngIf="cuponDescuento.length">
-                  <p class="d-flex">
-                    <span>{{ cuponDescuento.descripcion }}</span>
-                    <span style="text-align: right;">{{ cuponDescuento.porcentaje | numberFormat }} %</span>
-                  </p>
-                </div>
-            
-                <div class="form-group" *ngIf="!cuponDescuento.length && submitCuponDescuento">
-                  <p class="text-danger">
-                    No existe el cupon de descuento
-                  </p>
+            <form [formGroup]="datosEnvio">
+              
+              <div class="field-row">
+                <div class="field _required fl-placeholder-state">
+                  <div class="control">
+                    <label class="label"><span>Nombre completo o Razón Social</span></label>
+                    <input type="text" class="input-text">
+                  </div>
                 </div>
               </div>
+
+              <div class="field-row">
+                <div class="field _required fl-placeholder-state">
+                  <div class="control">
+                    <label class="label"><span>CI/RUC</span></label>
+                    <input type="text" class="input-text">
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field _required fl-placeholder-state">
+                  <div class="control">
+                    <label class="label"><span>Télefono</span></label>
+                    <input type="text" class="input-text">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </ion-col>
+          <!-- FIN DATOS ENVIO -->
+
+          <!-- INICIO TIPO ENVIO -->
+          <ion-col size="12" class="mt-4">
+            <div class="group-title">
+              <h2 class="d-flex align-items-center">
+                <span class="mark"></span>
+                <span>MÉTODO DE ENVIO</span>
+              </h2>
+            </div>
+
+            <form class="form" [formGroup]="datosEnvio">
+
+              <div class="field-row">
+                <div class="field _required fl-label-state">
+                  <div class="control">
+                    <label class="label">
+                      <span>Seleccionar método</span>
+                    </label>
+                    <select class="select" formControlName="tipo_envio" name="tipo_envio" placeholder="Seleccionar" (change)="datosEnvioSelect($event.target.value, 'tipo_envio')">
+                      <option value="">Por favor seleccione un método de pago</option>
+                      <option value="DE">DELIVERY</option>
+                      <option value="RT">RETIRO EN TIENDA</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- tipo de envio delivery -->
+              <!-- <div *ngIf="datosEnvio.value.tipo_envio == 'DE'" [@enterAnimation]> -->
+                <div class="field-row">
+                  <div class="field _required fl-label-state">
+                    <div class="control">
+                      <label for="" class="label"><span>Pais</span></label>
+                      <select formControlName="id_pais" name="pais" class="select" placeholder="Pais" (change)="datosEnvioSelect($event.target.value, 'pais')">
+                        <option value="0">-- SELECCIONE--</option>
+                        <option *ngFor="let pais of listaPaises" value="{{ pais.identificador }}"> {{ pais.nombre }}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+            
+                <div class="field-row" *ngIf="!mostrarCiudades">
+                  <div class="field _required fl-placeholder-state">
+                    <div class="control">
+                      <label class="label"><span>Ciudad</span></label>
+                      <input type="text" class="input-text" readonly>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field-row" *ngIf="mostrarCiudades">
+                  <div class="field _required fl-label-state">
+                    <div class="control">
+                      <label for="" class="label"><span>Ciudad</span></label>
+                      <select formControlName="id_ciudad" name="ciudad" class="select" placeholder="Ciudad" (change)="datosEnvioSelect($event.target.value, 'ciudad')">
+                        <option value="0">-- SELECCIONE--</option>
+                        <option *ngFor="let ciudad of listaCiudades" value="{{ ciudad.identificador }}">
+                          {{ ciudad.nombre }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field-row" *ngIf="!mostrarBarrios">
+                  <div class="field _required fl-placeholder-state">
+                    <div class="control">
+                      <label class="label"><span>Barrio</span></label>
+                      <input type="text" class="input-text" readonly>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field-row" *ngIf="mostrarBarrios">
+                  <div class="field _required fl-label-state">
+                    <div class="control">
+                      <label class="label"><span>Barrio</span></label>
+                      <select formControlName="id_barrio" name="barrio" class="select" placeholder="Barrio" (change)="datosEnvioSelect($event.target.value, 'barrio')">
+                        <option value="0">-- SELECCIONE--</option>
+                        <option *ngFor="let barrio of listaBarrios" value="{{ barrio.identificador }}">
+                          {{ barrio.nombre }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field-row">
+                  <div class="field _required fl-placeholder-state">
+                    <div class="control">
+                      <label class="label"><span>Dirección</span></label>
+                      <input type="text" name="direccion" class="input-text" formControlName="direccion">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field-row">
+                  <div class="field _required fl-placeholder-state">
+                    <div class="control">
+                      <div class="field-tooltip toggle"><span class="field-tooltip-action"></span></div>
+                      <label class="label"><span>Ubicación</span></label>
+                      <input type="text" name="ubicacion" class="input-text" formControlName="ubicacion" readonly (click)="abrirModal()">
+                    </div>
+                  </div>
+                </div>
+            
+                <!-- <div class="form-group">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <div class="input-group-prepend" data-toggle="modal" data-target="#modalUbicacion" (click)="abrirModal()">
+                        <span class=" input-group-text">
+                          <ion-icon name="bookmark"></ion-icon>
+                        </span>
+                      </div>
+                    </div>
+              
+                    
+                  </div>
+                </div> -->
+              
+              <!-- </div> -->
+            </form>
+          </ion-col>
+          <!-- INICIO TIPO ENVIO -->
+
+          <!-- INICIO OBSERVACIONES -->
+          <ion-col size="12" class="mt-4">
+            <div class="group-title">
+              <h2 class="d-flex align-items-center">
+                <span class="mark"></span>
+                OBSERVACIÓN (Opcional)
+              </h2>
+            </div>
+
+            <form class="form" [formGroup]="datosEnvio">
+              <div class="form-group">
+                <textarea class="form-control" formControlName="observacion"></textarea>
+              </div>
+            </form>
+          </ion-col>
+          <!-- FIN INICIO OBSERVACIONES -->
+
+          <!-- INICIO MEDIOS DE PAGO -->
+          <ion-col size="12" class="mt-4 payment-methods">
+            <div class="group-title">
+              <h2 class="d-flex align-items-center">
+                <span class="mark"></span>
+                MÉTODO DE PAGO
+              </h2>
+            </div>
+
+            <form [formGroup]="datosPago">
+              
+              <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'ATCD'}">
+                <div class="payment-method-title field choice">
+                  <ion-radio type="radio" value="ATCD" [checked]="datosPago.value.tipo == 'ATCD'" #agregarTarjeta></ion-radio>
+                  <label class="label" (click)="checkTipoPago(agregarTarjeta)">
+                    <div class="radio left">
+                      <span class="titulo-pago">Agregar tarjeta crédito/débito</span>
+                      <span class="descripcion-pago">Acepta todas las tarjetas de la red Infonet / www.infonet.com.py</span>
+                    </div>
+                    <figure class="img-pago">
+                      <ion-img src="/assets/svg/bancard.svg" class="payment-icon" style="width: 150px;"></ion-img>
+                    </figure>
+                  </label>
+                </div>
+                <div class="payment-method-content">
+                  <p>A continuación usted pasará por única vez por un proceso de validación con preguntas de
+                    seguridad. Para iniciar favor tener en cuenta las siguientes recomendaciones:</p>
+                  <ul>
+                    <li>Verifique su número de cédula de identidad</li>
+                    <li>Tenga a mano sus tarjetas de crédito y débito activas</li>
+                    <li>Verifique el monto y lugar de sus últimas compras en comercios o extracciones en cajeros</li>
+                  </ul>
+                </div>
+              </div>
+          
+              <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'PWTK'}" *ngIf="usuario && usuario.tiene_tarjetas">
+                <div class="payment-method-title field choice">
+                  <ion-radio type="radio" value="PWTK" [checked]="datosPago.value.tipo == 'PWTK'" #pagarUsandoToken></ion-radio>
+                  <label class="label" (click)="checkTipoPago(pagarUsandoToken)">
+                    <div class="radio left">
+                      <span class="titulo-pago">Seleccionar tarjeta</span>
+                      <span class="descripcion-pago">Acepta todas las tarjetas de la red Infonet / www.infonet.com.py</span>
+                    </div>
+                    <figure class="img-pago">
+                      <ion-img src="/assets/svg/bancard.svg" class="payment-icon" style="width: 150px;"></ion-img>
+                    </figure>
+                  </label>
+                </div>
+                <div class="payment-method-content">
+                  <div class="row" *ngFor="let tarjeta of tarjetas">
+                    <div class="col-md-12">
+                      <ion-card class="credit-card" (click)="seleccionarTarjeta(tarjeta.card_id)" [ngClass]="{'bg-primary text-white': datosPago.value.card_id == tarjeta.card_id}">
+                        <ion-label>{{ tarjeta.card_brand | truncateText:10}} {{ tarjeta.card_masked_number }}</ion-label>
+                        <ion-img [class]="tarjeta.card_brand | cardBrand:'class'" [src]="tarjeta.card_brand | cardBrand:'icon'"></ion-img>
+                      </ion-card>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          
+              <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'PO'}">
+                <div class="payment-method-title field choice">
+                  <ion-radio type="radio" value="PO" [checked]="datosPago.value.tipo == 'PO'" #pagoOnline></ion-radio>
+                  <label class="label" (click)="checkTipoPago(pagoOnline)">
+                    <div class="radio left">
+                      <span class="titulo-pago">Pago único (tarjeta crédito/débito)</span>
+                      <span class="descripcion-pago">Acepta todas las tarjetas de la red Infonet / www.infonet.com.py</span>
+                    </div>
+                    <figure class="img-pago">
+                      <ion-img src="/assets/svg/bancard.svg" class="payment-icon" style="width: 150px;"></ion-img>
+                    </figure>
+                  </label>
+                </div>
+                <div class="payment-method-content">
+                  <ion-img src="assets/images/pago-seguro.jpg" style="width: 250px;"></ion-img>
+                </div>
+              </div>
+          
+              <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'PERC'}">
+                <div class="payment-method-title field choice">
+                  <ion-radio type="radio" value="PERC" [checked]="datosPago.value.tipo == 'PERC'" #pagoEfectivo></ion-radio>
+                  <label class="label" (click)="checkTipoPago(pagoEfectivo)">
+                    <div class="radio left">
+                      <span class="titulo-pago">Pagar en mi casa con Efectivo o Al retirar</span>
+                      <span class="descripcion-pago">Debe presentar su documento de identidad para confirmar</span>
+                    </div>
+                    <figure class="img-pago">
+                      <!-- <ion-img src="/assets/svg/bancard.svg" class="payment-icon" style="width: 150px;"></ion-img> -->
+                    </figure>
+                  </label>
+                </div>
+                <div class="payment-method-content">
+                  <div class="form-row">
+                    <div class="field _required fl-placeholder-state">
+                      <div class="control">
+                        <label class="label"><span>Importe en Gs.</span></label>
+                        <input type="text" class="input-text" formControlName="importe">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <span class="text-secondary">* Por favor ingrese el monto en Gs. que utilizara para hacer el pago, para facilitarle el vuelto correspondiente</span>
+                  </div>
+                </div>
+              </div>
+          
+              <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'PCTCD'}">
+                <div class="payment-method-title field choice">
+                  <ion-radio type="radio" value="PCTCD" [checked]="datosPago.value.tipo == 'PCTCD'" #pagoTarjeta></ion-radio>
+                  <label class="label" (click)="checkTipoPago(pagoTarjeta)">
+                    <div class="radio left">
+                      <span class="titulo-pago">Pagar en casa o al retirar con Tarjeta Crédito, Débito</span>
+                      <span class="descripcion-pago">Debe presentar su documento de identidad para confirmar</span>
+                    </div>
+                    <figure class="img-pago">
+                      <!-- <ion-img src="/assets/svg/bancard.svg" class="payment-icon" style="width: 150px;"></ion-img> -->
+                    </figure>
+                  </label>
+                </div>
+                <div class="payment-method-content"></div>
+              </div>
+
+            </form>
+          </ion-col>
+          <!-- FIN MEDIOS DE PAGO -->
+
+        </ion-row>
+
+      </ion-col>
+      <!-- FIN SECCION IZQUIERDA -->
+
+      <!-- INICION SECCION DERECHA -->
+      <ion-col size="12" size-md="4">
+        <div class="cart-total mb-3">
+          
+          <div class="header d-flex align-items-center mb-3">
+            <ion-icon slot="start" name="checkmark-circle-outline" color="primary"></ion-icon>
+            <div class="subheader">
+              <span class="title ml-2">Resumen del pedido</span>
+              <span class="subtitle ml-2" *ngIf="carrito">{{ carrito.length }} productos en el carrito</span>
             </div>
           </div>
+
+          <div class="d-flex justify-content-between pb-2">
+            <span>Sub Total</span>
+            <span class="text-right">{{ totales.subtotal | numberFormat }} Gs.</span>
+          </div>
+
+          <div class="d-flex justify-content-between pb-2">
+            <span>Delivery</span>
+            <span class="text-right">{{ totales.delivery | numberFormat }} Gs.</span>
+          </div>
+
+          <div class="d-flex justify-content-between pb-2">
+            <span>Descuento</span>
+            <span class="text-right">{{ totales.descuento | numberFormat }} Gs.</span>
+          </div>
+
+          <hr class="border-top">
+          
+          <div class="d-flex justify-content-between total-price">
+            <span>Total</span>
+            <span class="text-right"><b>{{ totales.total | numberFormat }} Gs.</b></span>
+          </div>
+
+          <hr class="border-top">
+          
+          <div class="col-auto p-0" *ngIf="stepperEditable">
+            <form (ngSubmit)="obtenerCupones()">
+
+              <div class="form-row">
+                <div class="field fl-placeholder-state">
+                  <div class="control">
+                    <label for="" class="label"><span></span></label>
+                    <input type="text" class="input-text" placeholder="Ingrese el cupón de descuento" [(ngModel)]="cuponDescuento.codigo" [ngModelOptions]="{standalone: true}">
+                  </div>
+                </div>
+              </div>
+
+              <div class="actions-toolbar d-flex justify-content-end">
+                <button class="btn btn-primary" type="submit">Aplicar</button>
+              </div>
+
+            </form>
+          </div>
+
+          <div class="form-group" *ngIf="cuponDescuento.length">
+            <p class="d-flex">
+              <span>{{ cuponDescuento.descripcion }}</span>
+              <span style="text-align: right;">{{ cuponDescuento.porcentaje | numberFormat }} %</span>
+            </p>
+          </div>
+
+          <div class="form-group" *ngIf="!cuponDescuento.length && submitCuponDescuento">
+            <p class="text-danger">No existe el cupon de descuento</p>
+          </div>
+
+          <div class="finish-order mt-3">
+            <button (click)="procesarPedido()" class="btn btn-primary btn-block" mat-button [disabled]="datosEnvio.invalid || datosPago.invalid">Finalizar pedido</button>
+          </div>
+
+          <div class="info mt-2">
+            <p>Tu compra está protegida por Ley. Luego de recibir tu producto tienes 5 días hábiles para solicitar reembolso. Ley 4868/13 Decreto 1165/2014 del Ministerio de Industria y Comercio</p>
+          </div>
         </div>
+      </ion-col>
 
+      <ion-col size="12">
+        <div id="iframe-pago-unico"></div>
+        <div id="iframe-catastro-tarjeta"></div>
+      </ion-col>
 
-        <div class="text-right">
-          <!-- <button *ngIf="datosEnvio.invalid || datosPago.invalid" (click)="stepper.next()" class="btn btn-primary" mat-button [disabled]="datosEnvio.invalid">Medio de pago</button> -->
-          <button (click)="procesarPedido()" class="btn btn-primary" mat-button [disabled]="datosEnvio.invalid || datosPago.invalid">Finalizar pedido</button>
-        </div>
-      </div>
-    </div>
+      
 
-  </section>
+    </ion-row>
+
+  </ion-grid>
 
   <app-footer></app-footer>
 

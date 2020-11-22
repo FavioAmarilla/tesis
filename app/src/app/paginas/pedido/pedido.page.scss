@@ -4,31 +4,16 @@
     margin: 0 !important;
 }
 
-mat-expansion-panel {
+.credit-card {
+    position: relative;
+    padding: 1em;
+    cursor: pointer;
 
-    border-top: 0.5px solid #efefef;
-    border-bottom: 0.5px solid #efefef;
-    margin: 0;
-
-    .mat-expansion-panel-header-title {
-        flex-grow: 0 !important;
-    }
-
-    .mat-expansion-panel-header[aria-disabled=true] .mat-expansion-panel-header-description {
-        color: rgba(0, 0, 0, 0.54) !important;
-    }
-
-    .credit-card {
-        position: relative;
-        padding: 1em;
-        cursor: pointer;
-
-        ion-img {
-            position: absolute;
-            width: 48px;
-            right: 20px;
-            bottom: 0;
-        }
+    ion-img {
+        position: absolute;
+        width: 48px;
+        right: 20px;
+        bottom: 0;
     }
 }
 

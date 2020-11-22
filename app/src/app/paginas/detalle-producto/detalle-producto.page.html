@@ -15,13 +15,13 @@
     <ion-grid class="container">
       <ion-row class="row">
 
-        <ion-col size="6" size-xs="12">
+        <ion-col size-xs="12" size-md="6" size="6">
           <div class="panel panel-default product-image border">
             <img *ngIf="producto" class="img-fluid" [src]="producto.imagen | productImage | urlSanitizer">
           </div>
         </ion-col>
 
-        <ion-col size="6" size-xs="12">
+        <ion-col size-xs="12" size-md="6" size="6">
           <div class="panel panel-default product-details border">
             <h5 class="h5">{{ producto.descripcion }}</h5>
             <p class="mb-0">Código de barras: {{ producto.codigo_barras }}</p>
