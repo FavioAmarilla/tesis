@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
@@ -63,6 +64,7 @@ class MarcaController extends BaseController
 
         $marca = new Marca();
         $marca->nombre = $nombre;
+        $marca->slug = Str::slug($nombre, '-');
 
         if ($marca->save()) {
             return $this->sendResponse(true, 'Marca registrada', null, 201);
@@ -121,6 +123,7 @@ class MarcaController extends BaseController
         $marca = Marca::find($id);
         if ($marca) {
             $marca->nombre = $nombre;
+            $marca->slug = Str::slug($nombre, '-');
 
             if ($marca->save()) {
                 return $this->sendResponse(true, 'Marca actualizada', null, 200);

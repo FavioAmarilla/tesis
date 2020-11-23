@@ -11,7 +11,7 @@ class Marca extends Model
     protected $perPage = 10;
     
     protected $fillable = [
-        'identificador', 'nombre'
+        'identificador', 'nombre', 'slug'
     ];
 
     //obtener productos de un tipo de impuesto

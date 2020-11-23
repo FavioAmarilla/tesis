@@ -11,7 +11,7 @@ class LineaProducto extends Model
     protected $perPage = 10;
 
     protected $fillable = [
-        'identificador', 'descripcion', 'archivo_img',
+        'identificador', 'descripcion', 'slug'
     ];
 
     //obtener productos de una linea

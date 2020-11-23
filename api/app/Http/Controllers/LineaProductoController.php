@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
@@ -23,11 +24,6 @@ class LineaProductoController extends BaseController
         $descripcion = $request->query('descripcion');
         if ($descripcion) {
             $query->where('descripcion', 'LIKE', '%'.$descripcion.'%');
-        }
-        
-        $slug = $request->query('slug');
-        if ($slug) {
-            $query->where('slug', '=', $slug);
         }
 
         $paginar = $request->query('paginar');
@@ -68,6 +64,7 @@ class LineaProductoController extends BaseController
 
         $linea = new LineaProducto();
         $linea->descripcion = $descripcion;
+        $linea->slug = Str::slug($descripcion, '-');
 
         if ($linea->save()) {
             return $this->sendResponse(true, 'Linea de Producto registrada', $linea, 201);
@@ -126,6 +123,7 @@ class LineaProductoController extends BaseController
         $linea = LineaProducto::find($id);
         if ($linea) {
             $linea->descripcion = $descripcion;
+            $linea->slug = Str::slug($descripcion, '-');
 
             if ($linea->save()) {
                 return $this->sendResponse(true, 'Linea de Producto actualizada', $linea, 200);
