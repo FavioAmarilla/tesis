@@ -34,6 +34,7 @@ class CreateEcPedidosTable extends Migration
 			$table->text('observacion');
 			$table->string('persona')->nullable()->default('NULL');
 			$table->string('nro_documento', 15)->nullable()->default('NULL');
+			$table->string('telefono', 15);
 			$table->string('tipo_envio', 2);
 			$table->string('estado', 11);
 			$table->timestamps();

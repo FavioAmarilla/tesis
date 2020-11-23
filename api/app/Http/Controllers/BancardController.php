@@ -38,6 +38,8 @@ class BancardController extends BaseController
 
         $amount = $request->input("amount");
         $shop_process_id = $request->input("shop_process_id");
+        $telefono = $request->input("telefono");
+        $zimple = $request->input("zimple");
         
         $amount = str_replace(",", "", number_format($amount, 2));
 
@@ -56,6 +58,11 @@ class BancardController extends BaseController
                 "cancel_url" => "$cancel_url"
             )
         ));
+
+        if ($zimple == 'S') {
+            $data['operation']['additional_data'] = $telefono;
+            $data['operation']['zimple'] = 'S';
+        }
         
         $respuesta = $this->requestHTTP($url, $data);
 

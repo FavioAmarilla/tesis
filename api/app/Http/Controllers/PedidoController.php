@@ -130,6 +130,11 @@ class PedidoController extends BaseController
         $longitud = $request->input("longitud");
         $persona = $request->input("persona");
         $nro_documento = $request->input("nro_documento");
+        $telefono = $request->input("telefono");
+        $asignado = $request->input("asignado");
+        $nombre_asignado = $request->input("nombre_asignado");
+        $nro_documento_asignado = $request->input("nro_documento_asignado");
+        $telefono_asignado = $request->input("telefono_asignado");
         $costo_envio = $request->input("costo_envio");
         $observacion = $request->input("observacion");
         $tipo_envio = $request->input("tipo_envio");
@@ -138,6 +143,9 @@ class PedidoController extends BaseController
         $pago = $request->input("pago");
         $tarjeta = $request->input("card_id");
         
+        $token = $request->token;
+        $usuario = $token->usuario;
+
         $validator = Validator::make($request->all(), [
             'id_usuario'  => 'required',
             'id_sucursal'  => 'required',
@@ -196,14 +204,39 @@ class PedidoController extends BaseController
         $pedido->longitud = $longitud;
         $pedido->costo_envio = $costo_envio;
         $pedido->observacion = $observacion;
-        $pedido->persona = $persona;
-        $pedido->nro_documento = $nro_documento;
+        
         $pedido->tipo_envio = $tipo_envio;
         $pedido->estado = $estado;
         $pedido->total = $total;
         $pedido->total_exento = $total_exento;
         $pedido->total_iva5 = $total_iva5;
         $pedido->total_iva10 = $total_iva10;
+
+        if ($asignado == 'me') {
+            $pedido->persona = $persona;
+            $pedido->nro_documento = $nro_documento;
+            $pedido->telefono = $telefono;
+        } else {
+            $pedido->persona = $nombre_asignado;
+            $pedido->nro_documento = $nro_documento_asignado;
+            $pedido->telefono = $telefono_asignado;
+        }
+
+        $usuario = User::find($usuario->identificador);
+
+        if ($usuario->nombre_completo != $persona) {
+            $usuario->nombre_completo = $persona;
+        }
+
+        if ($usuario->nro_documento != $nro_documento) {
+            $usuario->nro_documento = $nro_documento;
+        }
+
+        if ($usuario->telefono != $telefono) {
+            $usuario->telefono = $telefono;
+        }
+
+        $usuario->save();
 
         //validar que llegaron productos
         if (count($productos) <= 0) {
@@ -273,8 +306,6 @@ class PedidoController extends BaseController
                 if ($pagoIt->save()) {
                     switch ($pago['tipo']) {
                         case 'ATCD':
-                            $token = $request->token;
-                            $usuario = $token->usuario;
 
                             $tarjeta = new UserTarjetas();
                             $tarjeta->id_usuario = $usuario->identificador;
@@ -294,8 +325,6 @@ class PedidoController extends BaseController
 
                             return $this->sendResponse(false, 'Ha ocurrido un problema al intentar registrar la tarjeta', null, 500);
                         case 'PWTK':
-                            $token = $request->token;
-                            $usuario = $token->usuario;
 
                             $request->request->add([
                                 'pedido'    => $pedido->identificador,
@@ -307,10 +336,13 @@ class PedidoController extends BaseController
 
                             $bancard = new BancardController();
                             return $bancard->payWithToken($request);
+                        case 'BZ':
                         case 'PO':
                             $request->request->add([
                                 'amount' => $total,
-                                'shop_process_id' => $pagoIt->referencia
+                                'shop_process_id' => $pagoIt->referencia,
+                                'telefono' => $telefono,
+                                'zimple' => $pago['tipo'] == 'BZ' ? 'S' : 'N'
                             ]);
 
                             $bancard = new BancardController();
@@ -382,10 +414,18 @@ class PedidoController extends BaseController
         $observacion = $request->input("observacion");
         $persona = $request->input("persona");
         $nro_documento = $request->input("nro_documento");
+        $telefono = $request->input("telefono");
+        $asignado = $request->input("asignado");
+        $nombre_asignado = $request->input("nombre_asignado");
+        $nro_documento_asignado = $request->input("nro_documento_asignado");
+        $telefono_asignado = $request->input("telefono_asignado");
         $tipo_envio = $request->input("tipo_envio");
         $estado = $request->input("estado");
         $productos = $request->input("productos");
         $pago = $request->input("pago");
+
+        $token = $request->token;
+        $usuario = $token->usuario;
 
         $validator = Validator::make($request->all(), [
             'id_usuario'  => 'required',
@@ -419,11 +459,34 @@ class PedidoController extends BaseController
             $pedido->longitud = $longitud;
             $pedido->costo_envio = $costo_envio;
             $pedido->observacion = $observacion;
-            $pedido->persona = $persona;
-            $pedido->nro_documento = $nro_documento;
             $pedido->tipo_envio = $tipo_envio;
             $pedido->estado = $estado;
     
+            if ($asignado == 'me') {
+                $pedido->persona = $persona;
+                $pedido->nro_documento = $nro_documento;
+                $pedido->telefono = $telefono;
+            } else {
+                $pedido->persona = $nombre_asignado;
+                $pedido->nro_documento = $nro_documento_asignado;
+                $pedido->telefono = $telefono_asignado;
+            }
+
+            $usuario = User::find($usuario->identificador);
+
+            if ($usuario->nombre_completo != $persona) {
+                $usuario->nombre_completo = $persona;
+            }
+
+            if ($usuario->nro_documento != $nro_documento) {
+                $usuario->nro_documento = $nro_documento;
+            }
+
+            if ($usuario->telefono != $telefono) {
+                $usuario->telefono = $telefono;
+            }
+
+            $usuario->save();
 
             if ($pedido->save()) {
                 PedidoItems::where('id_pedido', $id)->delete();
@@ -469,8 +532,6 @@ class PedidoController extends BaseController
                     if ($pagoIt->save()) {
                         switch ($pago['tipo']) {
                             case 'ATCD':
-                                $token = $request->token;
-                                $usuario = $token->usuario;
 
                                 $tarjeta = new UserTarjetas();
                                 $tarjeta->id_usuario = $usuario->identificador;
@@ -489,8 +550,6 @@ class PedidoController extends BaseController
 
                                 return $this->sendResponse(false, 'Ha ocurrido un problema al intentar registrar la tarjeta', null, 500);
                             case 'PWTK':
-                                $token = $request->token;
-                                $usuario = $token->usuario;
 
                                 $request->request->add([
                                     'user_id' => $usuario->identificador,
@@ -501,10 +560,13 @@ class PedidoController extends BaseController
 
                                 $bancard = new BancardController();
                                 return $bancard->payWithToken($request);
+                            case 'BZ':
                             case 'PO':
                                 $request->request->add([
                                     'amount' => $total,
-                                    'shop_process_id' => $pagoIt->referencia
+                                    'shop_process_id' => $pagoIt->referencia,
+                                    'telefono' => $telefono,
+                                    'zimple' => $pago['tipo'] == 'BZ' ? 'S' : 'N'
                                 ]);
 
                                 $bancard = new BancardController();

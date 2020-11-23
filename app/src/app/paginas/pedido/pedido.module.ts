@@ -12,6 +12,7 @@ import { PedidoPage } from './pedido.page';
 import { ModuloComponentes } from '../../componentes/componentes.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { MatExpansionModule } from '@angular/material';
+import { DirectivesModule } from 'src/app/directives/directives.module';
 
 const routes: Routes = [
   {
@@ -32,7 +33,8 @@ const routes: Routes = [
     MatExpansionModule,
     MatFormFieldModule,
     MatStepperModule,
-    MatInputModule
+    MatInputModule,
+    DirectivesModule
   ],
   declarations: [PedidoPage]
 })

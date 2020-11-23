@@ -29,28 +29,28 @@
             <form [formGroup]="datosEnvio">
               
               <div class="field-row">
-                <div class="field _required fl-placeholder-state">
+                <div class="field _required fl-placeholder-state" [ngClass]="{'fl-label-state': datosEnvio.value.persona}">
                   <div class="control">
                     <label class="label"><span>Nombre completo o Razón Social</span></label>
-                    <input type="text" class="input-text">
+                    <input type="text" class="input-text" formControlName="persona" appOnFocus>
                   </div>
                 </div>
               </div>
 
               <div class="field-row">
-                <div class="field _required fl-placeholder-state">
+                <div class="field _required fl-placeholder-state" [ngClass]="{'fl-label-state': datosEnvio.value.nro_documento}">
                   <div class="control">
                     <label class="label"><span>CI/RUC</span></label>
-                    <input type="text" class="input-text">
+                    <input type="text" class="input-text" formControlName="nro_documento" appOnFocus>
                   </div>
                 </div>
               </div>
 
               <div class="field-row">
-                <div class="field _required fl-placeholder-state">
+                <div class="field _required fl-placeholder-state" [ngClass]="{'fl-label-state': datosEnvio.value.telefono}">
                   <div class="control">
                     <label class="label"><span>Télefono</span></label>
-                    <input type="text" class="input-text">
+                    <input type="text" class="input-text" appOnFocus>
                   </div>
                 </div>
               </div>
@@ -77,7 +77,7 @@
                       <span>Seleccionar método</span>
                     </label>
                     <select class="select" formControlName="tipo_envio" name="tipo_envio" placeholder="Seleccionar" (change)="datosEnvioSelect($event.target.value, 'tipo_envio')">
-                      <option value="">Por favor seleccione un método de pago</option>
+                      <option value="0">Por favor seleccione un método de pago</option>
                       <option value="DE">DELIVERY</option>
                       <option value="RT">RETIRO EN TIENDA</option>
                     </select>
@@ -86,19 +86,7 @@
               </div>
               
               <!-- tipo de envio delivery -->
-              <!-- <div *ngIf="datosEnvio.value.tipo_envio == 'DE'" [@enterAnimation]> -->
-                <div class="field-row">
-                  <div class="field _required fl-label-state">
-                    <div class="control">
-                      <label for="" class="label"><span>Pais</span></label>
-                      <select formControlName="id_pais" name="pais" class="select" placeholder="Pais" (change)="datosEnvioSelect($event.target.value, 'pais')">
-                        <option value="0">-- SELECCIONE--</option>
-                        <option *ngFor="let pais of listaPaises" value="{{ pais.identificador }}"> {{ pais.nombre }}</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
+              <div *ngIf="datosEnvio.value.tipo_envio == 'DE'" [@enterAnimation]>
             
                 <div class="field-row" *ngIf="!mostrarCiudades">
                   <div class="field _required fl-placeholder-state">
@@ -147,20 +135,20 @@
                 </div>
 
                 <div class="field-row">
-                  <div class="field _required fl-placeholder-state">
+                  <div class="field _required fl-placeholder-state" [ngClass]="{'fl-label-state': datosEnvio.value.direccion}">
                     <div class="control">
                       <label class="label"><span>Dirección</span></label>
-                      <input type="text" name="direccion" class="input-text" formControlName="direccion">
+                      <input type="text" name="direccion" class="input-text" formControlName="direccion" appOnFocus>
                     </div>
                   </div>
                 </div>
 
                 <div class="field-row">
-                  <div class="field _required fl-placeholder-state">
+                  <div class="field _required fl-placeholder-state" [ngClass]="{'fl-label-state': datosEnvio.value.ubicacion}">
                     <div class="control">
                       <div class="field-tooltip toggle"><span class="field-tooltip-action"></span></div>
                       <label class="label"><span>Ubicación</span></label>
-                      <input type="text" name="ubicacion" class="input-text" formControlName="ubicacion" readonly (click)="abrirModal()">
+                      <input type="text" name="ubicacion" class="input-text" formControlName="ubicacion" readonly (click)="abrirModal()" appOnFocus>
                     </div>
                   </div>
                 </div>
@@ -179,7 +167,62 @@
                   </div>
                 </div> -->
               
-              <!-- </div> -->
+              </div>
+
+              <!-- tipo envio retiro en tienda -->
+              <div *ngIf="datosEnvio.value.tipo_envio == 'RT'" [@enterAnimation]>
+
+                <form [formGroup]="datosEnvio">
+
+                  <ion-radio-group name="asignado" value="me" class="d-flex retiro-tienda" formControlName="asignado">
+                    
+                    <ion-item lines="none">
+                      <ion-radio value="me"></ion-radio>
+                      <ion-label for="me">Lo retirare yo</ion-label>
+                    </ion-item>
+                    
+                    <ion-item lines="none">
+                      <ion-radio value="other"></ion-radio>
+                      <ion-label>Lo va a retirar otra persona</ion-label>
+                    </ion-item>
+
+                  </ion-radio-group>
+
+                  <div *ngIf="datosEnvio.value.asignado == 'other'" [@enterAnimation]>
+
+                    <div class="field-row">
+                      <div class="field _required fl-placeholder-state" [ngClass]="{'fl-label-state': datosEnvio.value.persona}">
+                        <div class="control">
+                          <label class="label"><span>Nombre completo</span></label>
+                          <input type="text" class="input-text" formControlName="nombre_asignado" appOnFocus>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <div class="field-row">
+                      <div class="field _required fl-placeholder-state" [ngClass]="{'fl-label-state': datosEnvio.value.nro_documento}">
+                        <div class="control">
+                          <label class="label"><span>CI</span></label>
+                          <input type="text" class="input-text" formControlName="nro_documento_asignado" appOnFocus>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <div class="field-row">
+                      <div class="field _required fl-placeholder-state" [ngClass]="{'fl-label-state': datosEnvio.value.telefono}">
+                        <div class="control">
+                          <label class="label"><span>Télefono</span></label>
+                          <input type="text" class="input-text" formControlName="telefono_asignado" appOnFocus>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </form>
+
+              </div>
+
             </form>
           </ion-col>
           <!-- INICIO TIPO ENVIO -->
@@ -278,6 +321,32 @@
                   <ion-img src="assets/images/pago-seguro.jpg" style="width: 250px;"></ion-img>
                 </div>
               </div>
+
+              <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'BZ'}">
+                <div class="payment-method-title field choice">
+                  <ion-radio type="radio" value="BZ" [checked]="datosPago.value.tipo == 'BZ'" #billeteraZimple></ion-radio>
+                  <label class="label" (click)="checkTipoPago(billeteraZimple)">
+                    <div class="radio left">
+                      <span class="titulo-pago">Billetera Zimple</span>
+                      <span class="descripcion-pago">www.zimple.com.py</span>
+                    </div>
+                    <figure class="img-pago">
+                      <ion-img src="/assets/icon/zimple.png" class="payment-icon" style="width: 50px;"></ion-img>
+                    </figure>
+                  </label>
+                </div>
+                <div class="payment-method-content">
+                  <!-- <div class="form-row">
+                    <div class="field _required fl-placeholder-state">
+                      <div class="control">
+                        <label class="label"><span>Ingrese su número de telefono</span></label>
+                        <input type="text" class="input-text">
+                      </div>
+                    </div>
+                  </div> -->
+                  <p>Zimple es la nueva billetera electrónica conectada con el sistema financiero, creada para que puedas realizar transacciones de forma rápida, segura y simple.</p>
+                </div>
+              </div>
           
               <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'PERC'}">
                 <div class="payment-method-title field choice">
@@ -294,10 +363,10 @@
                 </div>
                 <div class="payment-method-content">
                   <div class="form-row">
-                    <div class="field _required fl-placeholder-state">
+                    <div class="field _required fl-placeholder-state" [ngClass]="{'fl-label-state': datosPago.value.importe}">
                       <div class="control">
                         <label class="label"><span>Importe en Gs.</span></label>
-                        <input type="text" class="input-text" formControlName="importe">
+                        <input type="text" class="input-text" formControlName="importe" appOnFocus>
                       </div>
                     </div>
                   </div>

@@ -27,7 +27,7 @@ import { CustomHttpInterceptor } from './interceptors/http-interceptor';
     HttpClientModule,
     FormsModule,
     IonicStorageModule.forRoot({
-      name: '__mydb',
+      name: '__ecommercesy',
       driverOrder: ['sqlite', 'websql', 'indexeddb']
     })
   ],

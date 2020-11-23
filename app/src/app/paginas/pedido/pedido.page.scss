@@ -17,7 +17,27 @@
     }
 }
 
+.order-container {
+    counter-reset: group;
+}
+
 .order-resume .title {
     margin-top: 0 !important;
     margin-bottom: 20px !important;
+}
+
+.retiro-tienda {
+    
+    ion-item {
+        --background-hover: none;
+        
+        ion-radio {
+            --color: var(--ion-color-primary);
+        }
+        
+        ion-label {
+            font-family: AmpleSoft Pro;
+            margin-left: .5em;
+        }
+    }
 }

@@ -953,20 +953,14 @@ div.swiper-button-prev, div.swiper-button-next {
     outline: 0;
 }
 
-.field._required>.control>.label:first-of-type>span:first-child:after,
-.field.required>.control>.label:first-of-type>span:first-child:after,
-.field._required>.label:first-of-type>span:first-of-type:after,
-.field.required>.label:first-of-type>span:first-of-type:after,
-.field._required>.label.short>span:first-of-type:after,
-.field.required>.label.short>span:first-of-type:after {
+.field._required>.control>.label:first-of-type>span:first-child:after, .field.required>.control>.label:first-of-type>span:first-child:after, .field._required>.label:first-of-type>span:first-of-type:after, .field.required>.label:first-of-type>span:first-of-type:after, .field._required>.label.short>span:first-of-type:after, .field.required>.label.short>span:first-of-type:after {
     content: '*';
     color: #e02b27;
     font-size: 1.2rem;
     margin: -2px 0 0 2px;
 }
 
-.fl-placeholder-state .label,
-.fl-label-state .label {
+.fl-placeholder-state .label, .fl-label-state .label {
     color: #838383;
     -webkit-transition: .3s;
     -moz-transition: .3s;
@@ -989,8 +983,7 @@ div.swiper-button-prev, div.swiper-button-next {
     padding-left: 10px;
 }
 
-.field.fl-label-state .label,
-.field.fl-label[data-value-specified='1'] .label {
+.field.fl-label-state .label, .field.fl-label[data-value-specified='1'] .label {
     font-size: 85%;
     -webkit-transform: translateY(-10px);
     transform: translateY(-10px);
@@ -998,11 +991,7 @@ div.swiper-button-prev, div.swiper-button-next {
     overflow: hidden;
 }
 
-.field.fl-label-state .input-text,
-.field.fl-label[data-value-specified='1'] .input-text,
-.field.fl-label-state .select,
-.field.fl-label[data-value-specified='1'] .select, .field.fl-label-state textarea,
-.field.fl-label[data-value-specified='1'] textarea {
+.field.fl-label-state .input-text, .field.fl-label[data-value-specified='1'] .input-text, .field.fl-label-state .select, .field.fl-label[data-value-specified='1'] .select, .field.fl-label-state textarea, .field.fl-label[data-value-specified='1'] textarea {
     padding-top: 15px;
     outline: none;
 }
@@ -1013,8 +1002,7 @@ div.swiper-button-prev, div.swiper-button-next {
     font-size: 0.6em;
 }
 
-.group-title h1,
-.group-title h2 {
+.group-title h1, .group-title h2 {
     font-size: 1.5rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -1101,7 +1089,7 @@ div.swiper-button-prev, div.swiper-button-next {
 }
 
 .payment-method._active:before {
-    background-color:var(--ion-color-primary);
+    background-color: var(--ion-color-primary);
     content: '';
     display: block;
     height: 100%;
@@ -1155,13 +1143,11 @@ div.swiper-button-prev, div.swiper-button-next {
     visibility: visible;
 }
 
-.field>input[type=checkbox]+label:before,
-.field>input[type=radio]+label:before {
+.field>input[type=checkbox]+label:before, .field>input[type=radio]+label:before {
     border: none;
 }
 
-.payment-method-title.field.choice .label span,
-span.titulo-pago {
+.payment-method-title.field.choice .label span, span.titulo-pago {
     color: #666;
     font-weight: 500;
     font-size: 20px;
@@ -1175,8 +1161,7 @@ span.descripcion-pago {
     margin: 5px 0;
 }
 
-.payment-method-title.field.choice,
-span.descripcion-pago, span.titulo-pago {
+.payment-method-title.field.choice, span.descripcion-pago, span.titulo-pago {
     transition: all ease .5s;
 }
 
@@ -1199,8 +1184,7 @@ figure.img-pago {
     border: 1px solid #d8d8d8;
 }
 
-.subtotales,
-.cart-total {
+.subtotales, .cart-total {
     font-family: AmpleSoft Pro;
 }
 
@@ -1242,7 +1226,6 @@ figure.img-pago {
         margin-right: 9px;
         margin-left: 5px;
     }
-
     .group-title .mark:after {
         content: "";
     }
@@ -1253,7 +1236,6 @@ figure.img-pago {
         width: 65%;
         display: inline-block;
     }
-
     figure.img-pago {
         width: 32%;
         margin: 15px 0;

@@ -11,6 +11,7 @@ import { UbicacionPage } from '../../componentes/ubicacion/ubicacion.page';
 import { CuponDescuentoService } from 'src/app/servicios/cupon-descuento.service';
 import { EcParametrosService } from 'src/app/servicios/ec-parametros.service';
 import { ServicioUbicacion } from 'src/app/servicios/ubicacion.service';
+import { SucursalService } from 'src/app/servicios/sucursal.service';
 import { CarritoService } from 'src/app/servicios/carrito.service';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
 import { GeneralService } from 'src/app/servicios/general.service';
@@ -20,7 +21,6 @@ import { PedidoService } from 'src/app/servicios/pedido.service';
 
 import { Barrio, CuponDescuento, EcParametro, EcParamCiudad, Pedido } from 'src/app/interfaces/interfaces';
 
-import { addInputListeners } from 'src/assets/js/main';
 import * as moment from 'moment';
 
 declare var Bancard: any;
@@ -48,6 +48,7 @@ export class PedidoPage implements OnInit {
 
   public cargando = true;
 
+  public listaSucursales = [];
   public listaPaises = [];
   public listaCiudades = [];
   public listaBarrios: Barrio;
@@ -78,6 +79,7 @@ export class PedidoPage implements OnInit {
     private servicioEcParametros: EcParametrosService,
     private servicioCupon: CuponDescuentoService,
     private servicioUbicacion: ServicioUbicacion,
+    private servicioSucursal: SucursalService,
     private servicioUsuario: UsuarioService,
     private servicioCarrito: CarritoService,
     private servicioGeneral: GeneralService,
@@ -98,12 +100,12 @@ export class PedidoPage implements OnInit {
   }
 
   async ngOnInit() {
-    addInputListeners();
     this.obtenerUsuario();
 
     await this.servicioGeneral.agregarScriptBancard();
     await this.obtenerParametrosEcommerce();
     await this.obtenerTotales();
+    await this.obtenerSucursales();
 
     let comprobarTotales = true;
 
@@ -124,6 +126,7 @@ export class PedidoPage implements OnInit {
           subtotales.style.transform = 'none';
         }
       }
+
     });
 
     if (comprobarTotales) { this.comprobarTotales(); }
@@ -284,15 +287,20 @@ export class PedidoPage implements OnInit {
 
   inicializarDatosEnvio() {
     this.datosEnvio = this.formBuilder.group({
-      tipo_envio:     [0,  Validators.required],
-      id_pais:        [0],
-      id_ciudad:      [0],
-      id_barrio:      [0],
-      direccion:      [''],
-      ubicacion:      [''],
-      persona:        [''],
-      nro_documento:  [''],
-      observacion:    ['']
+      tipo_envio:             [0,  Validators.required],
+      id_pais:                [0],
+      id_ciudad:              [0],
+      id_barrio:              [0],
+      direccion:              [''],
+      ubicacion:              [''],
+      persona:                ['', Validators.required],
+      nro_documento:          ['', Validators.required],
+      telefono:               ['', Validators.required],
+      observacion:            [''],
+      asignado:               ['me'],
+      nombre_asignado:        [''],
+      nro_documento_asignado: [''],
+      telefono_asignado:      ['']
     }, {
       validators: [
         this.requiredValidator('tipo_envio', '==', 'DE', 'id_pais'),
@@ -301,7 +309,7 @@ export class PedidoPage implements OnInit {
         this.requiredValidator('tipo_envio', '==', 'DE', 'direccion'),
         this.requiredValidator('tipo_envio', '==', 'DE', 'ubicacion'),
         this.requiredValidator('tipo_envio', '==', 'RT', 'persona'),
-        this.requiredValidator('tipo_envio', '==', 'RT', 'nro_documento')
+        this.requiredValidator('tipo_envio', '==', 'RT', 'nro_documento'),
       ]
     });
   }
@@ -327,6 +335,26 @@ export class PedidoPage implements OnInit {
       }
       slaveControl.setErrors(null);
       return null;
+    }
+  }
+
+  async obtenerSucursales() {
+    const parametros = {
+      ecommerce: 'S'
+    };
+
+    const response: any = await this.servicioSucursal.obtenerSucursal(null, parametros);
+
+    if (response.success) {
+
+      this.listaSucursales = response.data;
+      const idSucursal: any = await this.servicioCarrito.getStorage('sucursal');
+      const sucursal = this.listaSucursales.find(fsucursal => fsucursal.identificador == idSucursal);
+      this.datosEnvioSelect(sucursal.pais, 'pais');
+
+    } else {
+      this.cargando = false;
+      this.servicioAlerta.dialogoError(response.message);
     }
   }
 
@@ -436,6 +464,10 @@ export class PedidoPage implements OnInit {
 
     if (response) {
       this.usuario = response;
+
+      this.datosEnvio.controls.persona.setValue(this.usuario.nombre_completo);
+      this.datosEnvio.controls.nro_documento.setValue(this.usuario.nro_documento);
+
       if (this.usuario && this.usuario.tiene_tarjetas) {
         this.obtenerTarjetas();
       }
