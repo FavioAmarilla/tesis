@@ -122,7 +122,6 @@ class PedidoController extends BaseController
         $id_usuario = $request->input("id_usuario");
         $id_sucursal = $request->input("id_sucursal");
         $fecha = $request->input("fecha");
-        $id_pais = $request->input("id_pais");
         $id_ciudad = $request->input("id_ciudad");
         $id_barrio = $request->input("id_barrio");
         $direccion = $request->input("direccion");
@@ -196,7 +195,6 @@ class PedidoController extends BaseController
         $pedido->id_usuario = $id_usuario;
         $pedido->id_sucursal = $id_sucursal;
         $pedido->fecha = $fecha;
-        $pedido->id_pais = $id_pais;
         $pedido->id_ciudad = $id_ciudad;
         $pedido->id_barrio = $id_barrio;
         $pedido->direccion = $direccion;
@@ -404,7 +402,6 @@ class PedidoController extends BaseController
         $id_usuario = $request->input("id_usuario");
         $id_sucursal = $request->input("id_sucursal");
         $fecha = $request->input("fecha");
-        $id_pais = $request->input("id_pais");
         $id_ciudad = $request->input("id_ciudad");
         $id_barrio = $request->input("id_barrio");
         $direccion = $request->input("direccion");
@@ -451,7 +448,6 @@ class PedidoController extends BaseController
             $pedido->id_usuario = $id_usuario;
             $pedido->id_sucursal = $id_sucursal;
             $pedido->fecha = $fecha;
-            $pedido->id_pais = $id_pais;
             $pedido->id_ciudad = $id_ciudad;
             $pedido->id_barrio = $id_barrio;
             $pedido->direccion = $direccion;

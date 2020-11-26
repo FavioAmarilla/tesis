@@ -15,18 +15,21 @@ class CreateVtaItemsComprobTable extends Migration
     {
         Schema::create('vta_items_comprob', function (Blueprint $table) {
 
-			$table->increments('identificador');
-			$table->integer('id_comprobante', 11);
-			$table->integer('id_producto', 11)->nullable()->default('NULL');
-			$table->integer('precio_venta', 11);
-			$table->integer('costo_unitario', 11)->nullable()->default('NULL');
-			$table->integer('porc_impuesto', 11)->nullable()->default('NULL');
-			$table->integer('total', 11)->nullable()->default('NULL');
-			$table->integer('cantidad', 11)->nullable()->default('NULL');
-			$table->integer('total_exento', 11)->nullable()->default('NULL');
-			$table->integer('total_iva5', 11)->nullable()->default('NULL');
-			$table->integer('total_iva10', 11)->nullable()->default('NULL');
-			$table->timestamps();
+			$table->bigIncrements('identificador');
+			$table->unsignedBigInteger('id_comprobante');
+			$table->unsignedBigInteger('id_producto');
+			$table->integer('precio_venta');
+			$table->integer('costo_unitario');
+			$table->integer('porc_impuesto');
+			$table->integer('total');
+			$table->integer('cantidad');
+			$table->integer('total_exento');
+			$table->integer('total_iva5');
+			$table->integer('total_iva10');
+            $table->timestamps();
+            
+            $table->foreign('id_comprobante')->references('identificador')->on('vta_comprobantes');
+            $table->foreign('id_producto')->references('identificador')->on('pr_productos');
 
         });
     }

@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreatePrStockTable extends Migration
+class CreateEcParamSucursalesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,17 @@ class CreatePrStockTable extends Migration
      */
     public function up()
     {
-        Schema::create('pr_stock', function (Blueprint $table) {
+        Schema::create('ec_param_sucursales', function (Blueprint $table) {
 
             $table->bigIncrements('identificador');
+            $table->unsignedBigInteger('id_ec_parametro');
             $table->unsignedBigInteger('id_sucursal');
-            $table->unsignedBigInteger('id_producto');
-            $table->decimal('stock', 10, 0)->default('0');
+            $table->string('activo', 2);
             $table->timestamps();
-
+            
+            $table->foreign('id_ec_parametro')->references('identificador')->on('ec_parametros');
             $table->foreign('id_sucursal')->references('identificador')->on('fnd_sucursales');
-            $table->foreign('id_producto')->references('identificador')->on('pr_productos');
+
         });
     }
 
@@ -33,6 +34,6 @@ class CreatePrStockTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pr_stock');
+        Schema::dropIfExists('ec_param_sucursales');
     }
 }
