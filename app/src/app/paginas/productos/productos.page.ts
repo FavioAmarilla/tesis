@@ -197,7 +197,7 @@ export class ProductosPage implements OnInit {
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }
-    
+
     this.cargando = false;
   }
 
@@ -305,4 +305,11 @@ export class ProductosPage implements OnInit {
 
     return check;
   }
+
+  buscarProducto() {
+    if (this.buscarProductoDescripcion == '') {
+      this.redirect();
+    }
+  }
+
 }

@@ -59,7 +59,7 @@
                             <div class="form-group input-group">
                                 <input type="text" class="form-control" placeholder="Buscá tu producto..."
                                     aria-label="Buscá tu producto..." aria-describedby="basic-addon2"
-                                    [(ngModel)]="buscarProductoDescripcion" (keyup.enter)="redirect()">
+                                    [(ngModel)]="buscarProductoDescripcion" (keyup.enter)="redirect()" (change)="buscarProducto()">
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2" (click)="redirect()">
                                         <ion-icon name="md-search"></ion-icon>
