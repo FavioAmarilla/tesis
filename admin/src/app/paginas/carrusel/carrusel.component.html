@@ -17,6 +17,7 @@
                                 <thead class="text-primary">
                                     <th>Titulo</th>
                                     <th>Descripción</th>
+                                    <th>Marca</th>
                                     <th class="text-right">Opciones</th>
                                 </thead>
                                 <tbody>
@@ -32,6 +33,17 @@
                                                 [(ngModel)]="filtrosTabla.descripcion"
                                                 (keyup.enter)="filtrarTabla($event)">
                                         </td>
+                                        <td>
+                                            <select name="id_marca" class="form-control"
+                                                [(ngModel)]="filtrosTabla.id_marca"
+                                                (change)="filtrarTabla('paginacion', $event)">
+                                                <option value="null">-- SELECCIONAR --</option>
+                                                <option *ngFor="let marca of listaMarcas"
+                                                    value="{{marca.identificador}}">
+                                                    {{marca.nombre}}
+                                                </option>
+                                            </select>
+                                        </td>
                                         <td class="text-right">
                                             <button class="btn btn-sm btn-danger" (click)="filtrarTabla(null)"><i
                                                     class="fas fa-times"></i></button> &nbsp;
@@ -44,6 +56,9 @@
                                         </td>
                                         <td>
                                             {{ row.descripcion }}
+                                        </td>
+                                        <td>
+                                            {{ row.marca.nombre }}
                                         </td>
                                         <td class="text-right">
                                             <button class="btn btn-sm btn-warning"
@@ -104,6 +119,18 @@
                                     <span class="invalid-feedback d-block"
                                         *ngIf="!descripcion.valid && descripcion.touched">Este campo es
                                         obligatorio</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_marca">Marca</label>
+                                    <select name="id_marca" id="id_marca" class="form-control"
+                                        [(ngModel)]="slide.id_marca" required #id_marca="ngModel">
+                                        <option value="null">-- SELECCIONE--</option>
+                                        <option *ngFor="let marca of listaMarcas" value="{{marca.identificador}}">
+                                            {{marca.nombre}}</option>
+                                    </select>
+                                    <span class="invalid-feedback d-block"
+                                        *ngIf="!id_marca.valid && id_marca.touched || slide.id_marca == null">Este
+                                        campo es obligatorio</span>
                                 </div>
                                 <div class="form-group">
                                     <button type="button" class="btn btn-primary" (click)="registrar()"

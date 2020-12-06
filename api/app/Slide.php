@@ -11,6 +11,10 @@ class Slide extends Model
     protected $perPage = 10;
 
     protected $fillable =[
-        'identificador', 'titulo', 'descripcion', 'archivo_img',
+        'identificador', 'titulo', 'descripcion', 'archivo_img', 'id_marca'
     ];
+
+    public function marca(){
+        return $this->belongsTo('App\Marca', 'id_marca');
+    }
 }
