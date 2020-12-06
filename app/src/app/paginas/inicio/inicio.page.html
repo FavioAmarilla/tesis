@@ -2,8 +2,10 @@
 
 <ion-content>
     <!-- slides -->
-    <ion-slides *ngIf="listaSlides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions">
-        <ion-slide *ngFor="let slide of listaSlides" class="slider-item" [style]="slide.imagen | slideImage">
+    <ion-slides *ngIf="listaSlides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions"
+        style="cursor: pointer;">
+        <ion-slide *ngFor="let slide of listaSlides" class="slider-item" [style]="slide.imagen | slideImage"
+            (click)="redirectMarca(slide.identificador)">
         </ion-slide>
     </ion-slides>
 

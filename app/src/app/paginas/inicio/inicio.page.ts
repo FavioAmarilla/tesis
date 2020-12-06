@@ -36,6 +36,7 @@ export class PaginaInicio implements OnInit {
   public paginaActual = 1;
   public porPagina;
   public total;
+  public sucursal = 0;
 
   public idsCategorias: string = "";
   public idsMarcas: string = "";
@@ -88,11 +89,7 @@ export class PaginaInicio implements OnInit {
     private servicioProducto: ProductoService,
     private servicioCarrusel: CarruselService,
     private servicioSucursal: SucursalService,
-    private servicioLineaProd: LineasProductoService,
-    private servicioMarca: MarcaService,
-    private servicioGeneral: GeneralService,
     private servicioAlerta: AlertaService,
-    private modalController: ModalController,
     private router: Router
   ) {
     this.API = environment.api;
@@ -101,8 +98,6 @@ export class PaginaInicio implements OnInit {
 
   async ngOnInit() {
     await this.obtenerCarrusel();
-    await this.obtenerLineaProducto();
-    await this.obtenerMarca();
     await this.obtenerSucursales();
   }
 
@@ -121,27 +116,6 @@ export class PaginaInicio implements OnInit {
     }
   }
 
-  async obtenerLineaProducto() {
-    const response: any = await this.servicioLineaProd.obtenerLinea();
-
-    if (response.success) {
-      this.listaLineas = response.data;
-    } else {
-      this.servicioAlerta.dialogoError(response.message);
-    }
-  }
-
-  async obtenerMarca() {
-    const response: any = await this.servicioMarca.obtenerMarca();
-
-    if (response.success) {
-      this.listaMarcas = response.data;
-    } else {
-      this.servicioAlerta.dialogoError(response.message);
-    }
-  }
-
-
   async obtenerSucursales() {
     const parametros = {
       ecommerce: 'S'
@@ -154,7 +128,6 @@ export class PaginaInicio implements OnInit {
       const central = response.data.find(sucursal => sucursal.central == 'S');
       if (central) {
         this.seleccionarSucursal(central.identificador)
-        await this.servicioCarrito.setStorage('sucursal', central.identificador);
       }
     } else {
       this.cargando = false;
@@ -167,22 +140,10 @@ export class PaginaInicio implements OnInit {
 
     let key = 'sucursal';
     this.parametrosTabla.push({ key, value });
+    this.sucursal = value;
 
     await this.servicioCarrito.setStorage('sucursal', value);
     this.obtenerProductos(null, this.parametrosTabla);
-  }
-
-
-  async buscarProductoPorDescripcion() {
-    if (this.buscarProductoDescripcion != '' && this.buscarProductoDescripcion != null) {
-      this.cargando = true;
-
-      let key = 'descripcion';
-      let value = this.buscarProductoDescripcion;
-
-      this.parametrosTabla.push({ key, value });
-      this.obtenerProductos(null, this.parametrosTabla);
-    }
   }
 
   async obtenerProductos(pagina?, parametrosFiltro?) {
@@ -215,65 +176,8 @@ export class PaginaInicio implements OnInit {
     this.cargando = false;
   }
 
-
-  async modalLineas() {
-    const modal = await this.modalController.create({
-      component: LineasModalComponent,
-      componentProps: {
-        listaLineas: this.listaLineas,
-        idsCategorias: this.idsCategorias,
-        listaMarcas: this.listaMarcas,
-        idsMarcas: this.idsMarcas,
-      }
-    });
-
-    await modal.present();
-
-    const { data } = await modal.onWillDismiss();
-
-    if (data) {
-      let key = 'lineas';
-      let value = data.idsCategorias;
-      this.idsCategorias = value;
-      this.parametrosTabla.push({ key, value });
-
-      key = 'marcas';
-      value = this.idsMarcas;
-      this.idsMarcas = value;
-      this.parametrosTabla.push({ key, value });
-
-      this.obtenerProductos(null, this.parametrosTabla);
-    }
-  }
-
-  seleccionarCategoria(id: string, event) {
-    const add = event.target.checked;
-
-    if (add) {
-      this.idsCategorias += id + ',';
-    } else {
-      this.idsCategorias = this.idsCategorias.replace(id, '');
-    }
-
-    let key = 'lineas';
-    let value = this.idsCategorias;
-    this.parametrosTabla.push({ key, value });
-    this.obtenerProductos(null, this.parametrosTabla);
-  }
-
-  seleccionarMarca(id: string, event) {
-    const add = event.target.checked;
-
-    if (add) {
-      this.idsMarcas += id + ',';
-    } else {
-      this.idsMarcas = this.idsMarcas.replace(id, '');
-    }
-
-    let key = 'marcas';
-    let value = this.idsMarcas;
-    this.parametrosTabla.push({ key, value });
-    this.obtenerProductos(null, this.parametrosTabla);
+  redirectMarca(marca) {
+    this.router.navigate(['/productos'], { queryParams: { sucursal: this.sucursal, order: 'created_at', marca: marca } });
   }
 
 }
