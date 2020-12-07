@@ -9,6 +9,7 @@
     <section class="ftco-section">
         <ion-grid class="container-fluid">
             <ion-row>
+                <!-- INICIO FILTROS -->
                 <ion-col size-md="3" class="shop-filters">
                     <ion-row>
                         <ion-col size-md="12" class="filter-items">
@@ -49,8 +50,10 @@
                         </ion-col>
                     </ion-row>
                 </ion-col>
+                <!-- FIN FILTROS -->
                 
                 <ion-col size-md="9">
+                    <!-- INICIO BUSCADOR -->
                     <ion-row>
                         <ion-col size="12" size-md="9">
                             <div class="form-group input-group">
@@ -74,7 +77,9 @@
                             </div>
                         </ion-col>
                     </ion-row>
-                
+                    <!-- FIN BUSCADOR -->
+
+                    <!-- INICIO LISTADO DE PRODUCTOS -->
                     <ion-row *ngIf="listaProductos.length">
                         <ion-col size="6" size-sm="6" size-md="6" size-lg="3"
                             *ngFor="let producto of listaProductos | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
@@ -85,27 +90,20 @@
                             <app-paginacion (actualizarPagina)="obtenerProductos($event)"></app-paginacion>
                         </ion-col>
                     </ion-row>
+                    <!-- FIN LISTADO DE PRODUCTOS -->
                 
-                
+                    <!-- INICIO SIN RESULTADOS -->
                     <ion-row class="text-center" *ngIf="!listaProductos.length && !cargando">
-                        <ion-col size-md="12" class="text-center">
+                        <ion-col size="12" size-md="12" class="text-center">
                             <img src="assets/images/sin-datos.png" width="150" height="150">
                             <h4>No se encontraron productos</h4>
                         </ion-col>
                     </ion-row>
+                    <!-- FIN SIN RESULTADOS -->
                 </ion-col>
             </ion-row>
         </ion-grid>
-
-        <div class="container-fluid">
-            <!-- productos -->
-            <div class="row"></div>
-
-        </div>
     </section>
-
-
-
 
     <app-footer></app-footer>
 </ion-content>
