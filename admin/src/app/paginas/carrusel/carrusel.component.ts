@@ -4,6 +4,8 @@ import { Carrusel } from '../../modelos/carrusel';
 import { environment } from 'environments/environment';
 import swal from 'sweetalert2';
 import { ServicioAlertas } from 'app/servicios/alertas.service';
+import { Marca } from 'app/modelos/marca';
+import { MarcaService } from 'app/servicios/marca.service';
 
 const API = environment.api;
 
@@ -19,6 +21,7 @@ export class CarruselComponent implements OnInit {
   public accion: string = '';
   public slide: Carrusel;
   public listaSlide: Carrusel;
+  public listaMarcas: Marca;
   public cargando: boolean = false;
   public parametros: any = {};
   public filtrosTabla: any = {};
@@ -44,10 +47,12 @@ export class CarruselComponent implements OnInit {
 
   constructor(
     private servicioCarrusel: ServicioCarrusel,
+    private servicioMarca: MarcaService,
     private servicioAlerta: ServicioAlertas
   ) {
     this.url = environment.api;
     this.inicializarFiltros()
+    this.obtenerMarcas();
   }
 
   ngOnInit() {
@@ -56,8 +61,9 @@ export class CarruselComponent implements OnInit {
 
   async inicializarFiltros() {
     this.filtrosTabla = {
-      titulo: null,
-      descripcion: ''
+      titulo: '',
+      descripcion: '',
+      id_marca: null
     }
   }
 
@@ -66,7 +72,7 @@ export class CarruselComponent implements OnInit {
     this.accion = accion;
 
     if (flag && accion == 'INS') {
-      this.slide = new Carrusel(null, null, null, null);
+      this.slide = new Carrusel(null, null, null, null, null, null);
     }
   }
 
@@ -75,7 +81,7 @@ export class CarruselComponent implements OnInit {
     this.listaSlide = null;
     this.accion = 'LST';
     this.cargando = true;
-    
+
     this.parametros = null;
     this.parametros = {
       paginar: true,
@@ -87,8 +93,6 @@ export class CarruselComponent implements OnInit {
         this.parametros[element.key] = element.value;
       });
     }
-
-    console.log(this.parametros);
 
     const response: any = await this.servicioCarrusel.obtener(null, this.parametros);
 
@@ -115,6 +119,18 @@ export class CarruselComponent implements OnInit {
       this.servicioAlerta.dialogoError(response.message);
     }
     this.cargando = false;
+  }
+
+
+  async obtenerMarcas() {
+    const response: any = await this.servicioMarca.obtener();
+
+    if (response.success) {
+      this.listaMarcas = response.data;
+    } else {
+      this.servicioAlerta.dialogoError(response.message);
+      this.mostrarFormulario(false, 'LST');
+    }
   }
 
   async registrar() {

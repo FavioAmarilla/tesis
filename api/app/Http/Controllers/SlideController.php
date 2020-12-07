@@ -18,7 +18,7 @@ class SlideController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Slide::orderBy('titulo', 'asc');
+        $query = Slide::with(['marca']);
 
         $titulo = $request->query('titulo');
         if ($titulo) {
@@ -29,11 +29,16 @@ class SlideController extends BaseController
         if ($descripcion) {
             $query->where('descripcion', 'LIKE', '%'.$descripcion.'%');
         }
+        
+        $id_marca = $request->query('id_marca');
+        if ($id_marca) {
+            $query->where('id_marca', '=', $id_marca);
+        }
 
         $paginar = $request->query('paginar');
         $listar = (filter_var($paginar, FILTER_VALIDATE_BOOLEAN)) ? 'paginate' : 'get';
 
-        $data = $query->$listar();
+        $data = $query->orderBy('created_at', 'desc')->$listar();
         
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
@@ -59,11 +64,13 @@ class SlideController extends BaseController
         $titulo = $request->input("titulo");
         $descripcion = $request->input("descripcion");
         $imagen = $request->input('imagen');
+        $id_marca = $request->input('id_marca');
 
         $validator = Validator::make($request->all(), [
             'titulo'  => 'required',
             'descripcion'  => 'required',
             'imagen'   =>  'required',
+            'id_marca'   =>  'required',
         ]);
 
         if ($validator->fails()) {
@@ -74,6 +81,7 @@ class SlideController extends BaseController
         $slide->titulo = $titulo;
         $slide->descripcion = $descripcion;
         $slide->imagen = $imagen;
+        $slide->id_marca = $id_marca;
 
         if ($slide->save()) {
             return $this->sendResponse(true, 'Slide registrado', $slide, 201);
@@ -122,11 +130,13 @@ class SlideController extends BaseController
         $titulo = $request->input("titulo");
         $descripcion = $request->input("descripcion");
         $imagen = $request->input('imagen');
+        $id_marca = $request->input('id_marca');
 
         $validator = Validator::make($request->all(), [
             'titulo'  => 'required',
             'descripcion'  => 'required',
             'imagen'   =>  'required',
+            'id_marca'   =>  'required',
         ]);
 
         if ($validator->fails()) {
@@ -139,6 +149,7 @@ class SlideController extends BaseController
             $slide->titulo = $titulo;
             $slide->descripcion = $descripcion;
             $slide->imagen = $imagen;
+            $slide->id_marca = $id_marca;
     
             if ($slide->save()) {
                 return $this->sendResponse(true, 'Slide actualizado', $slide, 200);

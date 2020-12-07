@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductoService } from '../../servicios/producto.service';
-import { Producto, Banner, LineaProducto, Sucursal, Marca } from '../../interfaces/interfaces';
-import { ActivatedRoute, ChildActivationStart, Router } from '@angular/router';
-import { CarruselService } from 'src/app/servicios/carrusel.service';
+import { Producto, LineaProducto, Sucursal, Marca } from '../../interfaces/interfaces';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { LineasProductoService } from 'src/app/servicios/linea-producto.service';
 import { CarritoService } from 'src/app/servicios/carrito.service';
