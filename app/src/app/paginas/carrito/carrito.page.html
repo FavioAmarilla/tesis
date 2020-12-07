@@ -3,7 +3,7 @@
 <ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<div class="container d-flex">
+			<div class="container-fluid d-flex pl-4">
 				<li class="breadcrumb-item"><a [routerLink]="['/']">INICIO</a></li>
 				<li class="breadcrumb-item active" aria-current="page">CARRITO DE COMPRAS</li>
 			</div>
@@ -14,7 +14,7 @@
 		<h1 class="m-0">Carrito de Compras</h1>
 	</header>
 
-  <ion-grid class="cart-container px-md-5 px-xs-3">
+  <ion-grid class="cart-container mt-4 px-md-5 px-xs-3">
     <ion-row *ngIf="listaCarrito && listaCarrito.length">
       <ion-col size="12" size-md="12" size-lg="8">
         <div class="cart-list">
@@ -111,44 +111,75 @@
       </ion-col>
 
       <!-- INICIO TOTALES DEL PEDIDO -->
-      <ion-col size="12" size-sm="12" size-md="12" size-lg="4">
-        
-        <ion-row class="subtotales">
-        
-          <ion-col size="12" class="subtotal d-flex ion-justify-content-between ion-align-items-center py-3">
-            <h6 class="m-0">Subtotal </h6>
-            <span>Gs. {{ subtotal | numberFormat }}</span>
-          </ion-col>
-        
-          <ion-col size="12" class="d-flex ion-justify-content-between ion-align-items-center py-3 border-top">
-            <h5 class="m-0">Total del pedido </h5>
-            <h5>Gs. {{ total | numberFormat }}</h5>
-          </ion-col>
-        
-          <ion-col size="12" class="border-top">
-            <h5>Aplicar código de descuento</h5>
-            <form class="form-inline">
-        
-              <label class="sr-only" for="inlineFormInputGroup">Cupón de descuento</label>
-        
-              <div class="input-group mb-2">
-                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Cupón de descuento">
-                <div class="input-group-prepend">
-                  <button class="btn btn-primary btn-border" type="submit">Aplicar</button>
+      <ion-col size-sm="12" size-md="4" size-lg="4" size="12">
+        <div class="cart-total mb-3">
+      
+          <div class="header d-flex align-items-center mb-3">
+            <ion-icon slot="start" name="basket" color="primary"></ion-icon>
+            <div class="subheader">
+              <span class="title ml-2">Resumen del carrito</span>
+              <span class="subtitle ml-2" *ngIf="listaCarrito">{{ listaCarrito.length }} productos en el carrito</span>
+            </div>
+          </div>
+      
+          <div class="d-flex justify-content-between pb-2">
+            <span>Sub Total</span>
+            <span class="text-right">{{ totales.subtotal | numberFormat }} Gs.</span>
+          </div>
+      
+          <div class="d-flex justify-content-between pb-2">
+            <span>Delivery</span>
+            <span class="text-right">{{ totales.delivery | numberFormat }} Gs.</span>
+          </div>
+      
+          <div class="d-flex justify-content-between pb-2">
+            <span>Descuento</span>
+            <span class="text-right">{{ totales.descuento | numberFormat }} Gs.</span>
+          </div>
+      
+          <hr class="border-top">
+      
+          <div class="d-flex justify-content-between total-price">
+            <span>Total</span>
+            <span class="text-right"><b>{{ totales.total | numberFormat }} Gs.</b></span>
+          </div>
+      
+          <hr class="border-top">
+      
+          <div class="col-auto p-0" *ngIf="stepperEditable">
+            <form (ngSubmit)="obtenerCupones()">
+      
+              <div class="form-row">
+                <div class="field fl-placeholder-state">
+                  <div class="control">
+                    <label for="" class="label"><span></span></label>
+                    <input type="text" class="input-text" placeholder="Ingrese el cupón de descuento" [(ngModel)]="cuponDescuento.codigo" [ngModelOptions]="{standalone: true}">
+                  </div>
                 </div>
               </div>
-        
+      
+              <div class="actions-toolbar d-flex justify-content-end">
+                <button class="btn btn-primary" type="submit">Aplicar</button>
+              </div>
+      
             </form>
-          </ion-col>
-        
-          <ion-col size="12">
-            <span class="float-right w-100" (click)="(listaCarrito && listaCarrito.length) ? pedido() : false;">
-              <a class="btn btn-primary btn-block py-2 px-4" [ngClass]="{'disabled': !listaCarrito || listaCarrito.length == 0}">Pagar</a>
-            </span>
-          </ion-col>
-        
-        </ion-row>
-
+          </div>
+      
+          <div class="form-group" *ngIf="cuponDescuento.length">
+            <p class="d-flex">
+              <span>{{ cuponDescuento.descripcion }}</span>
+              <span style="text-align: right;">{{ cuponDescuento.porcentaje | numberFormat }} %</span>
+            </p>
+          </div>
+      
+          <div class="form-group" *ngIf="!cuponDescuento.length && submitCuponDescuento">
+            <p class="text-danger">No existe el cupon de descuento</p>
+          </div>
+      
+          <div class="finish-order mt-3">
+            <button (click)="listaCarrito?.length ? pedido() : false" class="btn btn-primary btn-block" mat-button [disabled]="!listaCarrito || !listaCarrito?.length">Continuar</button>
+          </div>
+        </div>
       </ion-col>
       <!-- FIN TOTALES DEL PEDIDO -->
 

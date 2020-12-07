@@ -66,7 +66,12 @@ export class PedidoPage implements OnInit {
   public submitCuponDescuento = false;
   public datosEnvio: FormGroup;
   public datosPago: FormGroup;
-  public totales: any;
+  public totales: any = {
+    subtotal: 0,
+    delivery: 10000,
+    descuento: 0,
+    total: 0
+  };
 
   public pedido: Pedido = {};
 
@@ -118,15 +123,7 @@ export class PedidoPage implements OnInit {
 
     this.platform.resize
     .subscribe(() => {
-      const width = this.platform.width();
-
-      if (width < 997) {
-        const subtotales = document.querySelector('.subtotales') as HTMLElement;
-        if (subtotales) {
-          subtotales.style.transform = 'none';
-        }
-      }
-
+      this.servicioGeneral.resetContainerPosition('.cart-total');
     });
 
     if (comprobarTotales) { this.comprobarTotales(); }
@@ -606,4 +603,7 @@ export class PedidoPage implements OnInit {
     this.datosPago.controls.card_id.setValue(cardId);
   }
 
+  ionViewWillLeave() {
+    this.servicioGeneral.resetContainerPosition('.cart-total');
+  }
 }

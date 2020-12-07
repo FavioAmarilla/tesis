@@ -9,7 +9,7 @@ import { UsuarioService } from 'src/app/servicios/usuario.service';
 import { GeneralService } from 'src/app/servicios/general.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
 
-import { Producto, Sucursal, EcParametro } from 'src/app/interfaces/interfaces';
+import { Producto, Sucursal, EcParametro, CuponDescuento } from 'src/app/interfaces/interfaces';
 
 @Component({
   selector: 'app-carrito',
@@ -23,12 +23,24 @@ export class PaginaCarrito implements OnInit {
   public listaSucursales: Sucursal;
 
   public parametros: EcParametro;
-  public total: any = 0;
-  public subtotal: any = 0;
-  public descuento: any = 0;
   public cantidad: number = 1;
   public minimo = 1;
   public valor = 1;
+  public submitCuponDescuento = false;
+  public cuponDescuento: CuponDescuento = {
+    identificador: 0,
+    descripcion: 0,
+    codigo: '',
+    porc_descuento: 0,
+    fecha_desde: '',
+    fecha_hasta: '',
+    usado: ''
+  };
+  public totales: any = {
+    subtotal: 0,
+    descuento: 0,
+    total: 0
+  };
 
   constructor(
     private router: Router,
@@ -45,14 +57,7 @@ export class PaginaCarrito implements OnInit {
   async ngOnInit() {
     this.platform.resize
     .subscribe(() => {
-      const width = this.platform.width();
-
-      if (width < 997) {
-        const subtotales = document.querySelector('.subtotales') as HTMLElement;
-        if (subtotales) {
-          subtotales.style.transform = 'none';
-        }
-      }
+      this.servicioGeneral.resetContainerPosition('.cart-total');
     });
   }
 
@@ -63,7 +68,7 @@ export class PaginaCarrito implements OnInit {
   }
 
   onScroll(event: CustomEvent) {
-    this.servicioGeneral.translateContainer(event, '.cart-list', '.subtotales');
+    this.servicioGeneral.translateContainer(event, '.cart-list', '.cart-total');
   }
 
   async obtenerCarrito() {
@@ -77,12 +82,12 @@ export class PaginaCarrito implements OnInit {
 
   actualizarTotal() {
     // obtener total
-    this.total = 0;
-    this.subtotal = 0;
+    this.totales.total = 0;
+    this.totales.subtotal = 0;
     this.listaCarrito.forEach(element => {
-      this.subtotal += element.precio_venta * element.cantidad;
+      this.totales.subtotal += element.precio_venta * element.cantidad;
     });
-    this.total = this.subtotal - this.descuento;
+    this.totales.total = this.totales.subtotal - this.totales.descuento;
   }
 
   async confirmarParaEliminarDelCarrito(product) {
@@ -132,7 +137,7 @@ export class PaginaCarrito implements OnInit {
     }
 
     // validar monto minimo de compra
-    if (this.total < this.parametros.monto_minimo) {
+    if (this.totales.total < this.parametros.monto_minimo) {
       this.servicioAlerta.dialogoError('El monto de compra debe ser mayor a: ' + this.parametros.monto_minimo);
       return;
     }
@@ -154,5 +159,9 @@ export class PaginaCarrito implements OnInit {
 
     this.servicioCarrito.agregarAlCarrito(producto, 'upd');
     this.actualizarTotal();
+  }
+
+  ionViewWillLeave() {
+    this.servicioGeneral.resetContainerPosition('.cart-total');
   }
 }

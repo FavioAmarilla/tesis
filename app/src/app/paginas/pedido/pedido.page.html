@@ -229,7 +229,7 @@
             <div class="group-title">
               <h2 class="d-flex align-items-center">
                 <span class="mark"></span>
-                OBSERVACIÓN (Opcional)
+                <div>OBSERVACIÓN <span style="font-size: 16px;">(Opcional)</span></div>
               </h2>
             </div>
 
@@ -254,8 +254,7 @@
 
               <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'ATCD'}">
                 <div class="payment-method-title field choice">
-                  <ion-radio type="radio" value="ATCD" [checked]="datosPago.value.tipo == 'ATCD'" #agregarTarjeta>
-                  </ion-radio>
+                  <ion-radio type="radio" value="ATCD" [checked]="datosPago.value.tipo == 'ATCD'" #agregarTarjeta (click)="checkTipoPago(agregarTarjeta)"></ion-radio>
                   <label class="label" (click)="checkTipoPago(agregarTarjeta)">
                     <div class="radio left">
                       <span class="titulo-pago">Agregar tarjeta crédito/débito</span>
@@ -278,11 +277,9 @@
                 </div>
               </div>
 
-              <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'PWTK'}"
-                *ngIf="usuario && usuario.tiene_tarjetas">
+              <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'PWTK'}" *ngIf="usuario && usuario.tiene_tarjetas">
                 <div class="payment-method-title field choice">
-                  <ion-radio type="radio" value="PWTK" [checked]="datosPago.value.tipo == 'PWTK'" #pagarUsandoToken>
-                  </ion-radio>
+                  <ion-radio type="radio" value="PWTK" [checked]="datosPago.value.tipo == 'PWTK'" #pagarUsandoToken (click)="checkTipoPago(pagarUsandoToken)"></ion-radio>
                   <label class="label" (click)="checkTipoPago(pagarUsandoToken)">
                     <div class="radio left">
                       <span class="titulo-pago">Seleccionar tarjeta</span>
@@ -311,12 +308,11 @@
 
               <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'PO'}">
                 <div class="payment-method-title field choice">
-                  <ion-radio type="radio" value="PO" [checked]="datosPago.value.tipo == 'PO'" #pagoOnline></ion-radio>
+                  <ion-radio type="radio" value="PO" [checked]="datosPago.value.tipo == 'PO'" #pagoOnline (click)="checkTipoPago(pagoOnline)"></ion-radio>
                   <label class="label" (click)="checkTipoPago(pagoOnline)">
                     <div class="radio left">
                       <span class="titulo-pago">Pago único (tarjeta crédito/débito)</span>
-                      <span class="descripcion-pago">Acepta todas las tarjetas de la red Infonet /
-                        www.infonet.com.py</span>
+                      <span class="descripcion-pago">Acepta todas las tarjetas de la red Infonet / www.infonet.com.py</span>
                     </div>
                     <figure class="img-pago">
                       <ion-img src="/assets/svg/bancard.svg" class="payment-icon" style="width: 150px;"></ion-img>
@@ -330,8 +326,7 @@
 
               <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'BZ'}">
                 <div class="payment-method-title field choice">
-                  <ion-radio type="radio" value="BZ" [checked]="datosPago.value.tipo == 'BZ'" #billeteraZimple>
-                  </ion-radio>
+                  <ion-radio type="radio" value="BZ" [checked]="datosPago.value.tipo == 'BZ'" #billeteraZimple (click)="checkTipoPago(billeteraZimple)"></ion-radio>
                   <label class="label" (click)="checkTipoPago(billeteraZimple)">
                     <div class="radio left">
                       <span class="titulo-pago">Billetera Zimple</span>
@@ -358,8 +353,7 @@
 
               <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'PERC'}">
                 <div class="payment-method-title field choice">
-                  <ion-radio type="radio" value="PERC" [checked]="datosPago.value.tipo == 'PERC'" #pagoEfectivo>
-                  </ion-radio>
+                  <ion-radio type="radio" value="PERC" [checked]="datosPago.value.tipo == 'PERC'" #pagoEfectivo (click)="checkTipoPago(pagoEfectivo)"></ion-radio>
                   <label class="label" (click)="checkTipoPago(pagoEfectivo)">
                     <div class="radio left">
                       <span class="titulo-pago">Pagar en mi casa con Efectivo o Al retirar</span>
@@ -372,8 +366,7 @@
                 </div>
                 <div class="payment-method-content">
                   <div class="form-row">
-                    <div class="field _required fl-placeholder-state"
-                      [ngClass]="{'fl-label-state': datosPago.value.importe}">
+                    <div class="field _required fl-placeholder-state" [ngClass]="{'fl-label-state': datosPago.value.importe}">
                       <div class="control">
                         <label class="label"><span>Importe en Gs.</span></label>
                         <input type="text" class="input-text" formControlName="importe" appOnFocus>
@@ -389,8 +382,7 @@
 
               <div class="payment-method" [ngClass]="{'_active': datosPago.value.tipo == 'PCTCD'}">
                 <div class="payment-method-title field choice">
-                  <ion-radio type="radio" value="PCTCD" [checked]="datosPago.value.tipo == 'PCTCD'" #pagoTarjeta>
-                  </ion-radio>
+                  <ion-radio type="radio" value="PCTCD" [checked]="datosPago.value.tipo == 'PCTCD'" #pagoTarjeta (click)="checkTipoPago(pagoTarjeta)"></ion-radio>
                   <label class="label" (click)="checkTipoPago(pagoTarjeta)">
                     <div class="radio left">
                       <span class="titulo-pago">Pagar en casa o al retirar con Tarjeta Crédito, Débito</span>

@@ -98,4 +98,15 @@ export class GeneralService {
       }
     }
   }
+
+  resetContainerPosition(containerClass) {
+    const width = this.platform.width();
+
+    if (width < 997) {
+      const subtotales = document.querySelector(containerClass) as HTMLElement;
+      if (subtotales) {
+        subtotales.style.transform = 'none';
+      }
+    }
+  }
 }

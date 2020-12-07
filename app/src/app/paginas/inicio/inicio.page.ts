@@ -1,17 +1,21 @@
-import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
-import { ProductoService } from '../../servicios/producto.service';
-import { Producto, Banner, LineaProducto, Sucursal, Marca } from '../../interfaces/interfaces';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonSlides, ModalController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { CarruselService } from 'src/app/servicios/carrusel.service';
-import { environment } from '../../../environments/environment';
+
+import { LineasModalComponent } from 'src/app/componentes/lineas-modal/lineas-modal.component';
+
 import { LineasProductoService } from 'src/app/servicios/linea-producto.service';
+import { CarruselService } from 'src/app/servicios/carrusel.service';
+import { SucursalService } from 'src/app/servicios/sucursal.service';
+import { ProductoService } from 'src/app/servicios/producto.service';
 import { CarritoService } from 'src/app/servicios/carrito.service';
-import { IonSlides, ModalController } from '@ionic/angular';
 import { GeneralService } from 'src/app/servicios/general.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
-import { SucursalService } from 'src/app/servicios/sucursal.service';
-import { LineasModalComponent } from 'src/app/componentes/lineas-modal/lineas-modal.component';
 import { MarcaService } from 'src/app/servicios/marca.service';
+
+import { Producto, Banner, LineaProducto, Sucursal, Marca } from 'src/app/interfaces/interfaces';
+import { environment } from 'src/environments/environment';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-inicio',
@@ -42,7 +46,6 @@ export class PaginaInicio implements OnInit {
   public parametrosTabla: any = []
 
   public slideImgUrl: string;
-  @ViewChild(IonSlides, { static: true }) slider: IonSlides;
   public slideOptions = {
     initialSlide: 0,
     slidesPerView: 1,
@@ -83,6 +86,10 @@ export class PaginaInicio implements OnInit {
     }
   };
 
+  subscriptions: Subscription[] = [];
+
+  @ViewChild(IonSlides, { static: true }) slider: IonSlides;
+
   constructor(
     private servicioCarrito: CarritoService,
     private servicioProducto: ProductoService,
@@ -93,10 +100,19 @@ export class PaginaInicio implements OnInit {
     private servicioGeneral: GeneralService,
     private servicioAlerta: AlertaService,
     private modalController: ModalController,
-    private router: Router
+    private platform: Platform,
+    private router: Router,
   ) {
     this.API = environment.api;
     this.slideImgUrl = this.API + 'producto/getImage/';
+  }
+
+  ionViewWillEnter() {
+    const exitButton = this.platform.backButton.subscribe(() => {
+      navigator['app'].exitApp();
+    });
+
+    this.subscriptions.push(exitButton);
   }
 
   async ngOnInit() {
@@ -274,6 +290,10 @@ export class PaginaInicio implements OnInit {
     let value = this.idsMarcas;
     this.parametrosTabla.push({ key, value });
     this.obtenerProductos(null, this.parametrosTabla);
+  }
+
+  ionViewWillLeave() {
+    this.subscriptions.forEach((subscription: Subscription) => subscription.unsubscribe());
   }
 
 }

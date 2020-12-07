@@ -93,7 +93,7 @@ export class ProductosPage implements OnInit {
           key = 'lineas';
           value = params['categoria'];
 
-          this.idsCategorias.push(value);
+          this.idsCategorias = value.split(',');
           filtros.push({ key, value });
         }
 
@@ -101,7 +101,7 @@ export class ProductosPage implements OnInit {
           key = 'marcas';
           value = params['marca'];
 
-          this.idsMarcas = value;
+          this.idsMarcas = value.split(',');
           filtros.push({ key, value });
         }
 

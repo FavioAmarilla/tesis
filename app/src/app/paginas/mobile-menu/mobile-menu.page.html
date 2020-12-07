@@ -8,7 +8,7 @@
     <div *ngFor="let item of menuItems | async">
 
       <ion-menu-toggle autoHide="false" *ngIf="item.url" [ngClass]="{'hidden': item.soloLogueados && !logueado}" mode="md">
-        <ion-item [routerLink]="item.url" routerDirection="root" routerLinkActive="active" lines="none">
+        <ion-item [routerLink]="item.url" routerLinkActive="active" lines="none">
           <ion-icon slot="start" [name]="item.icono" color="primary"></ion-icon>
           <ion-label>{{ item.titulo }}</ion-label>
         </ion-item>
@@ -20,7 +20,7 @@
         </ion-item-divider>
         
           <ion-menu-toggle autoHide="false"> 
-            <ion-item *ngFor="let sub of item.children" (click)="(sub.icono == 'exit') ? logout() : false;" [routerLink]="sub.url" routerDirection="root" routerLinkActive="active" [ngClass]="{'hidden': (sub.soloLogueados && !logueado) || (sub.ocultarLogueados && logueado)}" lines="none" mode="md">
+            <ion-item *ngFor="let sub of item.children" (click)="(sub.icono == 'exit') ? logout() : false;" [routerLink]="sub.url" routerLinkActive="active" [ngClass]="{'hidden': (sub.soloLogueados && !logueado) || (sub.ocultarLogueados && logueado)}" lines="none" mode="md">
               <ion-icon slot="start" [name]="sub.icono" color="primary"></ion-icon>
               <ion-label>{{ sub.titulo }}</ion-label>
             </ion-item>
