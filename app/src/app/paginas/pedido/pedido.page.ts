@@ -305,8 +305,9 @@ export class PedidoPage implements OnInit {
         this.requiredValidator('tipo_envio', '==', 'DE', 'id_barrio'),
         this.requiredValidator('tipo_envio', '==', 'DE', 'direccion'),
         this.requiredValidator('tipo_envio', '==', 'DE', 'ubicacion'),
-        this.requiredValidator('tipo_envio', '==', 'RT', 'persona'),
-        this.requiredValidator('tipo_envio', '==', 'RT', 'nro_documento'),
+        this.requiredValidator('asignado', '==', 'other', 'nombre_asignado'),
+        this.requiredValidator('asignado', '==', 'other', 'nro_documento_asignado'),
+        this.requiredValidator('asignado', '==', 'other', 'telefono_asignado'),
       ]
     });
   }
