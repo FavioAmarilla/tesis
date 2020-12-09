@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MedioPagoPage implements OnInit {
 
+  cargando = false;
+
   constructor() { }
 
   ngOnInit() {

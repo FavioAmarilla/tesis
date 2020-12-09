@@ -197,6 +197,8 @@ export class PaginaInicio implements OnInit {
     this.router.navigate(['/productos'], { queryParams: { sucursal: this.sucursal, order: 'created_at', marca: marca } });
   }
 
+  modalLineas() {}
+
   ionViewWillLeave() {
     this.subscriptions.forEach((subscription: Subscription) => subscription.unsubscribe());
   }

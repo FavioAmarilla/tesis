@@ -161,6 +161,8 @@ export class PaginaCarrito implements OnInit {
     this.actualizarTotal();
   }
 
+  obtenerCupones() {}
+
   ionViewWillLeave() {
     this.servicioGeneral.resetContainerPosition('.cart-total');
   }

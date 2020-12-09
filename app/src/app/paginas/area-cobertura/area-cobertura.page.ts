@@ -15,6 +15,8 @@ export class AreaCoberturaPage implements OnInit {
   public longitud = 0;
   public latitud = 0;
   public marker: any;
+  public cargando = false;
+
   @ViewChild('map', { static: true }) map;
   @Input() coordenadas;
 

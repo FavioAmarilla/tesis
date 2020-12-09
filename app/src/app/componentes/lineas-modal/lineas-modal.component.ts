@@ -15,7 +15,7 @@ export class LineasModalComponent implements OnInit {
   @Input() listaMarcas;
   @Input() idsMarcas = [];
   @Input() listaSucursales;
-  private order: string = '';
+  public order: string = '';
 
 
   constructor(
