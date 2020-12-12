@@ -17,25 +17,6 @@
   <section class="ftco-section ftco-cart" style="padding-top: 20px;">
     <div class="container">
 
-      <div class="estados">
-        <div class="estados-item text-center text-warning">
-          <ion-icon name="clock"></ion-icon>
-          <p>PENDIENTE</p>
-        </div>
-        <div class="estados-item text-center text-info">
-          <ion-icon name="md-car"></ion-icon>
-          <p>EN CAMINO</p>
-        </div>
-        <div class="estados-item text-center text-success">
-          <ion-icon name="md-checkbox"></ion-icon>
-          <p>ENTREGADO</p>
-        </div>
-        <div class="estados-item text-center text-danger">
-          <mat-icon>remove_shopping_cart</mat-icon>
-          <p>CANCELADO</p>
-        </div>
-      </div>
-
       <div class="row" *ngIf="!mostrarListaMovil">
         <div class="col-md-12">
           <div class="table-responsive">
@@ -61,15 +42,17 @@
                     <div *ngIf="pedido.tipo_envio == 'RT'">RETIRO EN TIENDA</div>
                   </td>
                   <td>
-                    <div>
-                      {{ (pedido.pagos) ? pedido.pagos.estado : (pedido.estado == 'CANCELADO') ? pedido.estado : 'PENDIENTE' }}
-                    </div>
+                    <span *ngIf="pedido.pagos.estado == 'PENDIENTE'" class="badge badge-secondary">PENDIENTE</span>
+                    <span *ngIf="pedido.pagos.estado == 'CANCELADO'" class="badge badge-danger">CANCELADO</span>
+                    <span *ngIf="pedido.pagos.estado == 'PAGADO'" class="badge badge-success">PAGADO</span>
                   </td>
                   <td>
-                    <ion-icon class="text-warning" *ngIf="pedido.estado == 'PENDIENTE'" name="clock"></ion-icon>
-                    <ion-icon class="text-info" *ngIf="pedido.estado == 'EN CAMINO'" name="md-car"></ion-icon>
-                    <ion-icon class="text-success" *ngIf="pedido.estado == 'ENTREGADO'" name="md-checkbox"></ion-icon>
-                    <mat-icon class="text-danger" *ngIf="pedido.estado == 'CANCELADO'">remove_shopping_cart</mat-icon>
+                    <span *ngIf="pedido.estado == 'PENDIENTE'" class="badge badge-secondary">PENDIENTE</span>
+                    <span *ngIf="pedido.estado == 'EN PROCESO'" class="badge badge-info">EN PROCESO</span>
+                    <span *ngIf="pedido.estado == 'LISTO'" class="badge badge-info">LISTO</span>
+                    <span *ngIf="pedido.estado == 'EN CAMINO'" class="badge badge-primary">EN CAMINO</span>
+                    <span *ngIf="pedido.estado == 'ENTREGADO'" class="badge badge-success">ENTREGADO</span>
+                    <span *ngIf="pedido.estado == 'CANCELADO'" class="badge badge-danger">CANCELADO</span>
                   </td>
                   <td class="text-center">
                     <a mat-button [matMenuTriggerFor]="opciones"
@@ -89,7 +72,7 @@
                       </button>
 
                       <button mat-menu-item (click)="cancelarPedido(pedido.identificador)"
-                        *ngIf="!pedido.pagos || (pedido.pagos && pedido.pagos.estado == 'PENDIENTE' && pedido.pagos.vr_tipo != 'PO' && pedido.pagos.vr_tipo != 'ATCD')">
+                        *ngIf="pedido.estado == 'PENDIENTE'">
                         <mat-icon>cancel</mat-icon>
                         <span>Cancelar pedido</span>
                       </button>

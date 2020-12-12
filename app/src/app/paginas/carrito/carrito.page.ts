@@ -56,9 +56,9 @@ export class PaginaCarrito implements OnInit {
 
   async ngOnInit() {
     this.platform.resize
-    .subscribe(() => {
-      this.servicioGeneral.resetContainerPosition('.cart-total');
-    });
+      .subscribe(() => {
+        this.servicioGeneral.resetContainerPosition('.cart-total');
+      });
   }
 
   async ionViewWillEnter() {
@@ -132,7 +132,7 @@ export class PaginaCarrito implements OnInit {
     // validar que usuario este logueado
     const usuario: any = await this.servicioUsuario.obtenerUsuario();
     if (!usuario) {
-      this.router.navigate(['/login'], {queryParams: { redirect: 'pedido'}});
+      this.router.navigate(['/login'], { queryParams: { redirect: 'pedido' } });
       return;
     }
 
@@ -160,8 +160,7 @@ export class PaginaCarrito implements OnInit {
     this.servicioCarrito.agregarAlCarrito(producto, 'upd');
     this.actualizarTotal();
   }
-
-  obtenerCupones() {}
+s
 
   ionViewWillLeave() {
     this.servicioGeneral.resetContainerPosition('.cart-total');

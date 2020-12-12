@@ -25,6 +25,24 @@ export class UsuarioService {
     private router: Router
   ) { }
 
+  async getUsuario(id?, parametros?) {
+    const url = (id) ? `user/${id}` : `user`;
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const params = new HttpParams({ fromObject: parametros });
+
+    return new Promise(resolve => {
+      this.http.get(`${API}${url}`, { headers, params }).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error.error);
+        }
+      );
+    });
+  }
+
   async registro(usuario: Usuario) {
     return new Promise(resolve => {
       this.http.post(`${API}user`, usuario)

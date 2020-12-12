@@ -138,7 +138,7 @@ class UserController extends BaseController {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        $usuario = User::find($id)->load('rol');
+        $usuario = User::find($id)->load('rol')->load('cliente');
 
         if (is_object($usuario)) {
             return $this->sendResponse(true, 'Listado obtenido exitosamente', $usuario, 200);

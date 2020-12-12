@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵConsole } from '@angular/core';
 import { Pedido } from '../../modelos/pedido';
 import { PedidoService } from 'app/servicios/pedido.service';
 import { ServicioAlertas } from 'app/servicios/alertas.service';
@@ -118,6 +118,28 @@ export class PedidosComponent implements OnInit {
     }
   }
 
+
+  async procesar(idPedido) {
+    this.accion = 'LST';
+    this.cargando = true;
+
+    const responseEstado: any = await this.servicioPedido.cambiarEstado('EN PROCESO', idPedido);
+
+    if (responseEstado.success) {
+      await this.paginacion();
+      this.servicioAlerta.dialogoExito('Pedido listo para procesar');
+
+      setTimeout(() => {
+        window.open(`${environment.api}/pedido/${idPedido}/pdf`, '_blank');
+      }, 1550);
+
+    } else {
+      this.servicioAlerta.dialogoError(responseEstado.message);
+    }
+
+    this.cargando = false;
+  }
+
   ver(idPedido) {
     this.accion = 'LST';
     this.cargando = true;
@@ -127,11 +149,20 @@ export class PedidosComponent implements OnInit {
     this.cargando = false;
   }
 
-  ticket(idPedido) {
+  async listo(idPedido, tipo) {
     this.accion = 'LST';
     this.cargando = true;
 
-    window.open(`${environment.api}/pedido/${idPedido}/ticket`, '_blank');
+    const estado = (tipo == 'RT') ? 'LISTO' : 'EN CAMINO';
+    console.log(estado);
+    const responseEstado: any = await this.servicioPedido.cambiarEstado(estado, idPedido);
+
+    if (responseEstado.success) {
+      await this.paginacion();
+      await this.generarComprobante(idPedido);
+    } else {
+      this.servicioAlerta.dialogoError(responseEstado.message);
+    }
 
     this.cargando = false;
   }
@@ -139,7 +170,6 @@ export class PedidosComponent implements OnInit {
   async generarComprobante(id_pedido) {
     this.accion = 'LST';
     this.cargando = true;
-    console.log(this.usuario);
 
     let pedido = {
       id_pedido: id_pedido,
@@ -148,26 +178,17 @@ export class PedidosComponent implements OnInit {
     let response: any = await this.servicioComprobante.registrar(pedido);
 
     if (response.success) {
-      const responseEstado: any = await this.servicioPedido.cambiarEstado('EN CAMINO', id_pedido);
+      await this.paginacion();
+      this.servicioAlerta.dialogoExito('Comprobante generado');
 
-      if (responseEstado.success) {
-        await this.paginacion();
-        this.servicioAlerta.dialogoExito(response.message);
-
-        setTimeout(() => {
-          window.open(`${environment.api}/pedido/${id_pedido}/pdf`, '_blank');
-        }, 1550);
-
-      } else {
-        this.servicioAlerta.dialogoError(response.message);
-      }
+      setTimeout(() => {
+        window.open(`${environment.api}/pedido/${id_pedido}/ticket`, '_blank');
+      }, 1550);
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }
 
     this.cargando = false;
-
-
   }
 
   async terminarPedido(id_pedido) {
@@ -179,11 +200,6 @@ export class PedidosComponent implements OnInit {
     if (response.success) {
       await this.paginacion();
       this.servicioAlerta.dialogoExito(response.message);
-
-      // setTimeout(() => {
-      //   window.open(`${environment.api}/pedido/${id_pedido}/pdf`, '_blank');
-      // }, 1000);
-
     } else {
       this.servicioAlerta.dialogoError(response.message);
     }

@@ -128,11 +128,6 @@
           </div>
       
           <div class="d-flex justify-content-between pb-2">
-            <span>Delivery</span>
-            <span class="text-right">{{ totales.delivery | numberFormat }} Gs.</span>
-          </div>
-      
-          <div class="d-flex justify-content-between pb-2">
             <span>Descuento</span>
             <span class="text-right">{{ totales.descuento | numberFormat }} Gs.</span>
           </div>
@@ -146,25 +141,6 @@
       
           <hr class="border-top">
       
-          <div class="col-auto p-0">
-            <form (ngSubmit)="obtenerCupones()">
-      
-              <div class="form-row">
-                <div class="field fl-placeholder-state">
-                  <div class="control">
-                    <label for="" class="label"><span></span></label>
-                    <input type="text" class="input-text" placeholder="Ingrese el cupón de descuento" [(ngModel)]="cuponDescuento.codigo" [ngModelOptions]="{standalone: true}">
-                  </div>
-                </div>
-              </div>
-      
-              <div class="actions-toolbar d-flex justify-content-end">
-                <button class="btn btn-primary" type="submit">Aplicar</button>
-              </div>
-      
-            </form>
-          </div>
-      
           <div class="form-group" *ngIf="cuponDescuento.length">
             <p class="d-flex">
               <span>{{ cuponDescuento.descripcion }}</span>
@@ -177,7 +153,7 @@
           </div>
       
           <div class="finish-order mt-3">
-            <button (click)="listaCarrito?.length ? pedido() : false" class="btn btn-primary btn-block" mat-button [disabled]="!listaCarrito || !listaCarrito?.length">Continuar</button>
+            <button (click)="listaCarrito?.length ? pedido() : false" class="btn btn-primary btn-block" mat-button [disabled]="!listaCarrito || !listaCarrito?.length">Pagar</button>
           </div>
         </div>
       </ion-col>

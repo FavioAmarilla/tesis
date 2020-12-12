@@ -14,6 +14,8 @@ use App\PedidoPagos;
 use App\CuponDescuento;
 use App\UserTarjetas;
 use App\Empresa;
+use App\User;
+use App\Cliente;
 use PDF;
 
 class PedidoController extends BaseController
@@ -220,21 +222,11 @@ class PedidoController extends BaseController
             $pedido->telefono = $telefono_asignado;
         }
 
-        $usuario = User::find($usuario->identificador);
-
-        if ($usuario->nombre_completo != $persona) {
-            $usuario->nombre_completo = $persona;
-        }
-
-        if ($usuario->nro_documento != $nro_documento) {
-            $usuario->nro_documento = $nro_documento;
-        }
-
-        if ($usuario->telefono != $telefono) {
-            $usuario->telefono = $telefono;
-        }
-
-        $usuario->save();
+        $cliente = Cliente::where('id_usuario', '=', $id_usuario)->first();
+        $cliente->razon_social = $persona;
+        $cliente->numero_documento = $nro_documento;
+        $cliente->celular = $telefono;
+        $cliente->save();
 
         //validar que llegaron productos
         if (count($productos) <= 0) {
@@ -468,21 +460,11 @@ class PedidoController extends BaseController
                 $pedido->telefono = $telefono_asignado;
             }
 
-            $usuario = User::find($usuario->identificador);
-
-            if ($usuario->nombre_completo != $persona) {
-                $usuario->nombre_completo = $persona;
-            }
-
-            if ($usuario->nro_documento != $nro_documento) {
-                $usuario->nro_documento = $nro_documento;
-            }
-
-            if ($usuario->telefono != $telefono) {
-                $usuario->telefono = $telefono;
-            }
-
-            $usuario->save();
+            $cliente = Cliente::where('id_usuario', '=', $id_usuario)->first();
+            $cliente->razon_social = $persona;
+            $cliente->numero_documento = $nro_documento;
+            $cliente->celular = $telefono;
+            $cliente->save();
 
             if ($pedido->save()) {
                 PedidoItems::where('id_pedido', $id)->delete();
@@ -601,15 +583,24 @@ class PedidoController extends BaseController
 
             $pago = PedidoPagos::where('id_pedido', '=', $pedido->identificador)->first();
             if ($pago) {
+
                 $tipo_envio = $pago->vr_tipo;
                 if ($tipo_envio == 'PO') {
+                    if ($pedido->save()) {
+                        $pago->estado = 'CANCELADO';
+                        $pago->save();
+                    }
                     $bancard = new BancardController();
                     return $bancard->singleBuyRollback($request, $pago->referencia);
                 } else {
-                    $pago->estado = 'CANCELADO';
-                    if ($pago->save()) {
-                        return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
+                    $pedido->estado = 'CANCELADO';
+                    if ($pedido->save()) {
+                        $pago->estado = 'CANCELADO';
+                        if ($pago->save()) {
+                            return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
+                        }
                     }
+                    
                     return $this->sendResponse(false, 'Ha ocurrido un problema, por favor intentelo más tarde', false, 500);
                 }
             } else {
@@ -720,6 +711,14 @@ class PedidoController extends BaseController
 
         $pedido = Pedido::find($id);
         if ($pedido) {
+            if ($estado == "ENTREGADO") {
+                $pago = PedidoPagos::where('id_pedido', '=', $pedido->identificador)->first();
+                $pago->estado = 'PAGADO';
+                $pago->save();
+
+                $mensaje = "Pedido Finalizado";
+            } 
+            
             $pedido->estado = $estado;
     
             if ($pedido->save()) {

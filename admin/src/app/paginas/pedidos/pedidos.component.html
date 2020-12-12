@@ -15,8 +15,8 @@
                                     <th>Tipo Pedido</th>
                                     <th>Cliente</th>
                                     <th>RUC/CI</th>
-                                    <th>Estado Pedido</th>
                                     <th>Estado Pago</th>
+                                    <th>Estado Pedido</th>
                                     <th class="text-right">Opciones</th>
                                 </thead>
                                 <tbody>
@@ -29,23 +29,45 @@
                                         </td>
                                         <td>{{ row.usuario.cliente.razon_social }}</td>
                                         <td>{{ row.usuario.cliente.numero_documento }}</td>
-                                        <td>{{ row.estado }}</td>
-                                        <td>{{ row.pagos.estado }}</td>
-
-                                        <td class="text-right">
-                                            <button class="btn btn-sm btn-info" title="Orden de Pedido" *ngIf="row.estado == 'PENDIENTE'"
-                                                (click)="ver(row.identificador)"> <i class="fas fa-eye"></i>
+                                        <td class="text-center">
+                                            <span *ngIf="row.pagos.estado == 'PENDIENTE'"
+                                                class="badge badge-secondary">PENDIENTE</span>
+                                            <span *ngIf="row.pagos.estado == 'CANCELADO'"
+                                                class="badge badge-danger">CANCELADO</span>
+                                            <span *ngIf="row.pagos.estado == 'PAGADO'"
+                                                class="badge badge-success">PAGADO</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="row.estado == 'PENDIENTE'"
+                                                class="badge badge-secondary">PENDIENTE</span>
+                                            <span *ngIf="row.estado == 'EN PROCESO'" class="badge badge-info">EN
+                                                PROCESO</span>
+                                            <span *ngIf="row.estado == 'LISTO'" class="badge badge-info">LISTO</span>
+                                            <span *ngIf="row.estado == 'EN CAMINO'" class="badge badge-primary">EN
+                                                CAMINO</span>
+                                            <span *ngIf="row.estado == 'ENTREGADO'"
+                                                class="badge badge-success">ENTREGADO</span>
+                                            <span *ngIf="row.estado == 'CANCELADO'"
+                                                class="badge badge-danger">CANCELADO</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <button class="btn btn-sm btn-info mb-1" title="Finalizar Pedido"
+                                                (click)="ver(row.identificador)">
+                                                VER PEDIDO
+                                            </button> <br>
+                                            <button class="btn btn-sm btn-primary" title="Orden de Pedido"
+                                                *ngIf="row.estado == 'PENDIENTE'" (click)="procesar(row.identificador)">
+                                                PROCESAR
                                             </button>
-                                            <button class="btn btn-sm btn-default" title="Ticket" *ngIf="row.estado == 'EN CAMINO' || row.estado == 'ENTREGADO'"
-                                                (click)="ticket(row.identificador)"> <i class="fas fa-file"></i>
+                                            <button class="btn btn-sm btn-primary" title="Ticket"
+                                                *ngIf="row.estado == 'EN PROCESO'"
+                                                (click)="listo(row.identificador, row.tipo_envio)">
+                                                GEN. COMPROBANTE
                                             </button>
-                                            <button class="btn btn-sm btn-default" title="Generar Comprobante" *ngIf="row.estado == 'PENDIENTE'"
-                                                (click)="generarComprobante(row.identificador)"> <i
-                                                    class="fas fa-paper-plane"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-primary" title="Finalizar Pedido" *ngIf="row.estado == 'EN CAMINO'"
-                                                (click)="terminarPedido(row.identificador)"> <i
-                                                    class="fas fa-check"></i>
+                                            <button class="btn btn-sm btn-primary" title="Finalizar Pedido"
+                                                *ngIf="row.estado == 'LISTO' || row.estado == 'EN CAMINO'"
+                                                (click)="terminarPedido(row.identificador)">
+                                                FINALIZAR
                                             </button>
                                         </td>
                                     </tr>

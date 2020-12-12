@@ -141,7 +141,6 @@ export class PedidoListadoPage implements OnInit {
     this.cargando = true;
 
     const response: any = await this.servicioPedido.cancelar(id_pedido);
-    console.log('response: ', response);
 
     if (response.success) {
       this.servicioAlerta.dialogoExito(response.message);

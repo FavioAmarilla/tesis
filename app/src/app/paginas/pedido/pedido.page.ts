@@ -78,7 +78,7 @@ export class PedidoPage implements OnInit {
   public coordenadas;
   public stepperEditable = true;
 
-  @ViewChild('stepper', {static: false}) stepper: MatStepper;
+  @ViewChild('stepper', { static: false }) stepper: MatStepper;
 
   constructor(
     private servicioEcParametros: EcParametrosService,
@@ -122,9 +122,9 @@ export class PedidoPage implements OnInit {
     });
 
     this.platform.resize
-    .subscribe(() => {
-      this.servicioGeneral.resetContainerPosition('.cart-total');
-    });
+      .subscribe(() => {
+        this.servicioGeneral.resetContainerPosition('.cart-total');
+      });
 
     if (comprobarTotales) { this.comprobarTotales(); }
 
@@ -217,7 +217,7 @@ export class PedidoPage implements OnInit {
 
   inicializarDatosPago() {
     this.datosPago = this.formBuilder.group({
-      tipo:    ['', Validators.required],
+      tipo: ['', Validators.required],
       card_id: [''],
       importe: ['', Validators.min(this.totales.total)]
     }, {
@@ -284,20 +284,20 @@ export class PedidoPage implements OnInit {
 
   inicializarDatosEnvio() {
     this.datosEnvio = this.formBuilder.group({
-      tipo_envio:             [0,  Validators.required],
-      id_pais:                [0],
-      id_ciudad:              [0],
-      id_barrio:              [0],
-      direccion:              [''],
-      ubicacion:              [''],
-      persona:                ['', Validators.required],
-      nro_documento:          ['', Validators.required],
-      telefono:               ['', Validators.required],
-      observacion:            [''],
-      asignado:               ['me'],
-      nombre_asignado:        [''],
+      tipo_envio: [0, Validators.required],
+      id_pais: [0],
+      id_ciudad: [0],
+      id_barrio: [0],
+      direccion: [''],
+      ubicacion: [''],
+      persona: ['', Validators.required],
+      nro_documento: ['', Validators.required],
+      telefono: ['', Validators.required],
+      observacion: [''],
+      asignado: ['me'],
+      nombre_asignado: [''],
       nro_documento_asignado: [''],
-      telefono_asignado:      ['']
+      telefono_asignado: ['']
     }, {
       validators: [
         this.requiredValidator('tipo_envio', '==', 'DE', 'id_pais'),
@@ -459,15 +459,22 @@ export class PedidoPage implements OnInit {
 
   async obtenerUsuario() {
     const response: any = await this.servicioUsuario.obtenerUsuario();
-
     if (response) {
       this.usuario = response;
 
-      this.datosEnvio.controls.persona.setValue(this.usuario.nombre_completo);
-      this.datosEnvio.controls.nro_documento.setValue(this.usuario.nro_documento);
+      const usuario: any = await this.servicioUsuario.getUsuario(this.usuario.identificador);
+      if (usuario) {
+        console.log(usuario.data.cliente);
+        this.datosEnvio.controls.persona.setValue(usuario.data.cliente.razon_social);
+        this.datosEnvio.controls.nro_documento.setValue(usuario.data.cliente.numero_documento);
+        this.datosEnvio.controls.telefono.setValue(usuario.data.cliente.celular);
 
-      if (this.usuario && this.usuario.tiene_tarjetas) {
-        this.obtenerTarjetas();
+        if (this.usuario && this.usuario.tiene_tarjetas) {
+          this.obtenerTarjetas();
+        }
+      } else {
+        this.servicioAlerta.dialogoError('Debe estar Logueado para confirmar la operacion');
+        this.router.navigate(['/login']);
       }
     } else {
       this.servicioAlerta.dialogoError('Debe estar Logueado para confirmar la operacion');
@@ -501,7 +508,7 @@ export class PedidoPage implements OnInit {
       this.pedido[index] = this.datosEnvio.value[index];
     }
     this.carrito.forEach(element => {
-      this.pedido.productos.push({...element});
+      this.pedido.productos.push({ ...element });
     });
 
     if (this.pedido.identificador) {
