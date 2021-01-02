@@ -209,7 +209,22 @@ export class PedidosComponent implements OnInit {
 
   async obtenerUsuario() {
     this.usuario = await this.servicioUsuario.obtenerUsuario();
-    console.log(this.usuario);
+  }
+
+  async devolucion(idPedido) {
+    this.accion = 'LST';
+    this.cargando = true;
+
+    const responseEstado: any = await this.servicioPedido.devolucion(idPedido, this.usuario.identificador);
+
+    if (responseEstado.success) {
+      await this.paginacion();
+      this.servicioAlerta.dialogoExito("Devolucion realizada con exito");
+    } else {
+      this.servicioAlerta.dialogoError(responseEstado.message);
+    }
+
+    this.cargando = false;
   }
 
 }

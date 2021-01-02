@@ -49,25 +49,32 @@
                                                 class="badge badge-success">ENTREGADO</span>
                                             <span *ngIf="row.estado == 'CANCELADO'"
                                                 class="badge badge-danger">CANCELADO</span>
+                                                <span *ngIf="row.estado == 'DEVUELTO'"
+                                                    class="badge badge-danger">DEVUELTO</span>
                                         </td>
                                         <td class="text-center">
-                                            <button class="btn btn-sm btn-info mb-1" title="Finalizar Pedido"
-                                                (click)="ver(row.identificador)">
-                                                VER PEDIDO
-                                            </button> <br>
-                                            <button class="btn btn-sm btn-primary" title="Orden de Pedido"
-                                                *ngIf="row.estado == 'PENDIENTE'" (click)="procesar(row.identificador)">
+                                            <button class="btn btn-sm btn-primary" *ngIf="row.estado == 'PENDIENTE'"
+                                                (click)="procesar(row.identificador)">
                                                 PROCESAR
                                             </button>
-                                            <button class="btn btn-sm btn-primary" title="Ticket"
-                                                *ngIf="row.estado == 'EN PROCESO'"
+                                            <button class="btn btn-sm btn-primary" *ngIf="row.estado == 'EN PROCESO'"
                                                 (click)="listo(row.identificador, row.tipo_envio)">
                                                 GEN. COMPROBANTE
                                             </button>
-                                            <button class="btn btn-sm btn-primary" title="Finalizar Pedido"
+                                            <button class="btn btn-sm btn-primary"
                                                 *ngIf="row.estado == 'LISTO' || row.estado == 'EN CAMINO'"
                                                 (click)="terminarPedido(row.identificador)">
                                                 FINALIZAR
+                                            </button>
+                                            <br>
+                                            <button class="btn btn-sm btn-info mt-1" (click)="ver(row.identificador)">
+                                                VER PEDIDO
+                                            </button>
+                                            <br>
+                                            <button class="btn btn-sm btn-danger mt-1"
+                                                *ngIf="row.estado == 'ENTREGADO'"
+                                                (click)="devolucion(row.identificador)">
+                                                DEVOLUCION
                                             </button>
                                         </td>
                                     </tr>

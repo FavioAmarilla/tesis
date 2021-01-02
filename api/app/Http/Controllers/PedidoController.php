@@ -8,6 +8,8 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Http\Controllers\BancardController as BancardController;
+use App\Http\Controllers\ComprobanteController as ComprobanteController;
+use App\Comprobante;
 use App\Pedido;
 use App\PedidoItems;
 use App\PedidoPagos;
@@ -578,10 +580,18 @@ class PedidoController extends BaseController
     public function destroy(Request $request, $id)
     {
         $pedido = Pedido::find($id);
+        $devolucion = $request->input("devolucion");
+        $usr = $request->input("usr");
+        $estado = 'CANCELADO';
 
         if ($pedido) {
 
             $pago = PedidoPagos::where('id_pedido', '=', $pedido->identificador)->first();
+
+            if ($devolucion) {
+                $estado = 'DEVUELTO';
+            } 
+
             if ($pago) {
 
                 $tipo_envio = $pago->vr_tipo;
@@ -593,12 +603,20 @@ class PedidoController extends BaseController
                     $bancard = new BancardController();
                     return $bancard->singleBuyRollback($request, $pago->referencia);
                 } else {
-                    $pedido->estado = 'CANCELADO';
+                    $pedido->estado = $estado;
                     if ($pedido->save()) {
                         $pago->estado = 'CANCELADO';
                         if ($pago->save()) {
-                            return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
+                            $comprobante = Comprobante::where('id_pedido', '=', $id)->first();
+                            if ($comprobante) {
+                                $comprobante->fec_anulacion = date('Y-m-d H:i:s');
+                                $comprobante->usr_anulacion = $usr;
+                                if ($comprobante->save()) {
+                                    return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
+                                }
+                            } 
                         }
+                        return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
                     }
                     
                     return $this->sendResponse(false, 'Ha ocurrido un problema, por favor intentelo más tarde', false, 500);
@@ -615,8 +633,18 @@ class PedidoController extends BaseController
 
                 if ($pagoIt->save()) {
 
-                    $pedido->estado = 'CANCELADO';
+                    $pedido->estado = $estado;
                     if ($pedido->save()) {
+                        if ($devolucion) {
+                            $comprobante = Comprobante::where('id_pedido', '=', $id)->first();
+                            if ($comprobante) {
+                                $comprobante->fec_anulacion = date('Y-m-d H:i:s');
+                                $comprobante->usr_anulacion = $usr;
+                                if ($comprobante->save()) {
+                                    return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
+                                }
+                            } 
+                        }
                         return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
                     }
                     
@@ -625,6 +653,8 @@ class PedidoController extends BaseController
 
                 return $this->sendResponse(false, 'Ha ocurrido un problema, por favor intentelo más tarde', false, 500);
             }
+
+            
         }
 
         return $this->sendResponse(false, 'No se encontro el pedido', null, 404);

@@ -53,6 +53,7 @@
                     <span *ngIf="pedido.estado == 'EN CAMINO'" class="badge badge-primary">EN CAMINO</span>
                     <span *ngIf="pedido.estado == 'ENTREGADO'" class="badge badge-success">ENTREGADO</span>
                     <span *ngIf="pedido.estado == 'CANCELADO'" class="badge badge-danger">CANCELADO</span>
+                    <span *ngIf="pedido.estado == 'DEVUELTO'" class="badge badge-danger">DEVUELTO</span>
                   </td>
                   <td class="text-center">
                     <a mat-button [matMenuTriggerFor]="opciones"

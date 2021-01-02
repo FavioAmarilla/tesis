@@ -32,4 +32,26 @@ export class PedidoService extends BaseService {
       );
     });
   }
+
+  async devolucion(id, usr) {
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: {
+        devolucion: true,
+        usr: usr
+      }
+    }
+
+    return new Promise(resolve => {
+      this.http.delete(`${API}/pedido/${id}`, options).subscribe(
+        (response: any) => {
+          resolve(response);
+        },
+        error => {
+          resolve(error.error);
+        }
+      );
+    });
+  }
+
 }
