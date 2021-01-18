@@ -197,7 +197,7 @@ export class PedidoPage implements OnInit {
   inicializarTotales() {
     this.totales = {
       subtotal: 0,
-      delivery: 10000,
+      delivery: this.parametros ? this.parametros.costo_delivery : 10000,
       descuento: 0,
       total: 0
     };
@@ -249,6 +249,7 @@ export class PedidoPage implements OnInit {
     }
 
     // obtener total
+    this.totales.delivery = this.datosPago.value.tipo == 'DE' ? this.totales.delivery : 0;
     this.totales.total = (this.totales.subtotal + this.totales.delivery) - this.totales.descuento;
 
     this.cargando = false;
