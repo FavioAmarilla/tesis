@@ -29,6 +29,7 @@ export class PaginaInicio implements OnInit {
 
   public listaSucursales: Sucursal;
   public listaProductos: Producto[] = [];
+  public listaProductosPorCategoria: any[] = [];
   public listaSlides: Banner;
   public listaLineas: LineaProducto;
   public idLineaProducto: any = 0;
@@ -189,6 +190,16 @@ export class PaginaInicio implements OnInit {
       this.cargando = false;
       this.servicioAlerta.dialogoError(response.message);
     }
+
+    const responseCat: any = await this.servicioProducto.shopHome(null, parametros);
+    if (responseCat.success) {
+      this.listaProductosPorCategoria = responseCat.data;
+    } else {
+      this.cargando = false;
+      this.servicioAlerta.dialogoError(responseCat.message);
+    }
+
+    
 
     this.cargando = false;
   }

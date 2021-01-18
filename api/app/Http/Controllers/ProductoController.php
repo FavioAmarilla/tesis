@@ -12,6 +12,7 @@ use App\Producto;
 use App\Sucursal;
 use App\Stock;
 use App\LineaProducto;
+use Illuminate\Support\Facades\DB;
 
 class ProductoController extends BaseController
 {
@@ -399,5 +400,35 @@ class ProductoController extends BaseController
         $data['data'] = $resultados;
 
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
+    }
+
+    public function shopHome(Request $request)
+    {
+        $lineas = DB::select('select pr.id_linea, li.descripcion, sum(it.cantidad) as cantidad
+                                from vta_items_comprob it
+                                left join pr_productos pr on pr.identificador = it.id_producto
+                                left join pr_lineas_prod li on li.identificador = pr.id_linea
+                                left join pr_stock st on st.id_producto = pr.identificador
+                                where st.stock > 0 and st.id_sucursal=1
+                                group by pr.id_linea, li.descripcion
+                                order by sum(it.cantidad) desc
+                                limit 5');
+
+        $data = array();
+        foreach ($lineas as $linea) {
+           $productos = DB::select('select distinct pr.*
+                                    from vta_items_comprob it
+                                    left join pr_productos pr on pr.identificador = it.id_producto
+                                    left join pr_lineas_prod li on li.identificador = pr.id_linea
+                                    left join pr_stock st on st.id_producto = pr.identificador
+                                    where st.stock > 0 and st.id_sucursal=1 and pr.id_linea='.$linea->id_linea.'
+                                    limit 10');
+
+            array_push($data, array('linea' => $linea, 'productos' => $productos));
+        }
+
+        
+        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
+        
     }
 }

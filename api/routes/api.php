@@ -56,7 +56,8 @@ Route::group(['prefix' => 'producto'], function () {
 
 Route::get('shop', ['as' => 'producto.shop', 'uses' => 'ProductoController@shop']);
 Route::group(['prefix' => 'shop'], function () {
-    Route::get('producto', ['as' => 'producto.producto', 'uses' => 'ProductoController@shop']);
+    Route::get('producto', ['as' => 'shop.producto', 'uses' => 'ProductoController@shop']);
+    Route::get('home', ['as' => 'shop.home', 'uses' => 'ProductoController@shopHome']);
 });
 
 Route::resource('slide', 'SlideController');
