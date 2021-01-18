@@ -274,7 +274,7 @@ class PedidoController extends BaseController
                 
             }
 
-            if (!procesoStock()) {
+            if (!procesoStock($pedido->identificador, $pedido->id_sucursal, 'DI')) {
                 return $this->sendResponse(false, 'Stock de producto no actualizado', $item, 400);
             }
 
@@ -618,14 +618,14 @@ class PedidoController extends BaseController
                                 $comprobante->fec_anulacion = date('Y-m-d H:i:s');
                                 $comprobante->usr_anulacion = $usr;
                                 if ($comprobante->save()) {
-                                    if (!procesoStock()) {
+                                    if (!procesoStock($pedido->identificador, $pedido->id_sucursal, 'AU')) {
                                         return $this->sendResponse(false, 'Stock de producto no actualizado', $item, 400);
                                     }
                                     return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
                                 }
                             } 
                         }
-                        if (!procesoStock()) {
+                        if (!procesoStock($pedido->identificador, $pedido->id_sucursal, 'AU')) {
                             return $this->sendResponse(false, 'Stock de producto no actualizado', $item, 400);
                         }
                         return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
@@ -653,14 +653,14 @@ class PedidoController extends BaseController
                                 $comprobante->fec_anulacion = date('Y-m-d H:i:s');
                                 $comprobante->usr_anulacion = $usr;
                                 if ($comprobante->save()) {
-                                    if (!procesoStock()) {
+                                    if (!procesoStock($pedido->identificador, $pedido->id_sucursal, 'AU')) {
                                         return $this->sendResponse(false, 'Stock de producto no actualizado', $item, 400);
                                     }
                                     return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
                                 }
                             } 
                         }
-                        if (!procesoStock()) {
+                        if (!procesoStock($pedido->identificador, $pedido->id_sucursal, 'AU')) {
                             return $this->sendResponse(false, 'Stock de producto no actualizado', $item, 400);
                         }
                         return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
