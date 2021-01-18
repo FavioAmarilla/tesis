@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { IonSlides, ModalController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 
@@ -90,7 +90,7 @@ export class PaginaInicio implements OnInit {
 
   subscriptions: Subscription[] = [];
 
-  @ViewChild(IonSlides, { static: true }) slider: IonSlides;
+  @ViewChildren(IonSlides) slides: IonSlides[];
 
   constructor(
     private servicioCarrito: CarritoService,
@@ -117,6 +117,10 @@ export class PaginaInicio implements OnInit {
   async ngOnInit() {
     await this.obtenerCarrusel();
     await this.obtenerSucursales();
+  }
+
+  ngAfterViewInit() {
+    this.checkSlides();
   }
 
   redireccionar(url) {
@@ -199,9 +203,22 @@ export class PaginaInicio implements OnInit {
       this.servicioAlerta.dialogoError(responseCat.message);
     }
 
-    
+    setTimeout(() => this.checkSlides(), 500);
 
     this.cargando = false;
+  }
+
+  checkSlides() {
+    if (this.slides) {
+      this.slides.forEach(async (slider: IonSlides) => {
+        const swiper: any = await slider.getSwiper();
+        if (swiper.originalParams.loop && swiper.loopedSlides < swiper.originalParams.slidesPerView) {
+          swiper.params.slidesPerView = swiper.loopedSlides;
+          swiper.destroy(false, false);
+          swiper.init();
+        }
+      });
+    }
   }
 
   redirectMarca(marca) {
