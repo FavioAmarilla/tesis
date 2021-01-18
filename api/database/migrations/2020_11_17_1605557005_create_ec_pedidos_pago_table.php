@@ -23,7 +23,7 @@ class CreateEcPedidosPagoTable extends Migration
 			$table->integer('total');
 			$table->integer('importe');
 			$table->integer('vuelto');
-            $table->string('estado', 11)->default('PENDIENTE');
+            $table->enum('estado', ['PENDIENTE', 'CANCELADO', 'PAGADO'])->default('PENDIENTE');
 			$table->timestamps();
             
             $table->foreign('id_pedido')->references('identificador')->on('ec_pedidos');

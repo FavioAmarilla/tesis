@@ -35,7 +35,7 @@ class CreateEcPedidosTable extends Migration
 			$table->string('nro_documento', 15);
 			$table->string('telefono', 15);
 			$table->string('tipo_envio', 2);
-			$table->string('estado', 11);
+			$table->enum('estado', ['PENDIENTE', 'EN PROCESO', 'LISTO', 'EN CAMINO', 'ENTREGADO', 'CANCELADO', 'DEVUELTO']);
 			$table->timestamps();
 			
 			$table->foreign('id_cupon_descuento')->references('identificador')->on('vta_cupones_descuento');
