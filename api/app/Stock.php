@@ -11,7 +11,7 @@ class Stock extends Model
     protected $perPage = 10;
 
     protected $fillable =[
-        'identificador', 'id_sucursal', 'id_producto',
+        'identificador', 'id_sucursal', 'id_producto', 'stock'
     ];
 
     //obtener sucursal

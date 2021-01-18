@@ -18,6 +18,7 @@ use App\UserTarjetas;
 use App\Empresa;
 use App\User;
 use App\Cliente;
+use App\Stock;
 use PDF;
 
 class PedidoController extends BaseController
@@ -259,7 +260,7 @@ class PedidoController extends BaseController
                         $item->importe_iva10 = $producto['precio_venta'];
                         break;
                     default:
-                        $item->importe_exento = 1;
+                        $item->importe_exento = $producto['precio_venta'];
                         break;
                 }
                 $item->cantidad = $producto['cantidad'];
@@ -270,6 +271,11 @@ class PedidoController extends BaseController
                     return $this->sendResponse(true, 'Producto de pedido no registrados', $item, 400);
                     break;
                 }
+                
+            }
+
+            if (!procesoStock()) {
+                return $this->sendResponse(false, 'Stock de producto no actualizado', $item, 400);
             }
 
             $total += $costo_envio;
@@ -612,9 +618,15 @@ class PedidoController extends BaseController
                                 $comprobante->fec_anulacion = date('Y-m-d H:i:s');
                                 $comprobante->usr_anulacion = $usr;
                                 if ($comprobante->save()) {
+                                    if (!procesoStock()) {
+                                        return $this->sendResponse(false, 'Stock de producto no actualizado', $item, 400);
+                                    }
                                     return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
                                 }
                             } 
+                        }
+                        if (!procesoStock()) {
+                            return $this->sendResponse(false, 'Stock de producto no actualizado', $item, 400);
                         }
                         return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
                     }
@@ -641,9 +653,15 @@ class PedidoController extends BaseController
                                 $comprobante->fec_anulacion = date('Y-m-d H:i:s');
                                 $comprobante->usr_anulacion = $usr;
                                 if ($comprobante->save()) {
+                                    if (!procesoStock()) {
+                                        return $this->sendResponse(false, 'Stock de producto no actualizado', $item, 400);
+                                    }
                                     return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
                                 }
                             } 
+                        }
+                        if (!procesoStock()) {
+                            return $this->sendResponse(false, 'Stock de producto no actualizado', $item, 400);
                         }
                         return $this->sendResponse(true, 'Pedido cancelado correctamente', null, 200);
                     }
@@ -825,5 +843,44 @@ class PedidoController extends BaseController
         }
 
         return $this->sendResponse(false, 'No se encontro el pedido', null, 404);
+    }
+
+
+    function procesoStock($id_pedido, $id_sucursal, $op) {
+        
+        $pedido = Pedido::find($id);
+
+        if ($pedido) {
+            $items = PedidoItems::where('id_pedido', $id)->get();
+
+            if ($items) {
+                foreach ($items as $item) {
+                    $stock = Stock::where('id_producto', $items->id_producto)
+                                    ->where('id_sucursal', $id_sucursal)
+                                    ->first();
+                    if (!$stock) {
+                        $stock = new Stock();
+                        $stock->id_producto = $items->id_producto;
+                        $stock->id_sucursal = $id_sucursal;
+                        $stock->stock = $items->cantidad;
+
+                        if (!$stock->save()) {
+                            return false;
+                        }
+                    }    
+                    if ($op == 'AU') {
+                        $stock->stock = $stock->stock + $items->cantidad;
+                    } else {
+                        $stock->stock = $stock->stock - $items->cantidad;
+                    }
+
+                    if (!$stock->save()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        
+        return true;
     }
 }
