@@ -75,6 +75,23 @@ export class GeneralService {
     });
   }
 
+  public addDisqusScript(url, identifier) {
+    const _this = this;
+    const renderer = this.rendererFactory.createRenderer(null, null);
+    
+    var disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+    };
+    (function () { // DON'T EDIT BELOW THIS LINE
+      const renderer = _this.rendererFactory.createRenderer(null, null);
+      var s = renderer.createElement('script');
+      s.setAttribute('src', 'https://ecommercesy.disqus.com/embed.js');
+      s.setAttribute('data-timestamp', '' + new Date());
+      renderer.appendChild(_this.document.body, s);
+    })();
+  }
+
   public promiseTimeout(time) {
     return new Promise(resolve => {
       const timeout = setTimeout(() => {

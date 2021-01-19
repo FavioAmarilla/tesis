@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { ProductoService } from '../../servicios/producto.service';
 import { Producto } from '../../interfaces/interfaces';
+
 import { CarritoService } from '../../servicios/carrito.service';
 import { GeneralService } from 'src/app/servicios/general.service';
 import { AlertaService } from 'src/app/servicios/alerta.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-detalle-producto',
@@ -13,7 +17,9 @@ import { AlertaService } from 'src/app/servicios/alerta.service';
 })
 export class PaginaDetalleProducto implements OnInit {
 
+  public url;
   public slug: string;
+  public pageId;
   public cargando = true;
   public producto: any;
   public relacionados: Producto[] = [];
@@ -23,22 +29,32 @@ export class PaginaDetalleProducto implements OnInit {
   public valor = 1;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
     private servicioProducto: ProductoService,
     private servicioCarrito: CarritoService,
     private servicioGeneral: GeneralService,
     private servicioAlerta: AlertaService
   ) {
-    this.route.params.subscribe(
-      params => {
-        this.slug = params['slug'];
-        this.obtenerProducto(this.slug);
-      }
-    );
+    this.route.params.subscribe(params => {
+      this.url = window.location.href;
+      this.slug = params['slug'];
+      this.pageId = this.slug;
+      this.obtenerProducto(this.slug);
+    });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
+  
+  ngAfterViewInit() {
+    this.initDisqus();
+  }
+
+  initDisqus() {
+    this.servicioGeneral.addDisqusScript(this.url, this.pageId);
+  }
 
   async obtenerProducto(slug) {
     this.cargando = true;

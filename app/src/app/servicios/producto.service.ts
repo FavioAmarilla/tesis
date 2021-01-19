@@ -21,12 +21,8 @@ export class ProductoService {
 
     return new Promise(resolve => {
       this.http.get(`${API}${url}`, { headers, params }).subscribe(
-        (response: any) => {
-          resolve(response);
-        },
-        error => {
-          resolve(error.error);
-        }
+        response => resolve(response),
+        error => resolve(error.error)
       );
     });
   }
@@ -39,12 +35,8 @@ export class ProductoService {
 
     return new Promise(resolve => {
       this.http.get(`${API}${url}`, { headers, params }).subscribe(
-        (response: any) => {
-          resolve(response);
-        },
-        error => {
-          resolve(error.error);
-        }
+        response => resolve(response),
+        error => resolve(error.error)
       );
     });
   }
@@ -55,12 +47,8 @@ export class ProductoService {
 
     return new Promise(resolve => {
       this.http.get(`${API}shop/home`, { headers, params }).subscribe(
-        (response: any) => {
-          resolve(response);
-        },
-        error => {
-          resolve(error.error);
-        }
+        response => resolve(response),
+        error => resolve(error.error)
       );
     });
   }

@@ -54,6 +54,11 @@
           </div>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <div id="fb-root"></div>
+        </ion-col>
+      </ion-row>
     </ion-grid>
   </section>
 
@@ -62,29 +67,29 @@
   </section>
 
   <section class="ftco-section">
-    <hr>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-12 heading-section text-center">
-          <h3 class="mb-4 h3">Productos Relacionados</h3>
-        </div>
-      </div>
-    </div>
-    <div class="container" *ngIf="relacionados.length">
-      <div class="row">
-        <div class="col-md-6 col-lg-3" *ngFor="let relacionado of relacionados">
-          <cp-producto [producto]="relacionado"></cp-producto>
-        </div>
-      </div>
-    </div>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <mat-tab-group>
+            <!-- INICIO PRODUCTOS RELACIONADOS -->
+            <mat-tab label="Productos Relacionados">
+              <div class="productos-relacionados mt-5">
+                <div class="col-md-6 col-lg-3" *ngFor="let relacionado of relacionados">
+                  <cp-producto [producto]="relacionado"></cp-producto>
+                </div>
 
-    <div class="container" *ngIf="!relacionados.length">
-      <div class="row">
-        <div class="col-md-12">
-          <h4>No se encontraron productos relacionados</h4>
-        </div>
-      </div>
-    </div>
+                <h4 *ngIf="!relacionados.length">No se encontraron productos relacionados</h4>
+              </div>
+            </mat-tab>
+            <!-- FIN PRODUCTOS RELACIONADOS -->
+          </mat-tab-group>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </section>
+
+  <section class="ftco-section" [ngClass]="{'d-none': !producto}">
+    <div id="disqus_thread"></div>
   </section>
 
   <app-footer></app-footer>
