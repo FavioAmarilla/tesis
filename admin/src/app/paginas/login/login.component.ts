@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
     this.errores = [];
     const response: any = await this.servicioUsuario.iniciarSession(this.usuario);
     if (response.success) {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/dashboard/ventas/pedido']);
     } else {
       this.servicioAlertas.dialogoError('Acceso Denegado', response.message);
     };
