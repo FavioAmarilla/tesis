@@ -40,9 +40,9 @@ export const ROUTES: RouteInfo[] = [
         icono: 'fa fa-barcode',
         children: [
             { url: '/dashboard/producto', titulo: 'Todos los productos', icono: 'fas fa-barcode' },
-            { url: '/dashboard/productos/marca', titulo: 'Marcas', icono: 'fas fa-tags' },
-            { url: '/dashboard/productos/tipo-impuesto', titulo: 'Tipos de impuesto', icono: 'fas fa-percent' },
-            { url: '/dashboard/productos/linea-producto', titulo: 'Lineas de productos', icono: 'fas fa-th-list' },
+            { url: '/dashboard/producto/marca', titulo: 'Marcas', icono: 'fas fa-tags' },
+            { url: '/dashboard/producto/tipo-impuesto', titulo: 'Tipos de impuesto', icono: 'fas fa-percent' },
+            { url: '/dashboard/producto/linea-producto', titulo: 'Lineas de productos', icono: 'fas fa-th-list' },
         ]
     },
     {

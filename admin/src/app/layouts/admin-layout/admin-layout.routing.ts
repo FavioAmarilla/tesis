@@ -65,7 +65,7 @@ export const AdminLayoutRoutes: Routes = [
                 ]
             },
             {
-                path: 'productos',
+                path: 'producto',
                 data: { breadcrumb: 'Productos' },
                 canActivateChild: [PermisosGuard],
                 children: [
