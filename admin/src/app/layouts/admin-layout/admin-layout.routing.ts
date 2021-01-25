@@ -47,7 +47,7 @@ export const AdminLayoutRoutes: Routes = [
                     { path: 'empresa', component: EmpresaComponent, data: { breadcrumb: 'Empresas' } },
                     { path: 'sucursal', component: SucursalComponent, data: { breadcrumb: 'Sucursal' } },
                     { path: 'banner', component: CarruselComponent, data: { breadcrumb: 'Carrusel' } },
-                    { path: 'parametros-ec', component: EcParametrosComponent, data: { breadcrumb: 'Parametros Ec.' } },
+                    { path: 'parametro-ec', component: EcParametrosComponent, data: { breadcrumb: 'Parametros Ec.' } },
                     { path: 'pregunta', component: PreguntasComponent, data: { breadcrumb: 'Preguntas Frecuentes' } },
                 ]
             },
