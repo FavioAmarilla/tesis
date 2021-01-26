@@ -10,6 +10,7 @@ import { AlertaService } from 'src/app/servicios/alerta.service';
 import { SucursalService } from 'src/app/servicios/sucursal.service';
 import { LineasModalComponent } from 'src/app/componentes/lineas-modal/lineas-modal.component';
 import { MarcaService } from 'src/app/servicios/marca.service';
+import { EcParametrosService } from 'src/app/servicios/ec-parametros.service';
 
 @Component({
   selector: 'app-productos',
@@ -21,7 +22,7 @@ export class ProductosPage implements OnInit {
   public API: string;
   public cargando = true;
 
-  public listaSucursales: Sucursal;
+  public listaSucursales: Sucursal[] = [];
   public listaProductos: Producto[] = [];
   public listaLineas: LineaProducto;
   public idLineaProducto: any = 0;
@@ -54,9 +55,9 @@ export class ProductosPage implements OnInit {
   constructor(
     private servicioCarrito: CarritoService,
     private servicioProducto: ProductoService,
-    private servicioSucursal: SucursalService,
     private servicioLineaProd: LineasProductoService,
     private servicioMarca: MarcaService,
+    private ecParametrosService: EcParametrosService,
     private servicioAlerta: AlertaService,
     private modalController: ModalController,
     private router: Router,
@@ -151,10 +152,12 @@ export class ProductosPage implements OnInit {
   }
 
   async obtenerSucursales() {
-    const response: any = await this.servicioSucursal.obtenerSucursal(null, { ecommerce: 'S' });
+    const response: any = await this.ecParametrosService.obtenerParamsucursales();
 
     if (response.success) {
-      this.listaSucursales = response.data;
+      response.data.forEach(element => {
+        this.listaSucursales.push(element.sucursal);
+      });
     } else {
       this.cargando = false;
       this.servicioAlerta.dialogoError(response.message);
