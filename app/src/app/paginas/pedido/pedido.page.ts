@@ -134,7 +134,7 @@ export class PedidoPage implements OnInit {
   }
 
   onScroll(event) {
-    this.servicioGeneral.translateContainer(event, '.details-container', '.cart-total');
+    this.servicioGeneral.translateContainer(event, '.details-container', '.order-total');
   }
 
   async obtenerTarjetas() {

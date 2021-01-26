@@ -67,7 +67,8 @@
                       </button>
 
                       <button mat-menu-item (click)="finalizarPedido(pedido.identificador)"
-                        *ngIf="!pedido.pagos || (pedido.pagos && pedido.pagos.estado == 'PENDIENTE' && pedido.pagos.vr_tipo == 'PO' && pedido.pagos.process_id)">
+                        *ngIf="!pedido.pagos || (pedido.pagos && pedido.pagos.estado == 'PENDIENTE' &&
+                        (pedido.pagos.vr_tipo == 'PO' || pedido.pagos.vr_tipo == 'PWTK' || pedido.pagos.vr_tipo == 'ATCD') && pedido.pagos.process_id)">
                         <mat-icon>credit_card</mat-icon>
                         <span>Finalizar pedido</span>
                       </button>

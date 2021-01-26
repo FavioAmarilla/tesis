@@ -31,22 +31,25 @@ export class HeaderComponent implements OnInit, OnChanges {
     this.verificarResolucion();
   }
 
-  async ngOnInit() {
+  ngOnInit() {}
+
+  async ngAfterViewInit() {
+    console.log('ngAfterViewInit');
     await this.obtenerUsuario();
     this.servicioUsuario.loginEmitter
-      .subscribe(response => {
-        this.usuario = response;
-      });
+    .subscribe(response => {
+      this.usuario = response;
+    });
 
     this.servicioUsuario.logoutEmitter
-      .subscribe(event => {
-        this.obtenerUsuario();
-      });
+    .subscribe(event => {
+      this.obtenerUsuario();
+    });
 
     this.platform.resize
-      .subscribe(() => {
-        this.verificarResolucion();
-      });
+    .subscribe(() => {
+      this.verificarResolucion();
+    });
 
     this.obtenerCantidadCarrito();
     await this.obtenerSucursales();
