@@ -26,7 +26,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('getImage/{filename}', ['as' => 'user.getImage', 'uses' => 'UserController@getImage']);
     Route::post('cambiarPassword', ['as' => 'user.cambiarPassword', 'uses' => 'UserController@cambiarPassword']);
     Route::post('{userId}/tarjetas', ['as' => 'user.tarjetas', 'uses' => 'BancardController@getCards']);
-    Route::post('{userId}/tarjeta/{cardId}', ['as' => 'user.eliminar.tarjeta', 'uses' => 'BancardController@deleteCard']);
+    Route::delete('{userId}/tarjeta/{cardId}', ['as' => 'user.eliminar.tarjeta', 'uses' => 'BancardController@deleteCard']);
     Route::post('permisos', ['as' => 'user.permisos', 'uses' => 'UserController@permisos']);
 });
 
