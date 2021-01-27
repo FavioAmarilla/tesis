@@ -29,6 +29,7 @@ export interface Producto {
     slug?: string;
     length?: number;
     tipo_impuesto?: TipoImpuesto
+    stock?: Stock
 }
 
 export interface Banner {
@@ -159,4 +160,11 @@ export interface PreguntaFrecuente {
     identificador?: number;
     pregunta?: number;
     respuesta?: string;
+}
+
+export interface Stock {
+    identificador?: number;
+    id_producto?: number;
+    id_sucursal?: number;
+    stock?: number;
 }

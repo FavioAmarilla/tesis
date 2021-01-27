@@ -23,7 +23,7 @@ export class ProductosPage implements OnInit {
   public cargando = true;
 
   public listaSucursales: Sucursal[] = [];
-  public listaProductos: Producto[] = [];
+  public listaProductos: any[] = [];
   public listaLineas: LineaProducto;
   public idLineaProducto: any = 0;
   public lineasProducto: LineaProducto;

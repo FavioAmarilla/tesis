@@ -28,7 +28,6 @@ class ProductoController extends BaseController
         'stock'=> function($q) use ($id_sucursal) {
             if ($id_sucursal) {
                 $q->where('pr_stock.id_sucursal', '=', $id_sucursal);
-                $q->where('pr_stock.stock', '>', 0);
             }
         }]);
 
@@ -77,18 +76,44 @@ class ProductoController extends BaseController
             $query->where('slug', '=', $slug);
         }
 
+        //filtros para la tienda
+        $lineas = $request->query('lineas');
+        if ($lineas) {
+            $query->whereIn('id_linea', explode(',', $lineas));
+        }
+
+        $marcas = $request->query('marcas');
+        if ($marcas) {
+            $query->whereIn('id_marca', explode(',', $marcas));
+        }
+
+        $order = $request->query('order');
+        if (!$order) {
+            $order = 'created_at';
+            $dir = 'desc';
+        }
+        if ($order == 'created_at') {
+            $order = 'created_at';
+            $dir = 'desc';
+        }
+        if ($order == 'descripcion') {
+            $order = 'descripcion';
+            $dir = 'asc';
+        }
+        if ($order == 'precio_asc') {
+            $order = 'precio_venta';
+            $dir = 'asc';
+        }
+        if ($order == 'precio_desc') {
+            $order = 'precio_venta';
+            $dir = 'desc';
+        }
+        //fin filtros para la tienda
+
         $paginar = $request->query('paginar');
         $listar = (filter_var($paginar, FILTER_VALIDATE_BOOLEAN)) ? 'paginate' : 'get';
 
-        $data = $query->orderBy('descripcion', 'asc')->$listar()->toArray();
-
-        $resultados = [];
-        $elements = ($listar == 'paginate') ? $data['data'] : $data;
-        foreach ($elements as $element) {
-            if ($element['stock']) array_push($resultados, $element);
-        }
-
-        $data['data'] = $resultados;
+        $data = $query->orderBy($order, $dir)->$listar()->toArray();
 
         return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
     }
@@ -335,81 +360,17 @@ class ProductoController extends BaseController
         
         return $this->sendResponse(false, 'La imagen no existe', null, 404);
     }
-    
-       /**
-     * Display a listing of the shop.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function shop(Request $request)
-    {
-        $sucursal = $request->query('sucursal');
-        $query = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca', 
-        'stock'=> function($q) use ($sucursal) {
-            if ($sucursal) {
-                $q->where('pr_stock.id_sucursal', '=', $sucursal);
-                $q->where('pr_stock.stock', '>', 0);
-            }
-        }]);
-
-        $descripcion = $request->query('descripcion');
-        if ($descripcion) {
-            $query->where('descripcion', 'LIKE', '%'.$descripcion.'%');
-        }
-
-        $lineas = $request->query('lineas');
-        if ($lineas) {
-            $query->whereIn('id_linea', explode(',', $lineas));
-        }
-
-        $marcas = $request->query('marcas');
-        if ($marcas) {
-            $query->whereIn('id_marca', explode(',', $marcas));
-        }
-        
-        $order = $request->query('order');
-        if (!$order) {
-            $order = 'created_at';
-            $dir = 'desc';
-        }
-        if ($order == 'created_at') {
-            $order = 'created_at';
-            $dir = 'desc';
-        }
-        if ($order == 'descripcion') {
-            $order = 'descripcion';
-            $dir = 'asc';
-        }
-        if ($order == 'precio_asc') {
-            $order = 'precio_venta';
-            $dir = 'asc';
-        }
-        if ($order == 'precio_desc') {
-            $order = 'precio_venta';
-            $dir = 'desc';
-        }
-        
-        $data = $query->orderBy($order, $dir)->paginate()->toArray();
-
-        $resultados = [];
-        $elements = $data['data'];
-        foreach ($elements as $element) {
-            if ($element['stock']) array_push($resultados, $element);
-        }
-
-        $data['data'] = $resultados;
-
-        return $this->sendResponse(true, 'Listado obtenido exitosamente', $data, 200);
-    }
 
     public function shopHome(Request $request)
     {
+        $id_sucursal = $request->query('id_sucursal');
+
         $lineas = DB::select('select pr.id_linea, li.descripcion, sum(it.cantidad) as cantidad
                                 from vta_items_comprob it
                                 left join pr_productos pr on pr.identificador = it.id_producto
                                 left join pr_lineas_prod li on li.identificador = pr.id_linea
                                 left join pr_stock st on st.id_producto = pr.identificador
-                                where st.stock > 0 and st.id_sucursal=1
+                                where st.id_sucursal='.$id_sucursal.'
                                 group by pr.id_linea, li.descripcion
                                 order by sum(it.cantidad) desc
                                 limit 5');
@@ -421,7 +382,7 @@ class ProductoController extends BaseController
                                     left join pr_productos pr on pr.identificador = it.id_producto
                                     left join pr_lineas_prod li on li.identificador = pr.id_linea
                                     left join pr_stock st on st.id_producto = pr.identificador
-                                    where st.stock > 0 and st.id_sucursal=1 and pr.id_linea='.$linea->id_linea.'
+                                    where st.id_sucursal='.$id_sucursal.' and pr.id_linea='.$linea->id_linea.'
                                     limit 10');
 
             array_push($data, array('linea' => $linea, 'productos' => $productos));
