@@ -363,7 +363,7 @@ class ProductoController extends BaseController
 
     public function shopHome(Request $request)
     {
-        $id_sucursal = $request->query('id_sucursal');
+        $id_sucursal = $request->query('sucursal');
 
         $lineas = DB::select('select pr.id_linea, li.descripcion, sum(it.cantidad) as cantidad
                                 from vta_items_comprob it
