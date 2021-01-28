@@ -34,7 +34,6 @@ export class HeaderComponent implements OnInit, OnChanges {
   ngOnInit() {}
 
   async ngAfterViewInit() {
-    console.log('ngAfterViewInit');
     await this.obtenerUsuario();
     this.servicioUsuario.loginEmitter
     .subscribe(response => {

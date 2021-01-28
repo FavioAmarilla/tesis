@@ -2,24 +2,35 @@
 
 <ion-content>
 
-  <div class="container d-flex align-items-center justify-content-center" style="height: 60vh;">
-    <div *ngIf="success">
-      <h1>¡Su pedido ha sido procesado!</h1>
-      <p>Gracias por su preferencia</p>
-  
-      <div class="text-right">
-        <a [routerLink]="['/home']" class="btn btn-primary">Finalizar</a>
+  <div class="container d-flex align-items-center justify-content-center flex-column" style="height: 60vh;">
+
+    <div class="login-logo">
+      <a [routerLink]="['/']"><img src="assets/images/logo-super-rojo.png" alt="Logo EcommerceSY" width="184"></a>
+    </div>
+
+    <div class="card">
+      <div class="card-body login-card-body" *ngIf="success">
+
+        <div class="icon-container success" ><ion-icon color="primary" name="checkmark-circle-outline"></ion-icon></div>
+
+        <h3 class="text-center mt-4">¡Gracias por su orden!</h3>
+        <p class="text-center login-box-msg">Tu pago ha sido realizado con éxito</p>
+
+        <a [routerLink]="['/']" routerLinkActive="router-link-active" class="btn btn-primary w-100">Aceptar</a>
+      </div>
+
+      <div class="card-body login-card-body" *ngIf="!success">
+
+        <div class="icon-container payment-error"><ion-icon color="danger" name="close-circle-outline"></ion-icon></div>
+
+        <h3 class="text-center mt-4">Error en el pago</h3>
+        <p class="login-box-msg mb-0">Lo sentimos, ha ocurrido un problema y no hemos podido procesar su pedido</p>
+        <p class="text-center">Por favor intentelo más tarde.</p>
+
+        <a [routerLink]="['/']" class="btn btn-danger w-100">Aceptar</a>
       </div>
     </div>
-  
-    <div *ngIf="!success">
-      <h1>¡Pedido cancelado!</h1>
-      <p>{{ (description) ? description : 'Su pedido ha sido cancelado' }}</p>
-    
-      <div class="text-right">
-        <a [routerLink]="['/home']" class="btn btn-primary">Finalizar</a>
-      </div>
-    </div>
+
   </div>
 
 
