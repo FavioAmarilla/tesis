@@ -55,13 +55,14 @@
                                         <td class="text-right">
                                             <button class="btn btn-sm btn-warning"
                                                 (click)="obtenerUsuario(row.identificador)"><i
-                                                    class="fas fa-edit"></i></button>&nbsp;
+                                                    class="fas fa-edit"></i></button>
+                                            <br>
                                             <button class="btn btn-sm" (click)="activarDesactivarUsuario(row)"
                                                 [ngClass]="{'btn-danger': row.activo == 'S', 'btn-primary': row.activo == 'N'}"
                                                 [title]="(row.activo == 'S') ? 'Desactivar Usuario' : 'Activar Usuario'">
                                                 <i class="fas"
                                                     [ngClass]="{'fa-times': row.activo == 'S', 'fa-check-square': row.activo == 'N'}"></i>
-                                            </button>&nbsp;
+                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>

@@ -31,9 +31,8 @@
                                                 (keyup.enter)="filtrarTabla($event)">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="codigo"
-                                                placeholder="Código" [(ngModel)]="filtrosTabla.codigo"
-                                                (keyup.enter)="filtrarTabla($event)">
+                                            <input type="text" class="form-control" name="codigo" placeholder="Código"
+                                                [(ngModel)]="filtrosTabla.codigo" (keyup.enter)="filtrarTabla($event)">
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" name="porc_descuento"
@@ -60,7 +59,7 @@
                                         </td>
                                         <td class="text-right">
                                             <button class="btn btn-sm btn-danger" (click)="filtrarTabla(null)"><i
-                                                    class="fas fa-times"></i></button> &nbsp;
+                                                    class="fas fa-times"></i></button>
                                         </td>
                                     </tr>
                                     <tr
@@ -73,8 +72,8 @@
                                         <td>{{ row.usado }}</td>
                                         <td class="text-right">
                                             <button class="btn btn-sm btn-warning"
-                                                (click)="obtenerCupon(row.identificador)"> <i
-                                                    class="fas fa-edit"></i> </button> &nbsp;
+                                                (click)="obtenerCupon(row.identificador)"> <i class="fas fa-edit"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>

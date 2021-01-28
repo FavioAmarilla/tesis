@@ -74,7 +74,7 @@
                                         </td>
                                         <td class="text-right">
                                             <button class="btn btn-sm btn-danger" (click)="filtrarTabla(null)"><i
-                                                    class="fas fa-times"></i></button> &nbsp;
+                                                    class="fas fa-times"></i></button>
                                         </td>
                                     </tr>
                                     <tr
@@ -95,8 +95,9 @@
                                         <td class="text-right">
                                             <button class="btn btn-sm btn-warning"
                                                 (click)="obtenerSucursal(row.identificador)"><i
-                                                    class="fas fa-edit"></i></button> &nbsp;
-                                            <button class="btn btn-sm"
+                                                    class="fas fa-edit"></i></button>
+                                            <br>
+                                            <button class="btn btn-sm mt-1"
                                                 [ngClass]="{'btn-danger': row.activo == 'S', 'btn-primary': row.activo == 'N'}"
                                                 (click)="alternarEstado(row)">
                                                 <i class="fas"

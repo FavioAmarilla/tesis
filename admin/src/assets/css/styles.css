@@ -27,10 +27,14 @@ tr:nth-child(even) {
 	background-color: #f2f2f2 !important;
 }
 
-.wrapper{
+.wrapper {
 	background-color: #f4f3ef !important;
 }
 
 body, input, button {
-    font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif !important;
+	font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+}
+
+table th:last-child, td:last-child {
+	text-align: center !important;
 }
