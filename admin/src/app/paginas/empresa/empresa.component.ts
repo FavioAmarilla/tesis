@@ -146,7 +146,7 @@ export class EmpresaComponent implements OnInit {
   subirImagen(event) {
     console.log(event);
     const data = JSON.parse(event.response);
-    this.empresa.imagen = data;
+    this.empresa.imagen = data.data;
   }
 
   async filtrarTabla(event?) {
