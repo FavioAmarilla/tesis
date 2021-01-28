@@ -182,10 +182,11 @@ class PedidoController extends BaseController
                     break;
             }
         }
-        $total += $costo_envio;
-        $total_exento += $costo_envio;
-        $total_iva5 += $costo_envio;
-        $total_iva10 += $costo_envio;
+
+        if ($tipo_envio == 'DE') {
+            $total += $costo_envio;
+            $total_iva10 += $costo_envio;
+        }
 
         if ($id_cupon_descuento) {
             $descuento = CuponDescuento::where('identificador', '=', $id_cupon_descuento);
@@ -277,11 +278,6 @@ class PedidoController extends BaseController
             if (!$this->procesoStock($pedido->identificador, $pedido->id_sucursal, 'DI')) {
                 return $this->sendResponse(false, 'Stock de producto no actualizado', $item, 400);
             }
-
-            $total += $costo_envio;
-            $total_exento += $costo_envio;
-            $total_iva5 += $costo_envio;
-            $total_iva10 += $costo_envio;
 
             // actualizar total
             $totalPedido = Pedido::find($pedido->identificador);
@@ -492,10 +488,10 @@ class PedidoController extends BaseController
                     }
                 }
 
-                $total += $costo_envio;
-                $total_exento += $costo_envio;
-                $total_iva5 += $costo_envio;
-                $total_iva10 += $costo_envio;
+                if ($tipo_envio == 'DE') {
+                    $total += $costo_envio;
+                    $total_iva10 += $costo_envio;
+                }
 
                 // actualizar total
                 $totalPedido = Pedido::find($pedido->identificador);
