@@ -50,7 +50,6 @@ export class SucursalComponent implements OnInit {
     this.paginacion(this.paginaActual);
     this.obtenerEmpresas();
     this.obtenerPaises();
-    this.obtenerCiudades();
   }
 
   async inicializarFiltros() {
@@ -156,7 +155,7 @@ export class SucursalComponent implements OnInit {
     const response = <any>await this.servicioSucursal.obtener(id);
 
     if (response.success) {
-      this.sucursal = response.data;
+      this.sucursal = await response.data;
       await this.obtenerPaises();
       await this.obtenerCiudades(this.sucursal.id_pais);
       this.mostrarFormulario(true, 'UPD');

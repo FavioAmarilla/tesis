@@ -167,7 +167,7 @@
                                 <div class="form-group">
                                     <label for="">Pais</label>
                                     <select name="id_pais" class="form-control" [(ngModel)]="sucursal.id_pais" required
-                                        #id_pais="ngModel">
+                                        #id_pais="ngModel" (change)="obtenerCiudades(sucursal.id_pais)">
                                         <option value="null">-- SELECCIONAR --</option>
                                         <option *ngFor="let pais of listaPaises" value="{{pais.identificador}}"
                                             [selected]="pais.identificador == sucursal.id_pais">{{pais.nombre}}
