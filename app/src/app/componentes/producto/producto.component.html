@@ -1,7 +1,7 @@
 <div class="product">
   <a [routerLink]="['/producto', producto.slug]" class="img-prod">
     <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="210" class="product-image">
-    <div class="agotado" *ngIf="producto.stock == null || producto.stock.stock == 0">
+    <div class="agotado" *ngIf="producto.stock == null || producto.stock.stock <= 0">
       <img src="assets/images/agotado.png">
     </div>
     <!-- <span class="status">30%</span> -->

@@ -361,6 +361,7 @@ export class PedidoPage implements OnInit {
 
     if (select === 'tipo_envio') {
       this.totales.delivery = (value == 'DE') ? this.parametros.costo_delivery : 0;
+      this.totales.total = (this.totales.subtotal + this.totales.delivery) - this.totales.descuento;
     }
 
     if (select === 'pais') {
@@ -465,7 +466,6 @@ export class PedidoPage implements OnInit {
 
       const usuario: any = await this.servicioUsuario.getUsuario(this.usuario.identificador);
       if (usuario) {
-        console.log(usuario.data.cliente);
         this.datosEnvio.controls.persona.setValue(usuario.data.cliente.razon_social);
         this.datosEnvio.controls.nro_documento.setValue(usuario.data.cliente.numero_documento);
         this.datosEnvio.controls.telefono.setValue(usuario.data.cliente.celular);
