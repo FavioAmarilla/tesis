@@ -49,11 +49,12 @@
                                                 class="badge badge-success">ENTREGADO</span>
                                             <span *ngIf="row.estado == 'CANCELADO'"
                                                 class="badge badge-danger">CANCELADO</span>
-                                                <span *ngIf="row.estado == 'DEVUELTO'"
-                                                    class="badge badge-danger">DEVUELTO</span>
+                                            <span *ngIf="row.estado == 'DEVUELTO'"
+                                                class="badge badge-danger">DEVUELTO</span>
                                         </td>
                                         <td class="text-center">
-                                            <button class="btn btn-sm btn-primary" *ngIf="row.estado == 'PENDIENTE'"
+                                            <button class="btn btn-sm btn-primary"
+                                                *ngIf="row.estado == 'PENDIENTE' && ((row.pagos.vr_tipo == 'PO' || row.pagos.vr_tipo == 'ATCD' || row.pagos.vr_tipo == 'PWTK') && row.pagos.estado == 'PAGADO')"
                                                 (click)="procesar(row.identificador)">
                                                 PROCESAR
                                             </button>
@@ -71,8 +72,7 @@
                                                 VER PEDIDO
                                             </button>
                                             <br>
-                                            <button class="btn btn-sm btn-danger mt-1"
-                                                *ngIf="row.estado == 'ENTREGADO'"
+                                            <button class="btn btn-sm btn-danger mt-1" *ngIf="row.estado == 'ENTREGADO'"
                                                 (click)="devolucion(row.identificador)">
                                                 DEVOLUCION
                                             </button>
