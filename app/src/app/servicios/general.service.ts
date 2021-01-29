@@ -116,10 +116,10 @@ export class GeneralService {
     }
   }
 
-  resetContainerPosition(containerClass) {
+  resetContainerPosition(containerClass, override = false) {
     const width = this.platform.width();
 
-    if (width < 997) {
+    if (width < 997 || override) {
       const subtotales = document.querySelector(containerClass) as HTMLElement;
       if (subtotales) {
         subtotales.style.transform = 'none';

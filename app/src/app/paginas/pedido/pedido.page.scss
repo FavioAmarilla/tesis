@@ -17,6 +17,18 @@
     }
 }
 
+.details-container {
+    order: 1;
+}
+
+.resume-container {
+    order: 2;
+}
+
+.iframe-container {
+    order: 3;
+}
+
 .order-container {
     counter-reset: group;
 }
@@ -39,5 +51,15 @@
             font-family: AmpleSoft Pro;
             margin-left: .5em;
         }
+    }
+}
+
+@media screen and (min-width: 997px) {
+    .resume-container {
+        order: 3;
+    }
+    
+    .iframe-container {
+        order: 2;
     }
 }
