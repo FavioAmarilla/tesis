@@ -20,6 +20,44 @@
                                     <th class="text-right">Opciones</th>
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                        <td>
+                                            <input type="date" class="form-control" name="fecha" placeholder="Fecha" [(ngModel)]="filtrosTabla.fecha" (change)="filtrarTabla($event)">
+                                          </td>
+                                        <td>
+                                            <select name="tipo_envio" class="form-control" [(ngModel)]="filtrosTabla.tipo_envio" (change)="filtrarTabla($event)">
+                                                <option value="">-- SELECCIONAR --</option>
+                                                <option value="DE">DELIVERY</option>
+                                                <option value="RT">RETIRO EN TIENDA</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="persona" class="form-control" placeholder="Persona" [(ngModel)]="filtrosTabla.persona" (keyup.enter)="filtrarTabla($event)">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="nro_documento" class="form-control" placeholder="Número de docuemnto" [(ngModel)]="filtrosTabla.nro_documento" (keyup.enter)="filtrarTabla($event)">
+                                        </td>
+                                        <td>
+                                            <select name="estado_pago" class="form-control" [(ngModel)]="filtrosTabla.estado_pago" (change)="filtrarTabla($event)">
+                                                <option value="">-- SELECCIONAR --</option>
+                                                <option value="CANCELADO">CANCELADO</option>
+                                                <option value="PENDIENTE">PENDIENTE</option>
+                                                <option value="PAGADO">PAGADO</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select name="estado" class="form-control" [(ngModel)]="filtrosTabla.estado" (change)="filtrarTabla($event)">
+                                                <option value="">-- SELECCIONAR --</option>
+                                                <option value="PENDIENTE">PENDIENTE</option>
+                                                <option value="EN PROCESO">EN PROCESO</option>
+                                                <option value="LISTO">LISTO</option>
+                                                <option value="EN CAMINO">EN CAMINO</option>
+                                                <option value="ENTREGADO">ENTREGADO</option>
+                                                <option value="CANCELADO">CANCELADO</option>
+                                                <option value="DEVUELTO">DEVUELTO</option>
+                                            </select>
+                                        </td>
+                                    </tr>
                                     <tr
                                         *ngFor="let row of listaPedidos | paginate: { itemsPerPage: porPagina, currentPage: paginaActual, totalItems: total }">
                                         <td>{{ row.fecha | date: 'dd/MM/yyyy'}}</td>
@@ -30,74 +68,44 @@
                                         <td>{{ row.usuario.cliente.razon_social }}</td>
                                         <td>{{ row.usuario.cliente.numero_documento }}</td>
                                         <td class="text-center">
-                                            <span *ngIf="row.pagos.estado == 'PENDIENTE'"
-                                                class="badge badge-secondary">PENDIENTE</span>
-                                            <span *ngIf="row.pagos.estado == 'CANCELADO'"
-                                                class="badge badge-danger">CANCELADO</span>
-                                            <span *ngIf="row.pagos.estado == 'PAGADO'"
-                                                class="badge badge-success">PAGADO</span>
+                                            <span *ngIf="row.pagos.estado == 'PENDIENTE'" class="badge badge-secondary">PENDIENTE</span>
+                                            <span *ngIf="row.pagos.estado == 'CANCELADO'" class="badge badge-danger">CANCELADO</span>
+                                            <span *ngIf="row.pagos.estado == 'PAGADO'" class="badge badge-success">PAGADO</span>
                                         </td>
                                         <td class="text-center">
-                                            <span *ngIf="row.estado == 'PENDIENTE'"
-                                                class="badge badge-secondary">PENDIENTE</span>
-                                            <span *ngIf="row.estado == 'EN PROCESO'" class="badge badge-info">EN
-                                                PROCESO</span>
+                                            <span *ngIf="row.estado == 'PENDIENTE'" class="badge badge-secondary">PENDIENTE</span>
+                                            <span *ngIf="row.estado == 'EN PROCESO'" class="badge badge-info">EN PROCESO</span>
                                             <span *ngIf="row.estado == 'LISTO'" class="badge badge-info">LISTO</span>
-                                            <span *ngIf="row.estado == 'EN CAMINO'" class="badge badge-primary">EN
-                                                CAMINO</span>
-                                            <span *ngIf="row.estado == 'ENTREGADO'"
-                                                class="badge badge-success">ENTREGADO</span>
-                                            <span *ngIf="row.estado == 'CANCELADO'"
-                                                class="badge badge-danger">CANCELADO</span>
-                                            <span *ngIf="row.estado == 'DEVUELTO'"
-                                                class="badge badge-danger">DEVUELTO</span>
+                                            <span *ngIf="row.estado == 'EN CAMINO'" class="badge badge-primary">EN CAMINO</span>
+                                            <span *ngIf="row.estado == 'ENTREGADO'" class="badge badge-success">ENTREGADO</span>
+                                            <span *ngIf="row.estado == 'CANCELADO'" class="badge badge-danger">CANCELADO</span>
+                                            <span *ngIf="row.estado == 'DEVUELTO'" class="badge badge-danger">DEVUELTO</span>
                                         </td>
                                         <td class="text-center">
-                                            <button class="btn btn-sm btn-primary"
-                                                *ngIf="row.estado == 'PENDIENTE' && ((row.pagos.vr_tipo == 'PO' || row.pagos.vr_tipo == 'ATCD' || row.pagos.vr_tipo == 'PWTK') && row.pagos.estado == 'PAGADO')"
-                                                (click)="procesar(row.identificador)">
-                                                PROCESAR
-                                            </button>
-                                            <button class="btn btn-sm btn-primary" *ngIf="row.estado == 'EN PROCESO'"
-                                                (click)="listo(row.identificador, row.tipo_envio)">
-                                                GEN. COMPROBANTE
-                                            </button>
-                                            <button class="btn btn-sm btn-primary"
-                                                *ngIf="row.estado == 'LISTO' || row.estado == 'EN CAMINO'"
-                                                (click)="terminarPedido(row.identificador)">
-                                                FINALIZAR
-                                            </button>
+                                            <button class="btn btn-sm btn-primary" *ngIf="row.estado == 'PENDIENTE'" (click)="procesar(row.identificador)">PROCESAR</button>
+                                            <button class="btn btn-sm btn-primary" *ngIf="row.estado == 'EN PROCESO'" (click)="listo(row.identificador, row.tipo_envio)">GEN. COMPROBANTE</button>
+                                            <button class="btn btn-sm btn-primary" *ngIf="row.estado == 'LISTO' || row.estado == 'EN CAMINO'" (click)="terminarPedido(row.identificador)">FINALIZAR</button>
                                             <br>
-                                            <button class="btn btn-sm btn-info mt-1" (click)="ver(row.identificador)">
-                                                VER PEDIDO
-                                            </button>
+                                            <button class="btn btn-sm btn-info mt-1" (click)="ver(row.identificador)">VER PEDIDO</button>
                                             <br>
-                                            <button class="btn btn-sm btn-danger mt-1" *ngIf="row.estado == 'ENTREGADO'"
-                                                (click)="devolucion(row.identificador)">
-                                                DEVOLUCION
-                                            </button>
+                                            <button class="btn btn-sm btn-danger mt-1" *ngIf="row.estado == 'ENTREGADO'" (click)="devolucion(row.identificador)">DEVOLUCION</button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                             <div *ngIf="!cargando && !form && accion == 'LST'">
-                                <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="pais"
-                                    [porPagina]="porPagina" [total]="total"></app-paginacion>
+                                <app-paginacion (actualizarPagina)="paginacion($event)" [datos]="pais" [porPagina]="porPagina" [total]="total"></app-paginacion>
                             </div>
                             <div class="row justify-content-center align-items-center col-md-12">
-                                <span *ngIf="cargando && !form && accion == 'LST'"
-                                    class="spinner-border spinner-border-lg spinner-table" role="status"
-                                    aria-hidden="true"></span>
+                                <span *ngIf="cargando && !form && accion == 'LST'" class="spinner-border spinner-border-lg spinner-table" role="status" aria-hidden="true"></span>
                             </div>
                         </div>
-
 
                     </div>
                 </div>
 
             </div>
         </div>
-
 
     </div>
     <footer-cmp></footer-cmp>
