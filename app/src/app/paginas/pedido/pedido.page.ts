@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { trigger, style, animate, transition } from '@angular/animations';
-import { ModalController, Platform } from '@ionic/angular';
+import { IonContent, ModalController, Platform } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { MatStepper } from '@angular/material/stepper';
 
 import { UbicacionPage } from '../../componentes/ubicacion/ubicacion.page';
 
@@ -46,6 +44,7 @@ declare var Bancard: any;
 })
 export class PedidoPage implements OnInit {
 
+  public mobile = false;
   public cargando = true;
 
   public listaSucursales = [];
@@ -77,8 +76,6 @@ export class PedidoPage implements OnInit {
 
   public coordenadas;
   public stepperEditable = true;
-
-  @ViewChild('stepper', { static: false }) stepper: MatStepper;
 
   constructor(
     private servicioEcParametros: EcParametrosService,
@@ -121,10 +118,15 @@ export class PedidoPage implements OnInit {
       }
     });
 
+    this.mobile = this.platform.is('android') || this.platform.is('ios') ? true : false;
+    this.servicioGeneral.resetContainerPosition('.order-total', true);
+
     this.platform.resize
-      .subscribe(() => {
-        this.servicioGeneral.resetContainerPosition('.cart-total');
-      });
+    .subscribe(() => {
+      const width = this.platform.width();
+      this.mobile = (width < 997) ? true : false;
+      this.servicioGeneral.resetContainerPosition('.order-total');
+    });
 
     if (comprobarTotales) { this.comprobarTotales(); }
 
@@ -174,7 +176,6 @@ export class PedidoPage implements OnInit {
       this.datosEnvio.controls.ubicacion.setValue(`${pedido.latitud},${pedido.longitud}`);
 
       if (pedido.pagos) {
-        this.stepper.next();
         this.datosPago.controls.tipo.setValue(pedido.pagos.vr_tipo);
         this.datosPago.controls.importe.setValue(pedido.pagos.importe);
 
@@ -545,7 +546,6 @@ export class PedidoPage implements OnInit {
   }
 
   catastrarTajeta(process_id) {
-    this.stepperEditable = false;
 
     const styles = {
       'form-background-color': '#001b60',
@@ -560,12 +560,9 @@ export class PedidoPage implements OnInit {
     Bancard.Cards.createForm('iframe-catastro-tarjeta', process_id, styles);
 
     this.cargando = false;
-    this.stepper.next();
   }
 
   pagoOnlineBancard(process_id) {
-
-    this.stepperEditable = false;
 
     const styles = {
       'form-background-color': '#001b60',
@@ -579,11 +576,17 @@ export class PedidoPage implements OnInit {
 
     Bancard.Checkout.createForm('iframe-pago-unico', process_id, styles);
     this.cargando = false;
-    this.stepper.next();
 
   }
 
-  finalizarPedido(response) {
+  async finalizarPedido(response) {
+    this.datosEnvio.disable();
+    this.datosPago.disable();
+    this.stepperEditable = false;
+    this.servicioGeneral.resetContainerPosition('.order-total', true);
+    
+    await this.servicioGeneral.promiseTimeout(500);
+
     switch (this.pedido.pago.tipo) {
       case 'ATCD':
         this.catastrarTajeta(response.data.process_id);

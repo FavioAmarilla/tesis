@@ -13,8 +13,12 @@
         </div>
       </ion-col>
 
+    </ion-row>
+
+    <ion-row>
+
       <!-- INICIO SECCION IZQUIERDA -->
-      <ion-col size="12" size-md="8" class="details-container">
+      <ion-col size="12" size-md="8" class="details-container" *ngIf="stepperEditable">
 
         <ion-row>
           <!-- INICIO DATOS ENVIO -->
@@ -406,7 +410,7 @@
       <!-- FIN SECCION IZQUIERDA -->
 
       <!-- INICION SECCION DERECHA -->
-      <ion-col size="12" size-md="4">
+      <ion-col size="12" size-md="4" class="resume-container">
         <div class="cart-total order-total mb-3">
 
           <div class="header d-flex align-items-center mb-3">
@@ -448,14 +452,13 @@
                 <div class="field fl-placeholder-state">
                   <div class="control">
                     <label for="" class="label"><span></span></label>
-                    <input type="text" class="input-text" placeholder="Ingrese el cupón de descuento"
-                      [(ngModel)]="cuponDescuento.codigo" [ngModelOptions]="{standalone: true}">
+                    <input type="text" name="cupon" class="input-text" placeholder="Ingrese el cupón de descuento" [(ngModel)]="cuponDescuento.codigo">
                   </div>
                 </div>
               </div>
 
               <div class="actions-toolbar d-flex justify-content-end">
-                <button class="btn btn-primary" type="submit">Aplicar</button>
+                <button class="btn btn-primary" type="submit" [disabled]="!stepperEditable">Aplicar</button>
               </div>
 
             </form>
@@ -474,7 +477,7 @@
 
           <div class="finish-order mt-3">
             <button (click)="procesarPedido()" class="btn btn-primary btn-block" mat-button
-              [disabled]="datosEnvio.invalid || datosPago.invalid">Finalizar pedido</button>
+              [disabled]="datosEnvio.invalid || datosPago.invalid || !stepperEditable">Finalizar pedido</button>
           </div>
 
           <div class="info mt-2">
@@ -484,12 +487,10 @@
         </div>
       </ion-col>
 
-      <ion-col size="12">
+      <ion-col size="12" size-md="8" class="iframe-container" *ngIf="!stepperEditable">
         <div id="iframe-pago-unico"></div>
         <div id="iframe-catastro-tarjeta"></div>
       </ion-col>
-
-
 
     </ion-row>
 

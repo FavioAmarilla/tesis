@@ -44,7 +44,12 @@ export class PedidosComponent implements OnInit {
 
   async inicializarFiltros() {
     this.filtrosTabla = {
-      nombre: ''
+      fecha: '',
+      tipo_envio: '',
+      persona: '',
+      nro_documento: '',
+      estado_pago: '',
+      estado: ''
     }
   }
 

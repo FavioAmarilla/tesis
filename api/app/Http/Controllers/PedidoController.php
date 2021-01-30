@@ -79,7 +79,7 @@ class PedidoController extends BaseController
         
         $persona = $request->query('persona');
         if ($persona) {
-            $query->where('persona', '=', $persona);
+            $query->where('persona', 'LIKE', "%$persona%");
         }
 
         $nro_documento = $request->query('nro_documento');
