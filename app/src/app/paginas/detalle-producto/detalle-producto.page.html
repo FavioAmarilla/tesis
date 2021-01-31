@@ -74,9 +74,15 @@
             <!-- INICIO PRODUCTOS RELACIONADOS -->
             <mat-tab label="Productos Relacionados">
               <div class="productos-relacionados mt-5">
-                <div class="col-md-6 col-lg-3" *ngFor="let relacionado of relacionados">
-                  <cp-producto [producto]="relacionado"></cp-producto>
-                </div>
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-slides #slides mode="ios" [options]="productSlideOpts" [pager]="true">
+                      <ion-slide *ngFor="let relacionado of relacionados">
+                        <cp-producto [producto]="relacionado"></cp-producto>
+                      </ion-slide>
+                    </ion-slides>
+                  </ion-col>
+                </ion-row>
 
                 <h4 *ngIf="!relacionados.length">No se encontraron productos relacionados</h4>
               </div>

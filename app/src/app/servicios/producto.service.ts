@@ -27,6 +27,18 @@ export class ProductoService {
     });
   }
 
+  async obtenerProductoRelacionados(id, parametros?) {
+    const url = `producto/${id}/relacionados`;
+    const params = new HttpParams({ fromObject: parametros });
+
+    return new Promise(resolve => {
+      this.http.get(`${API}${url}`, { params }).subscribe(
+        response => resolve(response),
+        error => resolve(error.error)
+      );
+    });
+  }
+
   async shop(slug?, parametros?) {
     const url = (slug) ? `producto/slug/${slug}` : `producto`;
 

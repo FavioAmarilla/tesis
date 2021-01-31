@@ -1,7 +1,8 @@
 .product {
     .product-image {
         width: 100%;
-        object-fit: cover;
+        object-fit: contain;
+        max-height: 210px;
     }
 
     .bottom-area {

@@ -28,6 +28,36 @@ export class PaginaDetalleProducto implements OnInit {
   public minimo = 1;
   public valor = 1;
 
+  productSlideOpts = {
+    loop: true,
+    slidesPerView: 6,
+    allowSlidePrev: true,
+    allowSlideNext: true,
+    autoplay: {
+      delay: 3000
+    },
+    breakpoints: {
+      0: {
+        slidesPerView: 2,
+      },
+      320: {
+        slidesPerView: 2,
+      },
+      480: {
+        slidesPerView: 2,
+      },
+      640: {
+        slidesPerView: 3,
+      },
+      767: {
+        slidesPerView: 3,
+      },
+      1024: {
+        slidesPerView: 6,
+      }
+    }
+  };
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -63,13 +93,25 @@ export class PaginaDetalleProducto implements OnInit {
     if (response.success) {
       this.cargando = false;
       this.producto = response.data;
-      this.relacionados = this.producto.relacionados;
       this.cantidad = this.minimo = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida, 'minimo');
       this.valor = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida);
+      this.obtenerProductosRelacionados();
     } else {
       this.servicioAlerta.dialogoError(response.message);
       this.router.navigate(['/']);
     }
+    this.cargando = false;
+  }
+
+  async obtenerProductosRelacionados() {
+    this.cargando = true;
+    const response: any = await this.servicioProducto.obtenerProductoRelacionados(this.producto.identificador);
+
+    if (response.success) {
+      this.cargando = false;
+      this.relacionados = response.data;
+    }
+    
     this.cargando = false;
   }
 
