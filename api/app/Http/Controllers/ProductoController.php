@@ -206,12 +206,30 @@ class ProductoController extends BaseController
         $producto = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca'])->find($id);
 
         if (is_object($producto)) {
-            $relacionados = Producto::where('id_linea', '=', $producto->id_linea)->where('identificador', '!=', $id)->get();
-            $producto['relacionados'] = $relacionados;
             return $this->sendResponse(true, 'Se listaron exitosamente los registros', $producto, 200);
         }
         
         return $this->sendResponse(false, 'No se encontro el Producto', null, 404);
+    }
+
+    /**
+     * Display the related products of product line.
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function related(Request $request, $id)
+    {
+        $producto = Producto::find($id);
+
+        if ($producto) {
+            $relacionados = Producto::where('id_linea', '=', $producto->id_linea)->where('identificador', '!=', $id)->paginate();
+    
+            return $this->sendResponse(true, 'Se listaron exitosamente los registros', $relacionados, 200);
+        }
+        
+        return $this->sendResponse(true, 'Se listaron exitosamente los registros', [], 200);
     }
 
     /**
@@ -225,8 +243,6 @@ class ProductoController extends BaseController
         $producto = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca'])->where('slug', '=', $slug)->first();
 
         if (is_object($producto)) {
-            $relacionados = Producto::where('id_linea', '=', $producto->id_linea)->where('identificador', '!=', $producto->identificador)->get();
-            $producto['relacionados'] = $relacionados;
             return $this->sendResponse(true, 'Se listaron exitosamente los registros', $producto, 200);
         }
         

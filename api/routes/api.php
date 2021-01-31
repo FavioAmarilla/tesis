@@ -50,6 +50,7 @@ Route::resource('producto', 'ProductoController');
 Route::group(['prefix' => 'producto'], function () {
     Route::get('slug/{slug}', ['as' => 'producto.slug', 'uses' => 'ProductoController@showBySlug']);
     Route::get('search/{search}', ['as' => 'producto.search', 'uses' => 'ProductoController@search']);
+    Route::get('{id}/relacionados', ['as' => 'producto.related', 'uses' => 'ProductoController@related']);
     Route::post('upload', ['as' => 'producto.upload', 'uses' => 'ProductoController@upload']);
     Route::get('getImage/{filename}', ['as' => 'producto.getImage', 'uses' => 'ProductoController@getImage']);
 });
