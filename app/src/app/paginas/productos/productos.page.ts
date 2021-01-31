@@ -241,7 +241,6 @@ export class ProductosPage implements OnInit {
       }
     }
 
-    console.log(this.idsCategorias);
     this.redirect();
   }
 
@@ -267,6 +266,7 @@ export class ProductosPage implements OnInit {
 
   redirect() {
     let queryParams: any = {};
+    this.paginaActual = 1;
 
     if (this.sucursal) {
       queryParams.sucursal = this.sucursal;
