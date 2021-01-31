@@ -354,7 +354,7 @@ class ProductoController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error de validacion', $validator->errors(), 400);
+            return $this->sendResponse(false, 'Error de validacion', $validator->errors(), 400);
         }
 
         if ($image) {
