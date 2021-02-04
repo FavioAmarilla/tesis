@@ -22,6 +22,7 @@ export class PaginaDetalleProducto implements OnInit {
   public pageId;
   public cargando = true;
   public producto: any;
+  public sinStock = false;
   public relacionados: Producto[] = [];
 
   public cantidad: number = 1;
@@ -95,6 +96,7 @@ export class PaginaDetalleProducto implements OnInit {
       this.producto = response.data;
       this.cantidad = this.minimo = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida, 'minimo');
       this.valor = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida);
+      this.sinStock = this.producto.stock == null || this.producto.stock.stock <= 0;
       this.obtenerProductosRelacionados();
     } else {
       this.servicioAlerta.dialogoError(response.message);
@@ -116,6 +118,8 @@ export class PaginaDetalleProducto implements OnInit {
   }
 
   asignarCantidad(accion) {
+    if (this.sinStock) { return; }
+
     if (accion == 'DI') {
       this.cantidad = (this.cantidad > this.minimo) ? this.cantidad - this.valor : this.minimo;
     }
@@ -125,6 +129,8 @@ export class PaginaDetalleProducto implements OnInit {
   }
 
   async agregarAlCarrito() {
+    if (this.sinStock) { return; }
+
     this.producto.cantidad = this.cantidad;
     const add = await this.servicioCarrito.agregarAlCarrito(this.producto);
 

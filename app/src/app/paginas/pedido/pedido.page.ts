@@ -179,10 +179,17 @@ export class PedidoPage implements OnInit {
         this.datosPago.controls.tipo.setValue(pedido.pagos.vr_tipo);
         this.datosPago.controls.importe.setValue(pedido.pagos.importe);
 
+        this.stepperEditable = false;
         await this.servicioGeneral.promiseTimeout(500);
 
-        if (pedido.pagos.vr_tipo == 'PO' && pedido.pagos.process_id) {
-          this.pagoOnlineBancard(pedido.pagos.process_id);
+        if (pedido.pagos.process_id) {
+          switch (pedido.pagos.vr_tipo) {
+            case 'PO':
+              this.pagoOnlineBancard(pedido.pagos.process_id);
+              break;
+            case 'PWTK':
+              break;
+          }
         }
       }
     }

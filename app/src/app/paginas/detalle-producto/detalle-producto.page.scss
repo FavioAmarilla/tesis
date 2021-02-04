@@ -14,3 +14,15 @@ textarea {
     padding: 9px;
     height: auto !important;
 }
+
+.product-image {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+.agotado {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+}

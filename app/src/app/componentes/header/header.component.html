@@ -23,7 +23,9 @@
   <a mat-button (click)="redirectProducto()">Productos</a>
   <a mat-button [routerLink]="['/acerca-de']">Acerca de</a>
   <a mat-button [routerLink]="['/contacto']">Contacto</a>
-  <a mat-button class="p-0" [routerLink]="['/favoritos']"><mat-icon>favorite_border</mat-icon></a>
+  <a mat-button class="p-0" [routerLink]="['/favoritos']">
+    <mat-icon class="mr-2" [matBadge]="favorito" matBadgeColor="warn" [matBadgeHidden]="!favorito">favorite_border</mat-icon>
+  </a>
   <a mat-button class="p-0" [routerLink]="['/carrito']">
     <mat-icon class="mr-2" [matBadge]="carrito" matBadgeColor="warn" [matBadgeHidden]="!carrito">shopping_cart</mat-icon>
   </a>

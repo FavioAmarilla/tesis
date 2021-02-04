@@ -16,18 +16,20 @@ export class HeaderComponent implements OnInit, OnChanges {
   @Input() cargando;
   public usuario: any = null;
   public carrito: any;
+  public favorito: any;
   public mostrarMobileMenu = true;
   public sucursal: number = 0;
 
   constructor(
-    private platform: Platform,
+    private servicioSucursal: SucursalService,
     private servicioUsuario: UsuarioService,
     private servicioCarrito: CarritoService,
     private servicioAlerta: AlertaService,
-    private servicioSucursal: SucursalService,
+    private platform: Platform,
     private router: Router
   ) {
     this.carrito = 0;
+    this.favorito = 0;
     this.verificarResolucion();
   }
 
@@ -51,11 +53,13 @@ export class HeaderComponent implements OnInit, OnChanges {
     });
 
     this.obtenerCantidadCarrito();
+    this.obtenerCantidadFavoritos();
     await this.obtenerSucursales();
   }
 
   async ngOnChanges() {
     this.obtenerCantidadCarrito();
+    this.obtenerCantidadFavoritos();
   }
 
   verificarResolucion() {
@@ -77,6 +81,18 @@ export class HeaderComponent implements OnInit, OnChanges {
     this.servicioCarrito.carrito.subscribe(
       (response: any) => {
         this.carrito = response;
+      },
+      (error: any) => {
+        this.servicioAlerta.dialogoError(error);
+      }
+    );
+  }
+
+  async obtenerCantidadFavoritos() {
+    this.servicioCarrito.obtenerCantidad('favorito');
+    this.servicioCarrito.favorito.subscribe(
+      (response: any) => {
+        this.favorito = response;
       },
       (error: any) => {
         this.servicioAlerta.dialogoError(error);
