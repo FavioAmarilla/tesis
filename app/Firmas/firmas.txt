@@ -1,0 +1,20 @@
+Generación del keystore
+keytool -genkey -v -keystore Firmas/ecommercesy-release-key.keystore -alias ecommercesy -keyalg RSA -keysize 2048 -validity 10000
+
+alias: ecommercesy
+Introduzca la contraseña del almacén de claves: Ecommercesy21
+¿Cuáles son su nombre y su apellido?
+  [Unknown]:  EcommerceSY
+¿Cuál es el nombre de su unidad de organización?
+  [Unknown]:  EcommerceSY
+¿Cuál es el nombre de su organización?
+  [Unknown]:  EcommerceSY
+¿Cuál es el nombre de su ciudad o localidad?
+  [Unknown]:  Ypacarai
+¿Cuál es el nombre de su estado o provincia?
+  [Unknown]:  Central
+¿Cuál es el código de país de dos letras de la unidad?
+  [Unknown]:  PY
+¿Es correcto CN=EcommerceSY, OU=EcommerceSY, O=EcommerceSY, L=Ypacarai, ST=Central, C=PY?
+
+Introduzca la contraseña de clave para <mot_keystore>: Misma de antes (Ecommercesy21)
