@@ -189,6 +189,9 @@ export class PedidoPage implements OnInit {
               break;
             case 'PWTK':
               break;
+            case 'BZ':
+              this.pagoBilleteraZimple(pedido.pagos.process_id);
+              break;
           }
         }
       }
@@ -582,6 +585,23 @@ export class PedidoPage implements OnInit {
     };
 
     Bancard.Checkout.createForm('iframe-pago-unico', process_id, styles);
+    this.cargando = false;
+
+  }
+
+  pagoBilleteraZimple(process_id) {
+
+    const styles = {
+      'form-background-color': '#001b60',
+      'button-background-color': '#4faed1',
+      'button-text-color': '#fcfcfc',
+      'button-border-color': '#dddddd',
+      'input-background-color': '#fcfcfc',
+      'input-text-color': '#111111',
+      'input-placeholder-color': '#111111'
+    };
+
+    Bancard.Zimple.createForm('iframe-billetera-zimple', process_id, styles);
     this.cargando = false;
 
   }

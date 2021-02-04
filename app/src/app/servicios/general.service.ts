@@ -67,7 +67,7 @@ export class GeneralService {
       const renderer = this.rendererFactory.createRenderer(null, null);
       const script = renderer.createElement('script');
       renderer.setAttribute(script, 'id', 'bancard-checkout-js');
-      renderer.setAttribute(script, 'src', `${api}/checkout/javascript/dist/bancard-checkout-2.0.0.js`);
+      renderer.setAttribute(script, 'src', `${api}/checkout/javascript/dist/bancard-checkout-3.0.0.js`);
 
       renderer.appendChild(this.document.body, script);
 
