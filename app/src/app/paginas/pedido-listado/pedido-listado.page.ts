@@ -79,7 +79,7 @@ export class PedidoListadoPage implements OnInit {
       ];
 
       if (!pedido.pagos || pedido.pagos && pedido.pagos.estado == 'PENDIENTE') {
-        if (pedido.pagos.vr_tipo == 'PO') {
+        if (pedido.pagos.vr_tipo != 'PERC' && pedido.pagos.vr_tipo != 'PCTCD') {
           botones.push({
             text: 'Finalizar pedido',
             icon: 'card',
@@ -89,7 +89,7 @@ export class PedidoListadoPage implements OnInit {
           });
         }
 
-        if (pedido.pagos.vr_tipo != 'PO' && pedido.pagos.vr_tipo != 'ATCD') {
+        // if (pedido.pagos.vr_tipo != 'PO' && pedido.pagos.vr_tipo != 'ATCD') {
           botones.push({
             text: 'Cancelar pedido',
             icon: 'close',
@@ -97,7 +97,7 @@ export class PedidoListadoPage implements OnInit {
               this.cancelarPedido(pedido);
             }
           });
-        }
+        // }
       }
 
       const actionSheet = await this.actionSheetController.create({
