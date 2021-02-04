@@ -13,10 +13,14 @@
 }
 
 @media screen and (max-width: 767px) {
+    .cart-container .header {
+        display: none;
+    }
+
     .remove-product {
         position: absolute;
         top: -90px;
-        right: 0px;
+        right: 5px;
         padding: 0.2em;
         background-color: transparent !important;
         color: #06803D !important;
@@ -24,7 +28,7 @@
     }
 
     .add-to-cart {
-        width: 60% !important;
+        width: 100% !important;
     }
 }
 

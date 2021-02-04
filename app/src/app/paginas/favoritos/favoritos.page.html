@@ -3,23 +3,46 @@
 <ion-content>
   <nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<div class="container d-flex">
+			<div class="container-fluid d-flex pl-4">
 				<li class="breadcrumb-item"><a [routerLink]="['/']">INICIO</a></li>
 				<li class="breadcrumb-item active" aria-current="page">LISTA DE DESEOS</li>
 			</div>
 		</ol>
   </nav>
 
-	<header class="ftco-header container">
+	<header class="ftco-header px-md-5 px-xs-3">
 		<h1 class="m-0">Mi Lista de Deseos</h1>
 	</header>
 
-  <ion-grid class="container">
+  <ion-grid class="cart-container mt-4 px-md-5 px-xs-3">
 
-    <ion-row *ngIf="productos && productos.length" class="text-center">
+    <!-- INICIO CABECERA DE PRODUCTOS -->
+    <ion-row class="header bg-light text-primary">
+            
+      <ion-col size-lg="2" size-md="2" size-sm="4" size-xs="4">
+        <h6 class="ml-2">Producto</h6>
+      </ion-col>
+
+      <ion-col size-lg="10" size-md="10" size-sm="8" size-xs="8">
+        <ion-row>
+          
+          <ion-col size-lg="5" size-md="5" size-sm="9" size-xs="10"></ion-col>
+          
+          <ion-col size-lg="3" size-md="2" size-sm="9" size-xs="9">
+            <h6 class="text-center">Subtotal</h6>
+          </ion-col>
+
+        </ion-row>
+      </ion-col>
+
+    </ion-row>
+    <!-- FIN CABECERA DE PRODUCTOS -->
+
+    <ion-row *ngIf="productos && productos.length" class="ion-text-md-center">
       <ion-col size="12">
         <div class="cart-list">
           <ion-row *ngFor="let producto of productos">
+
             <ion-col size-lg="2" size-md="2" size-sm="4" size-xs="4" class="picture-col">
               <div class="product-picture text-center">
                 <a [routerLink]="['/producto', producto.slug]" class="miniCart_prod_title">
@@ -28,10 +51,12 @@
                 <div class="oferta"></div>
               </div>
             </ion-col>
+
             <ion-col size-lg="10" size-md="10" size-sm="8" size-xs="8" class="desc-col">
               <ion-row>
+                
                 <ion-col size-lg="5" size-md="5" size-sm="9" size-xs="10" class="cart-item">
-                  <div class="productdata">
+                  <div class="productdata ion-text-sm-left ion-text-md-center">
                     <a class="miniCart_prod_title" [routerLink]="['/producto', producto.slug]" title="Ver detalles">
                       {{ producto.descripcion }}
                     </a>
@@ -40,24 +65,28 @@
                     </div>
                   </div>
                 </ion-col>
+
                 <ion-col size-lg="3" size-md="2" size-sm="9" size-xs="9" class="cart-item price">
-                  <div class="ion-text-sm-left ion-text-md-center">
+                  <div class="ion-text-xs-left ion-text-sm-left ion-text-md-center">
                     <!-- <p style="margin-bottom: 0;">Total:</p> -->
                     <span class="gs">Gs. </span>
                     <span class="productPrice"> {{producto.precio_venta | numberFormat}}</span>
                   </div>
                 </ion-col>
+
                 <ion-col size="4" size-md="4" size-xs="12" class="ion-text-xs-left ion-text-md-center actions m-auto">
-                  <a (click)="agregarAlCarrito(producto)" class="btn btn-primary mr-2 add-to-cart">
+                  <a (click)="agregarAlCarrito(producto)" class="btn btn-primary mr-2 add-to-cart ">
                     <ion-icon name="cart"></ion-icon>
                   </a>
                   <a (click)="confirmEliminarDeFavoritos(producto)" class="btn btn-primary remove-product">
-                    <ion-icon name="close"></ion-icon>
+                    <ion-icon name="trash"></ion-icon>
                   </a>
                 </ion-col>
+
               </ion-row>
             </ion-col>
           </ion-row>
+
           <div class="clear"></div>
         </div>
       </ion-col>
