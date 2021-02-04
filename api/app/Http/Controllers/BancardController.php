@@ -46,7 +46,7 @@ class BancardController extends BaseController
         $token = md5($this->private_key.$shop_process_id.$amount.$currency);
 
         $url = "$this->api/single_buy";
-        $data = json_encode(array(
+        $data = array(
             "public_key" => "$this->public_key",
             "operation"  => array(
                 "token" => "$token",
@@ -57,14 +57,14 @@ class BancardController extends BaseController
                 "return_url" => "$return_url",
                 "cancel_url" => "$cancel_url"
             )
-        ));
+        );
 
         if ($zimple == 'S') {
             $data['operation']['additional_data'] = $telefono;
             $data['operation']['zimple'] = 'S';
         }
         
-        $respuesta = $this->requestHTTP($url, $data);
+        $respuesta = $this->requestHTTP($url, json_encode($data));
 
         if ($respuesta->status == 'error') return $this->sendResponse(false, 'Ha ocurrido un problema al intentar procesar la solicitud', $respuesta, 500);
 
