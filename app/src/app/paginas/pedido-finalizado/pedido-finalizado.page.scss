@@ -12,12 +12,13 @@
     position: relative;
 
     .icon-container {
+        display: flex;
+        width: 100%;
         position: absolute;
-        padding: 1em;
         border-radius: 50%;
         line-height: 16px;
-        top: -50px;
-        left: 43%;
+        top: -35px;
+        left: 0;
 
         &.payment-error {
             line-height: 16px !important;
