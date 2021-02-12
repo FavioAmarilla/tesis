@@ -36,6 +36,7 @@ export class PedidoFinalizadoPage implements OnInit {
 
   verificarEstado(estado) {
     switch (estado) {
+      case 'BZ':
       case 'PERC':
       case 'PCTCD':
       case 'payment_success':

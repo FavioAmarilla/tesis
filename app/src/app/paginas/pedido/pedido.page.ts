@@ -626,6 +626,9 @@ export class PedidoPage implements OnInit {
       case 'PO':
         this.pagoOnlineBancard(response.data.process_id);
         break;
+      case 'BZ':
+        this.pagoBilleteraZimple(response.data.process_id);
+        break;
       default:
         this.servicioCarrito.removeStorage('carrito');
         this.servicioCarrito.obtenerCantidad('carrito');
