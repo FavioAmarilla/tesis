@@ -11,6 +11,10 @@ class Producto extends Model
     protected $table = 'pr_productos';
     protected $perPage = 10;
 
+    protected $casts = [
+        'stock' => 'integer',
+    ];
+
     protected $fillable =[
         'identificador', 'id_linea', 'id_tipo_impuesto', 'id_marca', 
         'vr_unidad_medida', 'descripcion', 'codigo_barras', 'costo_unitario', 

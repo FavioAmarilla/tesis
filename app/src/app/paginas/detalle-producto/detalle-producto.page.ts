@@ -96,7 +96,7 @@ export class PaginaDetalleProducto implements OnInit {
       this.producto = response.data;
       this.cantidad = this.minimo = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida, 'minimo');
       this.valor = this.servicioGeneral.unidadMedida(this.producto.vr_unidad_medida);
-      this.sinStock = this.producto.stock == null || this.producto.stock.stock <= 0;
+      this.sinStock = this.producto.stock == null || this.producto.stock <= 0;
       this.obtenerProductosRelacionados();
     } else {
       this.servicioAlerta.dialogoError(response.message);

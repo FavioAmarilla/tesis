@@ -1,14 +1,14 @@
 <div class="product">
   <a [routerLink]="['/producto', producto.slug]" class="img-prod">
     <img *ngIf="producto" [src]="producto.imagen | productImage | urlSanitizer" height="210" class="product-image">
-    <div class="agotado" *ngIf="producto.stock == null || producto.stock.stock <= 0">
+    <div class="agotado" *ngIf="producto.stock == null || producto.stock <= 0">
       <img src="assets/images/agotado.png">
     </div>
     <!-- <span class="status">30%</span> -->
     <div class="overlay"></div>
   </a>
   <div class="text py-3 text-center details">
-    <div class="bottom-area closed" *ngIf="producto.stock != null && producto.stock.stock > 0">
+    <div class="bottom-area closed" *ngIf="producto.stock != null && producto.stock > 0">
       <div class="m-auto d-flex">
         <a [routerLink]="['/producto', producto.slug]"
           class="d-flex justify-content-center align-items-center text-center">

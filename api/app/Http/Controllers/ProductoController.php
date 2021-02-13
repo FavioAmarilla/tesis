@@ -12,6 +12,7 @@ use App\Producto;
 use App\Sucursal;
 use App\Stock;
 use App\LineaProducto;
+use App\ComprobanteItems;
 use Illuminate\Support\Facades\DB;
 
 class ProductoController extends BaseController
@@ -407,13 +408,14 @@ class ProductoController extends BaseController
 
         $data = array();
         foreach ($lineas as $linea) {
-           $productos = DB::select('select distinct pr.*, st.stock
-                                    from vta_items_comprob it
-                                    left join pr_productos pr on pr.identificador = it.id_producto
-                                    left join pr_lineas_prod li on li.identificador = pr.id_linea
-                                    left join pr_stock st on st.id_producto = pr.identificador
-                                    where st.id_sucursal='.$id_sucursal.' and pr.id_linea='.$linea->id_linea.'
-                                    limit 10');
+           $productos = ComprobanteItems::from('vta_items_comprob as it')
+                ->select(DB::raw('distinct pr.*, st.stock'))
+                ->leftJoin('pr_productos as pr', 'pr.identificador', '=', 'it.id_producto')
+                ->leftJoin('pr_lineas_prod as li', 'li.identificador', '=', 'pr.id_linea')
+                ->leftJoin('pr_stock as st', 'st.id_producto', '=', 'pr.identificador')
+                ->where('st.id_sucursal', '=', $id_sucursal)
+                ->where('pr.id_linea', '=', $linea->id_linea)
+                ->get(10);
 
             array_push($data, array('linea' => $linea, 'productos' => $productos));
         }
