@@ -24,12 +24,12 @@ class ProductoController extends BaseController
     public function index(Request $request)
     {
         $id_sucursal = $request->query('id_sucursal');
-        $query = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca', 
-        'stock'=> function($q) use ($id_sucursal) {
-            if ($id_sucursal) {
-                $q->where('pr_stock.id_sucursal', '=', $id_sucursal);
-            }
-        }]);
+        if (!$id_sucursal) {
+            $sucursal = Sucursal::where('central', '=', 'S')->first();
+            $id_sucursal = $sucursal->identificador;
+        }
+        
+        $query = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca'])->stock($id_sucursal);
 
         $id_linea = $request->query('id_linea');
         if ($id_linea) {
@@ -221,10 +221,16 @@ class ProductoController extends BaseController
      */
     public function related(Request $request, $id)
     {
+        $sucursal = $request->get('sucursal');
+        if (!$sucursal) {
+            $find = Sucursal::where('central', '=', 'S')->first();
+            $sucursal = $find->identificador;
+        }
+
         $producto = Producto::find($id);
 
         if ($producto) {
-            $relacionados = Producto::where('id_linea', '=', $producto->id_linea)->where('identificador', '!=', $id)->paginate();
+            $relacionados = Producto::where('id_linea', '=', $producto->id_linea)->stock($sucursal)->where('identificador', '!=', $id)->paginate();
     
             return $this->sendResponse(true, 'Se listaron exitosamente los registros', $relacionados, 200);
         }
@@ -235,12 +241,20 @@ class ProductoController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  string  $slug
+     * @param Request $request
+     * @param string $slug
      * @return \Illuminate\Http\Response
      */
-    public function showBySlug($slug)
+    public function showBySlug(Request $request, $slug)
     {
-        $producto = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca'])->where('slug', '=', $slug)->first();
+        $sucursal = $request->get('sucursal');
+        if (!$sucursal) {
+            $find = Sucursal::where('central', '=', 'S')->first();
+            $sucursal = $find->identificador;
+        }
+        
+        $producto = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca'])->stock($sucursal)->where('slug', '=', $slug)->first();
+
 
         if (is_object($producto)) {
             return $this->sendResponse(true, 'Se listaron exitosamente los registros', $producto, 200);
@@ -393,7 +407,7 @@ class ProductoController extends BaseController
 
         $data = array();
         foreach ($lineas as $linea) {
-           $productos = DB::select('select distinct pr.*
+           $productos = DB::select('select distinct pr.*, st.stock
                                     from vta_items_comprob it
                                     left join pr_productos pr on pr.identificador = it.id_producto
                                     left join pr_lineas_prod li on li.identificador = pr.id_linea

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Producto extends Model
 {
@@ -34,5 +35,14 @@ class Producto extends Model
     //obtener stock
     public function stock(){
         return $this->hasOne('App\Stock', 'id_producto');
+    }
+
+    public function scopeStock(Builder $query, $sucursal) {
+        $query->leftJoinSub(
+            "SELECT id_producto, stock FROM pr_stock WHERE id_sucursal = $sucursal",
+            'stock',
+            'stock.id_producto',
+            'pr_productos.identificador'
+        );
     }
 }

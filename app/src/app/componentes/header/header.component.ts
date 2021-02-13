@@ -111,6 +111,7 @@ export class HeaderComponent implements OnInit, OnChanges {
       const central = response.data.find(sucursal => sucursal.central == 'S');
       if (central != null) {
         this.sucursal = central.identificador;
+        await this.servicioCarrito.setStorage('sucursal', this.sucursal);
       }
     } else {
       this.cargando = false;
