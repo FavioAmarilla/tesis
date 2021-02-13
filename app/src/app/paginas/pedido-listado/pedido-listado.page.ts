@@ -94,7 +94,7 @@ export class PedidoListadoPage implements OnInit {
             text: 'Cancelar pedido',
             icon: 'close',
             handler: () => {
-              this.cancelarPedido(pedido);
+              this.cancelarPedido(pedido.identificador);
             }
           });
         // }

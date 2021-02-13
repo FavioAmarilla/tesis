@@ -234,12 +234,12 @@ class PedidoController extends BaseController
 
         //validar que llegaron productos
         if (count($productos) <= 0) {
-            return $this->sendResponse(false, 'Debe agregar por lo menos un producto', 400);
+            return $this->sendResponse(false, 'Debe agregar por lo menos un producto', null, 400);
         }
         
         // validar que llego los datos del pago
         if (!$pago) {
-            return $this->sendResponse(false, 'Debe agregar los datos de pago', 400);
+            return $this->sendResponse(false, 'Debe agregar los datos de pago', null, 400);
         }
 
         if ($pedido->save()) {
