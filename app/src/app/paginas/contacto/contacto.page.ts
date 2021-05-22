@@ -64,15 +64,17 @@ export class PaginaContacto implements OnInit {
   }
 
   async contactar() {
-    const response: any = this.generalService.contactar(this.angForm.value);
+    this.cargando = true;
+    const response: any = await this.generalService.contactar(this.angForm.value);
 
     if (response.success) {
+      this.angForm.reset();
       this.servicioAlerta.dialogoExito('Email enviado correctamente');
     } else {
       this.servicioAlerta.dialogoError('Ha ocurrido un problema por favor intentelo más tarde');
     }
 
-    this.angForm.reset();
+    this.cargando = false;
   }
 
 }

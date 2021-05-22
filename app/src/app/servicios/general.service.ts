@@ -25,7 +25,7 @@ export class GeneralService {
 
   public contactar(data) {
     return new Promise(resolve => {
-      this.http.post(`${API}/contactar`, data)
+      this.http.post(`${API}contactar`, data)
       .subscribe(
         response => resolve(response),
         error => resolve(error)
@@ -62,7 +62,7 @@ export class GeneralService {
       const api = (prodMode) ? bancard.production : bancard.staging;
 
       const scriptElm = document.querySelector('#bancard-checkout-js');
-      if (scriptElm) { return resolve(); }
+      if (scriptElm) { return resolve(true); }
 
       const renderer = this.rendererFactory.createRenderer(null, null);
       const script = renderer.createElement('script');
@@ -71,7 +71,7 @@ export class GeneralService {
 
       renderer.appendChild(this.document.body, script);
 
-      return resolve();
+      return resolve(true);
     });
   }
 
@@ -96,7 +96,7 @@ export class GeneralService {
     return new Promise(resolve => {
       const timeout = setTimeout(() => {
         clearTimeout(timeout);
-        return resolve();
+        return resolve(true);
       }, time);
     });
   }
