@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
 
-      <div class="col-md-4">
+      <div [ngClass]="{'col-md-4': isMobile, 'col-md-3': !isMobile}">
         <div class="ftco-footer-widget mb-4">
           <h2>LA EMPRESA</h2>
           <ul class="list-unstyled">
@@ -12,7 +12,7 @@
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div [ngClass]="{'col-md-4': isMobile, 'col-md-3': !isMobile}">
         <div class="ftco-footer-widget mb-4">
           <h2>CONTACTENOS</h2>
           <div class="block-23 mb-3">
@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div [ngClass]="{'col-md-4': isMobile, 'col-md-3': !isMobile}">
         <div class="ftco-footer-widget mb-4">
           <h2>ACCESOS RÁPIDOS</h2>
           <ul class="list-unstyled">
@@ -48,6 +48,15 @@
             <li><a class="py-2 d-block" [routerLink]="['/medio-pago']">Medios de pago</a></li>
             <li><a class="py-2 d-block" [routerLink]="['/area-cobertura']">Área de cobertura</a></li>
           </ul>
+        </div>
+      </div>
+
+      <div class="col-md-3" *ngIf="!isMobile">
+        <div class="ftco-footer-widget mb-4">
+          <h2>Descargar aplicación móvil</h2>
+          <a href="/download/EcommerceSY.apk" target="_blank">
+            <img src="/assets/images/download-android.png" alt="download-android" width="200">
+          </a>
         </div>
       </div>
 
