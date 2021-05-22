@@ -85,6 +85,7 @@ Route::group(['prefix' => 'ciudad'], function () {
     Route::post('/{id}/verificarZona', ['as' => 'ciudad.verificarZona', 'uses' => 'CiudadController@verificarZona']);
 });
 
+Route::post('contactar', 'ContactoController@send');
 Route::resource('barrio', 'BarrioController');
 Route::resource('sucursal', 'SucursalController');
 Route::resource('cuponDescuento', 'CuponDescuentoController');

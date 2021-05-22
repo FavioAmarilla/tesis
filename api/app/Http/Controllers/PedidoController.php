@@ -787,7 +787,7 @@ class PedidoController extends BaseController
      */
     public function pagarConTarjetaAgregada(Request $request, $id) {
         $pedido = Pedido::find($id);
-        return response()->json($request);
+
         if ($pedido) {
 
             $pago = PedidoPagos::where('id_pedido', '=', $id)->first();
