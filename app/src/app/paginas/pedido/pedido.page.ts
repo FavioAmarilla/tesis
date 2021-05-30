@@ -164,6 +164,19 @@ export class PedidoPage implements OnInit {
         }
       });
 
+      this.servicioCarrito.removeStorage('carrito');
+      const agregarAlCarrito = (detalle) => {
+        return new Promise(async (resolve) => {
+          await this.servicioCarrito.agregarAlCarrito({
+            identificador: detalle.id_producto,
+            cantidad: detalle.cantidad
+          });
+          return resolve(true);
+        });
+      }
+
+      await this.servicioGeneral.createQueue(pedido.detalles, agregarAlCarrito);
+
       this.totales.subtotal = pedido.total - pedido.costo_envio;
       this.totales.delivery = pedido.costo_envio;
       this.totales.total = pedido.total;
@@ -179,10 +192,10 @@ export class PedidoPage implements OnInit {
         this.datosPago.controls.tipo.setValue(pedido.pagos.vr_tipo);
         this.datosPago.controls.importe.setValue(pedido.pagos.importe);
 
-        this.stepperEditable = false;
         await this.servicioGeneral.promiseTimeout(500);
 
         if (pedido.pagos.process_id) {
+          this.stepperEditable = false;
           switch (pedido.pagos.vr_tipo) {
             case 'PO':
               this.pagoOnlineBancard(pedido.pagos.process_id);

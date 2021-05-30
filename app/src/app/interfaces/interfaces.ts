@@ -134,6 +134,7 @@ export interface Pedido {
     length?: number;
     productos?: Producto[];
     pago?: any;
+    detalles?: any[];
 }
 
 export interface Cliente {

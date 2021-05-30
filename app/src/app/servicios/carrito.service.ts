@@ -52,8 +52,8 @@ export class CarritoService {
       } else {
         productos.push(producto);
       }
-      this.setStorage('carrito', productos);
-      this.obtenerCantidad('carrito');
+      await this.setStorage('carrito', productos);
+      await this.obtenerCantidad('carrito');
       resolve(true);
     });
   }
