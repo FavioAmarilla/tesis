@@ -126,4 +126,26 @@ export class GeneralService {
       }
     }
   }
+
+  createQueue(tasks, callback) {
+    let taskIndex = 0;
+
+    return new Promise(done => {
+      const handleResult = result => {
+        taskIndex++;
+        getNextTask();
+      };
+      const getNextTask = async () => {
+        if (taskIndex < tasks.length) {
+            const element = tasks[taskIndex];
+            const response = await callback(element);
+            handleResult(response);
+        } else {
+            done({ success: true });
+        }
+      };
+      getNextTask();
+    });
+  }
+
 }
