@@ -74,7 +74,6 @@
             </span>
             <span class="float-right">
                 @if ($pedido->tipo_envio === 'DE')
-                    <p><strong>Pais:</strong> {{ $pedido->pais->nombre }}</p>
                     <p><strong>Ciudad:</strong> {{ $pedido->ciudad->nombre }}</p>
                     <p><strong>Barrio:</strong> {{ $pedido->barrio->nombre }}</p>
                     <p><strong>Direccion:</strong> {{ $pedido->direccion }}</p>                    
