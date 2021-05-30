@@ -183,7 +183,7 @@ class PedidoController extends BaseController
         foreach ($productos as $producto) {
             $producto['cantidad'] = $cantidades[$producto['identificador']];
             $total += $producto->precio_venta * $producto['cantidad'];
-            switch ($producto->tipo_impuesto['valor']) {
+            switch ($producto->tipoImpuesto->valor) {
                 case 0:
                     $total_exento += $producto->precio_venta * $producto['cantidad'];
                     break;

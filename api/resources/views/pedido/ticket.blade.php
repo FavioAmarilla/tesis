@@ -186,7 +186,7 @@
                         @if ($pedido->comprobante->monto_iva10 > 0)
                             <tr>
                                 <td colspan="3">IVA 10%:</td>
-                                <td colspan="1" style="text-align: right;">{{ number_format($pedido->comprobante->monto_iva10 / 11.0, 0, ',', '.') }}</td>
+                                <td colspan="1" style="text-align: right;">{{ number_format($pedido->monto_iva10 / 11.0, 0, ',', '.') }}</td>
                             </tr>
                         @endif
                         @if ($pedido->comprobante->monto_exento > 0)
