@@ -2,7 +2,8 @@
 
 <ion-content>
     <!-- slides -->
-    <ion-slides *ngIf="listaSlides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions" style="cursor: pointer;">
+    <ion-slides *ngIf="listaSlides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions"
+        style="cursor: pointer;">
         <ion-slide *ngFor="let slide of listaSlides" class="slider-item" [style]="slide.imagen | slideImage"
             (click)="redirectMarca(slide.marca.identificador)">
         </ion-slide>
@@ -28,7 +29,8 @@
 
                     <ion-row class="row" *ngFor="let prodCat of listaProductosPorCategoria">
                         <ion-col size="12">
-                            <h3 class="w-100 mt-5 mb-3 text-primary text-center">{{ prodCat.linea.descripcion }}</h3>
+                            <h3 class="w-100 text-primary text-center" style="margin-top: 5rem;">{{
+                                prodCat.linea.descripcion }}</h3>
                             <ion-slides #slides mode="ios" [options]="productSlideOpts" [pager]="true">
                                 <ion-slide *ngFor="let prod of prodCat.productos">
                                     <cp-producto [producto]="prod"></cp-producto>

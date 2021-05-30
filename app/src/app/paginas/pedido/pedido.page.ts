@@ -122,11 +122,11 @@ export class PedidoPage implements OnInit {
     this.servicioGeneral.resetContainerPosition('.order-total', true);
 
     this.platform.resize
-    .subscribe(() => {
-      const width = this.platform.width();
-      this.mobile = (width < 997) ? true : false;
-      this.servicioGeneral.resetContainerPosition('.order-total');
-    });
+      .subscribe(() => {
+        const width = this.platform.width();
+        this.mobile = (width < 997) ? true : false;
+        this.servicioGeneral.resetContainerPosition('.order-total');
+      });
 
     if (comprobarTotales) { this.comprobarTotales(); }
 
@@ -183,7 +183,7 @@ export class PedidoPage implements OnInit {
 
       if (pedido.cupon) {
         this.cuponDescuento = pedido.cupon;
-        const descuentoSubtotal = (this.cuponDescuento.porc_descuento * 100) / this.totales.subtotal;
+        const descuentoSubtotal = (this.cuponDescuento.porc_desc * this.totales.subtotal) / 100;
         this.totales.descuento = descuentoSubtotal;
       }
       this.datosEnvio.controls.ubicacion.setValue(`${pedido.latitud},${pedido.longitud}`);
@@ -232,7 +232,7 @@ export class PedidoPage implements OnInit {
       identificador: 0,
       descripcion: 0,
       codigo: '',
-      porc_descuento: 0,
+      porc_desc: 0,
       fecha_desde: '',
       fecha_hasta: '',
       usado: ''
@@ -268,7 +268,7 @@ export class PedidoPage implements OnInit {
 
     // obtener descuento por cupones
     if (this.cuponDescuento.identificador > 0) {
-      const descuentoSubtotal = (this.cuponDescuento.porc_descuento * 100) / this.totales.subtotal;
+      const descuentoSubtotal = (this.cuponDescuento.porc_desc * this.totales.subtotal) / 100;
       this.totales.descuento = descuentoSubtotal;
     }
 
@@ -428,8 +428,9 @@ export class PedidoPage implements OnInit {
       };
 
       const response: any = await this.servicioCupon.obtenerCupones(null, parametros);
+
       if (response.success) {
-        this.cuponDescuento = response.data;
+        this.cuponDescuento = response.data[0];
         this.cuponDescuento.codigo = codigo;
 
         this.obtenerTotales();
@@ -627,7 +628,7 @@ export class PedidoPage implements OnInit {
     this.datosPago.disable();
     this.stepperEditable = false;
     this.servicioGeneral.resetContainerPosition('.order-total', true);
-    
+
     await this.servicioGeneral.promiseTimeout(500);
 
     switch (this.pedido.pago.tipo) {

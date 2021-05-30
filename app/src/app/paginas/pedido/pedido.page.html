@@ -464,14 +464,14 @@
             </form>
           </div>
 
-          <div class="form-group" *ngIf="cuponDescuento.length">
+          <div class="form-group" *ngIf="cuponDescuento.porc_desc > 0">
             <p class="d-flex">
               <span>{{ cuponDescuento.descripcion }}</span>
-              <span style="text-align: right;">{{ cuponDescuento.porcentaje | numberFormat }} %</span>
+              <span style="text-align: right;">{{ cuponDescuento.porc_desc | numberFormat }} %</span>
             </p>
           </div>
 
-          <div class="form-group" *ngIf="!cuponDescuento.length && submitCuponDescuento">
+          <div class="form-group" *ngIf="!cuponDescuento.porc_desc < 0 && submitCuponDescuento">
             <p class="text-danger">No existe el cupon de descuento</p>
           </div>
 

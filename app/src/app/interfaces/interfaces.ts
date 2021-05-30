@@ -77,7 +77,7 @@ export interface CuponDescuento {
     identificador?: number;
     descripcion?: number;
     codigo?: string;
-    porc_descuento?: number;
+    porc_desc?: number;
     fecha_desde?: string;
     fecha_hasta?: string;
     usado?: string;
