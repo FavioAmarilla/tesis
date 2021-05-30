@@ -829,7 +829,7 @@ class PedidoController extends BaseController
                     $token = $request->token;
                     $usuario = $token->usuario;
 
-                    $tarjeta = UserTarjetas::where('id_usuario', '=', $usuario->identificador)->last();
+                    $tarjeta = UserTarjetas::where('id_usuario', '=', $usuario->identificador)->latest()->first();;
         
                     if ($tarjeta) {
                         $request->request->add([
