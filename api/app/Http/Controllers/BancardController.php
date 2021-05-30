@@ -333,10 +333,13 @@ class BancardController extends BaseController
 
                     return $this->sendResponse(true, 'Pago procesado correctamente', null, 200);
                 }
+
+                return $this->sendResponse(true, 'No se pudo procesar el pago', null, 400);
             }
+        } else {
+            return $this->sendResponse(false, 'No se ha encontrado la tarjeta solicitada para proceder con el pago', null, 404);
         }
     
-        return $this->sendResponse(false, 'No se ha encontrado la tarjeta solicitada para proceder con el pago', null, 404);
     }
 
     /**
@@ -392,7 +395,8 @@ class BancardController extends BaseController
         if ($respuesta->status == 'success') {
 
             $alias_token = null;
-            foreach ($respuesta->cards as $card) {
+            $cards = $respuesta->cards;
+            foreach ($cards as $card) {
                 if ($card->card_id == $cardId) {
                     $alias_token = $card->alias_token;
                     break;
@@ -414,7 +418,7 @@ class BancardController extends BaseController
                 if ($respuesta->status == 'success') {
 
                     $usuario = User::find($userId);
-                    $usuario->tiene_tarjetas = (count($respuesta->cards) - 1 < 1) ? 0 : 1;
+                    $usuario->tiene_tarjetas = (count($cards) - 1 < 1) ? 0 : 1;
                     $usuario->save();
 
                     $tarjeta = UserTarjetas::find($cardId);

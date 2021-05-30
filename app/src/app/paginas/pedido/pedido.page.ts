@@ -169,7 +169,11 @@ export class PedidoPage implements OnInit {
         return new Promise(async (resolve) => {
           await this.servicioCarrito.agregarAlCarrito({
             identificador: detalle.id_producto,
-            cantidad: detalle.cantidad
+            cantidad: detalle.cantidad,
+            descripcion: detalle.descripcion,
+            costo_unitario: detalle.costo_unitario,
+            precio_venta: detalle.precio_venta,
+            imagen: detalle.imagen,
           });
           return resolve(true);
         });

@@ -48,8 +48,11 @@ export class MiCuentaPage implements OnInit {
     private router: Router
   ) {
     this.inicializar();
-    this.verificarResolucion();
     this.obtenerUsuario();
+  }
+
+  ionViewWillEnter() {
+    this.verificarResolucion();
     this.obtenerTarjetas();
   }
 
