@@ -31,7 +31,7 @@ export class PaginaCarrito implements OnInit {
     identificador: 0,
     descripcion: 0,
     codigo: '',
-    porc_descuento: 0,
+    porc_desc: 0,
     fecha_desde: '',
     fecha_hasta: '',
     usado: ''
