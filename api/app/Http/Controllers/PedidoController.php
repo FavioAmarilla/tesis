@@ -11,6 +11,7 @@ use App\Http\Controllers\BancardController as BancardController;
 use App\Http\Controllers\ComprobanteController as ComprobanteController;
 use App\Comprobante;
 use App\Pedido;
+use App\Producto;
 use App\PedidoItems;
 use App\PedidoPagos;
 use App\CuponDescuento;
@@ -168,17 +169,29 @@ class PedidoController extends BaseController
         $total_exento = 0;
         $total_iva5 = 0;
         $total_iva10 = 0;
+
+        $prIds = []; $cantidades;
+        if (is_array($productos)) {
+            foreach ($productos as $producto) {
+                $cantidades[$producto['identificador']] = $producto['cantidad'];
+                array_push($prIds, $producto['identificador']);
+            }
+        } else $prIds = [$productos];
+
+        $productos = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca'])->whereIn('identificador', $prIds)->get();
+
         foreach ($productos as $producto) {
-            $total += $producto['precio_venta'] * $producto['cantidad'];
-            switch ($producto['tipo_impuesto']['valor']) {
+            $producto['cantidad'] = $cantidades[$producto['identificador']];
+            $total += $producto->precio_venta * $producto['cantidad'];
+            switch ($producto->tipo_impuesto['valor']) {
                 case 0:
-                    $total_exento += $producto['precio_venta'] * $producto['cantidad'];
+                    $total_exento += $producto->precio_venta * $producto['cantidad'];
                     break;
                 case 5:
-                    $total_iva5 += $producto['precio_venta'] * $producto['cantidad'];
+                    $total_iva5 += $producto->precio_venta * $producto['cantidad'];
                     break;
                 case 10:
-                    $total_iva10 += $producto['precio_venta'] * $producto['cantidad'];
+                    $total_iva10 += $producto->precio_venta * $producto['cantidad'];
                     break;
             }
         }
@@ -248,31 +261,37 @@ class PedidoController extends BaseController
             foreach ($productos as $producto) {
                 $item = new PedidoItems();
                 $item->id_pedido = $pedido->identificador;
-                $item->id_producto = $producto['identificador'];
-                $item->precio_venta = $producto['precio_venta'];
-                switch ($producto['tipo_impuesto']['valor']) {
+                $item->id_producto = $producto->identificador;
+                $item->precio_venta = $producto->precio_venta;
+                switch ($producto->tipo_impuesto['valor']) {
                     case 0:
-                        $item->importe_exento = $producto['precio_venta'];
+                        $item->importe_exento = $producto->precio_venta;
                         break;
                     case 5:
-                        $item->importe_iva5 = $producto['precio_venta'];
+                        $item->importe_iva5 = $producto->precio_venta;
                         break;
                     case 10:
-                        $item->importe_iva10 = $producto['precio_venta'];
+                        $item->importe_iva10 = $producto->precio_venta;
                         break;
                     default:
-                        $item->importe_exento = $producto['precio_venta'];
+                        $item->importe_exento = $producto->precio_venta;
                         break;
                 }
+
                 $item->cantidad = $producto['cantidad'];
                 $item->activo = 'S';
-                $total += ($producto['precio_venta'] * $producto['cantidad']);
+                $total += ($producto->precio_venta * $producto['cantidad']);
 
                 if (!$item->save()) {
                     return $this->sendResponse(true, 'Producto de pedido no registrados', $item, 400);
                     break;
                 }
                 
+            }
+
+            if ($tipo_envio == 'DE') {
+                $total += $costo_envio;
+                $total_iva10 += $costo_envio;
             }
 
             if (!$this->procesoStock($pedido->identificador, $pedido->id_sucursal, 'DI')) {
@@ -473,14 +492,27 @@ class PedidoController extends BaseController
             if ($pedido->save()) {
                 PedidoItems::where('id_pedido', $id)->delete();
                 $total = 0;
+
+                $prIds = []; $cantidades;
+                if (is_array($productos)) {
+                    foreach ($productos as $producto) {
+                        $cantidades[$producto['identificador']] = $producto['cantidad'];
+                        array_push($prIds, $producto['identificador']);
+                    }
+                } else $prIds = [$productos];
+
+                $productos = Producto::with(['lineaProducto', 'tipoImpuesto', 'marca'])->whereIn('identificador', $prIds)->get();
+
                 foreach ($productos as $producto) {
+                    $producto['cantidad'] = $cantidades[$producto['identificador']];
+
                     $item = new PedidoItems();
                     $item->id_pedido = $pedido->identificador;
-                    $item->id_producto = $producto['identificador'];
-                    $item->precio_venta = $producto['precio_venta'];
+                    $item->id_producto = $producto->identificador;
+                    $item->precio_venta = $producto->precio_venta;
                     $item->cantidad = $producto['cantidad'];
                     $item->activo = 'S';
-                    $total += ($producto['precio_venta'] * $producto['cantidad']);
+                    $total += ($producto->precio_venta * $producto['cantidad']);
 
                     if (!$item->save()) {
                         return $this->sendResponse(true, 'Producto de pedido no registrados', $item, 400);

@@ -520,7 +520,10 @@ export class PedidoPage implements OnInit {
       this.pedido[index] = this.datosEnvio.value[index];
     }
     this.carrito.forEach(element => {
-      this.pedido.productos.push({ ...element });
+      this.pedido.productos.push({
+        identificador: element.identificador,
+        cantidad: element.cantidad,
+      });
     });
 
     if (this.pedido.identificador) {
