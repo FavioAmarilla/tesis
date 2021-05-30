@@ -70,8 +70,6 @@ export class ProductosPage implements OnInit {
     this.activatedRoute.queryParams.subscribe(
       params => {
         this.params = params;
-        console.log(params);
-        
         this.comprobarParametros();
       }
     );
@@ -320,13 +318,7 @@ export class ProductosPage implements OnInit {
     }
   }
 
-  ngOnDestroy() {
-    console.log('destroy');
-    this.params = {};
-  }
-
   ionViewWillLeave() {
-    console.log('ionViewWillLeave');
     this.params = {};
     this.idsMarcas = [];
     this.idsCategorias = [];
