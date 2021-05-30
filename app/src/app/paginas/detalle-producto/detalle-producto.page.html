@@ -26,13 +26,27 @@
 
         <ion-col size-xs="12" size-md="6" size="6">
           <div class="panel panel-default product-details border">
-            <h5 class="h5">{{ producto.descripcion }}</h5>
-            <p class="mb-0">Código de barras: {{ producto.codigo_barras }}</p>
-            <span class="price"> {{ producto.precio_venta | numberFormat}} <span class="gs">Gs</span> </span>
-            <hr>
+            <h5 class="h5 mb-1 mt-1">{{ producto.descripcion }}</h5>
+            <span class="price"> <span class="gs">Gs</span> {{ producto.precio_venta | numberFormat}} </span>
+            <hr class="mb-1 mt-1">
+            <p class="mb-0 barcode">Código de barras: {{ producto.codigo_barras }}</p>
+
+            <div class="delivery-info d-flex align-items-center">
+              <div class="icon d-flex justify-content-center align-items-center mr-2">
+                <ion-icon slot="icon-only" name="stopwatch"></ion-icon>
+              </div>
+              <div class="description">
+                <h4>Delivery</h4>
+                <p>Servicio para la ciudad de Ypacaraí.</p>
+                <p>Lunes a Sábado 07:00 a 19:00 horas.</p>
+                <p>Todos los productos pasan por control de calidad para su correcta entrega.</p>
+              </div>
+            </div>
+
+            <div class="row"></div>
 
             <ion-row class="row mt-4">
-              <ion-col class="form-group input-group col-md-6 d-flex mb-3">
+              <ion-col size-xs="12" size-md="6" class="form-group input-group mb-3">
                 
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="basic-addon2" (click)="asignarCantidad('DI')">
@@ -49,11 +63,15 @@
                 </div>
 
               </ion-col>
+
+              <ion-col size-xs="12" size-md="6">
+                <a [routerLink]="null" class="btn btn-primary py-2 px-3 d-block" [ngClass]="{'disabled': sinStock}" (click)="agregarAlCarrito()">
+                  Añadir al Carrito
+                  <ion-icon slot="icon-only" name="cart"></ion-icon>
+                </a>
+              </ion-col>
             </ion-row>
 
-            <ion-col>
-              <a [routerLink]="null" class="btn btn-primary py-2 px-3 d-block" [ngClass]="{'disabled': sinStock}" (click)="agregarAlCarrito()">Añadir al Carrito</a>
-            </ion-col>
           </div>
         </ion-col>
       </ion-row>
