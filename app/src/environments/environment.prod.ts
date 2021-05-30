@@ -1,8 +1,9 @@
 export const environment = {
   production: true,
   api: 'http://api.ecommercesy.com/api/',
-  productImageUrl: 'producto/getImage/',
-  slideImageUrl: 'slide/getImage/',
+  host: 'http://api.ecommercesy.com/',
+  productImageUrl: 'storage/productos/',
+  slideImageUrl: 'storage/slides/',
   lineaProdImageUrl: 'lineaProducto/getImage/',
   bancard: {
     prodMode: false,

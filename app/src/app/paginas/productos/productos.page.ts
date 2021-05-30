@@ -35,6 +35,7 @@ export class ProductosPage implements OnInit {
   public porPagina;
   public total;
 
+  public params = {};
   public idsCategorias = [];
   public idsMarcas = [];
   public order = 'created_at';
@@ -68,53 +69,10 @@ export class ProductosPage implements OnInit {
 
     this.activatedRoute.queryParams.subscribe(
       params => {
-        let key = null;
-        let value = null;
-        let filtros = []
-
-        if (params['sucursal']) {
-          key = 'sucursal';
-          value = params['sucursal'];
-          this.seleccionarSucursal(value);
-
-          this.sucursal = value;
-          filtros.push({ key, value });
-        }
-
-        if (params['order']) {
-          key = 'order';
-          value = params['order'];
-
-          this.order = value;
-          filtros.push({ key, value });
-        }
-
-        if (params['categoria']) {
-          key = 'lineas';
-          value = params['categoria'];
-
-          this.idsCategorias = value.split(',');
-          filtros.push({ key, value });
-        }
-
-        if (params['marca']) {
-          key = 'marcas';
-          value = params['marca'];
-
-          this.idsMarcas = value.split(',');
-          filtros.push({ key, value });
-        }
-
-        if (params['descripcion']) {
-          key = 'descripcion';
-          value = params['descripcion'];
-
-          this.buscarProductoDescripcion = value;
-          filtros.push({ key, value });
-        }
-
-        this.obtenerProductos(null, filtros);
-
+        this.params = params;
+        console.log(params);
+        
+        this.comprobarParametros();
       }
     );
   }
@@ -130,6 +88,54 @@ export class ProductosPage implements OnInit {
     this.router.navigate([url]);
   }
 
+  comprobarParametros(pagina?) {
+    let key = null;
+    let value = null;
+    let filtros = []
+
+    if (this.params['sucursal']) {
+      key = 'sucursal';
+      value = this.params['sucursal'];
+      this.seleccionarSucursal(value);
+
+      this.sucursal = value;
+      filtros.push({ key, value });
+    }
+
+    if (this.params['order']) {
+      key = 'order';
+      value = this.params['order'];
+
+      this.order = value;
+      filtros.push({ key, value });
+    }
+
+    if (this.params['categoria']) {
+      key = 'lineas';
+      value = this.params['categoria'];
+
+      this.idsCategorias = value.split(',');
+      filtros.push({ key, value });
+    }
+
+    if (this.params['marca']) {
+      key = 'marcas';
+      value = this.params['marca'];
+
+      this.idsMarcas = value.split(',');
+      filtros.push({ key, value });
+    }
+
+    if (this.params['descripcion']) {
+      key = 'descripcion';
+      value = this.params['descripcion'];
+
+      this.buscarProductoDescripcion = value;
+      filtros.push({ key, value });
+    }
+
+    this.obtenerProductos(pagina, filtros);
+  }
 
   async obtenerLineaProducto() {
     const response: any = await this.servicioLineaProd.obtenerLinea();
@@ -314,4 +320,15 @@ export class ProductosPage implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    console.log('destroy');
+    this.params = {};
+  }
+
+  ionViewWillLeave() {
+    console.log('ionViewWillLeave');
+    this.params = {};
+    this.idsMarcas = [];
+    this.idsCategorias = [];
+  }
 }
