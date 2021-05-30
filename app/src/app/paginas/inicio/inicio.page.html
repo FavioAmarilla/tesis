@@ -4,7 +4,7 @@
     <!-- slides -->
     <ion-slides *ngIf="listaSlides" mode="ios" pager="ios" class="home-slider" [options]="slideOptions" style="cursor: pointer;">
         <ion-slide *ngFor="let slide of listaSlides" class="slider-item" [style]="slide.imagen | slideImage"
-            (click)="redirectMarca(slide.identificador)">
+            (click)="redirectMarca(slide.marca.identificador)">
         </ion-slide>
     </ion-slides>
 
