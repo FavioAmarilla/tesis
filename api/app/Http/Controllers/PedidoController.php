@@ -454,7 +454,7 @@ class PedidoController extends BaseController
 
         // validar que llegaron productos
         if (count($productos) <= 0) {
-            return $this->sendResponse(false, 'Debe agregar por lo menos un producto', 400);
+            return $this->sendResponse(false, 'Debe agregar por lo menos un producto', null, 400);
         }
 
         $pedido = Pedido::find($id);
