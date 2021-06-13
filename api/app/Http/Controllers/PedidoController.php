@@ -21,6 +21,7 @@ use App\User;
 use App\Cliente;
 use App\Stock;
 use PDF;
+use Illuminate\Support\Facades\Log;
 
 class PedidoController extends BaseController
 {
@@ -202,7 +203,7 @@ class PedidoController extends BaseController
         }
 
         if ($id_cupon_descuento) {
-            $descuento = CuponDescuento::where('identificador', '=', $id_cupon_descuento);
+            $descuento = CuponDescuento::find($id_cupon_descuento);
             if ($descuento) {
                 $aux = $total * $descuento->porc_desc / 100;
                 $total -= $aux;
@@ -263,7 +264,8 @@ class PedidoController extends BaseController
                 $item->id_pedido = $pedido->identificador;
                 $item->id_producto = $producto->identificador;
                 $item->precio_venta = $producto->precio_venta;
-                switch ($producto->tipo_impuesto['valor']) {
+                Log::info($producto);
+                switch ($producto->tipo_impuesto->valor) {
                     case 0:
                         $item->importe_exento = $producto->precio_venta;
                         break;
